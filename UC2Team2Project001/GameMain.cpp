@@ -5,4 +5,5 @@
 int main()
 {
 	cout << "pch.h test" << endl;
+	cout << "가 나 다 라 마 바 사 " << endl;
 }
