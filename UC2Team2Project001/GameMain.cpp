@@ -7,4 +7,5 @@ int main()
 	cout << "pch.h test" << endl;
 	cout << "송정훈" << endl;
 	cout << "김상현" << endl;
+	cout << "지명관" << endl;
 }
