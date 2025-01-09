@@ -6,4 +6,5 @@ int main()
 {
 	cout << "pch.h test" << endl;
 	cout << "¼ÛÁ¤ÈÆ" << endl;
+	cout << "±è»óÇö" << endl;
 }
