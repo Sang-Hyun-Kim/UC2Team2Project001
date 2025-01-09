@@ -1,10 +1,10 @@
 #include "pch.h"
 
 
-// °ÔÀÓ ½Ã½ºÅÛ ÄÚµå°¡ µ¹¾Æ°¥ main ÇÔ¼ö
+// ê²Œì„ ì‹œìŠ¤í…œ ì½”ë“œê°€ ëŒì•„ê°ˆ main í•¨ìˆ˜
 int main()
 {
 	cout << "pch.h test" << endl;
-	cout << "¼ÛÁ¤ÈÆ" << endl;
-	cout << "±è»óÇö" << endl;
+	cout << "ì†¡ì •í›ˆ" << endl;
+	cout << "ê¹€ìƒí˜„" << endl;
 }
