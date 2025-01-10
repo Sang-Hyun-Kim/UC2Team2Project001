@@ -4,8 +4,6 @@
 #include "GlobalEventManager.h"
 
 
-
-
 // 게임 시스템 코드가 돌아갈 main 함수
 int main()
 {
@@ -19,13 +17,13 @@ int main()
 	srand((unsigned)time(nullptr));
 
 	// 테스트용 캐릭터
-	Character hero("Hero", 50, 10, 5);
-	hero.SetAttackStrategy(new SimpleAttackStrategy());
-	hero.SetDefenseStrategy(new BlockDefenseStrategy());
+	//Character hero("Hero", 50, 10, 5);
+	//hero.SetAttackStrategy(new SimpleAttackStrategy());
+	//hero.SetDefenseStrategy(new BlockDefenseStrategy());
 
-	Character goblin("Goblin", 30, 8, 2);
-	goblin.SetAttackStrategy(new PowerAttackStrategy());
-	goblin.SetDefenseStrategy(new EvadeDefenseStrategy());
+	//Character goblin("Goblin", 30, 8, 2);
+	//goblin.SetAttackStrategy(new PowerAttackStrategy());
+	//goblin.SetDefenseStrategy(new EvadeDefenseStrategy());
 
 	
 }

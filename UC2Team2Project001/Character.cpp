@@ -1,7 +1,9 @@
 #include "pch.h"
+#include <memory>
 #include "Character.h"
 #include "IStrategy.h"
 #include "StatusComponent.h"
+
 
 Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
 	: Name(InName)

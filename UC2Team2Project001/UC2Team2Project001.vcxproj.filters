@@ -14,10 +14,10 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="소스 파일\CharacterSystem">
-      <UniqueIdentifier>{fdc76205-05d7-4c5a-acf6-9aabf33d3666}</UniqueIdentifier>
+      <UniqueIdentifier>{1a1d5b11-1105-4224-b940-758f55371439}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\CharacterSystem">
-      <UniqueIdentifier>{0cee3e6e-49a0-4211-ad74-ea3ec90754f0}</UniqueIdentifier>
+    <Filter Include="소스 파일\StatusSystem">
+      <UniqueIdentifier>{6e94fa12-ed4e-49f7-9a56-e42e177b28d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,19 +30,31 @@
     <ClCompile Include="Character.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
-    <ClCompile Include="IStrategy.cpp">
-      <Filter>소스 파일\CharacterSystem</Filter>
+    <ClCompile Include="StatusComponent.cpp">
+      <Filter>소스 파일\StatusSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>소스 파일\StatusSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManagerSystem.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>헤더 파일\CharacterSystem</Filter>
+    <ClInclude Include="Status.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="IStrategy.h">
-      <Filter>헤더 파일\CharacterSystem</Filter>
+    <ClInclude Include="StatusComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManagerSystem.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

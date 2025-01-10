@@ -1,26 +1,19 @@
 #pragma once
 class Status
 {
-private:
-	// Áö¼Ó ½Ã°£
-	int Duration;
-
-public:
-	// ½ºÅ×ÀÌÅÍ½º Àû¿ë
-	virtual void ApplyStatus();
-
-	// Àû¿ë ½Ã°£
-	int GetDuration();
-};
-
-
-// ¿¹½Ã
-class Berserker : Status
-{
-	// Àû¿ë ¹æ¹ý ±¸Çö
-	void ApplyStatus()
+	Status()
 	{
 
 	}
+private:
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+	int Duration;
+
+public:
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	virtual void ApplyStatus();
+
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+	int GetDuration();
 };
 

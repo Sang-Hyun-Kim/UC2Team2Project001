@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
+
 class IAttackStrategy;
 class IDefenseStrategy;
 class StatusComponent;
@@ -55,8 +56,8 @@ protected:
 	int Defense;
 
 	// 공격/방어 전략 포인터
-	shared_ptr<IAttackStrategy> AttackStrategy;
-	shared_ptr<IDefenseStrategy> DefenseStrategy;
+	IAttackStrategy* AttackStrategy;
+	IDefenseStrategy* DefenseStrategy;
 
 	shared_ptr<StatusComponent> StatusManager;
 };
