@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "Character.h"
 #include "IStrategy.h"
+#include "IEventTypes.h"
+#include "GlobalEventManager.h"
+
+Character::~Character()
+{
+	delete AttackStrategy;
+	delete DefenseStrategy;
+}
 
 void Character::Attack(Character* Target)
 {
@@ -13,6 +21,7 @@ void Character::Attack(Character* Target)
 	AttackStrategy->Attack(this, Target);
 }
 
+
 void Character::TakeDamage(int IncomingDamage)
 {
 	int finalDamage = IncomingDamage;
@@ -23,11 +32,19 @@ void Character::TakeDamage(int IncomingDamage)
 	}
 
 	HP -= finalDamage;
-	if (HP < 0)
-		HP = 0;
 
-	//ToDo: 나중에 OnDead 콜백을 만들어줄 예정
-	//콜백을 리워드 시스템에 연결
+	//
+	auto DamageEvent = std::make_shared<ICharacterDamagedEvent>(Name,finalDamage);
+	GlobalEventManager::Get().Notify(DamageEvent);
+
+
+	if (HP < 0)
+	{
+		HP = 0;
+		auto DeadEvent = std::make_shared<ICharacterDeadEvent>(Name);
+		GlobalEventManager::Get().Notify(DeadEvent);
+	}
+
 }
 
 bool Character::IsDead() const

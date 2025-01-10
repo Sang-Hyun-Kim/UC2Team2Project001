@@ -24,11 +24,7 @@ public:
 		
 	}
 
-	virtual ~Character()
-	{
-		delete AttackStrategy;
-		delete DefenseStrategy;
-	}
+	virtual ~Character();
 
 	virtual void Attack(Character* Target);
 
@@ -38,7 +34,7 @@ public:
 
 	void PrintStatus() const;
 	
-	int SetHP(int NewHp) { HP = NewHp; }
+	void SetHP(int NewHp) { HP = NewHp; }
 
 	const string& GetName() const { return Name; }
 	int GetHP() const { return HP; }
@@ -53,10 +49,11 @@ protected:
 	string Name;
 	int HP;
 	int AttackPower;
-	int Defense;
+	int Defense;	
 
 	// 공격/방어 전략 포인터
 	IAttackStrategy* AttackStrategy;
 	IDefenseStrategy* DefenseStrategy;
 };
+
 
