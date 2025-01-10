@@ -3,13 +3,10 @@
 #include <iostream>
 #include <algorithm>
 
-
 class IAttackStrategy;
 class IDefenseStrategy;
-class StatusComponent;
 
 using namespace std;
-
 
 // 캐릭터(공통 베이스 클래스)
 class Character 
@@ -58,7 +55,5 @@ protected:
 	// 공격/방어 전략 포인터
 	IAttackStrategy* AttackStrategy;
 	IDefenseStrategy* DefenseStrategy;
-
-	shared_ptr<StatusComponent> StatusManager;
 };
 

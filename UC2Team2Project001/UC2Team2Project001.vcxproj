@@ -145,10 +145,13 @@
     </ClCompile>
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="StatusComponent.cpp" />
+    <ClCompile Include="UIEventManagerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="EventManagerSystem.h" />
+    <ClInclude Include="IEventTypes.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="StatusComponent.h" />

@@ -2,7 +2,8 @@
 #include <memory>
 #include "Character.h"
 #include "IStrategy.h"
-#include "StatusComponent.h"
+#include "IEventTypes.h"
+#include "GlobalEventManager.h"
 
 
 Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
@@ -14,7 +15,7 @@ Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, 
 	, AttackStrategy(nullptr)
 	, DefenseStrategy(nullptr)
 {
-	StatusManager = make_shared<StatusComponent>();
+	
 }
 
 void Character::Attack(Character* Target)
@@ -39,8 +40,9 @@ void Character::TakeDamage(int IncomingDamage)
 
 	ChangeHP(-finalDamage);
 
-	//ToDo: 나중에 OnDead 콜백을 만들어줄 예정
 	//콜백을 리워드 시스템에 연결
+	auto Event = make_shared<ICharacterDamagedEvent>(Name, finalDamage);
+	GlobalEventManager::Get().Notify(Event);
 }
 
 bool Character::IsDead() const

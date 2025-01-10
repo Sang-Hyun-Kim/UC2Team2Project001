@@ -5,11 +5,11 @@
 class Monster : Character
 {
 private:
-	// �����Ǻ�
 	bool IsBoss;
 
 public:
-	// ���� ����
+	Monster(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense);
+	Monster(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense, int level);
 
-	// óġ ����
+	
 };
