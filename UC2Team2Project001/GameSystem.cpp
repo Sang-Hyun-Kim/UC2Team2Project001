@@ -13,7 +13,14 @@ void BattleSystem::EnterSystem()
 	cout << "-----------------------------------------------------------------\n";
 	cout << "                            전투 입장                           " << endl;
 	cout << "-----------------------------------------------------------------\n";
-
+	if (player == nullptr)
+	{
+		cout << "nullptr\n";
+	}
+	else
+	{
+		cout << "not nullptr\n";
+	}
 	cout << "게임 승리" << endl;
 	
 	
@@ -130,12 +137,12 @@ void LobbySystem::PlayerMove()
 	this->SetPlayer(nullptr);
 }
 
-shared_ptr<Player> GameSystem::GetPlayer()
+shared_ptr<Creature> GameSystem::GetPlayer()
 {
-	return dynamic_pointer_cast<Player>(player);
+	return player;
 }
 
-void GameSystem::SetPlayer(shared_ptr<Player> _player)
+void GameSystem::SetPlayer(shared_ptr<Creature> _player)
 {
 	player = _player;
 }
