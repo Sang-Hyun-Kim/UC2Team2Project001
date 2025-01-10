@@ -86,6 +86,7 @@ public:
 	//void SetPlayer(shared_ptr<Player> _player);
 	// 랜덤 골드 생성 
 	// 랜덤 아이템 생성
+	
 	// 상점 진입 물어보기
 	//
 
