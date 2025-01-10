@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
 class IAttackStrategy;
 class IDefenseStrategy;
+class StatusComponent;
 
 using namespace std;
 
@@ -13,18 +15,9 @@ class Character
 {
 
 public:
-	Character(const string& InName, int InHP, int InAttack, int InDefense)
-		: Name(InName)
-		, HP(InHP)
-		, AttackPower(InAttack)
-		, Defense(InDefense)
-		, AttackStrategy(nullptr)
-		, DefenseStrategy(nullptr)
-	{
-		
-	}
+	Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense);
 
-	virtual ~Character();
+	virtual ~Character() {}
 
 	virtual void Attack(Character* Target);
 
@@ -34,26 +27,37 @@ public:
 
 	void PrintStatus() const;
 	
-	void SetHP(int NewHp) { HP = NewHp; }
+	int SetHP(int NewHp) { HP = NewHp; }
+	
+	// 현제 체력 변화
+	void ChangeHP(int AddHp)
+	{
+		HP += AddHp;
+		
+		HP = clamp(HP, 0, MaxHP);
+	}
 
 	const string& GetName() const { return Name; }
 	int GetHP() const { return HP; }
+	int GetMaxHP() const { return MaxHP; }
 	int GetAttackPower() const { return AttackPower; }
 	int GetDefense() const { return Defense; }
 
 	void SetAttackStrategy(IAttackStrategy* NewAttackStrategy);
-	
+
 	void SetDefenseStrategy(IDefenseStrategy* NewDefenseStrategy);
 
 protected:
 	string Name;
 	int HP;
+	int MaxHP;
 	int AttackPower;
-	int Defense;	
+	int Defense;
 
 	// 공격/방어 전략 포인터
-	IAttackStrategy* AttackStrategy;
-	IDefenseStrategy* DefenseStrategy;
-};
+	shared_ptr<IAttackStrategy> AttackStrategy;
+	shared_ptr<IDefenseStrategy> DefenseStrategy;
 
+	shared_ptr<StatusComponent> StatusManager;
+};
 
