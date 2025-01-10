@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\CharacterSystem">
+      <UniqueIdentifier>{fdc76205-05d7-4c5a-acf6-9aabf33d3666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\CharacterSystem">
+      <UniqueIdentifier>{0cee3e6e-49a0-4211-ad74-ea3ec90754f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -21,10 +27,22 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IStrategy.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IStrategy.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
