@@ -44,11 +44,11 @@ public:
 	virtual ~GameSystem() {};
 	
 	virtual void PlayerMove() {}; // 플레이어의 이전 위치에서 받는 함수
-	virtual shared_ptr<Player> GetPlayer();
-	virtual void SetPlayer(shared_ptr<Player> _player);
+	virtual shared_ptr<Creature> GetPlayer();
+	virtual void SetPlayer(shared_ptr<Creature> _player);
 protected:
 	// 플레이어 저장
-	shared_ptr<Player> player;
+	shared_ptr<Creature> player;
 	
 
 };
@@ -94,7 +94,6 @@ public:
 
 private:
 	shared_ptr<Creature> monster;
-	shared_ptr<Creature> player;
 	bool isbattlefinished = false;
 	bool isfinished = false;
 };
