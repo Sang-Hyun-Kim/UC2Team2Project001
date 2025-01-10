@@ -19,18 +19,6 @@
     <Filter Include="헤더 파일\CharacterSystem">
       <UniqueIdentifier>{0cee3e6e-49a0-4211-ad74-ea3ec90754f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\ItemSystem">
-      <UniqueIdentifier>{1eb53fec-f6a3-47b3-99d0-6879cd97c4c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\ItemSystem">
-      <UniqueIdentifier>{3af2c9b0-b17a-4bcb-afc7-5392d9769b18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\ItemSystem\Potion">
-      <UniqueIdentifier>{49117da7-2925-46fc-afa1-6e4096cdefc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\ItemSystem\Potion">
-      <UniqueIdentifier>{1cb397e1-d1e2-4ee3-a35e-c2b87ee895da}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -45,18 +33,6 @@
     <ClCompile Include="IStrategy.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>소스 파일\ItemSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsumableItem.cpp">
-      <Filter>소스 파일\ItemSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthPotion.cpp">
-      <Filter>소스 파일\ItemSystem\Potion</Filter>
-    </ClCompile>
-    <ClCompile Include="Potion.cpp">
-      <Filter>소스 파일\ItemSystem\Potion</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -67,18 +43,6 @@
     </ClInclude>
     <ClInclude Include="IStrategy.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>헤더 파일\ItemSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsumableItem.h">
-      <Filter>헤더 파일\ItemSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthPotion.h">
-      <Filter>헤더 파일\ItemSystem\Potion</Filter>
-    </ClInclude>
-    <ClInclude Include="Potion.h">
-      <Filter>헤더 파일\ItemSystem\Potion</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
