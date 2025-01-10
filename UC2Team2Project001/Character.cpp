@@ -3,18 +3,14 @@
 #include "Character.h"
 #include "IStrategy.h"
 #include "StatusComponent.h"
+#include "StatComponent.h"
 
 
 Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
-	: Name(InName)
-	, HP(InHP)
-	, MaxHP(InMaxHP)
-	, AttackPower(InAttack)
-	, Defense(InDefense)
-	, AttackStrategy(nullptr)
-	, DefenseStrategy(nullptr)
+	: CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
 	StatusManager = make_shared<StatusComponent>();
+	StatManager = make_shared<UStatsComponent>(this);
 }
 
 void Character::Attack(Character* Target)
@@ -37,22 +33,7 @@ void Character::TakeDamage(int IncomingDamage)
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	ChangeHP(-finalDamage);
-
-	//ToDo: 나중에 OnDead 콜백을 만들어줄 예정
-	//콜백을 리워드 시스템에 연결
-}
-
-bool Character::IsDead() const
-{
-	return (HP <= 0);
-}
-
-void Character::PrintStatus() const
-{
-	std::cout << "[ " << Name << " ] HP: " << HP
-		<< " / ATK: " << AttackPower
-		<< " / DEF: " << Defense << std::endl;
+	StatManager->ModifyStat(StatType::HP, (float)finalDamage);
 }
 
 void Character::SetAttackStrategy(IAttackStrategy* NewAttackStrategy)
