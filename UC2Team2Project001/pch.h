@@ -2,8 +2,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
-#include "ItemManager.h";
 using namespace std;
 
-ItemManager* ItemManager::instance = nullptr;

@@ -11,9 +11,6 @@ private:
     // 다음에 저장될 키 
     int nextKey = 0;
 
-    // 싱글턴 인스턴스
-    static ItemManager* instance;
-
     // 생성자 
     ItemManager();
 

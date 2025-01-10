@@ -1,4 +1,6 @@
 #include "pch.h"
+
+
 #include "ItemManager.h"
 
 ItemManager::ItemManager() {}
@@ -10,10 +12,9 @@ ItemManager::~ItemManager()
 
 ItemManager* ItemManager::getInstance()
 {
-    if (!instance)
-    {
-        instance = new ItemManager();
-    }
+    // 싱글턴 인스턴스
+    static ItemManager* instance;
+
     return instance;
 }
 
