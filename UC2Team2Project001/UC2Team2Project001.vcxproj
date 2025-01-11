@@ -138,6 +138,7 @@
     <ClCompile Include="EventManagerSystem.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameSystem.cpp" />
+    <ClCompile Include="GlobalEventManager.cpp" />
     <ClCompile Include="IStrategy.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -145,13 +146,17 @@
     </ClCompile>
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="StatusComponent.cpp" />
+    <ClCompile Include="UIEventManagerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="EventManagerSystem.h" />
+    <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="GlobalEventManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="StatusComponent.h" />
+    <ClInclude Include="UIEventManagerSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

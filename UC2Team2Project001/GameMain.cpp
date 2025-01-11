@@ -5,7 +5,18 @@
 
 int main()
 {
-	GLobbySystem->CreatePlayer();
-	GLobbySystem->PlayerMove();
-	GBattleSystem->EnterSystem();
+
+	GSystemContext->currentSystem = GLobbySystem;
+
+
+	while (true)
+	{
+		GSystemContext->currentSystem->EnterSystem();
+	}
+
+	//GLobbySystem->CreatePlayer();
+	//GLobbySystem->PlayerMove();
+	//GBattleSystem->EnterSystem();
+
+
 }
