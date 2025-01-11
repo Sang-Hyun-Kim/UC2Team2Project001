@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GameSystem.h"
 
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
@@ -11,7 +11,7 @@ BattleSystem::BattleSystem()
 void BattleSystem::EnterSystem()
 {
 	cout << "-----------------------------------------------------------------\n";
-	cout << "                            ÀüÅõ ÀÔÀå                           " << endl;
+	cout << "                            ì „íˆ¬ ìž…ìž¥                           " << endl;
 	cout << "-----------------------------------------------------------------\n";
 	if (player == nullptr)
 	{
@@ -21,7 +21,7 @@ void BattleSystem::EnterSystem()
 	{
 		cout << "not nullptr\n";
 	}
-	cout << "°ÔÀÓ ½Â¸®" << endl;
+	cout << "ê²Œìž„ ìŠ¹ë¦¬" << endl;
 	
 	
 
@@ -29,16 +29,16 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::CreateMonster()
 {
-	// ¸ó½ºÅÍ Á¦ÀÛ
+	// ëª¬ìŠ¤í„° ì œìž‘
 	monster = make_shared<Monster>("monster",100);
 }
 
 //void BattleSystem::PrintCommand()
 //{
-//	cout << "Çàµ¿À» ¼±ÅÃÇÏ¼¼¿ä\n";
-//	cout << "1. °ø°Ý\n";
-//	cout << "2. ¹æ¾î\n";
-//	cout << "3. ¾ÆÀÌÅÛ »ç¿ë\n";
+//	cout << "í–‰ë™ì„ ì„ íƒí•˜ì„¸ìš”\n";
+//	cout << "1. ê³µê²©\n";
+//	cout << "2. ë°©ì–´\n";
+//	cout << "3. ì•„ì´í…œ ì‚¬ìš©\n";
 //
 //}
 

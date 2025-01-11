@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "GameSystem.h"
+#include "GlobalEventManager.h"
+#include "IEventTypes.h"
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
