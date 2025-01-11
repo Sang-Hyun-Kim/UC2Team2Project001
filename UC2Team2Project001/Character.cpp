@@ -45,7 +45,7 @@ void Character::TakeDamage(int IncomingDamage)
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	StatManager->ModifyStat(StatType::HP, -finalDamage);
+	StatManager->ModifyStat(StatType::HP, (float) - finalDamage);
 
 	//콜백을 리워드 시스템에 연결
 	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage);

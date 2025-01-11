@@ -2,6 +2,12 @@
 #include "AttackBoostPotion.h"
 #include "Character.h"
 #include "StatComponent.h"
+
+AttackBoostPotion::AttackBoostPotion()
+{
+
+}
+
 void AttackBoostPotion::use(Character& Target)
 {
 	Target.StatManager->ModifyStat(StatType::AttackPower, 5);

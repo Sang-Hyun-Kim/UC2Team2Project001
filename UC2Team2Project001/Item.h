@@ -11,6 +11,11 @@ protected:
     int value;              // 아이템 가치
 
 public:
+    Item()
+    {
+
+    }
+
     //생성자
     Item(const string& name, const string& description, int value);
 
