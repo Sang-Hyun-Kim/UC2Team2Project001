@@ -5,6 +5,9 @@
 
 int main()
 {
+	// 랜덤 함수 시드 설정
+	srand(time(NULL));
+
 	GLobbySystem->CreatePlayer();
 	GLobbySystem->PlayerMove();
 	GBattleSystem->EnterSystem();

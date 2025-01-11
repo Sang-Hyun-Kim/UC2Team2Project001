@@ -4,14 +4,17 @@
 #include "IStrategy.h"
 #include "IEventTypes.h"
 #include "GlobalEventManager.h"
-#include "StatusComponent.h"
 #include "StatComponent.h"
 
+Character::Character()
+	: AttackStrategy(nullptr), DefenseStrategy(nullptr)
+{
+	
+}
 
-Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
+Character::Character(const string& InName)
 	: CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
-	StatusManager = make_shared<StatusComponent>();
 	StatManager = make_shared<UStatsComponent>(this);
 }
 
@@ -35,34 +38,19 @@ void Character::TakeDamage(int IncomingDamage)
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	ChangeHP(-finalDamage);
+	StatManager->ModifyStat(StatType::HP, -finalDamage);
 
 	//콜백을 리워드 시스템에 연결
-	auto Event = make_shared<ICharacterDamagedEvent>(Name, finalDamage);
+	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage);
 	GlobalEventManager::Get().Notify(Event);
 }
 
-bool Character::IsDead() const
+void Character::SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy)
 {
-	return (HP <= 0);
+	AttackStrategy = move(NewAttackStrategy);
 }
 
-void Character::PrintStatus() const
+void Character::SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy)
 {
-	std::cout << "[ " << Name << " ] HP: " << HP
-		<< " / ATK: " << AttackPower
-		<< " / DEF: " << Defense << std::endl;
-	StatManager->ModifyStat(StatType::HP, (float)finalDamage);
-}
-
-void Character::SetAttackStrategy(IAttackStrategy* NewAttackStrategy)
-{
-	delete AttackStrategy;
-	AttackStrategy = NewAttackStrategy;
-}
-
-void Character::SetDefenseStrategy(IDefenseStrategy* NewDefenseStrategy)
-{
-	delete DefenseStrategy;
-	DefenseStrategy = NewDefenseStrategy;
+	DefenseStrategy = move(NewDefenseStrategy);
 }

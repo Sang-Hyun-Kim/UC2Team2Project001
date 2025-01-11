@@ -36,6 +36,27 @@ public:
 	}
 };
 
+// 캐릭터 공격 이벤트
+class ICharacterAttackEvent : public IEvent
+{
+public:
+	string CharacterName;
+	int Damage;
+	ICharacterAttackEvent(const string& InCharacterName,int InDamage)
+		: CharacterName(InCharacterName), Damage(InDamage) {}
+};
+
+// 캐릭터 방어 이벤트
+class ICharacterDefenseEvent : public IEvent
+{
+public:
+	string CharacterName;
+	int IncomingDamage;
+	int FinalDamage;
+	ICharacterDefenseEvent(const string& InCharacterName, int InIncomingDamage, int InFinalDamage)
+		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), FinalDamage() {}
+};
+
 class IEnterEvent : public IEvent
 {
 	string PaseName;

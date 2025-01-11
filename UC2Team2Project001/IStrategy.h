@@ -39,10 +39,10 @@ public:
 	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) override;
 };
 
-// 방어 전략: 회피(Evade)
-class EvadeDefenseStrategy : public IDefenseStrategy 
-{
-public:
-	// 회피 시 받는 최종 피해 계산 구현
-	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) override;
-};
+//// 방어 전략: 회피(Evade)
+//class EvadeDefenseStrategy : public IDefenseStrategy 
+//{
+//public:
+//	// 회피 시 받는 최종 피해 계산 구현
+//	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) override;
+//};

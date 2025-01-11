@@ -18,7 +18,8 @@ class Character
 {
 
 public:
-	Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense);
+	Character();
+	Character(const string& InName);
 
 	virtual ~Character() {}
 
@@ -26,9 +27,9 @@ public:
 
 	virtual void TakeDamage(int IncomingDamage);
 
-	void SetAttackStrategy(IAttackStrategy* NewAttackStrategy);
+	void SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy);
 
-	void SetDefenseStrategy(IDefenseStrategy* NewDefenseStrategy);
+	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy);
 
 public:
 	string CharacterName;
@@ -38,10 +39,7 @@ public:
 
 protected:
 	// 공격/방어 전략 포인터
-	IAttackStrategy* AttackStrategy;
-	IDefenseStrategy* DefenseStrategy;
-
-	//상태 컴포넌트
-	shared_ptr<StatusComponent> StatusManager;
+	shared_ptr<IAttackStrategy> AttackStrategy;
+	shared_ptr<IDefenseStrategy> DefenseStrategy;
 };
 
