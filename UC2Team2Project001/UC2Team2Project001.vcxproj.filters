@@ -16,8 +16,29 @@
     <Filter Include="소스 파일\CharacterSystem">
       <UniqueIdentifier>{1a1d5b11-1105-4224-b940-758f55371439}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\StatusSystem">
-      <UniqueIdentifier>{6e94fa12-ed4e-49f7-9a56-e42e177b28d2}</UniqueIdentifier>
+    <Filter Include="헤더 파일\CharacterSystem">
+      <UniqueIdentifier>{59a13d20-0127-4027-b4e4-574bd6a49d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\StatSystem">
+      <UniqueIdentifier>{5caa6155-139d-4cd7-a5be-806c6f5e13d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\StatSystem">
+      <UniqueIdentifier>{08a38387-a0d4-4b90-b86d-c150d3deb0b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\EventSystem">
+      <UniqueIdentifier>{0dfa23f1-0f50-401d-9429-8402a4b995a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameSystem">
+      <UniqueIdentifier>{b5e204e5-e408-426b-a434-0ed0e1b55883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameSystem">
+      <UniqueIdentifier>{768a6a38-2da3-460b-a6ff-721f5ecdaa34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\CharacterSystem">
+      <UniqueIdentifier>{bbdfc25e-057d-4b4f-9a04-d49861550232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\EventSystem">
+      <UniqueIdentifier>{f7bb552b-4e84-4cb5-96bf-7080180c4414}</UniqueIdentifier>
     </Filter>
     <Filter Include="헤더 파일\ItemSystem">
       <UniqueIdentifier>{e4c9e951-594a-41fc-ab6d-a5eeb545cd33}</UniqueIdentifier>
@@ -36,13 +57,46 @@
     <ClCompile Include="Character.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
-    <ClCompile Include="StatusComponent.cpp">
-      <Filter>소스 파일\StatusSystem</Filter>
+    <ClCompile Include="GameSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Status.cpp">
-      <Filter>소스 파일\StatusSystem</Filter>
+    <ClCompile Include="CharacterFactory.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
     <ClCompile Include="EventManagerSystem.cpp">
+      <Filter>소스 파일\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalEventManager.cpp">
+      <Filter>소스 파일\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IStrategy.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEventManagerSystem.cpp">
+      <Filter>소스 파일\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="StatComponent.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsLoader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalEventManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IStrategy.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="StatComponent.cpp">
+      <Filter>소스 파일\StatSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEventManagerSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameSystem.cpp">
@@ -74,17 +128,38 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Status.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="IEventTypes.h">
+      <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
-    <ClInclude Include="StatusComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="GlobalEventManager.h">
+      <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
     <ClInclude Include="EventManagerSystem.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEventManagerSystem.h">
+      <Filter>헤더 파일\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IStrategy.h">
+      <Filter>헤더 파일\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterFactory.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCharacter.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="StatComponent.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsLoader.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
     <ClInclude Include="HealthPotion.h">
       <Filter>헤더 파일\ItemSystem</Filter>

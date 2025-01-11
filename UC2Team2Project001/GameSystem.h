@@ -1,7 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include "pch.h"
 /*
-	Å×½ºÆ®¸¦ À§ÇÑ °¡Â¥ ÇÃ·¹ÀÌ¾î, ¸ó½ºÅÍ
+	í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•œ ê°€ì§œ í”Œë ˆì´ì–´, ëª¬ìŠ¤í„°
 
 */
 class Creature;
@@ -40,14 +40,14 @@ public:
 class GameSystem
 {
 public:
-	virtual void EnterSystem() {};// ÇÃ·¹ÀÌ¾î°¡ ÀÌÀü À§Ä¡¿¡¼­ ¿Å°Ü Á³À» °æ¿ì ÇØ´ç ¹æÀÇ ·ÎÁ÷À» ½ÇÇàÇÏ´Â ÇÔ¼ö
+	virtual void EnterSystem() {};// í”Œë ˆì´ì–´ê°€ ì´ì „ ìœ„ì¹˜ì—ì„œ ì˜®ê²¨ ì¡Œì„ ê²½ìš° í•´ë‹¹ ë°©ì˜ ë¡œì§ì„ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
 	virtual ~GameSystem() {};
 	
-	virtual void PlayerMove() {}; // ÇÃ·¹ÀÌ¾îÀÇ ÀÌÀü À§Ä¡¿¡¼­ ¹Ş´Â ÇÔ¼ö
+	virtual void PlayerMove() {}; // í”Œë ˆì´ì–´ì˜ ì´ì „ ìœ„ì¹˜ì—ì„œ ë°›ëŠ” í•¨ìˆ˜
 	virtual shared_ptr<Creature> GetPlayer();
 	virtual void SetPlayer(shared_ptr<Creature> _player);
 protected:
-	// ÇÃ·¹ÀÌ¾î ÀúÀå
+	// í”Œë ˆì´ì–´ ì €ì¥
 	shared_ptr<Creature> player;
 	
 
@@ -55,24 +55,24 @@ protected:
 
 
 /*
-	ÇÃ·¹ÀÌ¾îÀÇ »ı¼º, °ÔÀÓ Á¾·á½Ã µ¹¾Æ°¡´Â ·Îºñ
+	í”Œë ˆì´ì–´ì˜ ìƒì„±, ê²Œì„ ì¢…ë£Œì‹œ ëŒì•„ê°€ëŠ” ë¡œë¹„
 */
 class LobbySystem : public GameSystem 
 {
 public:
 	LobbySystem() {};
 
-	// ÇÃ·¹ÀÌ¾î »ı¼º
+	// í”Œë ˆì´ì–´ ìƒì„±
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
-	virtual void PlayerMove() override; // ÇÃ·¹ÀÌ¾îÀÇ ÀÌÀü À§Ä¡¿¡¼­ ¹Ş´Â ÇÔ¼ö
+	virtual void PlayerMove() override; // í”Œë ˆì´ì–´ì˜ ì´ì „ ìœ„ì¹˜ì—ì„œ ë°›ëŠ” í•¨ìˆ˜
 
 };
 
 /*
-	ÇÃ·¹ÀÌ¾îÀÇ ÀüÅõ¸¦ ÁøÇàÇÏ´Â °ø°£
-	Æ¯Á¤ »óÈ²¿¡ µû¶ó »óÁ¡°ú ·Îºñ·Î ÀÌµ¿½ÃÅ´
+	í”Œë ˆì´ì–´ì˜ ì „íˆ¬ë¥¼ ì§„í–‰í•˜ëŠ” ê³µê°„
+	íŠ¹ì • ìƒí™©ì— ë”°ë¼ ìƒì ê³¼ ë¡œë¹„ë¡œ ì´ë™ì‹œí‚´
 */
 
 class BattleSystem : public GameSystem
@@ -81,15 +81,13 @@ public:
 	BattleSystem();
 	virtual void EnterSystem() override;
 	void CreateMonster();
-	void PrintCommand(); // ÇÃ·¹ÀÌ¾î Çàµ¿ ¼±ÅÃÁö Ãâ·Â
+	void PrintCommand(); // í”Œë ˆì´ì–´ í–‰ë™ ì„ íƒì§€ ì¶œë ¥
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
-	// ·£´ı °ñµå »ı¼º 
-	// ·£´ı ¾ÆÀÌÅÛ »ı¼º
+	// ëœë¤ ê³¨ë“œ ìƒì„± 
+	// ëœë¤ ì•„ì´í…œ ìƒì„±
 	
-	// »óÁ¡ ÁøÀÔ ¹°¾îº¸±â
-	//
-
+	// ìƒì  ì§„ì… ë¬¼ì–´ë³´ê¸°
 
 
 private:
