@@ -12,7 +12,7 @@ void BasicAttackStrategy::Attack(Character* Self, Character* Target)
 {
 	// 치명타 확률 계산
 	int CriticalChance = (int)(Self->StatManager->GetStat(StatType::CriticalChance) * 100);
-	bool IsCritical = (rand() % 10 < CriticalChance);
+	bool IsCritical = (rand() % 100) <= CriticalChance;
 
 	int BaseDamage = (int) Self->StatManager->GetStat(StatType::AttackPower);
 	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
@@ -23,9 +23,9 @@ void BasicAttackStrategy::Attack(Character* Self, Character* Target)
 	Target->TakeDamage(FianlDamage);
 }
 
-int BlockDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingDamage)
+int BlockDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingDamage) 
 {
-	int finalDamage = IncomingDamage - (int) Self->StatManager->GetStat(StatType::Defense);
+	int finalDamage = IncomingDamage - (int)Self->StatManager->GetStat(StatType::Defense);
 
 	if (finalDamage < 0) finalDamage = 0;
 

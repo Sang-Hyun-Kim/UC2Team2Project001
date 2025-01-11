@@ -57,6 +57,18 @@ public:
 		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), FinalDamage() {}
 };
 
+class ILevelUpEvent : public IEvent
+{
+public:
+	string CharacterName;
+	int Level;
+
+	ILevelUpEvent(const std::string& name,int InLevel) : CharacterName(name) , Level(InLevel)
+	{
+	}
+};
+
+
 class IEnterEvent : public IEvent
 {
 	string PaseName;

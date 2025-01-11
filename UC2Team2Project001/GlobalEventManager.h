@@ -22,10 +22,11 @@ public:
 
     // 복사/대입 불가
     GlobalEventManager(const GlobalEventManager&) = delete;
+
     GlobalEventManager& operator=(const GlobalEventManager&) = delete;
 
     // 구독 등록
-    int Subscribe(const std::shared_ptr<EventManagerSystem>& system);
+    int Subscribe(const std::shared_ptr<IEventManagerSystem>& system);
 
     // 구독 해제
     void Unsubscribe(int subscriptionId);
@@ -36,5 +37,5 @@ public:
 private:
     int NextId = 1;
 
-    std::vector<std::shared_ptr<EventManagerSystem>> Listeners;
+    std::vector<std::shared_ptr<IEventManagerSystem>> Listeners;
 };

@@ -6,7 +6,7 @@
 GlobalEventManager::GlobalEventManager() {}
 GlobalEventManager::~GlobalEventManager() {}
 
-int GlobalEventManager::Subscribe(const std::shared_ptr<EventManagerSystem>& system)
+int GlobalEventManager::Subscribe(const std::shared_ptr<IEventManagerSystem>& system)
 {
 	int newId = NextId++;
 
@@ -20,7 +20,7 @@ int GlobalEventManager::Subscribe(const std::shared_ptr<EventManagerSystem>& sys
 void GlobalEventManager::Unsubscribe(int subscriptionId)
 {
 	auto it = std::remove_if(Listeners.begin(), Listeners.end(),
-		[subscriptionId](const std::shared_ptr<EventManagerSystem>& sys)
+		[subscriptionId](const std::shared_ptr<IEventManagerSystem>& sys)
 		{
 			return (sys->GetID() == subscriptionId);
 		}

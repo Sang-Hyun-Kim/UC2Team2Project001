@@ -1,31 +1,37 @@
 #include "pch.h"
-#include <memory>
 #include "Character.h"
 #include "IStrategy.h"
 #include "IEventTypes.h"
 #include "GlobalEventManager.h"
 #include "StatComponent.h"
+#include <memory>
 
-Character::Character()
-	: AttackStrategy(nullptr), DefenseStrategy(nullptr)
+
+Character::Character(): AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
-	
 }
 
-Character::Character(const string& InName)
-	: CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
+Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
-	StatManager = make_shared<UStatsComponent>(this);
+	StatManager = std::make_shared<UStatsComponent>(this);
+	StatManager.get()->BeginPlay();
 }
 
 void Character::Attack(Character* Target)
 {
-	if (!Target || !AttackStrategy)
+	if (!Target)
 	{
-		cout << "타겟이 없거나 공격 어택이 없습니다";
+		std::cout << "타겟이 없습니다." << std::endl;
 		return;
 	}
 
+	if (!AttackStrategy)
+	{
+		std::cout << "공격 전략이 설정되지 않았습니다." << std::endl;
+		return;
+	}
+
+	// 공격 전략 실행
 	AttackStrategy->Attack(this, Target);
 }
 
@@ -33,6 +39,7 @@ void Character::TakeDamage(int IncomingDamage)
 {
 	int finalDamage = IncomingDamage;
 
+	// 방어 전략 적용
 	if (DefenseStrategy)
 	{
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
