@@ -33,9 +33,6 @@ public:
 
 	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy);
 
-public:
-	string CharacterName;
-
 	//스텟 컴포넌트
 	shared_ptr<UStatsComponent> StatManager;
 
@@ -47,10 +44,6 @@ protected:
 public:
 	// 캐릭터 이름 반환
 	const string& GetName() { return CharacterName; }
-
-public:
-	// 스탯 컴포넌트
-	shared_ptr<UStatsComponent> StatManager;
 
 protected:
 	string CharacterName;

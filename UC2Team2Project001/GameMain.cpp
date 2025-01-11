@@ -29,7 +29,7 @@ int main()
 	Character goblin("Goblin");
 
 	// 공격 전략 설정
-	player.SetAttackStrategy(std::make_unique<SimpleAttackStrategy>());
+	player.SetAttackStrategy(std::make_shared<BasicAttackStrategy>());
 	player.Attack(&goblin);
 
 	/*GLobbySystem->CreatePlayer();

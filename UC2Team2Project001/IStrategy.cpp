@@ -17,7 +17,7 @@ void BasicAttackStrategy::Attack(Character* Self, Character* Target)
 	int BaseDamage = (int) Self->StatManager->GetStat(StatType::AttackPower);
 	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
 
-	auto Event = make_shared<ICharacterAttackEvent>(Self->CharacterName, FianlDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(Self->GetName(), FianlDamage);
 	GlobalEventManager::Get().Notify(Event);
 
 	Target->TakeDamage(FianlDamage);
@@ -29,7 +29,7 @@ int BlockDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingD
 
 	if (finalDamage < 0) finalDamage = 0;
 
-	auto Event = make_shared<ICharacterDefenseEvent>(Self->CharacterName, IncomingDamage, finalDamage);
+	auto Event = make_shared<ICharacterDefenseEvent>(Self->GetName(), IncomingDamage, finalDamage);
 	GlobalEventManager::Get().Notify(Event);
 
 	return finalDamage;
