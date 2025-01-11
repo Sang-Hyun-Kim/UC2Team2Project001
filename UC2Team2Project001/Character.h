@@ -9,7 +9,6 @@ class IDefenseStrategy;
 using namespace std;
 
 // 캐릭터(공통 베이스 클래스)
-class StatusComponent;
 class UStatsComponent;
 
 using namespace std;
