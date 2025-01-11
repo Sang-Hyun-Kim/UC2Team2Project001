@@ -66,6 +66,9 @@
     <ClCompile Include="ItemManager.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
     </ClCompile>
+    <ClCompile Include="AttackBoost.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -97,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="ItemManager.h">
       <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackBoost.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StatComponent.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

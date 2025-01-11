@@ -6,13 +6,8 @@
 // 게임 시스템 코드가 돌아갈 main 함수
 
 int main()
-{/*
+{
 	GLobbySystem->CreatePlayer();
 	GLobbySystem->PlayerMove();
-	GBattleSystem->EnterSystem();*/
-	ItemManager::GetInstance().init();
-	
-	ItemManager::GetInstance().getRandomItem();
-	
-	
+	GBattleSystem->EnterSystem();
 }

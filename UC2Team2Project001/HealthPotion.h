@@ -4,5 +4,5 @@ class HealthPotion : public Potion
 {
 public:
     HealthPotion();
-    void use() override;
+    void use(Character& Target) override;
 };

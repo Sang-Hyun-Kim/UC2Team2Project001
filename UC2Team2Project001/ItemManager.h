@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
+#include <map>
 class Item;
 
 class ItemManager
@@ -12,6 +13,7 @@ private:
     // 다음에 저장될 키 
     int nextKey = 0;
 
+    //생성자
     ItemManager();
     // 복사 생성자와 대입 연산자 삭제 (복사 방지)
     ItemManager(const ItemManager&) = delete;

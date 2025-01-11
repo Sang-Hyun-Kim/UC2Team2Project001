@@ -2,6 +2,7 @@
 
 #include "pch.h"
 
+class Character;
 //아이템 기본 클래스
 class Item {
 protected:
@@ -13,7 +14,7 @@ public:
     //생성자
     Item(const string& name, const string& description, int value);
 
-    virtual void use() = 0; // 순수 가상 함수
+    virtual void use(Character& Target) = 0; // 순수 가상 함수
     void info() const;
     
     virtual ~Item() {}
