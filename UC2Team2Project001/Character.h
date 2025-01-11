@@ -1,12 +1,16 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <algorithm>
 
 
+
+// Forward declarations
 class IAttackStrategy;
 class IDefenseStrategy;
-class StatusComponent;
+
+class UStatsComponent;
 
 using namespace std;
 
@@ -16,49 +20,34 @@ class Character
 {
 
 public:
-	Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense);
+	//생성자 및 소멸자
+	Character();
+
+	Character(const string& InName);
 
 	virtual ~Character() {}
 
+	// 공격 및 피해 처리
 	virtual void Attack(Character* Target);
-
 	virtual void TakeDamage(int IncomingDamage);
 
-	bool IsDead() const;
+	// 전략 설정
+	void SetAttackStrategy(std::shared_ptr<IAttackStrategy> NewAttackStrategy);
+	void SetDefenseStrategy(std::shared_ptr<IDefenseStrategy> NewDefenseStrategy);
 
-	void PrintStatus() const;
-	
-	int SetHP(int NewHp) { HP = NewHp; }
-	
-	// 현제 체력 변화
-	void ChangeHP(int AddHp)
-	{
-		HP += AddHp;
-		
-		HP = clamp(HP, 0, MaxHP);
-	}
+public:
+	// 캐릭터 이름 반환
+	const string& GetName() { return CharacterName; }
 
-	const string& GetName() const { return Name; }
-	int GetHP() const { return HP; }
-	int GetMaxHP() const { return MaxHP; }
-	int GetAttackPower() const { return AttackPower; }
-	int GetDefense() const { return Defense; }
-
-	void SetAttackStrategy(IAttackStrategy* NewAttackStrategy);
-
-	void SetDefenseStrategy(IDefenseStrategy* NewDefenseStrategy);
+public:
+	// 스탯 컴포넌트
+	shared_ptr<UStatsComponent> StatManager;
 
 protected:
-	string Name;
-	int HP;
-	int MaxHP;
-	int AttackPower;
-	int Defense;
+	string CharacterName;
 
-	// 공격/방어 전략 포인터
-	IAttackStrategy* AttackStrategy;
-	IDefenseStrategy* DefenseStrategy;
-
-	shared_ptr<StatusComponent> StatusManager;
+	// 공격/방어 전략
+	std::shared_ptr<IAttackStrategy> AttackStrategy;
+	std::shared_ptr<IDefenseStrategy> DefenseStrategy;
 };
 

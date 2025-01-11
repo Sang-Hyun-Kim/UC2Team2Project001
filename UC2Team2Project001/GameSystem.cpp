@@ -11,7 +11,7 @@ BattleSystem::BattleSystem()
 void BattleSystem::EnterSystem()
 {
 	cout << "-----------------------------------------------------------------\n";
-	cout << "                            ÀüÅõ ÀÔÀå                           " << endl;
+	cout << "                            ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½                    " << endl;
 	cout << "-----------------------------------------------------------------\n";
 	if (player == nullptr)
 	{
@@ -21,7 +21,7 @@ void BattleSystem::EnterSystem()
 	{
 		cout << "not nullptr\n";
 	}
-	cout << "°ÔÀÓ ½Â¸®" << endl;
+	cout << "ï¿½ï¿½ï¿½ï¿½ ï¿½Â¸ï¿½" << endl;
 	
 	
 
@@ -29,16 +29,16 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::CreateMonster()
 {
-	// ¸ó½ºÅÍ Á¦ÀÛ
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	monster = make_shared<Monster>("monster",100);
 }
 
 //void BattleSystem::PrintCommand()
 //{
-//	cout << "Çàµ¿À» ¼±ÅÃÇÏ¼¼¿ä\n";
-//	cout << "1. °ø°Ý\n";
-//	cout << "2. ¹æ¾î\n";
-//	cout << "3. ¾ÆÀÌÅÛ »ç¿ë\n";
+//	cout << "ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½\n";
+//	cout << "1. ï¿½ï¿½ï¿½ï¿½\n";
+//	cout << "2. ï¿½ï¿½ï¿½\n";
+//	cout << "3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½\n";
 //
 //}
 

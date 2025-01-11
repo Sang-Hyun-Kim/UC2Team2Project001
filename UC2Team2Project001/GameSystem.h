@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 /*
-	Å×½ºÆ®¸¦ À§ÇÑ °¡Â¥ ÇÃ·¹ÀÌ¾î, ¸ó½ºÅÍ
+	ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½, ï¿½ï¿½ï¿½ï¿½
 
 */
 class Creature;
@@ -40,14 +40,14 @@ public:
 class GameSystem
 {
 public:
-	virtual void EnterSystem() {};// ÇÃ·¹ÀÌ¾î°¡ ÀÌÀü À§Ä¡¿¡¼­ ¿Å°Ü Á³À» °æ¿ì ÇØ´ç ¹æÀÇ ·ÎÁ÷À» ½ÇÇàÇÏ´Â ÇÔ¼ö
+	virtual void EnterSystem() {};// ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Å°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 	virtual ~GameSystem() {};
 	
-	virtual void PlayerMove() {}; // ÇÃ·¹ÀÌ¾îÀÇ ÀÌÀü À§Ä¡¿¡¼­ ¹Þ´Â ÇÔ¼ö
+	virtual void PlayerMove() {}; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½Ô¼ï¿½
 	virtual shared_ptr<Creature> GetPlayer();
 	virtual void SetPlayer(shared_ptr<Creature> _player);
 protected:
-	// ÇÃ·¹ÀÌ¾î ÀúÀå
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	shared_ptr<Creature> player;
 	
 
@@ -55,24 +55,24 @@ protected:
 
 
 /*
-	ÇÃ·¹ÀÌ¾îÀÇ »ý¼º, °ÔÀÓ Á¾·á½Ã µ¹¾Æ°¡´Â ·Îºñ
+	ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½Îºï¿½
 */
 class LobbySystem : public GameSystem 
 {
 public:
 	LobbySystem() {};
 
-	// ÇÃ·¹ÀÌ¾î »ý¼º
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
-	virtual void PlayerMove() override; // ÇÃ·¹ÀÌ¾îÀÇ ÀÌÀü À§Ä¡¿¡¼­ ¹Þ´Â ÇÔ¼ö
+	virtual void PlayerMove() override; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½Ô¼ï¿½
 
 };
 
 /*
-	ÇÃ·¹ÀÌ¾îÀÇ ÀüÅõ¸¦ ÁøÇàÇÏ´Â °ø°£
-	Æ¯Á¤ »óÈ²¿¡ µû¶ó »óÁ¡°ú ·Îºñ·Î ÀÌµ¿½ÃÅ´
+	ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
+	Æ¯ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å´
 */
 
 class BattleSystem : public GameSystem
@@ -81,13 +81,13 @@ public:
 	BattleSystem();
 	virtual void EnterSystem() override;
 	void CreateMonster();
-	void PrintCommand(); // ÇÃ·¹ÀÌ¾î Çàµ¿ ¼±ÅÃÁö Ãâ·Â
+	void PrintCommand(); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½àµ¿ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
-	// ·£´ý °ñµå »ý¼º 
-	// ·£´ý ¾ÆÀÌÅÛ »ý¼º
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	
-	// »óÁ¡ ÁøÀÔ ¹°¾îº¸±â
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½îº¸ï¿½ï¿½
 	//
 
 

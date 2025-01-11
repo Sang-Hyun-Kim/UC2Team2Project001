@@ -1,0 +1,64 @@
+{
+  "Characters": {
+    "Player": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 50,
+        "MaxMP": 50,
+        "AttackPower": 10,
+        "Defense": 5,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 1,
+        "Experience": 0,
+        "MaxExperience": 100
+      }
+    },
+    "Goblin": {
+      "Stats": {
+        "HP": 50,
+        "MaxHP": 50,
+        "MP": 20,
+        "MaxMP": 20,
+        "AttackPower": 5,
+        "Defense": 2,
+        "CriticalChance": 0.02,
+        "EvasionRate": 0.05,
+        "Level": 1,
+        "Experience": 0,
+        "MaxExperience": 50
+      }
+    },
+    "Slime": {
+      "Stats": {
+        "HP": 30,
+        "MaxHP": 30,
+        "MP": 10,
+        "MaxMP": 10,
+        "AttackPower": 3,
+        "Defense": 1,
+        "CriticalChance": 0.01,
+        "EvasionRate": 0.02,
+        "Level": 1,
+        "Experience": 0,
+        "MaxExperience": 30
+      }
+    },
+    "Dragon": {
+      "Stats": {
+        "HP": 500,
+        "MaxHP": 500,
+        "MP": 200,
+        "MaxMP": 200,
+        "AttackPower": 50,
+        "Defense": 20,
+        "CriticalChance": 0.1,
+        "EvasionRate": 0.05,
+        "Level": 10,
+        "Experience": 0,
+        "MaxExperience": 1000
+      }
+    }
+  }
+}

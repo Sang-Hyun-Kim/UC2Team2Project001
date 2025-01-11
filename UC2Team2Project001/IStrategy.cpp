@@ -6,12 +6,7 @@ using namespace std;
 
 void SimpleAttackStrategy::Attack(Character* Self, Character* Target) 
 {
-	int damage = Self->GetAttackPower();
-
-	cout << Self->GetName() << "이(가) 간단한 공격을 수행합니다. "
-		<< Target->GetName() << "은(는) 데미지 " << damage << "을(를) 받았습니다!" << endl;
-
-	Target->TakeDamage(damage);
+	Target->TakeDamage((int)Self->StatManager->GetStat(StatType::AttackPower));
 }
 
 void PowerAttackStrategy::Attack(Character* Self, Character* Target) 
@@ -39,7 +34,7 @@ void PowerAttackStrategy::Attack(Character* Self, Character* Target)
 
 int BlockDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingDamage) 
 {
-	int finalDamage = IncomingDamage - Self->GetDefense();
+	int finalDamage = IncomingDamage - (int)Self->StatManager->GetStat(StatType::Defense);
 
 	if (finalDamage < 0) finalDamage = 0;
 
@@ -61,7 +56,7 @@ int EvadeDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingD
 	}
 	else 
 	{
-		cout << Self->GetName() << "이(가) 회피에 실패했습니다. 데미지: " << IncomingDamage << endl;
+		cout << Self->GetName()<< "이(가) 회피에 실패했습니다. 데미지: " << IncomingDamage << endl;
 		return IncomingDamage;
 	}
 }

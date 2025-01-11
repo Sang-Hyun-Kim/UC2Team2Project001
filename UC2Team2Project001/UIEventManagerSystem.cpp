@@ -1,6 +1,15 @@
 #include "pch.h"
 #include "UIEventManagerSystem.h"
 #include "IEventTypes.h"  
+#include "GlobalEventManager.h"
+
+UIEventManagerSystem::UIEventManagerSystem()
+{
+}
+
+UIEventManagerSystem::~UIEventManagerSystem()
+{
+}
 
 void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 {

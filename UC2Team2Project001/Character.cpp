@@ -1,30 +1,37 @@
 #include "pch.h"
-#include <memory>
 #include "Character.h"
 #include "IStrategy.h"
-#include "StatusComponent.h"
+#include <memory>
+#include "IEventTypes.h"
+#include "StatComponent.h"
+#include "GlobalEventManager.h"
 
 
-Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
-	: Name(InName)
-	, HP(InHP)
-	, MaxHP(InMaxHP)
-	, AttackPower(InAttack)
-	, Defense(InDefense)
-	, AttackStrategy(nullptr)
-	, DefenseStrategy(nullptr)
+Character::Character(): AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
-	StatusManager = make_shared<StatusComponent>();
+}
+
+Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
+{
+	StatManager = std::make_shared<UStatsComponent>(this);
+	StatManager.get()->BeginPlay();
 }
 
 void Character::Attack(Character* Target)
 {
-	if (!Target || !AttackStrategy)
+	if (!Target)
 	{
-		cout << "타겟이 없거나 공격 어택이 없습니다";
+		std::cout << "타겟이 없습니다." << std::endl;
 		return;
 	}
 
+	if (!AttackStrategy)
+	{
+		std::cout << "공격 전략이 설정되지 않았습니다." << std::endl;
+		return;
+	}
+
+	// 공격 전략 실행
 	AttackStrategy->Attack(this, Target);
 }
 
@@ -32,37 +39,25 @@ void Character::TakeDamage(int IncomingDamage)
 {
 	int finalDamage = IncomingDamage;
 
+	// 방어 전략 적용
 	if (DefenseStrategy)
 	{
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	ChangeHP(-finalDamage);
+	auto NewDamageEvent = std::make_shared<ICharacterDamagedEvent>(GetName(),finalDamage);
+	GlobalEventManager::Get().Notify(NewDamageEvent);
 
-	//ToDo: 나중에 OnDead 콜백을 만들어줄 예정
-	//콜백을 리워드 시스템에 연결
+	// HP 수정
+	StatManager->ModifyStat(StatType::HP, -static_cast<float>(finalDamage));
 }
 
-bool Character::IsDead() const
+void Character::SetAttackStrategy(std::shared_ptr<IAttackStrategy> NewAttackStrategy)
 {
-	return (HP <= 0);
+	AttackStrategy = std::move(NewAttackStrategy);
 }
 
-void Character::PrintStatus() const
+void Character::SetDefenseStrategy(std::shared_ptr<IDefenseStrategy> NewDefenseStrategy)
 {
-	std::cout << "[ " << Name << " ] HP: " << HP
-		<< " / ATK: " << AttackPower
-		<< " / DEF: " << Defense << std::endl;
-}
-
-void Character::SetAttackStrategy(IAttackStrategy* NewAttackStrategy)
-{
-	delete AttackStrategy;
-	AttackStrategy = NewAttackStrategy;
-}
-
-void Character::SetDefenseStrategy(IDefenseStrategy* NewDefenseStrategy)
-{
-	delete DefenseStrategy;
-	DefenseStrategy = NewDefenseStrategy;
+	DefenseStrategy = std::move(NewDefenseStrategy);
 }
