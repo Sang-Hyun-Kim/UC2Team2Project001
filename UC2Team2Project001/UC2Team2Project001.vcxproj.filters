@@ -19,6 +19,12 @@
     <Filter Include="소스 파일\StatusSystem">
       <UniqueIdentifier>{6e94fa12-ed4e-49f7-9a56-e42e177b28d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\ItemSystem">
+      <UniqueIdentifier>{e4c9e951-594a-41fc-ab6d-a5eeb545cd33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ItemSystem">
+      <UniqueIdentifier>{7da1d1e4-c40f-4af1-b7e8-0e588168ec0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -39,6 +45,27 @@
     <ClCompile Include="EventManagerSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GameSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IStrategy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthPotion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Potion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsumableItem.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -55,6 +82,21 @@
     </ClInclude>
     <ClInclude Include="EventManagerSystem.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthPotion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Potion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsumableItem.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

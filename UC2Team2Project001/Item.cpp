@@ -1,6 +1,6 @@
 
 #include "pch.h"
-#include "../Item/Item.h"
+#include "Item.h"
 
 Item::Item(const string& name, const string& description, int value)
 : name(name), description(description), value(value) {}
