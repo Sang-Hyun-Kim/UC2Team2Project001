@@ -4,18 +4,15 @@
 #include "IStrategy.h"
 #include "IEventTypes.h"
 #include "GlobalEventManager.h"
+#include "StatusComponent.h"
+#include "StatComponent.h"
 
 
 Character::Character(const string& InName, int InHP, int InMaxHP, int InAttack, int InDefense)
-	: Name(InName)
-	, HP(InHP)
-	, MaxHP(InMaxHP)
-	, AttackPower(InAttack)
-	, Defense(InDefense)
-	, AttackStrategy(nullptr)
-	, DefenseStrategy(nullptr)
+	: CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
-	
+	StatusManager = make_shared<StatusComponent>();
+	StatManager = make_shared<UStatsComponent>(this);
 }
 
 void Character::Attack(Character* Target)
@@ -55,6 +52,7 @@ void Character::PrintStatus() const
 	std::cout << "[ " << Name << " ] HP: " << HP
 		<< " / ATK: " << AttackPower
 		<< " / DEF: " << Defense << std::endl;
+	StatManager->ModifyStat(StatType::HP, (float)finalDamage);
 }
 
 void Character::SetAttackStrategy(IAttackStrategy* NewAttackStrategy)
