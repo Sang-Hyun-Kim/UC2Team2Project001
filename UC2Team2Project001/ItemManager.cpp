@@ -2,16 +2,13 @@
 #include "ItemManager.h"
 
 #include "HealthPotion.h"
-
+#include "AttackBoostPotion.h"
 ItemManager::ItemManager(){}
 
 void ItemManager::init()
 {
     items[nextKey++] = make_shared<HealthPotion>();
-    items[nextKey++] = make_shared<HealthPotion>();
-    items[nextKey++] = make_shared<HealthPotion>();
-    items[nextKey++] = make_shared<HealthPotion>();
-    items[nextKey++] = make_shared<HealthPotion>();
+    items[nextKey++] = make_shared<AttackBoostPotion>();
 }
 
 ItemManager::~ItemManager()

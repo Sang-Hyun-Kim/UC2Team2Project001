@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Potion.h"
-class AttackBoost : public Potion
+class AttackBoostPotion : public Potion
 {
-	AttackBoost();
+	AttackBoostPotion();
 
 	void use(Character& Target) override;
 };
