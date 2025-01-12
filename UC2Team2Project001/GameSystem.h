@@ -29,13 +29,13 @@ public:
 	void Attack(shared_ptr<Creature> target) override;
 	virtual bool isDead() override;
 };
-class Monster : public Creature
-{
-public:
-	Monster(string _name,int _hp);
-	void Attack(shared_ptr<Creature> target) override;
-	virtual bool isDead() override;
-};
+//class Monster : public Creature
+//{
+//public:
+//	Monster(string _name,int _hp);
+//	void Attack(shared_ptr<Creature> target) override;
+//	virtual bool isDead() override;
+//};
 
 class GameSystem
 {

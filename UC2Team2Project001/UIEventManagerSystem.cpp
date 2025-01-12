@@ -2,6 +2,8 @@
 #include "UIEventManagerSystem.h"
 #include "IEventTypes.h"  
 #include "GlobalEventManager.h"
+#include "Item.h"
+#include "CharacterTypes.h"
 
 UIEventManagerSystem::UIEventManagerSystem()
 {
@@ -28,7 +30,7 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto Attack = std::dynamic_pointer_cast<ICharacterAttackEvent>(ev))
 	{
-		std::cout << "[UI] " << Attack->CharacterName << "이(가) 공격했습니다!";
+		std::cout << "[UI] " << Attack->CharacterName << "이(가) 공격했습니다!\n";
 	}
 	else if (auto Defense = std::dynamic_pointer_cast<ICharacterDefenseEvent>(ev))
 	{

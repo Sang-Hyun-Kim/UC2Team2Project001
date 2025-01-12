@@ -3,9 +3,11 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include "CharacterTypes.h"
 
 class IAttackStrategy;
 class IDefenseStrategy;
+class Item;
 
 using namespace std;
 
@@ -33,6 +35,8 @@ public:
 
 	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy);
 
+	virtual void CreateCharacterReward() {}
+
 	//스텟 컴포넌트
 	shared_ptr<UStatsComponent> StatManager;
 
@@ -44,6 +48,9 @@ protected:
 public:
 	// 캐릭터 이름 반환
 	const string& GetName() { return CharacterName; }
+	
+	// 캐릭터 사망 보상
+	FCharacterReward CharacterReward;
 
 protected:
 	string CharacterName;

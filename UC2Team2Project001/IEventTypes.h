@@ -2,7 +2,7 @@
 
 #include <string>
 #include <memory>
-
+#include "CharacterTypes.h"
 
 using namespace std;
 
@@ -19,8 +19,9 @@ class ICharacterDamagedEvent : public IEvent
 public:
 	string CharacterName;
 	int Damage;
+	int HP;
 
-	ICharacterDamagedEvent(const std::string& name, int dmg) : CharacterName(name), Damage(dmg)
+	ICharacterDamagedEvent(const std::string& name, int dmg, int InHP) : CharacterName(name), Damage(dmg), HP(InHP)
 	{
 	}
 };
@@ -30,8 +31,9 @@ class ICharacterDeadEvent : public IEvent
 {
 public:
 	string CharacterName;
+	FCharacterReward Reward;
 
-	ICharacterDeadEvent(const std::string& name) : CharacterName(name)
+	ICharacterDeadEvent(const std::string& name, FCharacterReward InReward) : CharacterName(name), Reward(InReward)
 	{
 	}
 };
@@ -54,7 +56,7 @@ public:
 	int IncomingDamage;
 	int FinalDamage;
 	ICharacterDefenseEvent(const string& InCharacterName, int InIncomingDamage, int InFinalDamage)
-		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), FinalDamage() {}
+		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), FinalDamage(InFinalDamage) {}
 };
 
 class ILevelUpEvent : public IEvent

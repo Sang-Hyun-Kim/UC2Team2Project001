@@ -84,6 +84,15 @@
     <ClCompile Include="StatsLoader.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterTypes.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCharacter.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -125,10 +134,19 @@
     <ClInclude Include="Potion.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="StatsLoader.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IStrategy.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCharacter.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterTypes.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
   </ItemGroup>

@@ -30,7 +30,7 @@ void BattleSystem::EnterSystem()
 void BattleSystem::CreateMonster()
 {
 	// 몬스터 제작
-	monster = make_shared<Monster>("monster",100);
+	//monster = make_shared<Monster>("monster",100);
 }
 
 //void BattleSystem::PrintCommand()
@@ -71,25 +71,25 @@ bool Player::isDead()
 		return false;
 }
 
-Monster::Monster(string _name, int _hp)
-
-{
-	SetName(_name);
-	this->hp = _hp;
-
-}
-
-void Monster::Attack(shared_ptr<Creature> target)
-{
-}
-
-bool Monster::isDead()
-{
-	if (hp <= 0)
-		return true;
-	else
-		return false;
-}
+//Monster::Monster(string _name, int _hp)
+//
+//{
+//	SetName(_name);
+//	this->hp = _hp;
+//
+//}
+//
+//void Monster::Attack(shared_ptr<Creature> target)
+//{
+//}
+//
+//bool Monster::isDead()
+//{
+//	if (hp <= 0)
+//		return true;
+//	else
+//		return false;
+//}
 
 void Creature::SetName(string _name)
 {

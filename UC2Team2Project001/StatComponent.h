@@ -65,5 +65,7 @@ private:
 	Character* OwnedCharacter;
 
 	std::map<StatType, float> Stats;
+
+public:
 	bool bIsLoadJson = true;
 };

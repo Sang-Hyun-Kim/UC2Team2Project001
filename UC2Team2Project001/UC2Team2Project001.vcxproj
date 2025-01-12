@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="AttackBoostPotion.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="CharacterTypes.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="EventManagerSystem.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -145,10 +146,12 @@
     <ClCompile Include="IStrategy.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="StatComponent.cpp" />
     <ClCompile Include="StatsLoader.cpp" />
@@ -157,12 +160,15 @@
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="CharacterTypes.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
     <ClInclude Include="HealthPotion.h" />
+    <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="Monster.h" />

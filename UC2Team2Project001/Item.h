@@ -16,6 +16,9 @@ public:
 
     }
 
+    // 임시 추가
+    string GetName();
+
     //생성자
     Item(const string& name, const string& description, int value);
 

@@ -5,21 +5,17 @@
 class Monster : public Character
 {
 private:
-	bool bIsBoss;
+	vector<string> MonsterNames{ "Dragon", "Goblin", "Orc", "Troll" };
 
-	// 처치후 보상으로 얻을 골드와 아이템
-	int Gold;
-	//shared_ptr<Item> Item;
-public:
-	Monster(int PlayerLevel);
+	bool bIsBoss;
 
 	void SetMonsterStat(int PlayerLevel);
 
+public:
+	Monster(int PlayerLevel);
+
 	bool IsBoss() const;
 
-	// 처치 보상 골드
-	int GetGold() const;
-	
-	// 처치 아이템 골드
-	//shared_ptr<Item> GetItem() const;
+	// 처치 보상 생성
+	virtual void CreateCharacterReward() override;
 };

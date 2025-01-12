@@ -9,6 +9,7 @@
 
 Character::Character(): AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
+	StatManager = std::make_shared<UStatsComponent>(this);
 }
 
 Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
@@ -19,6 +20,11 @@ Character::Character(const string& InName) : CharacterName(InName), AttackStrate
 
 void Character::Attack(Character* Target)
 {
+	if (StatManager->IsDead())
+	{
+		return;
+	}
+
 	if (!Target)
 	{
 		std::cout << "타겟이 없습니다." << std::endl;
@@ -45,11 +51,11 @@ void Character::TakeDamage(int IncomingDamage)
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	StatManager->ModifyStat(StatType::HP, (float) - finalDamage);
-
 	//콜백을 리워드 시스템에 연결
-	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage);
+	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage, StatManager->GetStat(StatType::HP));
 	GlobalEventManager::Get().Notify(Event);
+
+	StatManager->ModifyStat(StatType::HP, (float) - finalDamage);
 }
 
 void Character::SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy)
