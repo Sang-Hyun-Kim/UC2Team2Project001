@@ -40,25 +40,25 @@ void ShopSystem::MainMenu()
 
 void ShopSystem::BuyMenu()
 {
-	string title = "아이템 구입";
+	//string title = "아이템 구입";
 
-	int itemSize= itemList.size();
-	vector<string> options(itemSize, "");
-	int index = 1;
+	//int itemSize= itemList.size();
+	//vector<string> options(itemSize, "");
+	//int index = 1;
 
-	for (int i = 0; i < itemSize; i++)
-	{
-		options[i] = (to_string(index++) + ". " + itemList[i]->name);
-	}
-	options.push_back(to_string(index) + ". 돌아가기");
+	///*for (int i = 0; i < itemSize; i++)
+	//{
+	//	options[i] = (to_string(index++) + ". " + itemList[i]->name);
+	//}*/
+	//options.push_back(to_string(index) + ". 돌아가기");
 
-	int input = InputManagerSystem::GetInput<int>(title, options, RangeValidator<int>(1, index));
+	//int input = InputManagerSystem::GetInput<int>(title, options, RangeValidator<int>(1, index));
 
-	if (input < itemSize)
-	{
-		auto buyCommand = make_shared<BuyCommand>(player, itemList[input]);
-		GInvoker->ExecuteCommand(buyCommand);
-	}
+	//if (input < itemSize)
+	//{
+	//	auto buyCommand = make_shared<BuyCommand>(player, itemList[input]);
+	//	GInvoker->ExecuteCommand(buyCommand);
+	//}
 }
 
 void ShopSystem::SellMenu()
@@ -70,9 +70,9 @@ void ShopSystem::SellMenu()
 void ShopSystem::GetRandomItems()
 {
 	//todo: 랜덤 아이템 구현
-	itemList.clear();
+	/*itemList.clear();
 	itemList.push_back(make_shared<Item>("체력 포션", "체력을 50 회복합니다.", 50));
 	itemList.push_back(make_shared<Item>("체력 포션", "체력을 50 회복합니다.", 50));
 	itemList.push_back(make_shared<Item>("공격력 포션", "공격력을 15 상승시킵니다.", 100));
-	itemList.push_back(make_shared<Item>("공격력 포션", "공격력을 15 상승시킵니다.", 100));
+	itemList.push_back(make_shared<Item>("공격력 포션", "공격력을 15 상승시킵니다.", 100));*/
 }

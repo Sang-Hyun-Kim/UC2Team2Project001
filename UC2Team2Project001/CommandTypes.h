@@ -46,14 +46,14 @@ public:
 
 	void Execute() override
 	{
-		auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 	void Undo() override
 	{
-		auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 private:
@@ -71,8 +71,8 @@ public:
 		auto p = dynamic_pointer_cast<Player>(player);
 		if (p != nullptr)
 		{
-			auto Event = make_shared<IItemPurchasedEvent>(p->GetName(), item->name, item->cost);
-			GlobalEventManager::Get().Notify(Event);
+			/*auto Event = make_shared<IItemPurchasedEvent>(p->GetName(), item->name, item->cost);
+			GlobalEventManager::Get().Notify(Event);*/
 		}
 	}
 
@@ -82,8 +82,8 @@ public:
 
 		if (p != nullptr)
 		{
-			auto Event = make_shared<IItemSoldEvent>(p->GetName(), item->name, item->cost);
-			GlobalEventManager::Get().Notify(Event);
+			/*auto Event = make_shared<IItemSoldEvent>(p->GetName(), item->name, item->cost);
+			GlobalEventManager::Get().Notify(Event);*/
 		}
 	}
 
