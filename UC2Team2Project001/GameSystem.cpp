@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "GameSystem.h"
+#include "InputManagerSystem.h"
 
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
@@ -28,11 +29,11 @@ void BattleSystem::EnterSystem()
 
 }
 
-void BattleSystem::CreateMonster()
-{
-	// 몬스터 제작
-	monster = make_shared<Monster>("monster",100);
-}
+//void BattleSystem::CreateMonster()
+//{
+//	// 몬스터 제작
+//	monster = make_shared<Monster>("monster",100);
+//}
 
 //void BattleSystem::PrintCommand()
 //{
@@ -72,25 +73,25 @@ bool Player::isDead()
 		return false;
 }
 
-Monster::Monster(string _name, int _hp)
-
-{
-	SetName(_name);
-	this->hp = _hp;
-
-}
-
-void Monster::Attack(shared_ptr<Creature> target)
-{
-}
-
-bool Monster::isDead()
-{
-	if (hp <= 0)
-		return true;
-	else
-		return false;
-}
+//Monster::Monster(string _name, int _hp)
+//
+//{
+//	SetName(_name);
+//	this->hp = _hp;
+//
+//}
+//
+//void Monster::Attack(shared_ptr<Creature> target)
+//{
+//}
+//
+//bool Monster::isDead()
+//{
+//	if (hp <= 0)
+//		return true;
+//	else
+//		return false;
+//}
 
 void Creature::SetName(string _name)
 {
@@ -119,38 +120,24 @@ int Creature::GetLevel()
 
 void LobbySystem::EnterSystem()
 {
-	bool inputvalid = false;
-	while (!inputvalid)
+	int input = InputManagerSystem::GetInput<int>(
+		" 게임 로비 메뉴를 출력합니다.",
+		{ "1. 게임 시작" , "2. 게임 종료"},
+		RangeValidator<int>(1, 2)
+	);
+	if (input == 1)
 	{
-		PrintLobbyMenu();
-
-		char command;
-		cin >> command;
-		if (command == '1')
-		{
-			CreatePlayer();
-			inputvalid = true;
-		}
-		else if (command == '2')
-		{
-			cout << "게임을 종료합니다." << endl;
-			exit(1);
-		}
-		else
-		{
-			cout << "입력이 잘못되었습니다." << endl;
-		}
+		auto gamestart = make_shared<IGameStartEvent>();
+		GlobalEventManager::Get().Notify(gamestart); 
+		CreatePlayer();
 	}
-
+	else if (input == 2)
+	{
+		auto gamexit = make_shared<IGameExitEvent>();
+		GlobalEventManager::Get().Notify(gamexit);
+	}
 }
 
-void LobbySystem::PrintLobbyMenu()
-{
-	cout <<" 게임 로비 메뉴를 출력합니다." << endl;
-	cout <<" 1. 게임 시작" << endl;
-	cout << "2. 게임 종료" << endl;
-
-}
 
 void LobbySystem::CreatePlayer()
 {
@@ -187,30 +174,30 @@ void LobbySystem::CreatePlayer()
 
 bool LobbySystem::isValidName(const string& _username)
 {
-	if (_username.size() > 12)
-	{
-		cout << "이름 사이즈 초과. 다시 입력하세요" << endl;
-		return false;
-	}
-	if (_username.empty()) {
-		cout << "이름을 입력하지 않으셨습니다. 다시 입력하세요" << endl;
-		return false;
-	}
-	if (std::all_of(_username.begin(), _username.end(), isspace))
-	{
-		cout << "전부 공백만 입력하셨습니다. 다시 입력하세요" << endl;
-		return false;
-	}
+	//if (_username.size() > 12)
+	//{
+	//	cout << "이름 사이즈 초과. 다시 입력하세요" << endl;
+	//	return false;
+	//}
+	//if (_username.empty()) {
+	//	cout << "이름을 입력하지 않으셨습니다. 다시 입력하세요" << endl;
+	//	return false;
+	//}
+	//if (std::all_of(_username.begin(), _username.end(), std::isspace))
+	//{
+	//	cout << "전부 공백만 입력하셨습니다. 다시 입력하세요" << endl;
+	//	return false;
+	//}
 
-	// 알파벳,숫자, 공백이아닌 특수문자의 경우 실패 반환
-	for (char ch : _username) 
-	{
-		if (!std::isspace(ch) && !std::isalnum(ch))
-		{
-			cout << "특수 문자는 허용되지 않습니다. 다시 입력하세요." << endl;
-			return false;
-		}
-	}
+	//// 알파벳,숫자, 공백이아닌 특수문자의 경우 실패 반환
+	//for (char ch : _username) 
+	//{
+	//	if (!std::isspace(ch) && !std::isalnum(ch))
+	//	{
+	//		cout << "특수 문자는 허용되지 않습니다. 다시 입력하세요." << endl;
+	//		return false;
+	//	}
+	//}
 	return true;
 }
 

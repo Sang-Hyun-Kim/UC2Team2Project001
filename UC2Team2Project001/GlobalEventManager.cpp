@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "GlobalEventManager.h"
 #include "IEventTypes.h"
-#include <algorithm>
 
 GlobalEventManager::GlobalEventManager() {}
 GlobalEventManager::~GlobalEventManager() {}

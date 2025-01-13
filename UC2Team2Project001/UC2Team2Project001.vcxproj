@@ -135,15 +135,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="CommandTypes.h" />
     <ClCompile Include="EventManagerSystem.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="GlobalEventManager.cpp" />
+    <ClCompile Include="IEventTypes.cpp" />
+    <ClCompile Include="InputManagerSystem.cpp" />
+    <ClCompile Include="InputValidatorTypes.h" />
+    <ClCompile Include="Invoker.cpp" />
     <ClCompile Include="IStrategy.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ShopSystem.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="StatusComponent.cpp" />
     <ClCompile Include="UIEventManagerSystem.cpp" />
@@ -153,7 +159,11 @@
     <ClInclude Include="EventManagerSystem.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GlobalEventManager.h" />
+    <ClInclude Include="IEventTypes.h" />
+    <ClInclude Include="InputManagerSystem.h" />
+    <ClInclude Include="Invoker.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ShopSystem.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="StatusComponent.h" />
     <ClInclude Include="UIEventManagerSystem.h" />

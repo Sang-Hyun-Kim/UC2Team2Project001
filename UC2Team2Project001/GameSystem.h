@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
+#include "Invoker.h"
 /*
 	테스트를 위한 가짜 플레이어, 몬스터
 
@@ -29,13 +30,13 @@ public:
 	void Attack(shared_ptr<Creature> target) override;
 	virtual bool isDead() override;
 };
-class Monster : public Creature
-{
-public:
-	Monster(string _name,int _hp);
-	void Attack(shared_ptr<Creature> target) override;
-	virtual bool isDead() override;
-};
+//class Monster : public Creature
+//{
+//public:
+//	Monster(string _name,int _hp);
+//	void Attack(shared_ptr<Creature> target) override;
+//	virtual bool isDead() override;
+//};
 
 class GameSystem
 {
@@ -64,8 +65,6 @@ public:
 	void EnterSystem() override; // 로비 실행후 동작
 	//	
 
-	// 플레이어 생성
-	void PrintLobbyMenu();
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);

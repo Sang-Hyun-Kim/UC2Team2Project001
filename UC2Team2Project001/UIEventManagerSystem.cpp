@@ -20,6 +20,40 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 			<< itemEvent->ItemName << "을(를) "
 			<< itemEvent->Cost << "에 구매했습니다.\n";
 	}
+	else if (auto sellEvent = std::dynamic_pointer_cast<IItemSoldEvent>(ev))
+	{
+		std::cout << "[UI] " << itemEvent->BuyerName << "님이 "
+			<< itemEvent->ItemName << "을(를) "
+			<< itemEvent->Cost << "에 판매했습니다.\n";
+	}
+	else if (auto moveEvent = std::dynamic_pointer_cast<IMoveEvent>(ev))
+	{
+		std::cout << "[UI] " << moveEvent->from << "에서 "
+			<< moveEvent->to << "로 이동했습니다.\n";
+	}
+	else if (auto menuEvent = std::dynamic_pointer_cast<IDisplayMenuEvent>(ev))
+	{
+		//system("cls");  //콘솔창 클리어 함수 (오류 메시지까지 보여주려면 delay 함수 필요)
+		std::cout << menuEvent->title << "\n";
+		for (const string& option : menuEvent->options)
+		{
+			cout << option << "\n";
+		}
+		cout << "input: ";
+	}
+	else if (auto wrongInputEvent = std::dynamic_pointer_cast<IWrongInputEvent>(ev))
+	{
+		cout << "잘못된 입력입니다.\n";
+	}
+	else if (auto gameexitEvent = std::dynamic_pointer_cast<IGameExitEvent>(ev))
+	{
+		cout << "게임을 종료합니다." << endl;
+		exit(1);
+	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IGameStartEvent>(ev))
+	{
+		cout << "게임을 시작합니다." << endl;
+	}
 	else
 	{
 		std::cout << "[UI] 알 수 없는 이벤트.\n";
