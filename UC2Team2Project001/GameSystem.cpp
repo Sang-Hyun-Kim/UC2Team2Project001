@@ -21,6 +21,7 @@ void BattleSystem::EnterSystem()
 	{
 		cout << "not nullptr\n";
 	}
+	cout << "플레이어 " << player->GetName() << "이 전투를 시작합니다!" << endl;
 	cout << "게임 승리" << endl;
 	
 	
@@ -155,17 +156,18 @@ void LobbySystem::CreatePlayer()
 {
 	cout << "캐릭터를 생성합니다.\n";
 	bool chnamevalid = false;
+	string username;
 	while (!chnamevalid)
 	{
 		cout << "캐릭터의 이름을 입력해주세요.\n";
 		cout << "이름(중간 공백 허용, 최대12자): ";
-		string username;
+
 		cin.ignore();
 		getline(cin,username);
 		chnamevalid = isValidName(username);
 	}
 
-	player = make_shared<Player>("hero",200,5);
+	player = make_shared<Player>(username,200,5);
 	// 캐릭터를 생성하고 statecontext를 BattleSystem으로 넘김
 	// 다음 system->EnterSystem()이 battlesystem으로 실행됨
 
