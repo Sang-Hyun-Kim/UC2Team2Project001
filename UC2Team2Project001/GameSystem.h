@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
+#include "Invoker.h"
 /*
 	테스트를 위한 가짜 플레이어, 몬스터
 
