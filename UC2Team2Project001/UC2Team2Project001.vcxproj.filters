@@ -40,6 +40,15 @@
     <Filter Include="소스 파일\EventSystem">
       <UniqueIdentifier>{f7bb552b-4e84-4cb5-96bf-7080180c4414}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ItemSystem">
+      <UniqueIdentifier>{d630197c-213c-4daa-9794-940992a22959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ItemSystem">
+      <UniqueIdentifier>{95b71860-0cdf-4538-a53f-1c529f565b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\JSONS">
+      <UniqueIdentifier>{6ffeecce-19bd-48eb-a2f8-e56fddb61922}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -54,7 +63,7 @@
     <ClCompile Include="GameSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterFactory.cpp">
+    <ClCompile Include="StrategyFactory.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
     <ClCompile Include="EventManagerSystem.cpp">
@@ -71,9 +80,6 @@
     </ClCompile>
     <ClCompile Include="StatComponent.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="StatsLoader.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameSystem.cpp">
       <Filter>소스 파일</Filter>
@@ -93,6 +99,18 @@
     <ClCompile Include="UIEventManagerSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ICommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsLoader.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -110,13 +128,10 @@
     <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
-    <ClInclude Include="IStrategy.h">
-      <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterFactory.h">
+    <ClInclude Include="StrategyFactory.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
@@ -131,5 +146,22 @@
     <ClInclude Include="StatsLoader.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IStrategy.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CharacterStat.json">
+      <Filter>헤더 파일\JSONS</Filter>
+    </None>
   </ItemGroup>
 </Project>

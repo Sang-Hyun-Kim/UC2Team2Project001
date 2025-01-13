@@ -6,6 +6,7 @@
 
 class IAttackStrategy;
 class IDefenseStrategy;
+struct StatsData;
 
 using namespace std;
 
@@ -20,7 +21,11 @@ class Character
 public:
 	//생성자 및 소멸자
 	Character();
+
 	Character(const string& InName);
+
+public:
+	void Initialize(const StatsData& stats);
 
 	virtual ~Character() {}
 
@@ -33,6 +38,12 @@ public:
 
 	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy);
 
+	virtual void UseItem(const string& ItemName);
+
+public:
+	bool IsDead();
+
+public:
 	//스텟 컴포넌트
 	shared_ptr<UStatsComponent> StatManager;
 
@@ -48,4 +59,5 @@ public:
 protected:
 	string CharacterName;
 };
+
 

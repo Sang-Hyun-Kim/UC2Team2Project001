@@ -1,7 +1,10 @@
 {
-  "Characters": {
-    "Player": {
-      "Stats": {
+  "Characters": 
+  {
+    "Player": 
+    {
+      "Stats": 
+      {
         "HP": 100,
         "MaxHP": 100,
         "MP": 50,
@@ -13,11 +16,21 @@
         "Level": 1,
         "Experience": 0,
         "MaxExperience": 100
+      },
+      "AttackStrategy": 
+      {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": 
+      {
+        "Type": "BlockDefense"
       }
     },
-    "Goblin": {
-      "Stats": {
-        "HP": 50,
+    "Goblin": 
+    {
+      "Stats": 
+      {
+        "HP": 60,
         "MaxHP": 50,
         "MP": 20,
         "MaxMP": 20,
@@ -28,10 +41,20 @@
         "Level": 1,
         "Experience": 0,
         "MaxExperience": 50
+      },
+      "AttackStrategy": 
+      {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": 
+      {
+        "Type": "BlockDefense"
       }
     },
-    "Slime": {
-      "Stats": {
+    "Slime": 
+    {
+      "Stats": 
+      {
         "HP": 30,
         "MaxHP": 30,
         "MP": 10,
@@ -43,10 +66,20 @@
         "Level": 1,
         "Experience": 0,
         "MaxExperience": 30
+      },
+      "AttackStrategy": 
+      {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": 
+      {
+        "Type": "BlockDefense"
       }
     },
-    "Dragon": {
-      "Stats": {
+    "Dragon": 
+    {
+      "Stats": 
+      {
         "HP": 500,
         "MaxHP": 500,
         "MP": 200,
@@ -58,6 +91,14 @@
         "Level": 10,
         "Experience": 0,
         "MaxExperience": 1000
+      },
+      "AttackStrategy": 
+      {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": 
+      {
+        "Type": "BlockDefense"
       }
     }
   }

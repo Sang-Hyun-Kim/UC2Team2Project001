@@ -6,33 +6,121 @@
 #include "IStrategy.h"
 #include <filesystem>
 #include "UIEventManagerSystem.h"
+#include <unordered_map>
+#include "ICommand.h"
+#include "StatComponent.h"
 
 // 게임 시스템 코드가 돌아갈 main 함수
+
+using namespace std;
 
 int main()
 {
 	// 랜덤 함수 시드 설정
 	srand(time(NULL));
 
-	// GlobalEventManager 싱글톤 인스턴스 가져오기
+	// GlobalEventManager 싱글톤 인스턴스 가져오기 //지우지마세요
 	GlobalEventManager& eventManager = GlobalEventManager::Get();
 
-	// UI 시스템 생성
+	// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
 
-	//std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
+	//캐릭터 및 몬스터 초기화 테스트 코드 부분
+	Character* player=new Character("Player");
+	Character* goblin= new Character("Goblin");
+
+	player->Attack(goblin);
+
+	/*std::unordered_map<int, std::unique_ptr<ICommand>> commandMap;
+
+	commandMap[1] = std::make_unique<AttackCommand>(player, goblin);
+	commandMap[2] = std::make_unique<UseItemCommand>(player,"HealPosition");*/
+	
+	//while (true)
+	//{
+	//	if (player->StatManager->IsDead() || goblin->StatManager->IsDead())
+	//	{
+	//		std::cout << "\n--------Battle Pase------------\n";
+
+	//	
+
+	//			break;
+	//	}
+
+	//	//명령 안내
+	//	cout << "\n 액션을 선택하세요.\n";
+	//	cout << "[1] 공격 \n";
+	//	cout << "[2] 아이템사용 \n";
+	//	cout << "Input : ";
+
+	//	int input;
+
+	//	cin >> input;
+
+	//	if (!cin || input == 0)
+	//	{
+	//		cout << "배틀을 종료합니다";
+	//	}
+
+	//	auto it = commandMap.find(input);
+	//	if (it != commandMap.end())
+	//	{
+	//		it->second->Excute();
+	//	}
+	//	else
+	//	{
+	//		cout << "[System] 유효하지 않은 입력 액션입니다";
+	//	}
 
 
-	Character player("Player");
-	Character goblin("Goblin");
+	//	cout << "------ End of Turn ------- \n";
+	//	player->StatManager->PrintStatus();
+	//	goblin->StatManager->PrintStatus();
+	//	cout << "---------------------------\n";	
 
-	// 공격 전략 설정
-	player.SetAttackStrategy(std::make_shared<BasicAttackStrategy>());
-	player.Attack(&goblin);
+	//}
+
+
+
+	/*while (true)
+	{
+		if (curState->IsStateEnd())
+		{
+			auto next =  curState->nextState();
+			if (!next)
+			{
+
+			}
+			else
+			{
+				currentState = next;
+			}
+		}
+
+		curentstate->handleInput(input);
+
+
+		currentstate->update();
+	}*/
+
+
+
+
+	//player.Attack(&goblin);
+
+
+	
 
 	/*GLobbySystem->CreatePlayer();
 	GLobbySystem->PlayerMove();
 	GBattleSystem->EnterSystem();*/
 }
+
+
+
+
+
+//현재 디렉토리 출력
+	//std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;

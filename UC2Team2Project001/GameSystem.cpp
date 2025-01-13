@@ -21,9 +21,7 @@ void BattleSystem::EnterSystem()
 	{
 		cout << "not nullptr\n";
 	}
-	cout << "게임 승리" << endl;
-	
-	
+	cout << "게임 승리" << endl;	
 
 }
 

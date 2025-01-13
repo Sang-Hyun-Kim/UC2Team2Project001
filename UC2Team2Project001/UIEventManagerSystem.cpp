@@ -24,16 +24,15 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto itemEvent = std::dynamic_pointer_cast<IItemPurchasedEvent>(ev))
 	{
-		std::cout << "[UI] " << itemEvent->BuyerName << "님이 " << itemEvent->ItemName << "을(를) "<< itemEvent->Cost << "에 구매했습니다.\n";
+		std::cout << "[UI] " << itemEvent->BuyerName << "님이 " << itemEvent->ItemName << "을(를) " << itemEvent->Cost << "에 구매했습니다.\n";
 	}
 	else if (auto Attack = std::dynamic_pointer_cast<ICharacterAttackEvent>(ev))
 	{
-		std::cout << "[UI] " << Attack->CharacterName << "이(가) 공격했습니다!";
+		std::cout << "[UI] " << Attack->CharacterName << "이(가) 공격했습니다!" << endl;
 	}
 	else if (auto Defense = std::dynamic_pointer_cast<ICharacterDefenseEvent>(ev))
 	{
-		std::cout << "[UI] " << Defense->CharacterName
-			<< "이(가) 방어했습니다! (" << Defense->IncomingDamage << " -> " << Defense->FinalDamage << ")\n";
+		std::cout << "[UI] " << Defense->CharacterName << "이(가)" << Defense->DefenseValue << " 만큼 방어했습니다!" << endl;
 	}
 	else
 	{

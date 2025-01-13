@@ -18,11 +18,6 @@ void UStatsComponent::BeginPlay()
 		std::cerr << "Error: OwnedCharacter가 없습니다!" << std::endl;
 		return;
 	}
-
-	if (bIsLoadJson)
-	{
-		LoadFromJSON();
-	}	
 }
 
 UStatsComponent::~UStatsComponent()

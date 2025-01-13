@@ -1,0 +1,20 @@
+[
+  {
+    "itemnumber" : 1,
+    "name": "Healing Potion",
+    "description": "A potion that restores health.",
+    "value": 50
+  },
+  {
+    "itemnumber": 2,
+    "name": "Mana Potion",
+    "description": "A potion that restores mana.",
+    "value": 75
+  },
+  {
+    "itemnumber": 3,
+    "name": "Sword",
+    "description": "A sharp blade for combat.",
+    "value": 150
+  }
+]
