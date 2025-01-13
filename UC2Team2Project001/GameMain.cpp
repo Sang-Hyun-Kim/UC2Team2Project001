@@ -60,8 +60,6 @@ int main()
 
 #pragma region 캐릭터 테스트 예시 코드
 
-	ItemManager::GetInstance().init();
-
 	Character* player = new Character("Player");
 	Monster* monster = new Monster(1);
 
@@ -97,7 +95,7 @@ int main()
 	if (monster->CharacterReward.DropItem != nullptr)
 	{
 		// 현재 아이템 이름이 설정되어 있지 않아서 빈칸으로 출력됨
-		cout << player->GetName() << "가 " << monster->CharacterReward.DropItem.get()->GetName() << "을(를) 획득했습니다.";
+		cout << player->GetName() << "가 " << monster->CharacterReward.DropItem.get()->getName() << "을(를) 획득했습니다.";
 	}
 
 	delete player;
