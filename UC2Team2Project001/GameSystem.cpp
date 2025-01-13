@@ -23,6 +23,12 @@ void BattleSystem::EnterSystem()
 	cout << "전투 커맨드:";
 	char command;
 	
+	// 목표
+	/*while ()
+	{
+		update()
+	}*/
+
 	while (!player->IsDead() && !monster->IsDead())
 	{
 		cin >> command;
@@ -33,12 +39,15 @@ void BattleSystem::EnterSystem()
 			// 플레이어 공격(몬스터) 	// 몬스터 사망 검증
 			cout << "플레이어 공격 수행" << endl;
 			player->Attack(monster.get());
-
+			// 몬스터 사망시
+			// IsBoss 분기
+			//// 게임승리
+			//// 전투, 상점 선택지
 
 			// 몬스터 공격
 			monster->Attack(player.get());
 			// 플레이어 사망 검증
-
+			// 로비 되돌아 가기
 
 			break;
 		case '2':
@@ -206,9 +215,6 @@ void GameSystem::SetPlayer(shared_ptr<Character> _player)
 {
 	player = _player;
 }
-
-
-
 
 void SystemContext::RunSystem(shared_ptr<GameSystem> next)
 {

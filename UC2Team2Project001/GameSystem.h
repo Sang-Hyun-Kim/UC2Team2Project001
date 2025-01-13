@@ -42,7 +42,9 @@
 class GameSystem
 {
 public:
-	virtual void EnterSystem() {};// 플레이어가 이전 위치에서 옮겨 졌을 경우 해당 방의 로직을 실행하는 함수
+	virtual void EnterSystem() {}; // 시스템이 시작될 때 수행될 함수(Initialize)
+	virtual void ExitSystem() {}; // 시스템을 나가야할 때 수행할 함수
+	virtual void Update() {}; // system의 로직 수행을 수행하는 함수, 반복
 	virtual ~GameSystem() {};
 
 	virtual void PlayerMove(shared_ptr<GameSystem> next); // 플레이어의 이전 위치에서 받는 함수
@@ -52,7 +54,7 @@ public:
 protected:
 	// 플레이어 저장
 	shared_ptr<Character> player;
-	
+	shared_ptr<GameSystem> nextsystem;
 
 };
 
@@ -65,7 +67,8 @@ class LobbySystem : public GameSystem
 public:
 	LobbySystem() {};
 	void EnterSystem() override; // 로비 실행후 동작
-
+	virtual void ExitSystem() {};
+	virtual void Update() {};
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
@@ -84,7 +87,8 @@ class BattleSystem : public GameSystem
 public:
 	BattleSystem();
 	virtual void EnterSystem() override;
-
+	virtual void ExitSystem() {};
+	virtual void Update() {};
 	void CreateMonster();
 	void PrintCommand(); // 플레이어 행동 선택지 출력
 	//shared_ptr<Player> GetPlayer();
