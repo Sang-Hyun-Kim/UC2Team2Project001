@@ -13,7 +13,9 @@
 #include <unordered_map>
 #include "ICommand.h"
 #include "Inventory.h"
-
+#include "ShopSystem.h"
+#include "InputManagerSystem.h"
+#include "CommandTypes.h"
 // 게임 시스템 코드가 돌아갈 main 함수
 
 using namespace std;
@@ -30,33 +32,12 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
-	//			break;
-	//	}
+	GSystemContext->currentSystem = GShopSystem;
 
-	//	//명령 안내
-	//	cout << "\n 액션을 선택하세요.\n";
-	//	cout << "[1] 공격 \n";
-	//	cout << "[2] 아이템사용 \n";
-	//	cout << "Input : ";
-
-	//	int input;
-
-	//	cin >> input;
-
-	//	if (!cin || input == 0)
-	//	{
-	//		cout << "배틀을 종료합니다";
-	//	}
-
-	//	auto it = commandMap.find(input);
-	//	if (it != commandMap.end())
-	//	{
-	//		it->second->Excute();
-	//	}
-	//	else
-	//	{
-	//		cout << "[System] 유효하지 않은 입력 액션입니다";
-	//	}
+	while (true)
+	{
+		GSystemContext->currentSystem->EnterSystem();
+	}
 
 #pragma region 캐릭터 테스트 예시 코드
 
@@ -106,6 +87,7 @@ int main()
 	/*GLobbySystem->CreatePlayer();
 	GLobbySystem->PlayerMove();
 	GBattleSystem->EnterSystem();*/
+	
 }
 
 

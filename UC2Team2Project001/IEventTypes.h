@@ -95,3 +95,53 @@ public:
 	{
 	}
 };
+
+class IItemSoldEvent : public IEvent
+{
+public:
+	std::string SellerName;
+	std::string ItemName;
+	int Cost;
+
+	IItemSoldEvent(const std::string& seller, const std::string& item, int c) : SellerName(seller), ItemName(item), Cost(c)
+	{
+	}
+};
+
+class IMoveEvent : public IEvent
+{
+public:
+	std::string to;
+	std::string from;
+
+	IMoveEvent(const std::string& to, const std::string& from) :to(to), from(from) {}
+};
+
+class IDisplayMenuEvent : public IEvent
+{
+public:
+	std::string title;
+	std::vector<string> options;
+
+	IDisplayMenuEvent() {}
+	IDisplayMenuEvent(const std::string& title, const std::vector<string>& options) :title(title), options(options) {}
+};
+
+class IWrongInputEvent : public IEvent
+{
+public:
+	IWrongInputEvent() {}
+};
+
+// 게임 종료 이벤트
+class IGameExitEvent : public IEvent
+{
+public:
+	IGameExitEvent() {}
+};
+// 게임 종료 이벤트
+class IGameStartEvent : public IEvent
+{
+public:
+	IGameStartEvent() {}
+};

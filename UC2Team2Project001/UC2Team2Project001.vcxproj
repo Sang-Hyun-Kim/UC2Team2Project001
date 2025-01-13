@@ -139,6 +139,7 @@
     <ClCompile Include="CharacterTypes.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
+    <ClCompile Include="CommandTypes.h" />
     <ClCompile Include="EventManagerSystem.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -147,6 +148,10 @@
     <ClCompile Include="GlobalEventManager.cpp" />
     <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="IEventTypes.cpp" />
+    <ClCompile Include="InputManagerSystem.cpp" />
+    <ClCompile Include="InputValidatorTypes.h" />
+    <ClCompile Include="Invoker.cpp" />
     <ClCompile Include="IStrategy.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemManager.cpp" />
@@ -159,6 +164,8 @@
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="StatComponent.cpp" />
     <ClCompile Include="StatsLoader.cpp" />
+    <ClCompile Include="ShopSystem.cpp" />
+    <ClCompile Include="Status.cpp" />
     <ClCompile Include="UIEventManagerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +198,15 @@
   <ItemGroup>
     <None Include="CharacterStat.json" />
     <None Include="ClassDiagram.cd" />
+    <ClInclude Include="GlobalEventManager.h" />
+    <ClInclude Include="IEventTypes.h" />
+    <ClInclude Include="InputManagerSystem.h" />
+    <ClInclude Include="Invoker.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ShopSystem.h" />
+    <ClInclude Include="Status.h" />
+    <ClInclude Include="StatusComponent.h" />
+    <ClInclude Include="UIEventManagerSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
