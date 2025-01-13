@@ -6,7 +6,9 @@ class ShopSystem : public GameSystem
 public:
 	ShopSystem() {}
 	virtual ~ShopSystem() {};
-
+	virtual void EnterSystem();
+	virtual void ExitSystem();
+	virtual void Update(); 
 	virtual void EnterSystem() override;
 private:
 	void MainMenu();

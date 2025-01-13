@@ -11,15 +11,20 @@ shared_ptr<ShopSystem> GShopSystem = make_shared<ShopSystem>();
 void ShopSystem::EnterSystem()
 {
 	GetRandomItems();
-
 	MainMenu();
 }
 
-void ShopSystem::MainMenu()
+void ShopSystem::ExitSystem()
+{
+	GSystemContext->RunSystem(GBattleSystem);
+	GSystemContext->MoveSystem(GBattleSystem, GShopSystem);
+}
+
+void ShopSystem::Update()
 {
 	int input = InputManagerSystem::GetInput<int>(
 		"상점 메뉴",
-		{ "1. 아이템 구입" , "2. 아이템 매각", "3. 돌아가기"},
+		{ "1. 아이템 구입" , "2. 아이템 매각", "3. 돌아가기" },
 		RangeValidator<int>(1, 3)
 	);
 
@@ -33,8 +38,7 @@ void ShopSystem::MainMenu()
 	}
 	else if (input == 3)
 	{
-		GSystemContext->RunSystem(GBattleSystem);
-		GSystemContext->MoveSystem(GBattleSystem, GShopSystem);
+
 	}
 }
 
