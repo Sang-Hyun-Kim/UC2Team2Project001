@@ -29,13 +29,6 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
-
-	//캐릭터 및 몬스터 초기화 테스트 코드 부분
-	Character* player=new Character("Player");
-	Character* goblin= new Character("Goblin");
-
-	player->Attack(goblin);
-
 	/*std::unordered_map<int, std::unique_ptr<ICommand>> commandMap;
 
 	commandMap[1] = std::make_unique<AttackCommand>(player, goblin);

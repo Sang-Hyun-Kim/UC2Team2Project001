@@ -3,10 +3,7 @@
 #include "Character.h"
 #include "StatComponent.h"
 
-AttackBoostPotion::AttackBoostPotion()
-{
-
-}
+AttackBoostPotion::AttackBoostPotion() : Potion("공격력 물약", "공격력을 증가 시키는 물약입니다.", 5) {}
 
 void AttackBoostPotion::use(Character& Target)
 {
