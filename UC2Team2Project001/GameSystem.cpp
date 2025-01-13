@@ -3,6 +3,8 @@
 #include "InputManagerSystem.h"
 #include "ShopSystem.h"
 #include "StatComponent.h"
+#include "PlayerCharacter.h"
+#include "Inventory.h"
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
@@ -29,17 +31,56 @@ void BattleSystem::EnterSystem()
 
 }
 
-void BattleSystem::ExitSystem()
-{
-}
-
 void BattleSystem::Update()
 {
 	// 이번 라운드 시작 전 검증
 	// 플레이어 사망 여부
-	// 몬스터 사망 여부
+	if (player->IsDead())
+	{
+		// 로비 귀환 UI 출력
+		auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
+		GlobalEventManager::Get().Notify(playergamedefeat);
+		ExitSystem(GLobbySystem);
+		return;
+	}
 
+	if (monster->IsDead())
+	{
 
+		if (monster->IsBoss()) 
+		{// 보스 몬스터
+			// 게임 승리 UI 출력
+			return;
+		}
+		else
+		{// 일반몬스터사망
+			// 일반 몬스터 사망 UI 출력
+			monster = nullptr;
+
+			auto battlestageclear = make_shared<IPlayerStageClearEvent>();
+			GlobalEventManager::Get().Notify(battlestageclear);
+			int input = InputManagerSystem::GetInput<int>(
+				" 스테이지 클리어 메뉴",
+				{ "1. 다음 스테이지" , "2. 상점 방문하기"},
+				RangeValidator<int>(1, 2)
+			);
+			if (input == 1)
+			{
+				// 다음 스테이지
+				ExitSystem(GBattleSystem);
+			}
+			else if (input == 2)
+			{
+				// 상점 가기
+				ExitSystem(GShopSystem);
+			}
+			return;
+		}
+	
+	}
+	
+	// 라운드 시작할때 몬스터 현재 상태 출력
+	monster->StatManager->PrintStatus();
 	int input = InputManagerSystem::GetInput<int>(
 		" 전투 메뉴",
 		{ "1. 공격하기" , "2. 내 현재 스탯 확인하기","3. 아이템 사용하기"},
@@ -47,8 +88,8 @@ void BattleSystem::Update()
 	);
 	if (input == 1) // 공격
 	{
-		auto gamestart = make_shared<IGameStartEvent>();
-		GlobalEventManager::Get().Notify(gamestart);
+		auto battleplayerattack = make_shared<IBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(battleplayerattack);
 
 		player->Attack(monster.get());
 		// 공격
@@ -66,36 +107,26 @@ void BattleSystem::Update()
 	}
 	else if (input == 2) // 스탯
 	{
+		auto battlestatCheck = make_shared<IBattleStatCheckEvent>();
+		GlobalEventManager::Get().Notify(battlestatCheck);
 		player->StatManager.get()->PrintStatus();
 	}
 	else if (input == 3) // 아이템
 	{
-		// player->Displayinventory();
-		//player->ItemUse(int idx);
+		auto battleitemcheck = make_shared<IBattleUseItemEvent>();
+		GlobalEventManager::Get().Notify(battleitemcheck);
+		player->InventoryComponent->displayInventory();
+		if (!player->InventoryComponent->IsEmpty())
+		{
+			int idx = InputManagerSystem::GetInput<int>(
+				"",
+				{  },
+				RangeValidator<int>(1, 3)/*수정해야함*/
+			);
+			player->UseItem(idx,dynamic_pointer_cast<Character>(player).get());
+		}
+		
 	}
-	char scommand;
-
-	cout << "상점가기 1 2 " << endl;
-	cin >> scommand;
-	switch (scommand)
-	{
-
-	case '1':
-		// 상점 가기	
-		GSystemContext->RunSystem(GShopSystem);
-		GSystemContext->MoveSystem(GShopSystem, GBattleSystem); // Lobby->Battle
-		break;
-	case '2':
-		// 다시 전투 하기
-		GSystemContext->RunSystem(GBattleSystem);
-		GSystemContext->MoveSystem(GBattleSystem, GLobbySystem); // Lobby->Battle
-
-		break;
-	default:
-		break;
-	}
-
-
 
 }
 
@@ -133,14 +164,6 @@ void LobbySystem::EnterSystem()
 	// 로그인, 로그인 검증 등
 }
 
-void LobbySystem::ExitSystem()
-{
-	GSystemContext->RunSystem(GBattleSystem);
-	GSystemContext->MoveSystem(GBattleSystem, GLobbySystem); // Lobby->Battle
-	GSystemContext->currentSystem->EnterSystem();
-}
-
-
 void LobbySystem::Update()
 {
 	int input = InputManagerSystem::GetInput<int>(
@@ -156,7 +179,7 @@ void LobbySystem::Update()
 		// 캐릭터를 생성하고 statecontext를 BattleSystem으로 넘김
 		// 다음 system->EnterSystem()이 battlesystem으로 실행됨
 		CreatePlayer();
-		GSystemContext->currentSystem->ExitSystem();
+		GSystemContext->currentSystem->ExitSystem(GBattleSystem);
 	}
 	else if (input == 2)
 	{
@@ -181,7 +204,7 @@ void LobbySystem::CreatePlayer()
 		chnamevalid = isValidName(username);
 	}
 
-	player = make_shared<Character>("Player");
+	player = make_shared<Player>("Player");
 
 
 }
@@ -225,18 +248,26 @@ bool LobbySystem::isValidName(const string& _username)
 	return true;
 }
 
+void GameSystem::ExitSystem(shared_ptr<GameSystem> next)
+{
+	GSystemContext->MoveSystem(next, GSystemContext->currentSystem); // Lobby->Battle
+	GSystemContext->RunSystem(next);
+	GSystemContext->currentSystem->EnterSystem();
+}
+
 void GameSystem::PlayerMove(shared_ptr<GameSystem> next)
 {
 	next->SetPlayer(this->GetPlayer());
+	
 	this->SetPlayer(nullptr);
 }
 
-shared_ptr<Character> GameSystem::GetPlayer()
+shared_ptr<Player> GameSystem::GetPlayer()
 {
 	return player;
 }
 
-void GameSystem::SetPlayer(shared_ptr<Character> _player)
+void GameSystem::SetPlayer(shared_ptr<Player> _player)
 {
 	player = _player;
 }
@@ -249,6 +280,7 @@ void SystemContext::RunSystem(shared_ptr<GameSystem> next)
 void SystemContext::MoveSystem(shared_ptr<GameSystem> to, shared_ptr<GameSystem> from)
 {
 	// System from 에서 System to 로 이동
-	from->PlayerMove(to);
+	if(to != from)
+		from->PlayerMove(to);
 
 }

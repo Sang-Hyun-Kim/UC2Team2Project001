@@ -166,3 +166,24 @@ class IBattleUseItemEvent : public IEvent
 public:
 	IBattleUseItemEvent() {}
 };
+
+// 플레이어 사망 및 게임 패배 출력
+class IPlayerDefeatEvent : public IEvent
+{
+public:
+	IPlayerDefeatEvent() {}
+};
+
+// 보스 몬스터 사망 및 게임 승리 출력
+class IPlayerGameClearEvent : public IEvent
+{
+public:
+	IPlayerGameClearEvent() {}
+};
+
+// 일반 몬스터 사망 처리
+class IPlayerStageClearEvent : public IEvent
+{
+public:
+	IPlayerStageClearEvent() {}
+};

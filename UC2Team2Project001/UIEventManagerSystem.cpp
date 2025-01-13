@@ -82,6 +82,24 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	{
 		cout << "아이템을 사용합니다." << endl;
 	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerDefeatEvent>(ev))
+	{
+		cout << "플레이어가 사망하였습니다.\n"<<"게임 로비로 귀환합니다." << endl;
+		cout << "--------------------------------------------------\n"
+			<< "                  게  임  패  배                   \n"
+			<< "---------------------------------------------------" << endl;
+	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerGameClearEvent>(ev))
+	{
+		cout << "보스 몬스터를 쓰러트렸습니다. 게임 클리어!!!" << endl;
+		cout << "--------------------------------------------------\n"
+			<< "                  게 임 클 리 어                   \n"
+			<< "---------------------------------------------------" << endl;
+ 	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
+	{
+		cout << "몬스터 사망으로 스테이지 클리어" << endl;
+	}
 	else
 	{
 		std::cout << "[UI] 알 수 없는 이벤트.\n";

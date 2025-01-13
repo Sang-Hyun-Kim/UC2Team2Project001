@@ -127,3 +127,8 @@ void Inventory::displayInventory() const {
     cout << "Gold: " << gold << endl;
     cout << "==== 인벤토리 끝 ====" << endl;
 }
+
+bool Inventory::IsEmpty() const
+{
+    return inven.size() <= 0;
+}

@@ -46,6 +46,8 @@ public:
     // 인벤토리 정보 출력
     void displayInventory() const;
 
+    // 인벤토리 개수 확인
+    bool IsEmpty() const;
     // 소멸자
     ~Inventory() {}
 };

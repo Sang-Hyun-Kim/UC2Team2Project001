@@ -32,7 +32,7 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
-	//GSystemContext->currentSystem = GLobbySystem;
+	GSystemContext->currentSystem = GLobbySystem;
 
 
 	while (true)
