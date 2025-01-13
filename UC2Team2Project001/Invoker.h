@@ -18,3 +18,5 @@ private:
     std::stack<std::shared_ptr<ICommand>> undoStack; // Undo 기록
     std::stack<std::shared_ptr<ICommand>> redoStack; // Redo 기록
 };
+
+extern shared_ptr<Invoker> GInvoker;
