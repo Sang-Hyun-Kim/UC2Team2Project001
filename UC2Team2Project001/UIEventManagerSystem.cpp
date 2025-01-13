@@ -102,6 +102,10 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 			<< "                  게 임 클 리 어                   \n"
 			<< "---------------------------------------------------" << endl;
  	}
+	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGetItemEvent>(ev))
+	{
+		cout << "아이템을 획득했습니다." << endl;
+	}
 	else if (auto playerlevelup = std::dynamic_pointer_cast<ILevelUpEvent>(ev))
 	{
 		cout <<"--------------------------------------------------\n"
