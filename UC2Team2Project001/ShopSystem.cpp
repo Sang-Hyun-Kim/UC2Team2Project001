@@ -60,7 +60,7 @@ void ShopSystem::DisplayInventory()
 	cout << "엔터를 눌러 계속하세요...\n";
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 엔터를 누를 때까지 대기
-	
+
 	state = MAIN;
 }
 
@@ -68,7 +68,7 @@ void ShopSystem::BuyMenu()
 {
 	string title = "\n==== 아이템 구입 ====";
 
-	int itemSize= itemList.size();
+	int itemSize = itemList.size();
 	vector<string> options(itemSize, "");
 	int index = 1;
 
@@ -84,7 +84,7 @@ void ShopSystem::BuyMenu()
 
 	if (input <= itemSize)
 	{
-		auto buyCommand = make_shared<BuyCommand>(player, itemList, input-1);
+		auto buyCommand = make_shared<BuyCommand>(player, itemList, input - 1);
 		GInvoker->ExecuteCommand(buyCommand);
 	}
 	else state = MAIN;

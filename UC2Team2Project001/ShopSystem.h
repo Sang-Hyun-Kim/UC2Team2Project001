@@ -16,7 +16,7 @@ public:
 	ShopSystem() {}
 	virtual ~ShopSystem() {};
 	virtual void EnterSystem() override;
-	virtual void Update() override; 
+	virtual void Update() override;
 private:
 	void MainMenu();
 	void DisplayInventory();
