@@ -15,7 +15,7 @@ Character::Character() : AttackStrategy(nullptr), DefenseStrategy(nullptr)
 	StatManager = std::make_shared<UStatsComponent>(this);
 }
 
-Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)
+Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)                                                                                                                                                                                                                                                          
 {
 	StatManager = std::make_shared<UStatsComponent>(this);
 	StatManager.get()->BeginPlay();

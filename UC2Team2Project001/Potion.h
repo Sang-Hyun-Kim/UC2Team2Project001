@@ -3,10 +3,7 @@
 
 class Potion: public ConsumableItem {
 public:
-    Potion()
-    {
+    Potion();
 
-    }
-
-    Potion(const string& name, const string& description, int value);
+    Potion(int itemNumber, const string& name, const string& description, int value);
 };

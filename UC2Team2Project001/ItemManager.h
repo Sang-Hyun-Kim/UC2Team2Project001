@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
-#include <map>
+
 class Item;
 
 class ItemManager
@@ -27,9 +27,6 @@ public:
     
    // 싱글턴 객체 반환 메서드
    static ItemManager& GetInstance();
-
-   //초기화 메서드
-   void init();
  
    // 아이템 추가 메서드
     void addItem(shared_ptr<Item> item);

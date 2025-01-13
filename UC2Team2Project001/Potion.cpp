@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Potion.h"
 
-Potion::Potion(const string& name, const string& description, int value)
-: ConsumableItem(name, description, value) {}
+Potion::Potion(){}
+
+Potion::Potion(int itemNumber, const string& name, const string& description, int value)
+: ConsumableItem(itemNumber, name, description, value) {}

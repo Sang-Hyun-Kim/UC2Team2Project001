@@ -123,6 +123,9 @@
     <ClCompile Include="StatsLoader.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -182,9 +185,6 @@
     <ClInclude Include="GameState.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>헤더 파일\ItemSystem</Filter>
-    </ClInclude>
     <ClInclude Include="IStrategy.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
@@ -199,5 +199,14 @@
     <None Include="CharacterStat.json">
       <Filter>헤더 파일\JSONS</Filter>
     </None>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

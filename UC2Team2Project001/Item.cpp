@@ -2,14 +2,10 @@
 #include "pch.h"
 #include "Item.h"
 
-// 임시 추가
-string Item::GetName()
-{
-    return name;
-}
+Item::Item(){}
 
-Item::Item(const string& name, const string& description, int value)
-: name(name), description(description), value(value) {}
+Item::Item(int itemNumber, const string& name, const string& description, int value)
+: itemNumber(itemNumber),name(name), description(description), value(value) {}
 
 void Item::info() const
 {

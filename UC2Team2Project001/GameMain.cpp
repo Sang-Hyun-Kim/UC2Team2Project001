@@ -12,6 +12,7 @@
 #include "Item.h"
 #include <unordered_map>
 #include "ICommand.h"
+#include "Inventory.h"
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
@@ -20,7 +21,7 @@ using namespace std;
 int main()
 {
 	// 랜덤 함수 시드 설정
-	srand(time(NULL));
+	//srand(time(NULL));
 
 	// GlobalEventManager 싱글톤 인스턴스 가져오기 //지우지마세요
 	GlobalEventManager& eventManager = GlobalEventManager::Get();
@@ -28,19 +29,6 @@ int main()
 	// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
-
-	/*std::unordered_map<int, std::unique_ptr<ICommand>> commandMap;
-
-	commandMap[1] = std::make_unique<AttackCommand>(player, goblin);
-	commandMap[2] = std::make_unique<UseItemCommand>(player,"HealPosition");*/
-	
-	//while (true)
-	//{
-	//	if (player->StatManager->IsDead() || goblin->StatManager->IsDead())
-	//	{
-	//		std::cout << "\n--------Battle Pase------------\n";
-
-	//	
 
 	//			break;
 	//	}
@@ -76,6 +64,22 @@ int main()
 
 	Character* player = new Character("Player");
 	Monster* monster = new Monster(1);
+
+	Inventory inv(player);
+
+	inv.addItem(ItemManager::GetInstance().getRandomItem());
+	inv.addItem(ItemManager::GetInstance().getRandomItem());
+	inv.addItem(ItemManager::GetInstance().getRandomItem());
+	inv.addItem(ItemManager::GetInstance().getRandomItem());
+	inv.addGold(50);
+
+	inv.displayInventory();
+
+	inv.useItem(0);
+	inv.useItem(0);
+	inv.useItem(0);
+	inv.removeGold(10);
+	inv.displayInventory();
 	
 	// 공격 전략 설정
 	player->SetAttackStrategy(std::make_shared<BasicAttackStrategy>());
@@ -100,49 +104,11 @@ int main()
 	delete monster;
 
 #pragma endregion
-	//	cout << "------ End of Turn ------- \n";
-	//	player->StatManager->PrintStatus();
-	//	goblin->StatManager->PrintStatus();
-	//	cout << "---------------------------\n";	
-
-	//}
-
-
-
-	/*while (true)
-	{
-		if (curState->IsStateEnd())
-		{
-			auto next =  curState->nextState();
-			if (!next)
-			{
-
-			}
-			else
-			{
-				currentState = next;
-			}
-		}
-
-		curentstate->handleInput(input);
-
-
-		currentstate->update();
-	}*/
-
-
-
-
-	//player.Attack(&goblin);
 	
-
 	/*GLobbySystem->CreatePlayer();
 	GLobbySystem->PlayerMove();
 	GBattleSystem->EnterSystem();*/
 }
-
-
-
 
 
 //현재 디렉토리 출력
