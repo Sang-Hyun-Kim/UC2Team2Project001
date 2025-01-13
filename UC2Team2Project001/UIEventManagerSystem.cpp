@@ -22,6 +22,12 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto dead = std::dynamic_pointer_cast<ICharacterDeadEvent>(ev))
 	{
+		if (dead->Reward.IsEmpty())
+		{
+			// 몬스터 출력
+			dead->Reward.DropGold;
+			dead->Reward.DropItem;
+		}
 		std::cout << "[UI] " << dead->CharacterName << "님이 사망했습니다.\n";
 	}
 	else if (auto itemEvent = std::dynamic_pointer_cast<IItemPurchasedEvent>(ev))
@@ -70,33 +76,43 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	{
 		cout << "게임을 시작합니다." << endl;
 	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleAttackEvent>(ev))
+	else if (auto playerbattleattack = std::dynamic_pointer_cast<IBattleAttackEvent>(ev))
 	{
 		cout << "플레이어 공격 수행" << endl;
 	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleStatCheckEvent>(ev))
+	else if (auto playerbattlecheckstat = std::dynamic_pointer_cast<IBattleStatCheckEvent>(ev))
 	{
 		cout << "스탯을 확인합니다" << endl;
 	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleUseItemEvent>(ev))
+	else if (auto playerbattleuseitem = std::dynamic_pointer_cast<IBattleUseItemEvent>(ev))
 	{
 		cout << "아이템을 사용합니다." << endl;
 	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerDefeatEvent>(ev))
+	else if (auto gamedefeat = std::dynamic_pointer_cast<IPlayerDefeatEvent>(ev))
 	{
 		cout << "플레이어가 사망하였습니다.\n"<<"게임 로비로 귀환합니다." << endl;
 		cout << "--------------------------------------------------\n"
 			<< "                  게  임  패  배                   \n"
 			<< "---------------------------------------------------" << endl;
 	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerGameClearEvent>(ev))
+	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGameClearEvent>(ev))
 	{
 		cout << "보스 몬스터를 쓰러트렸습니다. 게임 클리어!!!" << endl;
 		cout << "--------------------------------------------------\n"
 			<< "                  게 임 클 리 어                   \n"
 			<< "---------------------------------------------------" << endl;
  	}
-	else if (auto gamestartEvent = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
+	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGetItemEvent>(ev))
+	{
+		cout << "아이템을 획득했습니다." << endl;
+	}
+	else if (auto playerlevelup = std::dynamic_pointer_cast<ILevelUpEvent>(ev))
+	{
+		cout <<"--------------------------------------------------\n"
+			<< "                플 레 이 어 레 벨 업              \n"
+			<< "---------------------------------------------------" << endl;
+	}
+	else if (auto stageclear = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
 	{
 		cout << "몬스터 사망으로 스테이지 클리어" << endl;
 	}

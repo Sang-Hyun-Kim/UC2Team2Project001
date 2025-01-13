@@ -187,3 +187,10 @@ class IPlayerStageClearEvent : public IEvent
 public:
 	IPlayerStageClearEvent() {}
 };
+
+// 플레이어 아이템 획득 이벤트
+class IPlayerGetItemEvent : public IEvent
+{
+public:
+	IPlayerGetItemEvent() {}
+};
