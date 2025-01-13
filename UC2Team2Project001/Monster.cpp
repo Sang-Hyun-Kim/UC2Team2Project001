@@ -4,6 +4,8 @@
 #include "IStrategy.h"
 #include "ItemManager.h"
 #include "Item.h"
+#include "StatsLoader.h"
+#include "StrategyFactory.h"
 
 Monster::Monster(int PlayerLevel)
 {
@@ -19,14 +21,6 @@ Monster::Monster(int PlayerLevel)
 
 	// 몬스터 스탯 설정
 	SetMonsterStat(PlayerLevel);
-
-	// 몬스터 공격 전략 등록
-	shared_ptr<IAttackStrategy> MonsterAttackStrategy = make_shared<BasicAttackStrategy>();
-	SetAttackStrategy(MonsterAttackStrategy);
-
-	// 몬스터 방어 전략 등록
-	shared_ptr<IDefenseStrategy> MonsterDefenseStrategy = make_shared<BlockDefenseStrategy>();
-	SetDefenseStrategy(MonsterDefenseStrategy);
 
 	// 몬스터 생성시 지니고 있을 골드와 아이템을 설정
 	CreateCharacterReward();
@@ -60,6 +54,8 @@ void Monster::SetMonsterStat(int PlayerLevel)
 	CharacterName = MonsterNames[randomIndex];
 
 	StatManager.get()->BeginPlay();
+	StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
+	Initialize(LoadStatsData);
 
 	// 체력 = 레벨 * (20 ~ 30)
 	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
