@@ -24,7 +24,7 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	{
 		if (dead->Reward.IsEmpty())
 		{
-			// 몬스터 출력
+			// 몬스터 출력, reward는 몬스터만 받으니까 몬스터가 죽은 경우 reward 획득을 출력하기
 			dead->Reward.DropGold;
 			dead->Reward.DropItem;
 		}

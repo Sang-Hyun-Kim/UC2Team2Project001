@@ -33,15 +33,14 @@ public:
 
 			bool isValidate = true;
 
-			for (const auto& validator : {validators...})
-			{
-				if (!validator.IsValidate(input))
+			// 가변 매개변수에 대해 올바르게 검증
+			// C++17 폴드 표현식
+			([&] {
+				if (!validators.IsValidate(input))
 				{
 					isValidate = false;
-					break;
 				}
-			}
-
+				}(), ...);
 			if (isValidate) break;
 		}
 		

@@ -136,9 +136,9 @@ void BattleSystem::Update()
 		if (!player->InventoryComponent->IsEmpty())
 		{
 			int idx = InputManagerSystem::GetInput<int>(
-				"",
+				"돌아가기는 q를 입력해주세요",
 				{  },
-				RangeValidator<int>(0, 3)/*수정해야함*/
+				NoValidator<int>()
 			);
 			player->UseItem(idx,dynamic_pointer_cast<Character>(player).get());
 		}
@@ -146,31 +146,6 @@ void BattleSystem::Update()
 	}
 
 }
-
-//void BattleSystem::CreateMonster()
-//{
-//	// 몬스터 제작
-//	monster = make_shared<Monster>("monster",100);
-//}
-
-//void BattleSystem::PrintCommand()
-//{
-//	cout << "행동을 선택하세요\n";
-//	cout << "1. 공격\n";
-//	cout << "2. 방어\n";
-//	cout << "3. 아이템 사용\n";
-//
-//}
-
-//shared_ptr<Player> BattleSystem::GetPlayer()
-//{
-//}
-//
-//void BattleSystem::SetPlayer(shared_ptr<Player> _player)
-//{
-//	player = _player;
-//}
-
 
 
 void LobbySystem::EnterSystem()
@@ -208,34 +183,19 @@ void LobbySystem::Update()
 
 void LobbySystem::CreatePlayer()
 {
-	cout << "캐릭터를 생성합니다.\n";
-	bool chnamevalid = false;
-	string username;
-	// username = getinput<string>(,dqwd,,);
-	while (!chnamevalid)
-	{
-		cout << "캐릭터의 이름을 입력해주세요.\n";
-		cout << "이름(중간 공백 허용, 최대12자): ";
-
-		cin.ignore();
-		getline(cin,username);
-		chnamevalid = isValidName(username);
-	}
-
+	string username = InputManagerSystem::GetInput<string>(
+		"캐릭터를 생성합니다.\n",
+		{ "캐릭터의 이름을 입력해주세요.\n", "이름(중간 공백 허용, 최대12자): " },
+		NameRangeValidator(1, 12),
+		NameSpaceValidator(),
+		RegexValidator("이름에 특수문자가 포함되어 있습니다.")
+	);
+//	추후 Player의 displayname을 username 값으로 사용해주세요!!
+	cout << "입력된 플레이어 캐릭터 이름은 "<<username <<" 입니다." <<endl;
 	player = make_shared<Player>("Player");
 
 
 }
-
-//shared_ptr<Player> LobbySystem::GetPlayer()
-//{
-//	return player;
-//}
-//
-//void LobbySystem::SetPlayer(shared_ptr<Player> _player)
-//{
-//	
-//}
 
 bool LobbySystem::isValidName(const string& _username)
 {

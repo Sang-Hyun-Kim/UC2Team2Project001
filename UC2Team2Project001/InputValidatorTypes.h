@@ -28,6 +28,16 @@ protected:
 	virtual void PrintErrorMessage() const = 0;
 };
 
+// 입력이 필요 없는 경우가 생길 경우 해당 클래스를 이용해주세요
+template<typename T>
+class NoValidator : public InputValidator<T>
+{
+public:
+	NoValidator() {};
+	virtual bool IsValid(const T& input) const { return true; } ;
+	virtual void PrintErrorMessage() const {} ;
+};
+
 // 범위 검사 최소, 최댓값을 매개변수로 받습니다.
 template<typename T>
 class RangeValidator : public InputValidator<T>
@@ -70,14 +80,40 @@ protected:
 private:
 	int min, max;  // 최소 길이와 최대 길이
 };
+// 이름에 공백만 들어간 경우를 검증함
+class NameSpaceValidator : public InputValidator<string>
+{
+public:
+	NameSpaceValidator() {}
 
+protected:
+	bool IsValid(const string& input) const override
+	{
+		return !std::all_of(input.begin(), input.end(), [](const char c)
+			{ 
+				return std::isspace(c);
+			});
+		// std::all_of: iterator 구간 사이 모든 인자가 조건문을 만족하는 경우 true 아닌 경우 false
+		// isspace(): 공백인경우 true 반환
+		// => 모든 이름이 공백으로만 되어있는 경우 true를 반환
+		// !를 붙여 이름이 전부 공백이면 검증 통과를 못하도록 함
+	}
+
+	void PrintErrorMessage() const override
+	{
+		std::cout << "이름이 전부 공백으로 입력되어있습니다.\n";
+	}
+
+private:
+
+};
 // 정규식 검증 클래스 (입력 값이 주어진 정규식에 맞는지 확인합니다.)
 class RegexValidator : public InputValidator<string>
 {
 public:
 	// 정규식 패턴과, 정규식이 일치하지 않을 경우 출력할 오류 메시지를 넣어주세요.
-	RegexValidator(const string& pattern, const string& errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
-		: regexPattern(pattern), errorMessage(errorMessage) {
+	RegexValidator(const string& errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
+		:  errorMessage(errorMessage) {
 	}
 
 protected:
@@ -92,6 +128,7 @@ protected:
 	}
 
 private:
-	regex regexPattern;  // 검증할 정규식 패턴
+	regex regexPattern = regex("^[a-zA-Z0-9 ]*$");  // 검증할 정규식 패턴
+	// a-z, A-Z, 0-9, 공백을 허용하는 정규식
 	string errorMessage;  // 정규식 검증 실패 시 출력할 오류 메시지
 };
