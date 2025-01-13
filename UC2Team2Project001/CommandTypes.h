@@ -42,7 +42,7 @@ private:
 class SellCommand : public ICommand
 {
 public:
-	SellCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	SellCommand(shared_ptr<Character> player, shared_ptr<Item> item) :player(player), item(item) {}
 
 	void Execute() override
 	{
@@ -57,18 +57,18 @@ public:
 	}
 
 private:
-	shared_ptr<Player> player;
+	shared_ptr<Character> player;
 	shared_ptr<Item> item;
 };
 
 class BuyCommand : public ICommand
 {
 public:
-	BuyCommand(shared_ptr<Creature> player, shared_ptr<Item> item) :player(player), item(item) {}
+	BuyCommand(shared_ptr<Character> player, shared_ptr<Item> item) :player(player), item(item) {}
 
 	void Execute() override // Creature 로 둔다면 형변환
 	{
-		auto p = dynamic_pointer_cast<Player>(player);
+		auto p = dynamic_pointer_cast<Character>(player);
 		if (p != nullptr)
 		{
 			/*auto Event = make_shared<IItemPurchasedEvent>(p->GetName(), item->name, item->cost);
@@ -78,7 +78,7 @@ public:
 
 	void Undo() override
 	{
-		auto p = dynamic_pointer_cast<Player>(player);
+		auto p = dynamic_pointer_cast<Character>(player);
 
 		if (p != nullptr)
 		{
@@ -88,6 +88,6 @@ public:
 	}
 
 private:
-	shared_ptr<Creature> player;
+	shared_ptr<Character> player;
 	shared_ptr<Item> item;
 };

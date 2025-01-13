@@ -31,7 +31,7 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
-	GSystemContext->currentSystem = GShopSystem;
+	GSystemContext->currentSystem = GLobbySystem;
 
 	while (true)
 	{

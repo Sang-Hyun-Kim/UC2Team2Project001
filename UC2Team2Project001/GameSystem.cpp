@@ -1,7 +1,8 @@
 ﻿#include "pch.h"
 #include "GameSystem.h"
 #include "InputManagerSystem.h"
-
+#include "ShopSystem.h"
+#include "StatComponent.h"
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
@@ -14,18 +15,71 @@ void BattleSystem::EnterSystem()
 	cout << "-----------------------------------------------------------------\n";
 	cout << "                            전투 입장                           " << endl;
 	cout << "-----------------------------------------------------------------\n";
-	if (player == nullptr)
+	
+	// 플레이어 레벨에 따른 monster 생성
+	monster = make_shared<Monster>(player->StatManager.get()->GetStat(StatType::Level));
+
+	// 전투시작
+	cout << "전투 커맨드:";
+	char command;
+	
+	while (!player->IsDead() && !monster->IsDead())
 	{
-		cout << "nullptr\n";
+		cin >> command;
+		switch (command)
+		{
+		case '1':
+			// 공격
+			// 플레이어 공격(몬스터) 	// 몬스터 사망 검증
+			cout << "플레이어 공격 수행" << endl;
+			player->Attack(monster.get());
+
+
+			// 몬스터 공격
+			monster->Attack(player.get());
+			// 플레이어 사망 검증
+
+
+			break;
+		case '2':
+			// 현재 상태 출력
+			player->StatManager.get()->PrintStatus();
+			break;
+		case '3':
+			// 아이템 사용
+
+			break;
+		default:
+			break;
+		}
+
 	}
-	else
+	
+	char scommand;
+
+	cout << "상점가기 1 2 " << endl;
+	cin >> scommand;
+	switch (scommand)
 	{
-		cout << "not nullptr\n";
+
+	case '1':
+		// 상점 가기	
+		GSystemContext->RunSystem(GShopSystem);
+		GSystemContext->MoveSystem(GShopSystem, GBattleSystem); // Lobby->Battle
+		break;
+	case '2':
+		// 다시 전투 하기
+		GSystemContext->RunSystem(GBattleSystem);
+		GSystemContext->MoveSystem(GBattleSystem, GLobbySystem); // Lobby->Battle
+
+		break;
+	default:
+		break;
 	}
 
-	cout << "플레이어 " << player->GetName() << "이 전투를 시작합니다!" << endl;
-	cout << "게임 승리" << endl;
 	
+
+
 }
 
 //void BattleSystem::CreateMonster()
@@ -52,70 +106,7 @@ void BattleSystem::EnterSystem()
 //	player = _player;
 //}
 
-Player::Player(string _name, int _hp,int _lvl)
-{
-	this->name = _name;
-	this->hp = _hp;
-	this->lvl = _lvl;
-}
 
-void Player::Attack(shared_ptr<Creature> target)
-{
-	
-}
-
-bool Player::isDead()
-{
-	if (hp <= 0)
-		return true;
-	else
-		return false;
-}
-
-//Monster::Monster(string _name, int _hp)
-//
-//{
-//	SetName(_name);
-//	this->hp = _hp;
-//
-//}
-//
-//void Monster::Attack(shared_ptr<Creature> target)
-//{
-//}
-//
-//bool Monster::isDead()
-//{
-//	if (hp <= 0)
-//		return true;
-//	else
-//		return false;
-//}
-
-void Creature::SetName(string _name)
-{
-	name = _name;
-}
-
-string Creature::GetName()
-{
-	return name;
-}
-
-void Creature::SetHp(int _hp)
-{
-	hp = _hp;
-}
-
-int Creature::GetHp()
-{
-	return hp;
-}
-
-int Creature::GetLevel()
-{
-	return lvl;
-}
 
 void LobbySystem::EnterSystem()
 {
@@ -153,7 +144,7 @@ void LobbySystem::CreatePlayer()
 		chnamevalid = isValidName(username);
 	}
 
-	player = make_shared<Player>(username,200,5);
+	player = make_shared<Character>("Player");
 	// 캐릭터를 생성하고 statecontext를 BattleSystem으로 넘김
 	// 다음 system->EnterSystem()이 battlesystem으로 실행됨
 
@@ -206,15 +197,16 @@ void GameSystem::PlayerMove(shared_ptr<GameSystem> next)
 	this->SetPlayer(nullptr);
 }
 
-shared_ptr<Creature> GameSystem::GetPlayer()
+shared_ptr<Character> GameSystem::GetPlayer()
 {
 	return player;
 }
 
-void GameSystem::SetPlayer(shared_ptr<Creature> _player)
+void GameSystem::SetPlayer(shared_ptr<Character> _player)
 {
 	player = _player;
 }
+
 
 
 

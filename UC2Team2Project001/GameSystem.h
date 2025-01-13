@@ -1,35 +1,36 @@
 ﻿#pragma once
 #include "pch.h"
 #include "Invoker.h"
+#include "Monster.h"
 /*
 	테스트를 위한 가짜 플레이어, 몬스터
 
 */
-class Creature;
-
-class Creature
-{
-public:
-	virtual void Attack(shared_ptr<Creature> target) {};
-	
-	virtual void SetName(string _name);
-	virtual string GetName();
-	virtual void SetHp(int _hp);
-	virtual int GetHp();
-	virtual int GetLevel();
-	virtual bool isDead() = 0;
-protected:
-	string name;
-	int hp;
-	int lvl = 1;
-};
-class Player : public Creature
-{
-public:
-	Player(string _name, int _hp,int _lvl);
-	void Attack(shared_ptr<Creature> target) override;
-	virtual bool isDead() override;
-};
+//class Creature;
+//
+//class Creature
+//{
+//public:
+//	virtual void Attack(shared_ptr<Creature> target) {};
+//	
+//	virtual void SetName(string _name);
+//	virtual string GetName();
+//	virtual void SetHp(int _hp);
+//	virtual int GetHp();
+//	virtual int GetLevel();
+//	virtual bool isDead() = 0;
+//protected:
+//	string name;
+//	int hp;
+//	int lvl = 1;
+//};
+//class Player : public Creature
+//{
+//public:
+//	Player(string _name, int _hp,int _lvl);
+//	void Attack(shared_ptr<Creature> target) override;
+//	virtual bool isDead() override;
+//};
 //class Monster : public Creature
 //{
 //public:
@@ -46,11 +47,11 @@ public:
 
 	virtual void PlayerMove(shared_ptr<GameSystem> next); // 플레이어의 이전 위치에서 받는 함수
 
-	virtual shared_ptr<Creature> GetPlayer();
-	virtual void SetPlayer(shared_ptr<Creature> _player);
+	virtual shared_ptr<Character> GetPlayer();
+	virtual void SetPlayer(shared_ptr<Character> _player);
 protected:
 	// 플레이어 저장
-	shared_ptr<Creature> player;
+	shared_ptr<Character> player;
 	
 
 };
@@ -95,7 +96,7 @@ public:
 	// 상점 진입 물어보기
 
 private:
-	shared_ptr<Creature> monster;
+	shared_ptr<Monster> monster;
 	bool isbattlefinished = false;
 	bool isfinished = false;
 };
@@ -107,8 +108,6 @@ public:
 	shared_ptr<GameSystem> currentSystem = nullptr;
 
 	void RunSystem(shared_ptr<GameSystem> next); // 다음 실행될 EnterSystem이 실행될 정보 정해주기
-
-
 	void MoveSystem(shared_ptr<GameSystem> to, shared_ptr<GameSystem> from); // 이전 시스템-> 다음 시스템으로 플레이어 메모리 이동
 		
 };
