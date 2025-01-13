@@ -65,8 +65,6 @@ public:
 	void EnterSystem() override; // 로비 실행후 동작
 	//	
 
-	// 플레이어 생성
-	void PrintLobbyMenu();
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);

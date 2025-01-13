@@ -93,3 +93,16 @@ class IWrongInputEvent : public IEvent
 public:
 	IWrongInputEvent() {}
 };
+
+// 게임 종료 이벤트
+class IGameExitEvent : public IEvent
+{
+public:
+	IGameExitEvent() {}
+};
+// 게임 종료 이벤트
+class IGameStartEvent : public IEvent
+{
+public:
+	IGameStartEvent() {}
+};

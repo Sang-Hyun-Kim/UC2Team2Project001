@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "GameSystem.h"
+#include "InputManagerSystem.h"
 
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
@@ -119,38 +120,24 @@ int Creature::GetLevel()
 
 void LobbySystem::EnterSystem()
 {
-	bool inputvalid = false;
-	while (!inputvalid)
+	int input = InputManagerSystem::GetInput<int>(
+		" 게임 로비 메뉴를 출력합니다.",
+		{ "1. 게임 시작" , "2. 게임 종료"},
+		RangeValidator<int>(1, 2)
+	);
+	if (input == 1)
 	{
-		PrintLobbyMenu();
-
-		char command;
-		cin >> command;
-		if (command == '1')
-		{
-			CreatePlayer();
-			inputvalid = true;
-		}
-		else if (command == '2')
-		{
-			cout << "게임을 종료합니다." << endl;
-			exit(1);
-		}
-		else
-		{
-			cout << "입력이 잘못되었습니다." << endl;
-		}
+		auto gamestart = make_shared<IGameStartEvent>();
+		GlobalEventManager::Get().Notify(gamestart); 
+		CreatePlayer();
 	}
-
+	else if (input == 2)
+	{
+		auto gamexit = make_shared<IGameExitEvent>();
+		GlobalEventManager::Get().Notify(gamexit);
+	}
 }
 
-void LobbySystem::PrintLobbyMenu()
-{
-	cout <<" 게임 로비 메뉴를 출력합니다." << endl;
-	cout <<" 1. 게임 시작" << endl;
-	cout << "2. 게임 종료" << endl;
-
-}
 
 void LobbySystem::CreatePlayer()
 {

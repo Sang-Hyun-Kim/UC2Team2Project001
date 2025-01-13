@@ -45,6 +45,15 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	{
 		cout << "잘못된 입력입니다.\n";
 	}
+	else if (auto gameexitEvent = std::dynamic_pointer_cast<IGameExitEvent>(ev))
+	{
+		cout << "게임을 종료합니다." << endl;
+		exit(1);
+	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IGameStartEvent>(ev))
+	{
+		cout << "게임을 시작합니다." << endl;
+	}
 	else
 	{
 		std::cout << "[UI] 알 수 없는 이벤트.\n";
