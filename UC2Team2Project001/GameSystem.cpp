@@ -50,11 +50,28 @@ void BattleSystem::Update()
 		if (monster->IsBoss()) 
 		{// 보스 몬스터
 			// 게임 승리 UI 출력
+			auto playergameclear = make_shared<IPlayerGameClearEvent>();
+			GlobalEventManager::Get().Notify(playergameclear);
+
+			// 게임 승리로 로비로 귀환,
+			// 이때까지 동작한 로그라던가는 여기서 출력하시면 됩니다
+
+
+			ExitSystem(GLobbySystem);
 			return;
 		}
 		else
 		{// 일반몬스터사망
 			// 일반 몬스터 사망 UI 출력
+			// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
+			player->InventoryComponent->addGold(monster->CharacterReward.DropGold); // 돈 넣기
+			if (monster->CharacterReward.DropItem != nullptr)
+			{
+				auto playergetitem = make_shared<IPlayerGetItemEvent>();
+				GlobalEventManager::Get().Notify(playergetitem);
+				player->InventoryComponent->addItem(monster->CharacterReward.DropItem); // 템 넣기
+			}
+			player->StatManager->ModifyStat(StatType::Experience, 50);
 			monster = nullptr;
 
 			auto battlestageclear = make_shared<IPlayerStageClearEvent>();
@@ -121,7 +138,7 @@ void BattleSystem::Update()
 			int idx = InputManagerSystem::GetInput<int>(
 				"",
 				{  },
-				RangeValidator<int>(1, 3)/*수정해야함*/
+				RangeValidator<int>(0, 3)/*수정해야함*/
 			);
 			player->UseItem(idx,dynamic_pointer_cast<Character>(player).get());
 		}
@@ -194,6 +211,7 @@ void LobbySystem::CreatePlayer()
 	cout << "캐릭터를 생성합니다.\n";
 	bool chnamevalid = false;
 	string username;
+	// username = getinput<string>(,dqwd,,);
 	while (!chnamevalid)
 	{
 		cout << "캐릭터의 이름을 입력해주세요.\n";
