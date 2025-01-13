@@ -142,6 +142,7 @@
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="HealthPotion.cpp" />
     <ClCompile Include="GlobalEventManager.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="IStrategy.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemManager.cpp" />
@@ -159,7 +160,9 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
+    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="HealthPotion.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="pch.h" />
@@ -170,6 +173,9 @@
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

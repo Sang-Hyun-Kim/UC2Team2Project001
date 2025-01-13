@@ -2,8 +2,10 @@
 #include "pch.h"
 #include "Item.h"
 
-Item::Item(const string& name, const string& description, int value)
-: name(name), description(description), value(value) {}
+Item::Item(){}
+
+Item::Item(int itemNumber, const string& name, const string& description, int value)
+: itemNumber(itemNumber),name(name), description(description), value(value) {}
 
 void Item::info() const
 {

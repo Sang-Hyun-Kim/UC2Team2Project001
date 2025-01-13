@@ -84,6 +84,9 @@
     <ClCompile Include="StatsLoader.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -131,5 +134,14 @@
     <ClInclude Include="StatsLoader.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

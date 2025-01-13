@@ -3,9 +3,7 @@
 
 class ConsumableItem : public Item {
 public:
-    ConsumableItem()
-    {
+    ConsumableItem();
 
-    }
-    ConsumableItem(const string& name, const string& description, int value);
+    ConsumableItem(int itemNumber,const string& name, const string& description, int value);
 };
