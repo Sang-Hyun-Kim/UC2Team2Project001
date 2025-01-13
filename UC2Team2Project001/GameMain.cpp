@@ -35,7 +35,7 @@ int main()
 
 	while (true)
 	{
-		GSystemContext->currentSystem->EnterSystem();
+		GSystemContext->currentSystem->Update(); // Update()로 변경해야함
 	}
 
 #pragma region 캐릭터 테스트 예시 코드

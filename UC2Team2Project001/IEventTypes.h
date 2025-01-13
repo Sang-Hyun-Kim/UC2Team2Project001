@@ -145,3 +145,24 @@ class IGameStartEvent : public IEvent
 public:
 	IGameStartEvent() {}
 };
+
+// 전투 중 공격 이벤트
+class IBattleAttackEvent : public IEvent
+{
+public:
+	IBattleAttackEvent() {}
+};
+
+// 전투 중 스탯 확인 이벤트
+class IBattleStatCheckEvent : public IEvent
+{
+public:
+	IBattleStatCheckEvent() {}
+};
+
+// 전투 중 아이템 사용 이벤트
+class IBattleUseItemEvent : public IEvent
+{
+public:
+	IBattleUseItemEvent() {}
+};
