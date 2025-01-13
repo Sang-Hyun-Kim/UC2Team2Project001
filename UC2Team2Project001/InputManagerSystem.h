@@ -48,8 +48,6 @@ public:
 		return input;
 	}
 
-private:
-
 	static void ClearInput() //cin을 초기화
 	{
 		cin.clear();

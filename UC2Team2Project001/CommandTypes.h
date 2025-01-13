@@ -4,6 +4,9 @@
 #include "ShopSystem.h"
 #include "GlobalEventManager.h"
 #include "IEventTypes.h"
+#include "Item.h"
+#include "PlayerCharacter.h"
+#include "Inventory.h"
 
 class ICommand
 {
@@ -42,7 +45,7 @@ private:
 class SellCommand : public ICommand
 {
 public:
-	SellCommand(shared_ptr<Character> player, shared_ptr<Item> item) :player(player), item(item) {}
+	SellCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
 
 	void Execute() override
 	{
@@ -57,37 +60,45 @@ public:
 	}
 
 private:
-	shared_ptr<Character> player;
+	shared_ptr<Player> player;
 	shared_ptr<Item> item;
 };
 
 class BuyCommand : public ICommand
 {
 public:
-	BuyCommand(shared_ptr<Character> player, shared_ptr<Item> item) :player(player), item(item) {}
+	BuyCommand(shared_ptr<Player> player, vector<shared_ptr<Item>>& itemList, int index) :player(player), itemList(itemList), index(index) {}
 
 	void Execute() override // Creature 로 둔다면 형변환
 	{
-		auto p = dynamic_pointer_cast<Character>(player);
-		if (p != nullptr)
+		int gold = player->InventoryComponent->getGold();
+		auto item = itemList[index];
+		int itemValue = item->getValue();
+
+		if (gold >= itemValue)
 		{
-			/*auto Event = make_shared<IItemPurchasedEvent>(p->GetName(), item->name, item->cost);
-			GlobalEventManager::Get().Notify(Event);*/
+			auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->getName(), item->getValue());
+			GlobalEventManager::Get().Notify(Event);
+
+			player->InventoryComponent->removeGold(itemValue);
+			player->InventoryComponent->addItem(item);
+			itemList.erase(itemList.begin() + index);
+		}
+		else
+		{
+			cout << "골드가 부족합니다.\n";
 		}
 	}
 
 	void Undo() override
 	{
-		auto p = dynamic_pointer_cast<Character>(player);
 
-		if (p != nullptr)
-		{
-			/*auto Event = make_shared<IItemSoldEvent>(p->GetName(), item->name, item->cost);
-			GlobalEventManager::Get().Notify(Event);*/
-		}
+		/*auto Event = make_shared<IItemSoldEvent>(p->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 private:
-	shared_ptr<Character> player;
-	shared_ptr<Item> item;
+	shared_ptr<Player> player;
+	vector<shared_ptr<Item>>& itemList;
+	int index;
 };
