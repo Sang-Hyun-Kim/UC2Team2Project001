@@ -174,30 +174,30 @@ void LobbySystem::CreatePlayer()
 
 bool LobbySystem::isValidName(const string& _username)
 {
-	if (_username.size() > 12)
-	{
-		cout << "이름 사이즈 초과. 다시 입력하세요" << endl;
-		return false;
-	}
-	if (_username.empty()) {
-		cout << "이름을 입력하지 않으셨습니다. 다시 입력하세요" << endl;
-		return false;
-	}
-	if (std::all_of(_username.begin(), _username.end(), isspace))
-	{
-		cout << "전부 공백만 입력하셨습니다. 다시 입력하세요" << endl;
-		return false;
-	}
+	//if (_username.size() > 12)
+	//{
+	//	cout << "이름 사이즈 초과. 다시 입력하세요" << endl;
+	//	return false;
+	//}
+	//if (_username.empty()) {
+	//	cout << "이름을 입력하지 않으셨습니다. 다시 입력하세요" << endl;
+	//	return false;
+	//}
+	//if (std::all_of(_username.begin(), _username.end(), std::isspace))
+	//{
+	//	cout << "전부 공백만 입력하셨습니다. 다시 입력하세요" << endl;
+	//	return false;
+	//}
 
-	// 알파벳,숫자, 공백이아닌 특수문자의 경우 실패 반환
-	for (char ch : _username) 
-	{
-		if (!std::isspace(ch) && !std::isalnum(ch))
-		{
-			cout << "특수 문자는 허용되지 않습니다. 다시 입력하세요." << endl;
-			return false;
-		}
-	}
+	//// 알파벳,숫자, 공백이아닌 특수문자의 경우 실패 반환
+	//for (char ch : _username) 
+	//{
+	//	if (!std::isspace(ch) && !std::isalnum(ch))
+	//	{
+	//		cout << "특수 문자는 허용되지 않습니다. 다시 입력하세요." << endl;
+	//		return false;
+	//	}
+	//}
 	return true;
 }
 
