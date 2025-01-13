@@ -18,6 +18,9 @@ struct StatsData
 	float Level;
 	float Experience;
 	float MaxExperience;
+
+	json AttackStrategyData;
+	json DefenseStrategyData;
 };
 
 class StatsLoader

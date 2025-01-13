@@ -9,6 +9,8 @@ class IAttackStrategy;
 class IDefenseStrategy;
 class Item;
 
+struct StatsData;
+
 using namespace std;
 
 // 캐릭터(공통 베이스 클래스)
@@ -22,7 +24,11 @@ class Character
 public:
 	//생성자 및 소멸자
 	Character();
+
 	Character(const string& InName);
+
+public:
+	void Initialize(const StatsData& stats);
 
 	virtual ~Character() {}
 
@@ -37,6 +43,16 @@ public:
 
 	virtual void CreateCharacterReward() {}
 
+	virtual void UseItem(const string& ItemName);
+
+public:
+	bool IsDead();
+
+	// 캐릭터 이름 반환
+	const string& GetName() { return CharacterName; }
+
+public:
+
 	//스텟 컴포넌트
 	shared_ptr<UStatsComponent> StatManager;
 
@@ -46,8 +62,6 @@ protected:
 	shared_ptr<IDefenseStrategy> DefenseStrategy;
 
 public:
-	// 캐릭터 이름 반환
-	const string& GetName() { return CharacterName; }
 	
 	// 캐릭터 사망 보상
 	FCharacterReward CharacterReward;
@@ -55,4 +69,5 @@ public:
 protected:
 	string CharacterName;
 };
+
 

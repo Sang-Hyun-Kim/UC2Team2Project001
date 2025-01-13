@@ -1,79 +1,109 @@
 {
-	"Characters": {
-		"Player": {
-			"Stats": {
-				"HP": 100,
-				"MaxHP": 100,
-				"MP": 50,
-				"MaxMP": 50,
-				"AttackPower": 10,
-				"Defense": 5,
-				"CriticalChance": 0.05,
-				"EvasionRate": 0.0,
-				"Level": 1,
-				"Experience": 0,
-				"MaxExperience": 100
-			}
-		},
-		"Goblin": {
-			"Stats": {
-				"HP": 100,
-				"MaxHP": 100,
-				"MP": 0,
-				"MaxMP": 0,
-				"AttackPower": 10,
-				"Defense": 5,
-				"CriticalChance": 0.05,
-				"EvasionRate": 0.0,
-				"Level": 0,
-				"Experience": 0,
-				"MaxExperience": 0
-			}
-		},
-		"Orc": {
-			"Stats": {
-				"HP": 100,
-				"MaxHP": 100,
-				"MP": 0,
-				"MaxMP": 0,
-				"AttackPower": 10,
-				"Defense": 5,
-				"CriticalChance": 0.05,
-				"EvasionRate": 0.0,
-				"Level": 0,
-				"Experience": 0,
-				"MaxExperience": 0
-			}
-		},
-		"Troll": {
-			"Stats": {
-				"HP": 100,
-				"MaxHP": 100,
-				"MP": 0,
-				"MaxMP": 0,
-				"AttackPower": 10,
-				"Defense": 5,
-				"CriticalChance": 0.05,
-				"EvasionRate": 0.0,
-				"Level": 0,
-				"Experience": 0,
-				"MaxExperience": 0
-			}
-		},
-		"Dragon": {
-			"Stats": {
-				"HP": 100,
-				"MaxHP": 100,
-				"MP": 0,
-				"MaxMP": 0,
-				"AttackPower": 10,
-				"Defense": 8,
-				"CriticalChance": 0.05,
-				"EvasionRate": 0.0,
-				"Level": 0,
-				"Experience": 0,
-				"MaxExperience": 0
-			}
-		}
-	}
+  "Characters": {
+    "Player": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 50,
+        "MaxMP": 50,
+        "AttackPower": 10,
+        "Defense": 5,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 1,
+        "Experience": 0,
+        "MaxExperience": 100
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "Goblin": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 0,
+        "MaxMP": 0,
+        "AttackPower": 10,
+        "Defense": 5,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 0,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "Orc": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 0,
+        "MaxMP": 0,
+        "AttackPower": 10,
+        "Defense": 5,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 0,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "Troll": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 0,
+        "MaxMP": 0,
+        "AttackPower": 10,
+        "Defense": 5,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 0,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "Dragon": {
+      "Stats": {
+        "HP": 100,
+        "MaxHP": 100,
+        "MP": 0,
+        "MaxMP": 0,
+        "AttackPower": 10,
+        "Defense": 8,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 0,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    }
+  }
 }

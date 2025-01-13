@@ -44,8 +44,9 @@ class ICharacterAttackEvent : public IEvent
 public:
 	string CharacterName;
 	int Damage;
-	ICharacterAttackEvent(const string& InCharacterName,int InDamage)
-		: CharacterName(InCharacterName), Damage(InDamage) {}
+	ICharacterAttackEvent(const string& InCharacterName, int InDamage)
+		: CharacterName(InCharacterName), Damage(InDamage) {
+	}
 };
 
 // 캐릭터 방어 이벤트
@@ -54,9 +55,12 @@ class ICharacterDefenseEvent : public IEvent
 public:
 	string CharacterName;
 	int IncomingDamage;
-	int FinalDamage;
-	ICharacterDefenseEvent(const string& InCharacterName, int InIncomingDamage, int InFinalDamage)
-		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), FinalDamage(InFinalDamage) {}
+	int DefenseValue;
+
+	ICharacterDefenseEvent(const string& InCharacterName, int InIncomingDamage, int InDefenseValue)
+		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), DefenseValue(InDefenseValue) 
+	{
+	}
 };
 
 class ILevelUpEvent : public IEvent
@@ -65,7 +69,7 @@ public:
 	string CharacterName;
 	int Level;
 
-	ILevelUpEvent(const std::string& name,int InLevel) : CharacterName(name) , Level(InLevel)
+	ILevelUpEvent(const std::string& name, int InLevel) : CharacterName(name), Level(InLevel)
 	{
 	}
 };
@@ -74,7 +78,7 @@ public:
 class IEnterEvent : public IEvent
 {
 	string PaseName;
-	
+
 };
 
 

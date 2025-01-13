@@ -57,15 +57,15 @@ public:
 	// 레벨 업 기능
 	void LevelUp();
 
+
 protected:
 	void ClampStat(StatType type, float minValue, float maxValue);
 	
+public:
+	bool bIsLoadJson = true;
 
 private:
 	Character* OwnedCharacter;
 
 	std::map<StatType, float> Stats;
-
-public:
-	bool bIsLoadJson = true;
 };
