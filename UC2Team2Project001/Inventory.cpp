@@ -58,13 +58,14 @@ void Inventory::useItem(int index, Character* target)
         target = owner;
     }
     
-    if (index >= 0 && index < inven.size()) {
+    if (index >= 0 && index < inven.size()) 
+    {
         FItemData& itemData = inven[index];
 
-        cout << "아이템이 사용되었습니다!" << endl;
+        cout << itemData.item.get()->getName() <<"이 사용되었습니다!" << endl;
 
         // 아이템의 use 메서드 호출
-        itemData.item->use(*owner);
+        itemData.item->use(target);
 
         // 사용 후 아이템 수량 감소
         itemData.count -= 1;

@@ -13,6 +13,10 @@
 Character::Character() : AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
 	StatManager = std::make_shared<UStatsComponent>(this);
+	StatManager.get()->BeginPlay();
+
+	//StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
+	//Initialize(LoadStatsData);
 }
 
 Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)                                                                                                                                                                                                                                                          
@@ -98,9 +102,6 @@ void Character::SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrate
 {
 	DefenseStrategy = move(NewDefenseStrategy);
 }
-
-
-
 
 
 void Character::UseItem(const string& ItemName)
