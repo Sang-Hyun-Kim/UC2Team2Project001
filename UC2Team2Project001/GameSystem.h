@@ -67,8 +67,8 @@ class LobbySystem : public GameSystem
 public:
 	LobbySystem() {};
 	void EnterSystem() override; // 로비 실행후 동작
-	virtual void ExitSystem() {};
-	virtual void Update() {};
+	virtual void ExitSystem();
+	virtual void Update();
 	void CreatePlayer();
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
@@ -87,10 +87,10 @@ class BattleSystem : public GameSystem
 public:
 	BattleSystem();
 	virtual void EnterSystem() override;
-	virtual void ExitSystem() {};
-	virtual void Update() {};
+	virtual void ExitSystem();
+	virtual void Update();
 	void CreateMonster();
-	void PrintCommand(); // 플레이어 행동 선택지 출력
+
 	//shared_ptr<Player> GetPlayer();
 	//void SetPlayer(shared_ptr<Player> _player);
 	

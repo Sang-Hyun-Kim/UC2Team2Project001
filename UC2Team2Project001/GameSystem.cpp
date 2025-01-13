@@ -16,54 +16,63 @@ void BattleSystem::EnterSystem()
 	cout << "                            전투 입장                           " << endl;
 	cout << "-----------------------------------------------------------------\n";
 	
+	//플레이어 검증
+	if (player == nullptr)
+	{
+		// 플레이어 제대로 안넘어옴
+		cout << "플레이어 nullptr" << endl;
+
+	}
+
 	// 플레이어 레벨에 따른 monster 생성
 	monster = make_shared<Monster>(player->StatManager.get()->GetStat(StatType::Level));
 
-	// 전투시작
-	cout << "전투 커맨드:";
-	char command;
-	
-	// 목표
-	/*while ()
+}
+
+void BattleSystem::ExitSystem()
+{
+}
+
+void BattleSystem::Update()
+{
+	// 이번 라운드 시작 전 검증
+	// 플레이어 사망 여부
+	// 몬스터 사망 여부
+
+
+	int input = InputManagerSystem::GetInput<int>(
+		" 전투 메뉴",
+		{ "1. 공격하기" , "2. 내 현재 스탯 확인하기","3. 아이템 사용하기"},
+		RangeValidator<int>(1, 3)
+	);
+	if (input == 1) // 공격
 	{
-		update()
-	}*/
+		auto gamestart = make_shared<IGameStartEvent>();
+		GlobalEventManager::Get().Notify(gamestart);
 
-	while (!player->IsDead() && !monster->IsDead())
-	{
-		cin >> command;
-		switch (command)
-		{
-		case '1':
-			// 공격
-			// 플레이어 공격(몬스터) 	// 몬스터 사망 검증
-			cout << "플레이어 공격 수행" << endl;
-			player->Attack(monster.get());
-			// 몬스터 사망시
-			// IsBoss 분기
-			//// 게임승리
-			//// 전투, 상점 선택지
+		player->Attack(monster.get());
+		// 공격
+		// 플레이어 공격(몬스터) 	// 몬스터 사망 검증
 
-			// 몬스터 공격
-			monster->Attack(player.get());
-			// 플레이어 사망 검증
-			// 로비 되돌아 가기
+		// 몬스터 사망시
+		// IsBoss 분기
+		//// 게임승리
+		//// 전투, 상점 선택지
 
-			break;
-		case '2':
-			// 현재 상태 출력
-			player->StatManager.get()->PrintStatus();
-			break;
-		case '3':
-			// 아이템 사용
-
-			break;
-		default:
-			break;
-		}
-
+		// 몬스터 공격
+		monster->Attack(player.get());
+		// 플레이어 사망 검증
+		// 로비 되돌아 가기
 	}
-	
+	else if (input == 2) // 스탯
+	{
+		player->StatManager.get()->PrintStatus();
+	}
+	else if (input == 3) // 아이템
+	{
+		// player->Displayinventory();
+		//player->ItemUse(int idx);
+	}
 	char scommand;
 
 	cout << "상점가기 1 2 " << endl;
@@ -86,7 +95,6 @@ void BattleSystem::EnterSystem()
 		break;
 	}
 
-	
 
 
 }
@@ -119,24 +127,44 @@ void BattleSystem::EnterSystem()
 
 void LobbySystem::EnterSystem()
 {
+	// 처음 로비에 들어왔을 때
+	// 게임 시작, 또는 게임 패배 후 돌아왔을 때
+	// 지금 굳이 필요 없는 기능, 추후 확장=> 로비가 시작되었을 때 해야하는 것들
+	// 로그인, 로그인 검증 등
+}
+
+void LobbySystem::ExitSystem()
+{
+	GSystemContext->RunSystem(GBattleSystem);
+	GSystemContext->MoveSystem(GBattleSystem, GLobbySystem); // Lobby->Battle
+	GSystemContext->currentSystem->EnterSystem();
+}
+
+
+void LobbySystem::Update()
+{
 	int input = InputManagerSystem::GetInput<int>(
 		" 게임 로비 메뉴를 출력합니다.",
-		{ "1. 게임 시작" , "2. 게임 종료"},
+		{ "1. 게임 시작" , "2. 게임 종료" },
 		RangeValidator<int>(1, 2)
 	);
 	if (input == 1)
 	{
 		auto gamestart = make_shared<IGameStartEvent>();
-		GlobalEventManager::Get().Notify(gamestart); 
+		GlobalEventManager::Get().Notify(gamestart);
+		
+		// 캐릭터를 생성하고 statecontext를 BattleSystem으로 넘김
+		// 다음 system->EnterSystem()이 battlesystem으로 실행됨
 		CreatePlayer();
+		GSystemContext->currentSystem->ExitSystem();
 	}
 	else if (input == 2)
 	{
 		auto gamexit = make_shared<IGameExitEvent>();
 		GlobalEventManager::Get().Notify(gamexit);
 	}
-}
 
+}
 
 void LobbySystem::CreatePlayer()
 {
@@ -154,11 +182,8 @@ void LobbySystem::CreatePlayer()
 	}
 
 	player = make_shared<Character>("Player");
-	// 캐릭터를 생성하고 statecontext를 BattleSystem으로 넘김
-	// 다음 system->EnterSystem()이 battlesystem으로 실행됨
 
-	GSystemContext->RunSystem(GBattleSystem);
-	GSystemContext->MoveSystem(GBattleSystem, GLobbySystem); // Lobby->Battle
+
 }
 
 //shared_ptr<Player> LobbySystem::GetPlayer()
