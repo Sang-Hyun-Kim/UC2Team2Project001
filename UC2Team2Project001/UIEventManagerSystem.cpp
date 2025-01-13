@@ -70,6 +70,18 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	{
 		cout << "게임을 시작합니다." << endl;
 	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleAttackEvent>(ev))
+	{
+		cout << "플레이어 공격 수행" << endl;
+	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleStatCheckEvent>(ev))
+	{
+		cout << "스탯을 확인합니다" << endl;
+	}
+	else if (auto gamestartEvent = std::dynamic_pointer_cast<IBattleUseItemEvent>(ev))
+	{
+		cout << "아이템을 사용합니다." << endl;
+	}
 	else
 	{
 		std::cout << "[UI] 알 수 없는 이벤트.\n";
