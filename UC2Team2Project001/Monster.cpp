@@ -43,7 +43,7 @@ void Monster::SetMonsterStat(int PlayerLevel)
 		random_device rd;
 		mt19937 gen(rd());
 		// 보스 몬스터 인덱스 0을 제외한 범위로 난수 생성
-		uniform_real_distribution<> dis(1.0, MonsterNames.size() - 1);
+		uniform_real_distribution<> dis(1.0, (unsigned int)MonsterNames.size() - 1);
 
 		// 실수형 랜덤 값 -> 정수로 변환
 		// 일반 몬스터 이름 인덱스 랜덤 설정

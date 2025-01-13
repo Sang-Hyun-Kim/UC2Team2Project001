@@ -15,6 +15,7 @@
 #include "ShopSystem.h"
 #include "InputManagerSystem.h"
 #include "CommandTypes.h"
+#include "PlayerCharacter.h"
 // 게임 시스템 코드가 돌아갈 main 함수
 
 using namespace std;
@@ -31,52 +32,51 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
-	GSystemContext->currentSystem = GLobbySystem;
+	//GSystemContext->currentSystem = GLobbySystem;
 
-	while (true)
-	{
-		GSystemContext->currentSystem->EnterSystem();
-	}
+	//while (true)
+	//{
+	//	GSystemContext->currentSystem->EnterSystem();
+	//}
 
 #pragma region 캐릭터 테스트 예시 코드
 
-	Character* player = new Character("Player");
+	Player* player = new Player("Player");
 	Monster* monster = new Monster(1);
 
-	Inventory inv(player);
+	player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	player->InventoryComponent->addGold(50);
 
-	inv.addItem(ItemManager::GetInstance().getRandomItem());
-	inv.addItem(ItemManager::GetInstance().getRandomItem());
-	inv.addItem(ItemManager::GetInstance().getRandomItem());
-	inv.addItem(ItemManager::GetInstance().getRandomItem());
-	inv.addGold(50);
+	//inv.displayInventory();
 
-	inv.displayInventory();
+	//inv.useItem(0);
+	//inv.useItem(0);
+	//inv.useItem(0);
+	//inv.removeGold(10);
 
-	inv.useItem(0);
-	inv.useItem(0);
-	inv.useItem(0);
-	inv.removeGold(10);
-	inv.displayInventory();
+	player->InventoryComponent->displayInventory();
 	
-	// 공격 전략 설정
-	player->SetAttackStrategy(std::make_shared<BasicAttackStrategy>());
-	// 방어 전략 설정
-	player->SetDefenseStrategy(make_shared<BlockDefenseStrategy>());
-	while (!monster->StatManager->IsDead())
-	{
-		player->Attack(monster);
-		monster->Attack(player);
-	}
+	player->UseItem(0, player);
 
-	cout << player->GetName() << "가 " << monster->CharacterReward.DropGold << "골드를 획득했습니다.\n";
 	
-	// 아이템이 있을 경우
-	if (monster->CharacterReward.DropItem != nullptr)
-	{
-		// 현재 아이템 이름이 설정되어 있지 않아서 빈칸으로 출력됨
-		cout << player->GetName() << "가 " << monster->CharacterReward.DropItem.get()->getName() << "을(를) 획득했습니다.";
-	}
+
+	//while (!monster->StatManager->IsDead())
+	//{
+	//	player->Attack(monster);
+	//	monster->Attack(player);
+	//}
+
+	//cout << player->GetName() << "가 " << monster->CharacterReward.DropGold << "골드를 획득했습니다.\n";
+	
+	//// 아이템이 있을 경우
+	//if (monster->CharacterReward.DropItem != nullptr)
+	//{
+	//	// 현재 아이템 이름이 설정되어 있지 않아서 빈칸으로 출력됨
+	//	cout << player->GetName() << "가 " << monster->CharacterReward.DropItem.get()->getName() << "을(를) 획득했습니다.";
+	//}
 
 	delete player;
 	delete monster;

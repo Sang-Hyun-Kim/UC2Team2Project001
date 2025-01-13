@@ -2,17 +2,24 @@
 #pragma once
 #include "Character.h"
 
+class Inventory;
+
 class Player : public Character
 {
 public:
-	Player(const std::string& InName): Character(InName)
-	{
-	}
+	Player();
+
+	Player(const std::string& InName);
 
 	virtual ~Player() = default;
 
-	// 플레이어만의 행동이나 정보
-	// 예: 인벤토리, 골드, 경험치, 스킬 사용 등
-	void AddToInventory(const std::string& item);
-	// ...
+
+	// 아이템 사용
+
+	void UseItem(int index, Character* target);
+
+public:
+
+	shared_ptr<Inventory> InventoryComponent;
+
 };

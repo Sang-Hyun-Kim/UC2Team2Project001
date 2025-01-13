@@ -40,6 +40,7 @@ public:
 
     // 골드 추가/제거
     void addGold(int amount);
+
     void removeGold(int amount);
 
     // 인벤토리 정보 출력
