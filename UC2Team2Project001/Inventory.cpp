@@ -34,6 +34,8 @@ void Inventory::addItem(shared_ptr<Item> item, int count) {
 }
 
 void Inventory::removeItem(int index, int count) {
+    //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
+    index--;
     if (index >= 0 && index < inven.size()) {
         FItemData& data = inven[index];
 
@@ -57,7 +59,8 @@ void Inventory::useItem(int index, Character* target)
     if (!target) {
         target = owner;
     }
-    
+    //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
+    index--;
     if (index >= 0 && index < inven.size()) 
     {
         FItemData& itemData = inven[index];
@@ -79,6 +82,8 @@ void Inventory::useItem(int index, Character* target)
 }
 
 int Inventory::getItemCount(int index) const {
+    //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
+    index--;
     if (index >= 0 && index < inven.size()) {
         return inven[index].count;
     }
@@ -109,23 +114,40 @@ void Inventory::removeGold(int amount) {
     }
 }
 
-void Inventory::displayInventory() const {
+void Inventory::displayInventory(int intype) const {
     cout << "==== 인벤토리 아이템 정보 ====" << endl;
 
     if (inven.empty()) {
         cout << "- 인벤토리가 비어있습니다." << endl;
     } else {
         for (size_t i = 0; i < inven.size(); ++i) {
-            cout << "===============" << endl;
-            cout << "Index: " << i << endl;
-            cout << "Item: ";
-            inven[i].item->info(); // 아이템 정보 출력
-            cout << " Count: " << inven[i].count << endl;
-            cout << "===============" << endl;
+            ostringstream itemInfo;
+            itemInfo << i + 1 << "." << inven[i].item->getName() << " : " << inven[i].item->getDescription();
+
+            switch (intype) {
+            case 0: // 이름, 설명, 개수, 가치 출력
+                itemInfo << " [Count: " << inven[i].count << "]";
+                itemInfo << " - " << inven[i].item->getValue() << " Gold";
+                break;
+
+            case 1: // 이름, 설명, 개수 출력
+                itemInfo << " [Count: " << inven[i].count << "]";
+                break;
+
+            case 2: // 이름, 설명만 출력
+            default:
+                break;
+            }
+            std::cout << itemInfo.str() << std::endl;
         }
     }
     cout << "Gold: " << gold << endl;
     cout << "==== 인벤토리 끝 ====" << endl;
+}
+
+int Inventory::getInventorySize() const
+{
+    return inven.size();
 }
 
 bool Inventory::IsEmpty() const

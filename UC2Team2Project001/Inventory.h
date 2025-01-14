@@ -44,10 +44,19 @@ public:
     void removeGold(int amount);
 
     // 인벤토리 정보 출력
-    void displayInventory() const;
-
+    // type = 0 : 아이템 명, 아이템 설명, 아이템 개수, 골드 출력
+    // type = 1 : 이름, 설명, 개수 출력
+    // type = 2 : 이름, 설명 출력 
+    void displayInventory(int intype = 0) const;
+    
     // 인벤토리 개수 확인
+    int getInventorySize() const;
+    
+    //인벤토리가 비어있는지 확인
     bool IsEmpty() const;
+    
     // 소멸자
     ~Inventory() {}
 };
+
+

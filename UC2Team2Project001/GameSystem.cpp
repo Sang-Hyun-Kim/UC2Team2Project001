@@ -134,7 +134,7 @@ void BattleSystem::Update()
 	{
 		auto battleitemcheck = make_shared<IBattleUseItemEvent>();
 		GlobalEventManager::Get().Notify(battleitemcheck);
-		player->InventoryComponent->displayInventory();
+		player->InventoryComponent->displayInventory(2);
 		if (!player->InventoryComponent->IsEmpty())
 		{
 			int idx = InputManagerSystem::GetInput<int>(

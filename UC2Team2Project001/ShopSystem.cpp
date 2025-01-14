@@ -41,6 +41,7 @@ void ShopSystem::MainMenu()
 	int input = InputManagerSystem::GetInput<int>(
 		"\n ==== 상점 메뉴 ====",
 		{ "1. 인벤토리 보기" , "2. 아이템 사기", "3. 돌아가기" },
+		"",
 		RangeValidator<int>(1, 3)
 	);
 
@@ -50,7 +51,7 @@ void ShopSystem::MainMenu()
 void ShopSystem::DisplayInventory()
 {
 	cout << "\n";
-	player->InventoryComponent->displayInventory();
+	player->InventoryComponent->displayInventory(2);
 
 	if (cin.rdbuf()->in_avail() > 0) // 버퍼에 읽을 수 있는 데이터가 있으면
 	{
@@ -78,7 +79,7 @@ void ShopSystem::BuyMenu()
 	}
 	options.push_back(to_string(index) + ". 돌아가기");
 
-	int input = InputManagerSystem::GetInput<int>(title, options, RangeValidator<int>(1, index));
+	int input = InputManagerSystem::GetInput<int>(title, options,"", RangeValidator<int>(1, index));
 
 	cout << "\n";
 
