@@ -79,6 +79,7 @@ void BattleSystem::Update()
 			int input = InputManagerSystem::GetInput<int>(
 				" 스테이지 클리어 메뉴",
 				{ "1. 다음 스테이지" , "2. 상점 방문하기"},
+				"input: ",
 				RangeValidator<int>(1, 2)
 			);
 			if (input == 1)
@@ -101,6 +102,7 @@ void BattleSystem::Update()
 	int input = InputManagerSystem::GetInput<int>(
 		" 전투 메뉴",
 		{ "1. 공격하기" , "2. 내 현재 스탯 확인하기","3. 아이템 사용하기"},
+		"input: ",
 		RangeValidator<int>(1, 3)
 	);
 	if (input == 1) // 공격
@@ -138,6 +140,7 @@ void BattleSystem::Update()
 			int idx = InputManagerSystem::GetInput<int>(
 				"돌아가기는 q를 입력해주세요",
 				{  },
+				"input: ",
 				NoValidator<int>()
 			);
 			player->UseItem(idx,dynamic_pointer_cast<Character>(player).get());
@@ -161,6 +164,7 @@ void LobbySystem::Update()
 	int input = InputManagerSystem::GetInput<int>(
 		" 게임 로비 메뉴를 출력합니다.",
 		{ "1. 게임 시작" , "2. 게임 종료" },
+		"input: ",
 		RangeValidator<int>(1, 2)
 	);
 	if (input == 1)
@@ -183,9 +187,11 @@ void LobbySystem::Update()
 
 void LobbySystem::CreatePlayer()
 {
-	string username = InputManagerSystem::GetInput<string>(
-		"캐릭터를 생성합니다.\n",
-		{ "캐릭터의 이름을 입력해주세요.\n", "이름(중간 공백 허용, 최대12자): " },
+	cout << endl;
+	string username = InputManagerSystem::GetInput(
+		"캐릭터의 이름을 입력해주세요.",
+		{ "이름(중간 공백 허용, 최대12자): " },
+		"input: ",
 		NameRangeValidator(1, 12),
 		NameSpaceValidator(),
 		RegexValidator("이름에 특수문자가 포함되어 있습니다.")
