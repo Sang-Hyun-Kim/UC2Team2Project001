@@ -43,9 +43,15 @@
     <Filter Include="헤더 파일\JSONS">
       <UniqueIdentifier>{6ffeecce-19bd-48eb-a2f8-e56fddb61922}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\GameSystem\SubSystem">
+      <UniqueIdentifier>{34119b4a-48a3-43d9-b059-7ee72367c048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GameSystem\SubSystem">
+      <UniqueIdentifier>{950193a1-11b6-4a47-959d-10ee24c4dcd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameMain.cpp">
+    <ClCompile Include="MainSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -111,12 +117,6 @@
     <ClCompile Include="PlayerCharacter.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ICommand.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameState.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
     </ClCompile>
@@ -150,11 +150,23 @@
     <ClCompile Include="InputValidatorTypes.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ShopSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Invoker.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbySystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SubSystem.cpp">
+      <Filter>소스 파일\GameSystem\SubSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemContext.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,12 +220,6 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
-	</ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="GameState.h">
-      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
     <ClInclude Include="IStrategy.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
@@ -223,6 +229,36 @@
     </ClInclude>
     <ClInclude Include="CharacterTypes.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalEventManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventTypes.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEventManagerSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbySystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SubSystem.h">
+      <Filter>헤더 파일\GameSystem\SubSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemContext.h">
+      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +284,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="InputManagerSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ShopSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Invoker.h">
