@@ -7,6 +7,8 @@
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
+#include "SystemContext.h"
+
 
 class ICommand
 {
@@ -14,32 +16,6 @@ public:
 	virtual void Execute() = 0;
 	virtual void Undo() = 0;
 	virtual ~ICommand() = default;
-};
-
-class MoveCommand : public ICommand
-{
-public:
-	MoveCommand(shared_ptr<GameSystem>to, shared_ptr<GameSystem>from) : to(to), from(from) {}
-
-	void Execute() override
-	{
-		GSystemContext->RunSystem(to);
-		GSystemContext->MoveSystem(to, from);
-		auto Event = make_shared<IMoveEvent>("현 위치", "목적지");
-		GlobalEventManager::Get().Notify(Event);
-	}
-
-	void Undo() override
-	{
-		GSystemContext->RunSystem(from);
-		GSystemContext->MoveSystem(from, to);
-		auto Event = make_shared<IMoveEvent>("현 위치", "목적지");
-		GlobalEventManager::Get().Notify(Event);
-	}
-
-private:
-	shared_ptr<GameSystem> to;
-	shared_ptr<GameSystem> from;
 };
 
 class SellCommand : public ICommand

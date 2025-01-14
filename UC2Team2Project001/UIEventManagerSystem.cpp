@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "SystemContext.h"
 #include "UIEventManagerSystem.h"
 #include "IEventTypes.h"  
 #include "GlobalEventManager.h"
@@ -40,7 +41,7 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto Defense = std::dynamic_pointer_cast<ICharacterDefenseEvent>(ev))
 	{
-		std::cout << "[UI] " << Defense->CharacterName << "이(가)" << Defense->DefenseValue << " 만큼 방어했습니다!" << endl;
+		std::cout << "[UI] " << Defense->CharacterName << "이(가) " << Defense->DefenseValue << "만큼 방어했습니다!" << endl;
 	}
 	else if (auto sellEvent = std::dynamic_pointer_cast<IItemSoldEvent>(ev))
 	{
@@ -55,8 +56,6 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto menuEvent = std::dynamic_pointer_cast<IDisplayMenuEvent>(ev))
 	{
-		system("cls");  //콘솔창 클리어 함수 (오류 메시지까지 보여주려면 delay 함수 필요)
-
 		std::cout << menuEvent->title << "\n";
 		for (const string& option : menuEvent->options)
 		{
@@ -116,6 +115,10 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	else if (auto stageclear = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
 	{
 		cout << "몬스터 사망으로 스테이지 클리어" << endl;
+	}
+	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(ev))
+	{
+		cout << "캐릭터 생성 완료" << endl;
 	}
 	else
 	{

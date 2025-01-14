@@ -44,7 +44,7 @@ void Character::Initialize(const StatsData& stats)
 		StatManager->SetStat(StatType::Level, stats.Level);
 		StatManager->SetStat(StatType::Experience, stats.Experience);
 		StatManager->SetStat(StatType::MaxExperience, stats.MaxExperience);
-		StatManager->PrintStatus();
+		//StatManager->PrintStatus();
 	}
 
 

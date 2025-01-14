@@ -1,13 +1,10 @@
 #include "pch.h"
-#include "CommandTypes.h"
-#include "InputManagerSystem.h"
-#include "GameSystem.h"
 #include "ShopSystem.h"
-#include "functional"
+#include "BattleSystem.h"
+#include "InputManagerSystem.h"
 #include "ItemManager.h"
-
-
-shared_ptr<ShopSystem> GShopSystem = make_shared<ShopSystem>();
+#include "Invoker.h"
+#include "CommandTypes.h"
 
 void ShopSystem::EnterSystem()
 {
@@ -29,7 +26,7 @@ void ShopSystem::Update()
 		BuyMenu();
 		break;
 	case EXIT:
-		ExitSystem(GBattleSystem);
+		ExitSystem(SystemType::BATTLE);
 		break;
 	default:
 		break;
@@ -38,8 +35,10 @@ void ShopSystem::Update()
 
 void ShopSystem::MainMenu()
 {
+	CLEAR;
+
 	int input = InputManagerSystem::GetInput<int>(
-		"\n ==== 상점 메뉴 ====",
+		"==== 상점 메뉴 ====",
 		{ "1. 인벤토리 보기" , "2. 아이템 사기", "3. 돌아가기" },
 		RangeValidator<int>(1, 3)
 	);
@@ -49,24 +48,21 @@ void ShopSystem::MainMenu()
 
 void ShopSystem::DisplayInventory()
 {
-	cout << "\n";
+	CLEAR;
+	auto player = GSystemContext->GetPlayer(GetSystemType());
+
 	player->InventoryComponent->displayInventory();
 
-	if (cin.rdbuf()->in_avail() > 0) // 버퍼에 읽을 수 있는 데이터가 있으면
-	{
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 버퍼에 있는 모든 입력을 무시
-	};
-
-	cout << "엔터를 눌러 계속하세요...\n";
-
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 엔터를 누를 때까지 대기
+	InputManagerSystem::PauseUntilEnter();
 
 	state = MAIN;
 }
 
 void ShopSystem::BuyMenu()
 {
-	string title = "\n==== 아이템 구입 ====";
+	CLEAR;
+
+	string title = "==== 아이템 구입 ====";
 
 	int itemSize = itemList.size();
 	vector<string> options(itemSize, "");
@@ -80,12 +76,13 @@ void ShopSystem::BuyMenu()
 
 	int input = InputManagerSystem::GetInput<int>(title, options, RangeValidator<int>(1, index));
 
-	cout << "\n";
-
 	if (input <= itemSize)
 	{
+		auto player = GSystemContext->GetPlayer(GetSystemType());
 		auto buyCommand = make_shared<BuyCommand>(player, itemList, input - 1);
 		GInvoker->ExecuteCommand(buyCommand);
+
+		InputManagerSystem::PauseUntilEnter();
 	}
 	else state = MAIN;
 }

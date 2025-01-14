@@ -107,13 +107,33 @@ protected:
 private:
 
 };
-// 정규식 검증 클래스 (입력 값이 주어진 정규식에 맞는지 확인합니다.)
+
+class NoSpecialCharValidator : public InputValidator<string>
+{
+public:
+		
+
+protected:
+	bool IsValid(const string& input) const override
+	{
+		// 정규식 패턴: 알파벳 대소문자, 숫자, 공백만 허용
+		return regex_match(input, regex("^[a-zA-Z0-9 ]*$"));
+	}
+
+	void PrintErrorMessage() const override
+	{
+		std::cout << "입력값에 특수문자가 포함되어 있습니다.\n";
+	}
+};
+
 class RegexValidator : public InputValidator<string>
 {
 public:
 	// 정규식 패턴과, 정규식이 일치하지 않을 경우 출력할 오류 메시지를 넣어주세요.
-	RegexValidator(const string& errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
-		:  errorMessage(errorMessage) {
+	RegexValidator(const string& pattern, const string& errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
+		: errorMessage(errorMessage) 
+	{
+		regexPattern = regex(pattern);
 	}
 
 protected:
@@ -128,7 +148,6 @@ protected:
 	}
 
 private:
-	regex regexPattern = regex("^[a-zA-Z0-9 ]*$");  // 검증할 정규식 패턴
-	// a-z, A-Z, 0-9, 공백을 허용하는 정규식
-	string errorMessage;  // 정규식 검증 실패 시 출력할 오류 메시지
+	regex regexPattern;
+	string errorMessage;
 };

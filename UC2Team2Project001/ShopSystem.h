@@ -2,9 +2,11 @@
 #include "GameSystem.h"
 
 class Item;
-
+class SystemContext;
 class ShopSystem : public GameSystem
 {
+	friend class SystemContext;
+
 	enum ShopState
 	{
 		MAIN = 0,
@@ -12,11 +14,19 @@ class ShopSystem : public GameSystem
 		BUY = 2,
 		EXIT = 3
 	};
+
+	ShopSystem() 
+	{
+	}
+	virtual ~ShopSystem() 
+	{
+	}
 public:
-	ShopSystem() {}
-	virtual ~ShopSystem() {};
+
 	virtual void EnterSystem() override;
 	virtual void Update() override;
+
+	inline SystemType GetSystemType() override { return SystemType::SHOP; }
 private:
 	void MainMenu();
 	void DisplayInventory();
@@ -27,5 +37,3 @@ private:
 	vector<shared_ptr<Item>> itemList;
 	int state = MAIN;
 };
-
-extern shared_ptr<ShopSystem> GShopSystem;
