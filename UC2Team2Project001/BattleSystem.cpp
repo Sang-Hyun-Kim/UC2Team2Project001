@@ -132,6 +132,34 @@ void BattleSystem::Attack()
 	player->combatManager->SetTarget(monster.get());
 	player->combatManager->Attack();
 
+	/*
+		플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
+
+	CLEAR;
+
+	auto battleitemcheck = make_shared<IBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
+	GlobalEventManager::Get().Notify(battleitemcheck);
+
+	auto player = GSystemContext->GetPlayer(GetSystemType()); // Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
+	vector<string> ActiveSkillList = player->InventoryComponent->GetInventoryInfoWithString(1);
+	// => ItemInventory=>SkillManagerComponent로 변경해서 불러오기
+	// => Activeskill header
+	int lastIndex = ActiveSkillList.size() + 1; // Add return button
+
+	ActiveSkillList.push_back(to_string(lastIndex) + ". 돌아가기");
+	int input = InputManagerSystem::GetInput<int>(
+		"==================  스킬 사용 ===================",
+		ActiveSkillList,
+		RangeValidator<int>(1, lastIndex)
+	);
+
+	if (input != lastIndex)
+	{
+		player->UseItem(input, player.get()); // UseSkill로 변경 예정
+		Delay(1);
+	}
+	*/
+
 	// 몬스터 공격
 	cout << endl;
 	monster->combatManager->SetTarget(player.get());
