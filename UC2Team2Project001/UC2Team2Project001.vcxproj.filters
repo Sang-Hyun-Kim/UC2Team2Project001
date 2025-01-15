@@ -70,15 +70,9 @@
     <Filter Include="헤더 파일\SkillSystem\SkillClass">
       <UniqueIdentifier>{91a4ccdc-70e4-4999-a8ae-3ea9528a64c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\GameSystem\SubSystem">
-      <UniqueIdentifier>{950193a1-11b6-4a47-959d-10ee24c4dcd4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\GameSystem\SystemStates">
-      <UniqueIdentifier>{a6f1f99f-1b4f-4cbb-8414-a211671debd4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainSystem.cpp">
+    <ClCompile Include="GameMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -126,11 +120,17 @@
     <ClCompile Include="PlayerCharacter.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
     </ClCompile>
     <ClCompile Include="StatsLoader.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameSystem.cpp">
       <Filter>소스 파일</Filter>
@@ -144,6 +144,18 @@
     <ClCompile Include="GlobalEventManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CommandTypes.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManagerSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InputValidatorTypes.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Invoker.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="CombatComponent.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
@@ -155,15 +167,6 @@
     </ClCompile>
     <ClCompile Include="Potion.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Invoker.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LobbySystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="BattleSystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
     <ClCompile Include="ShopSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
@@ -182,27 +185,18 @@
     </ClCompile>
     <ClCompile Include="ConsumableItem.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
-      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="SubSystem.cpp">
-      <Filter>소스 파일\GameSystem\SubSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemContext.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
     <ClCompile Include="UTurnEventManager.cpp">
       <Filter>소스 파일\EventSystem</Filter>
     </ClCompile>
     <ClCompile Include="UStatusComponent.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="IInputEventTypes.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="ISystemTypes.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="ISkillAction.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ISkillEffect.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
     </ClCompile>
     <ClCompile Include="ISkillCondition.cpp">
       <Filter>소스 파일\SkillSystem</Filter>
@@ -216,51 +210,9 @@
     <ClCompile Include="LifeStealAttack.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
-    <ClCompile Include="ISkillAction.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ISkillEffect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BashAttack.cpp">
+    <ClCompile Include="USkillComponent.cpp">
       <Filter>소스 파일\SkillSystem</Filter>
     </ClCompile>
-    <ClCompile Include="MentalDiscipline.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ISkillCondition.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldAttack.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="OnePointAttack.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="InputValidatorTypes.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandTypes.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="StatType.cpp">
-      <Filter>소스 파일\CharacterSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Invoker.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="IInputEventTypes.cpp">
-      <Filter>소스 파일\EventSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterUtility.cpp">
-      <Filter>소스 파일\CharacterSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManagerSystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
-	<ClCompile Include="Inventory.cpp">
-		<Filter>소스 파일\CharacterSystem</Filter>
-	</ClCompile>
     <ClCompile Include="PoisonedBlade.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
@@ -282,15 +234,15 @@
     <ClCompile Include="Plague.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
+    <ClCompile Include="SkillManager.cpp">
+      <Filter>소스 파일\SkillSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EventManagerSystem.h">
-      <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
     <ClInclude Include="GameSystem.h">
@@ -310,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
     <ClInclude Include="IStrategy.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
@@ -334,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="USkillComponent.h">
       <Filter>헤더 파일\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterStatus.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="AttackBoostPotion.h">
       <Filter>헤더 파일\ItemSystem</Filter>
@@ -383,53 +341,21 @@
     <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalEventManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="IEventTypes.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="UIEventManagerSystem.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="ICharacterEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="LobbySystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
+    <ClInclude Include="IItemEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="BattleSystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
+    <ClInclude Include="ICombatEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="ShopSystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
+    <ClInclude Include="IInputEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="SubSystem.h">
-      <Filter>헤더 파일\GameSystem\SubSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemContext.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="IEventTypes.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UIEventManagerSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleSystemStates.h">
-      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
-    </ClInclude>
-    <ClInclude Include="LobbySystemStates.h">
-      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
-    </ClInclude>
-    <ClInclude Include="ShopSystemStates.h">
-      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharacterStat.json">
-      <Filter>헤더 파일\JSONS</Filter>
-    </None>
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -445,26 +371,6 @@
     <ClInclude Include="ISkillCondition.h">
       <Filter>헤더 파일\SkillSystem</Filter>
     </ClInclude>
-    <ClInclude Include="BashAttack.h">
-      <Filter>헤더 파일\SkillSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="MentalDiscipline.h">
-      <Filter>헤더 파일\SkillSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ISkillCondition.h">
-      <Filter>헤더 파일\SkillSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ShieldAttack.h">
-      <Filter>헤더 파일\SkillSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="OnePointAttack.h">
-      <Filter>헤더 파일\SkillSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterUtility.h">
-      <Filter>헤더 파일\CharacterSystem</Filter>
-    </ClInclude>
-	<ClInclude Include="CharacterStatus.h">
-	</ClInclude>
     <ClInclude Include="StatType.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
@@ -477,12 +383,6 @@
     <ClInclude Include="GlobalEventManager.h">
       <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Invoker.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
-	<ClInclude Include="StatType.h">
-		<Filter>헤더 파일\CharacterSystem</Filter>
-	</ClInclude>
     <ClInclude Include="LifeStealAttack.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
@@ -507,6 +407,9 @@
     <ClInclude Include="Plague.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
+    <ClInclude Include="SkillManager.h">
+      <Filter>헤더 파일\SkillSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">
@@ -515,11 +418,13 @@
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Invoker.h">
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IEventTypes.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Invoker.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
