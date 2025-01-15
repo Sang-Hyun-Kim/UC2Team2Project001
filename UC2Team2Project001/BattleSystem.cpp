@@ -6,7 +6,7 @@
 #include "Inventory.h"
 #include "PlayerCharacter.h"
 #include "Monster.h"
-
+#include "CombatComponent.h"
 BattleSystem::BattleSystem()
 {
 }
@@ -20,7 +20,7 @@ void BattleSystem::EnterSystem()
 	auto player = GSystemContext->GetPlayer(GetSystemType());
 	
 	// 플레이어 레벨에 따른 monster 생성
-	monster = make_shared<Monster>(player->StatManager.get()->GetStat(StatType::Level));
+	monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level));
 	state = MAINMENU;
 }
 
@@ -55,7 +55,7 @@ void BattleSystem::MainMenu()
 {
 	CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
-	monster->StatManager->PrintStatus();
+	CharacterUtility::PrintStatus(monster.get());
 
 	state = InputManagerSystem::GetInput<int>(
 		"==== 전투 메뉴 ====",
@@ -69,21 +69,23 @@ void BattleSystem::Attack()
 	cout << endl;
 
 	auto player = GSystemContext->GetPlayer(GetSystemType());
-	player->Attack(monster.get());
+	player->combatManager->SetTarget(monster);
+	player->combatManager->Attack();
 
 	Delay(1);
 	// 몬스터 공격
 	cout << endl;
-	monster->Attack(player.get());
+	monster->combatManager->SetTarget(player);
+	monster->combatManager->Attack();
 
 	Delay(1);
 	InputManagerSystem::PauseUntilEnter();
 
-	if (monster->IsDead())
+	if (monster->statManager->IsDead())
 	{
 		state = NEXTSTAGE;
 	}
-	else if (player->IsDead())
+	else if (player->statManager->IsDead())
 	{
 		state = GAMEOVER;
 	}
@@ -97,7 +99,7 @@ void BattleSystem::DisplayStat()
 {
 	CLEAR;
 	auto player = GSystemContext->GetPlayer(GetSystemType());
-	player->StatManager.get()->PrintStatus();
+	CharacterUtility::PrintStatus(player.get());
 
 	InputManagerSystem::PauseUntilEnter();
 
@@ -138,16 +140,16 @@ void BattleSystem::NextStage()
 		// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
 
 		auto player = GSystemContext->GetPlayer(GetSystemType());
-		player->InventoryComponent->addGold(monster->CharacterReward.DropGold); // 돈 넣기
+		player->InventoryComponent->addGold(monster->characterReward.DropGold); // 돈 넣기
 
-		if (monster->CharacterReward.DropItem != nullptr)
+		if (monster->characterReward.DropItem != nullptr)
 		{
 			auto playergetitem = make_shared<IPlayerGetItemEvent>();
 			GlobalEventManager::Get().Notify(playergetitem);
-			player->InventoryComponent->addItem(monster->CharacterReward.DropItem); // 템 넣기
+			player->InventoryComponent->addItem(monster->characterReward.DropItem); // 템 넣기
 		}
 
-		player->StatManager->ModifyStat(StatType::Experience, 50);
+		CharacterUtility::ModifyStat(player.get(), StatType::Experience, 50);
 		monster = nullptr;
 
 		auto battlestageclear = make_shared<IPlayerStageClearEvent>();

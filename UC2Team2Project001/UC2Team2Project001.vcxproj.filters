@@ -46,9 +46,6 @@
     <Filter Include="헤더 파일\SkillSystem">
       <UniqueIdentifier>{fa372a00-0e03-4411-b0a5-a15e3659e3b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\SkillSystem">
-      <UniqueIdentifier>{30bf33a7-89bd-4957-89e4-59187432490e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\GameSystem\SubSystem">
       <UniqueIdentifier>{34119b4a-48a3-43d9-b059-7ee72367c048}</UniqueIdentifier>
     </Filter>

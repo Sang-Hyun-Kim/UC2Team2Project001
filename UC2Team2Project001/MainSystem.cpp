@@ -66,7 +66,7 @@ int main()
 	//{
 	//	GSystemContext->currentSystem->Update(); // Update()로 변경해야함
 	//}
-
+#pragma endregion
 
 #pragma region 스킬 사용 예제
 

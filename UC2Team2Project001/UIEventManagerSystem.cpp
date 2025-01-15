@@ -28,6 +28,8 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 			// 몬스터 출력, reward는 몬스터만 받으니까 몬스터가 죽은 경우 reward 획득을 출력하기
 			dead->Reward.DropGold;
 			dead->Reward.DropItem;
+			std::cout << "[UI] " << dead->Reward.DropGold << "골드를 획득했습니다.\n";
+			std::cout << "[UI] " << dead->Reward.DropItem->getName() << "(을)를 획득했습니다.\n";
 		}
 		std::cout << "[UI] " << dead->CharacterName << "님이 사망했습니다.\n";
 	}
@@ -90,17 +92,21 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto gamedefeat = std::dynamic_pointer_cast<IPlayerDefeatEvent>(ev))
 	{
+		CLEAR;
 		cout << "플레이어가 사망하였습니다.\n"<<"게임 로비로 귀환합니다." << endl;
 		cout << "--------------------------------------------------\n"
 			<< "                  게  임  패  배                   \n"
 			<< "---------------------------------------------------" << endl;
+		Delay(1);
 	}
 	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGameClearEvent>(ev))
 	{
+		CLEAR;
 		cout << "보스 몬스터를 쓰러트렸습니다. 게임 클리어!!!" << endl;
 		cout << "--------------------------------------------------\n"
 			<< "                  게 임 클 리 어                   \n"
 			<< "---------------------------------------------------" << endl;
+		Delay(1);
  	}
 	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGetItemEvent>(ev))
 	{
@@ -111,6 +117,8 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 		cout <<"--------------------------------------------------\n"
 			<< "                플 레 이 어 레 벨 업              \n"
 			<< "---------------------------------------------------" << endl;
+
+		Delay(1);
 	}
 	else if (auto stageclear = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
 	{

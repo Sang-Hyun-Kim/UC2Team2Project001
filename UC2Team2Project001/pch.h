@@ -18,3 +18,14 @@ using namespace std;
 #include <cctype>
 #include <algorithm>
 #include "CharacterUtility.h"
+
+
+#include <chrono>
+#include <thread>
+
+#define CLEAR system("cls");  //콘솔창 클리어 함수
+
+static void Delay(int _sec, int _milliSec = 0)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(_sec) + std::chrono::microseconds(_milliSec));
+}

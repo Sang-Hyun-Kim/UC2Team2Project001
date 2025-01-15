@@ -6,15 +6,8 @@
 #include "GlobalEventManager.h"
 #include <sstream>
 
-#include <chrono>
-#include <thread>
 
-#define CLEAR system("cls");  //콘솔창 클리어 함수
 
-static void Delay(int _sec, int _milliSec = 0)
-{
-	std::this_thread::sleep_for(std::chrono::seconds(_sec) + std::chrono::microseconds(_milliSec));
-}
 
 class InputManagerSystem //선택지를 입력할 때 사용할 클래스
 {
