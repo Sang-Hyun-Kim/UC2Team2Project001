@@ -32,7 +32,7 @@ public:
 	Character(const string& _name);
 
 public:
-	void Initialize(const StatsData& _stats);
+	virtual void Initialize();
 
 	virtual ~Character() {}
 

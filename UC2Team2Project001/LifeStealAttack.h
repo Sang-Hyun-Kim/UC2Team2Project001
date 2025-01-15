@@ -5,6 +5,6 @@
 class LifeStealAttack : public ActiveSkill
 {
 public:
-	LifeStealAttack(shared_ptr<Character> _owner);
+	LifeStealAttack(Character* _owner);
 };
 

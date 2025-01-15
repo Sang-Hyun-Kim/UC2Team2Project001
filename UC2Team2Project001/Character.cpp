@@ -23,9 +23,6 @@ Character::Character()
 Character::Character(const string& _name) : characterName(_name)
 {
 	ManagerRegister();
-
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
-	Initialize(LoadStatsData);
 }
 
 void Character::ManagerRegister()
@@ -34,31 +31,33 @@ void Character::ManagerRegister()
 	statManager.get()->BeginPlay();
 	combatManager = make_shared<CombatComponent>();
 
-	shared_ptr<Character> tmp(this);
-	combatManager->SetOwner(tmp);
+	
+
+	combatManager->SetOwner(this);
 	skillManager = make_shared<USkillComponent>();
 }
 
-void Character::Initialize(const StatsData& _stats)
+void Character::Initialize()
 {
+	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
 	// 스탯 설정
-	statManager->SetStat(StatType::HP, _stats.HP);
-	statManager->SetStat(StatType::MaxHP, _stats.MaxHP);
-	statManager->SetStat(StatType::MP, _stats.MP);
-	statManager->SetStat(StatType::MaxMP, _stats.MaxMP);
-	statManager->SetStat(StatType::AttackPower, _stats.AttackPower);
-	statManager->SetStat(StatType::Defense, _stats.Defense);
-	statManager->SetStat(StatType::CriticalChance, _stats.CriticalChance);
-	statManager->SetStat(StatType::EvasionRate, _stats.EvasionRate);
-	statManager->SetStat(StatType::Level, _stats.Level);
-	statManager->SetStat(StatType::Experience, _stats.Experience);
-	statManager->SetStat(StatType::MaxExperience, _stats.MaxExperience);
+	statManager->SetStat(StatType::HP, LoadStatsData.HP);
+	statManager->SetStat(StatType::MaxHP, LoadStatsData.MaxHP);
+	statManager->SetStat(StatType::MP, LoadStatsData.MP);
+	statManager->SetStat(StatType::MaxMP, LoadStatsData.MaxMP);
+	statManager->SetStat(StatType::AttackPower, LoadStatsData.AttackPower);
+	statManager->SetStat(StatType::Defense, LoadStatsData.Defense);
+	statManager->SetStat(StatType::CriticalChance, LoadStatsData.CriticalChance);
+	statManager->SetStat(StatType::EvasionRate, LoadStatsData.EvasionRate);
+	statManager->SetStat(StatType::Level, LoadStatsData.Level);
+	statManager->SetStat(StatType::Experience, LoadStatsData.Experience);
+	statManager->SetStat(StatType::MaxExperience, LoadStatsData.MaxExperience);
 	statManager->PrintStatus();
 
 
 	// 전략 설정
-	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(_stats.AttackStrategyData));
-	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(_stats.DefenseStrategyData));
+	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
+	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
 }
 
 void Character::UseItem(const string& ItemName)

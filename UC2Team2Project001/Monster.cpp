@@ -12,11 +12,62 @@
 #include "ISkillEffect.h"
 #include "CombatComponent.h"
 #include "LifeStealAttack.h"
+#include "GameSystem.h"
 
-Monster::Monster(int PlayerLevel)
+Monster::Monster()
 {
+}
+
+void Monster::SetMonsterStat(int PlayerLevel)
+{
+	// 보스 몬스터라면 능력치 1.5배 범위에서 설정
+	// 보스가 아닐경우 배수는 1
+	float BossStat = 1.0f;
+	// 보스 몬스터 이름 인덱스 = 0
+	int randomIndex = 0;
+	if (bIsBoss)
+	{
+		BossStat = 1.5f;
+	}
+	else
+	{
+		// 랜덤 엔진 및 실수형 분포 설정
+		random_device rd;
+		mt19937 gen(rd());
+		// 보스 몬스터 인덱스 0을 제외한 범위로 난수 생성
+		uniform_real_distribution<> dis(1.0, (unsigned int)MonsterNames.size() - 1);
+
+		// 실수형 랜덤 값 -> 정수로 변환
+		// 일반 몬스터 이름 인덱스 랜덤 설정
+		randomIndex = static_cast<int>(dis(gen));
+	}
+
+	// 몬스터 이름 설정
+	characterName = MonsterNames[randomIndex];
+
+	statManager.get()->BeginPlay();
+	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
+
+	// 체력 = 레벨 * (20 ~ 30)
+	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
+	float HP = (float)PlayerLevel * RandomHP;
+	statManager->SetStat(StatType::MaxHP, HP);
+	statManager->SetStat(StatType::HP, HP);
+
+	// 공격력 = 레벨 * (5 ~ 10)
+	int RandomAttackPower = (rand() % (int)(5 * BossStat)) + (int)(10 * BossStat);
+	float AttackPower = (float)PlayerLevel * RandomAttackPower;
+	statManager->SetStat(StatType::AttackPower, AttackPower);
+}
+
+void Monster::Initialize()
+{
+	
+	//ToDo:
+	/*SetBlance(GLobbySystem->player->GetName());*/
+
 	// 입력받은 플레이어의 레벨이 10 이상인 경우 보스 몬스터 생성
-	if (PlayerLevel >= 10)
+	if (blanceLevel >= 10)
 	{
 		bIsBoss = true;
 	}
@@ -25,14 +76,15 @@ Monster::Monster(int PlayerLevel)
 		bIsBoss = false;
 	}
 
+	
 	// 몬스터 스탯 설정
-	SetMonsterStat(PlayerLevel);
+	SetMonsterStat(blanceLevel);
 
 	// 몬스터 생성시 지니고 있을 골드와 아이템을 설정
 	CreateCharacterReward();
 
 	// 몬스터 스킬 설정
-	
+
 
 	//그냥 스킬을생성하고 추가하는거야.
 
@@ -65,52 +117,28 @@ Monster::Monster(int PlayerLevel)
 	//캐릭터를 새로만들었으니까 임시객체로 만든 얘가 필요없으니 지워야지<< 지우니까 소멸자가 호출되는건지
 
 
-	shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(shared_ptr<Character>(this));
+	//기존 착각 
+	// main.cpp 에선 1참조가 있으니 저렇게 하면 2참조가 된다.
+
+	//쉐어드포인터가 참조카운1인 새로운 쉐어드포인터
+
+
+
+
+	//this
+
+	// Monster가 이미 make_shared<Monster>()로 생성되었다는 전제 하에
+
 	//shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(shared_from_this());
-	skillManager.get()->AddSkill(newLifeStealAttack);
+
+
+
+	//skillManager.get()->AddSkill(newLifeStealAttack);
 }
 
-void Monster::SetMonsterStat(int PlayerLevel)
+void Monster::SetBlance(Character* Player)
 {
-	// 보스 몬스터라면 능력치 1.5배 범위에서 설정
-	// 보스가 아닐경우 배수는 1
-	float BossStat = 1.0f;
-	// 보스 몬스터 이름 인덱스 = 0
-	int randomIndex = 0;
-	if (bIsBoss)
-	{
-		BossStat = 1.5f;
-	}
-	else
-	{
-		// 랜덤 엔진 및 실수형 분포 설정
-		random_device rd;
-		mt19937 gen(rd());
-		// 보스 몬스터 인덱스 0을 제외한 범위로 난수 생성
-		uniform_real_distribution<> dis(1.0, (unsigned int)MonsterNames.size() - 1);
-
-		// 실수형 랜덤 값 -> 정수로 변환
-		// 일반 몬스터 이름 인덱스 랜덤 설정
-		randomIndex = static_cast<int>(dis(gen));
-	}
-
-	// 몬스터 이름 설정
-	characterName = MonsterNames[randomIndex];
-
-	statManager.get()->BeginPlay();
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
-	Initialize(LoadStatsData);
-
-	// 체력 = 레벨 * (20 ~ 30)
-	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
-	float HP = (float)PlayerLevel * RandomHP;
-	statManager->SetStat(StatType::MaxHP, HP);
-	statManager->SetStat(StatType::HP, HP);
-
-	// 공격력 = 레벨 * (5 ~ 10)
-	int RandomAttackPower = (rand() % (int)(5 * BossStat)) + (int)(10 * BossStat);
-	float AttackPower = (float)PlayerLevel * RandomAttackPower;
-	statManager->SetStat(StatType::AttackPower, AttackPower);
+	blanceLevel = (int)CharacterUtility::GetStat(Player, StatType::Level);
 }
 
 bool Monster::IsBoss() const

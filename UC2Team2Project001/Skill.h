@@ -10,19 +10,25 @@ class ICharacterState;
 
 struct FSkillData
 {
-	string skillName ="";
-	int mpCost =0;
-	int maxCooldown =99;
-	int currentCooldown =0;
-	shared_ptr<ISkillAction> action;
-	vector<shared_ptr<ISkillEffect>> effects;
-	shared_ptr<Character> owner;
-	vector<shared_ptr<ICharacterState>> state;
+	string skillName =""; //스킬이름
+	int mpCost =0; //스킬에 사용되는 코스트
+	int maxCooldown =99; //스킬 쿨다운
+	int currentCooldown =0; //현재 스킬쿨다운
+
+	shared_ptr<ISkillAction> action; //액션
+	vector<shared_ptr<ISkillEffect>> effects; //효과가 여러개일수도있으니
+	
+	Character* owner;//이 스킬을 소유한 캐릭터오너 //ToDO: 원시 or 위크드
+	vector<shared_ptr<ICharacterState>> state; //상태
 
 	FSkillData() = default;
 
 	FSkillData(const string& skillName, int mpCost, int maxCooldown)
 		: skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
+	{
+	}
+	FSkillData(Character* _owner,const string& skillName, int mpCost, int maxCooldown)
+		: owner(_owner), skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
 	{
 	}
 
@@ -31,10 +37,7 @@ struct FSkillData
 	{
 	}
 
-	FSkillData(const string& skillName, int mpCost, int maxCooldown, int currentCooldown, const shared_ptr<ISkillAction>& action, const vector<shared_ptr<ISkillEffect>>& effects, const shared_ptr<Character>& owner, const shared_ptr<Character>& target)
-		: skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown), currentCooldown(currentCooldown), action(action), effects(effects), owner(owner)
-	{
-	}
+
 };
 
 class Skill
@@ -48,18 +51,20 @@ public:
 	{
 	};
 
-	Skill(shared_ptr<Character> _owner) 
+	Skill(Character* _owner) 
 	{
 		skillData.owner = _owner;
 	};
 
+	~Skill() = default;
+
 	template<typename T>
 	void SkillInit()
 	{
-		skillData.action.get()->SetSkill(shared_ptr<T>(this));
+		skillData.action.get()->SetSkill(this);
 		for (auto effect : skillData.effects)
 		{
-			effect.get()->SetSkill(shared_ptr<T>(this));
+			effect.get()->SetSkill(this);
 		}
 	}
 
@@ -78,12 +83,7 @@ public:
 
 	//virtual vector<Character> GetSearchFindTarget();
 
-	virtual shared_ptr<Character> GetTarget();
-
-	virtual void SetOwner(shared_ptr<Character> _owner)
-	{
-		skillData.owner = _owner;
-	}
+	virtual Character* GetTarget();
 
 };
 
@@ -94,14 +94,18 @@ public:
 	{
 	};
 
-	ActiveSkill(shared_ptr<Character> _owner) : Skill(_owner)
+	ActiveSkill(Character* _owner) : Skill(_owner)
 	{
 	};
 
-	ActiveSkill(shared_ptr<Character> _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
+	ActiveSkill(Character* _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
 	{
-		skillData = FSkillData(skillName, mpCost, maxCooldown);
+		skillData.skillName = skillName;
+		skillData.mpCost = mpCost;
+		skillData.maxCooldown = maxCooldown;
 	};
+
+	~ActiveSkill() = default;
 
 	virtual void UseSkill() override;
 };
@@ -113,14 +117,18 @@ public:
 	{
 	};
 
-	PassiveSkill(shared_ptr<Character> _owner) : Skill(_owner)
+	PassiveSkill(Character* _owner) : Skill(_owner)
 	{
 	};
 
-	PassiveSkill(shared_ptr<Character> _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
+	PassiveSkill(Character* _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
 	{
-		skillData = FSkillData(skillName, mpCost, maxCooldown);
+		skillData.skillName = skillName;
+		skillData.mpCost = mpCost;
+		skillData.maxCooldown = maxCooldown;
 	};
+
+	~PassiveSkill() = default;
 
 	virtual void UseSkill() override;
 };

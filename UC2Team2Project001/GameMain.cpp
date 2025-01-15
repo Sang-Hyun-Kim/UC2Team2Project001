@@ -20,6 +20,7 @@
 #include "USkillComponent.h"
 #include "UTurnEventManager.h"
 #include "UStatusComponent.h"
+#include "LifeStealAttack.h"
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
@@ -28,7 +29,7 @@ using namespace std;
 int main()
 {
 	// 랜덤 함수 시드 설정
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	
 
 	// GlobalEventManager 싱글톤 인스턴스 가져오기 //지우지마세요
@@ -103,11 +104,20 @@ int main()
 #pragma region 스킬 사용 예제
 
 	shared_ptr<Player> player = make_shared<Player>("Player");
-	shared_ptr<Monster> monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level)); //Delete ?
-	monster->combatManager->SetTarget(player);
+	player->Initialize();
+
+	shared_ptr<Monster> monster = make_shared<Monster>();
+	monster->Initialize();
+	monster->combatManager->SetTarget(player.get());
+
+	shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
+	monster->skillManager->AddSkill(newLifeStealAttack);
+	
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "흡혈 공격");
 
 #pragma endregion
+
+	//몬스터가 소멸되고 -> 몬스터가 스텟매니저 스킬매니저
 
 	
 	

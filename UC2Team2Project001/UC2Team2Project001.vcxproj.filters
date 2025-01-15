@@ -144,18 +144,6 @@
     <ClCompile Include="CharacterUtility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="USkillComponent.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Skill.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ISkillEffect.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-	<ClCompile Include="ISkillAction.cpp">
-		<Filter>소스 파일\SkillSystem</Filter>
-	</ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>소스 파일\ItemSystem</Filter>
     </ClCompile>
@@ -191,6 +179,21 @@
     </ClCompile>
     <ClCompile Include="ISystemTypes.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="ISkillAction.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ISkillEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LifeStealAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="USkillComponent.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +263,9 @@
     <ClInclude Include="ISkillAction.h">
       <Filter>헤더 파일\SkillSystem</Filter>
     </ClInclude>
-	<ClInclude Include="USkillComponent.h">
-		<Filter>헤더 파일\SkillSystem</Filter>
-	</ClInclude>
+    <ClInclude Include="USkillComponent.h">
+      <Filter>헤더 파일\SkillSystem</Filter>
+    </ClInclude>
     <ClInclude Include="CharacterStatus.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -311,9 +314,9 @@
     <ClInclude Include="IEventTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-	<ClInclude Include="UIEventManagerSystem.h">
-		<Filter>헤더 파일</Filter>
-	</ClInclude>
+    <ClInclude Include="UIEventManagerSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="IEventTypes.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
@@ -337,6 +340,12 @@
     </ClInclude>
     <ClInclude Include="GlobalEventManager.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeStealAttack.h">
+      <Filter>헤더 파일\SkillSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

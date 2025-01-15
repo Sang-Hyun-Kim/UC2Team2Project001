@@ -8,9 +8,12 @@
 //	FSkillData skillData("기본 스킬", 10, 3, action, { effect }, combatManager->GetOwner(), combatManager->GetTarget());
 //}
 
-LifeStealAttack::LifeStealAttack(shared_ptr<Character> _owner) : ActiveSkill(_owner)
+LifeStealAttack::LifeStealAttack(Character* _owner) : ActiveSkill(_owner)
 {
-	skillData = FSkillData("흡혈 공격", 10, 3);
+	
+	
+	skillData= FSkillData(_owner,"흡혈 공격", 10, 3);
+	
 
 	skillData.action = make_shared<AttackAction>();
 

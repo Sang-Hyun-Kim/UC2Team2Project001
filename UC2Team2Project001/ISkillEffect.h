@@ -9,11 +9,11 @@ enum class StatType;
 class ISkillEffect
 {
 public:
-	shared_ptr<Skill> skill;
+	Skill* skill;
 public:
 	virtual ~ISkillEffect() = default;
 
-	void SetSkill(shared_ptr<Skill> _skill)
+	void SetSkill(Skill* _skill)
 	{
 		skill = _skill;
 	}

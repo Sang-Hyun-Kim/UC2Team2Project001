@@ -32,8 +32,8 @@ void BattleSystem::EnterSystem()
 	}
 
 	// 플레이어 레벨에 따른 monster 생성
-	monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level));
-	monster->combatManager->SetTarget(player);
+	monster = make_shared<Monster>();
+	monster->combatManager->SetTarget(player.get());
 }
 
 void BattleSystem::Update()

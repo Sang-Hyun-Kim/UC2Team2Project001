@@ -5,7 +5,7 @@
 
 void ActiveSkill::UseSkill()
 {
-	if (!skillData.owner.get())
+	if (!skillData.owner)
 	{
 		return;
 	}
@@ -30,7 +30,7 @@ void ActiveSkill::UseSkill()
 
 void PassiveSkill::UseSkill()
 {
-	if (!skillData.owner.get())
+	if (!skillData.owner)
 	{
 		return;
 	}
@@ -50,7 +50,7 @@ void PassiveSkill::UseSkill()
 	std::cout << "패시브 발동" << std::endl;
 }
 
-shared_ptr<Character> Skill::GetTarget()
+Character* Skill::GetTarget()
 {
 	return skillData.owner->combatManager->GetTarget();
 }

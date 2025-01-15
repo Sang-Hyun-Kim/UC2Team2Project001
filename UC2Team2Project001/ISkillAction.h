@@ -11,18 +11,21 @@ public:
 
 	virtual void ExecuteAction() = 0;
 
-	void SetSkill(shared_ptr<Skill> _skill)
+	void SetSkill(Skill* _skill)
 	{
 		parentSkill = _skill;
 	}
 
-protected:
-	shared_ptr<Skill> parentSkill;
+public:
+	Skill* parentSkill;
 };
 
 class AttackAction : public ISkillAction
 {
+public:
 	virtual void ExecuteAction() override;
+
+	~AttackAction() = default;
 };
 
 // 럭키스트라이크

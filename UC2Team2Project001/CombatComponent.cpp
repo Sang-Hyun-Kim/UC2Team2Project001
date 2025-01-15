@@ -6,19 +6,19 @@
 #include "ICharacterEventTypes.h"
 #include "GlobalEventManager.h"
 
-void CombatComponent::SetOwner(shared_ptr<Character> _owner)
+void CombatComponent::SetOwner(Character* _owner)
 {
 	owner = _owner;
 }
 
-void CombatComponent::SetTarget(shared_ptr<Character> _target)
+void CombatComponent::SetTarget(Character* _target)
 {
 	target = _target;
 }
 
 void CombatComponent::Attack()
 {
-	if (CharacterUtility::IsDead(owner.get()))
+	if (CharacterUtility::IsDead(owner))
 	{
 		return;
 	}
@@ -36,7 +36,7 @@ void CombatComponent::Attack()
 	}
 
 	// 공격 전략 실행
-	attackStrategy->Attack(owner.get(), target.get());
+	attackStrategy->Attack(owner, target);
 }
 
 void CombatComponent::TakeDamage(int _incomingDamage)
@@ -46,14 +46,14 @@ void CombatComponent::TakeDamage(int _incomingDamage)
 	// 방어 전략 적용
 	if (defenseStrategy)
 	{
-		finalDamage = defenseStrategy->CalculateDamageReceived(owner.get(), _incomingDamage);
+		finalDamage = defenseStrategy->CalculateDamageReceived(owner, _incomingDamage);
 	}
 
 	//콜백을 리워드 시스템에 연결
-	auto Event = make_shared<ICharacterDamagedEvent>(owner->GetName(), finalDamage, CharacterUtility::GetStat(owner.get(), StatType::HP));
+	auto Event = make_shared<ICharacterDamagedEvent>(owner->GetName(), finalDamage, CharacterUtility::GetStat(owner, StatType::HP));
 	GlobalEventManager::Get().Notify(Event);
 
-	CharacterUtility::ModifyStat(owner.get(), StatType::HP, (float)-finalDamage);
+	CharacterUtility::ModifyStat(owner, StatType::HP, (float)-finalDamage);
 }
 
 void CombatComponent::SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy)

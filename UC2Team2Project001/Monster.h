@@ -11,8 +11,20 @@ private:
 
 	void SetMonsterStat(int PlayerLevel);
 
+	
+
+	int blanceLevel = 4;
+
+	void SetBlance(Character* Player);
 public:
-	Monster(int PlayerLevel);
+	Monster();
+
+	virtual  void Initialize() override;
+
+	//Character();
+
+	//Character(const string& _name);
+
 
 	bool IsBoss() const;
 
