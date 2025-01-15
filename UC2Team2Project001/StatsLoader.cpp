@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "StatsLoader.h"
+#include <iostream>
 
 const std::string DefaultFileName = "CharacterStat.json";
 //const std::string DefaultFileName = "ItemData.json";
 
 
-StatsData StatsLoader::LoadFromJSON(const std::string& characterName) 
+StatsData StatsLoader::LoadFromJSON(const std::string& characterName)
 {
 	std::ifstream file(DefaultFileName);
 	if (!file.is_open()) {
@@ -23,9 +24,9 @@ StatsData StatsLoader::LoadFromJSON(const std::string& characterName)
 	}
 
 	const auto& characters = jsonData["Characters"];
-	if (!characters.contains(characterName)) 
+	if (!characters.contains(characterName))
 	{
-		throw std::runtime_error("캐릭터 이름 '" + characterName + "'에 해당하는 데이터가 없습니다.");
+		std::cerr << "캐릭터 이름 '" + characterName + "'에 해당하는 데이터가 없습니다.";
 	}
 
 	const auto& statsData = characters[characterName]["Stats"];
