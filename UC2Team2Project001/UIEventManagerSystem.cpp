@@ -20,18 +20,23 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	if (auto dmg = std::dynamic_pointer_cast<ICharacterDamagedEvent>(ev))
 	{
 		std::cout << "[UI] " << dmg->CharacterName << "님이 " << dmg->Damage << "의 피해를 입었습니다.\n";
+		Delay(1);
 	}
 	else if (auto dead = std::dynamic_pointer_cast<ICharacterDeadEvent>(ev))
 	{
+		std::cout << "[UI] " << dead->CharacterName << "님이 사망했습니다.\n";
+
 		if (dead->Reward.IsEmpty())
 		{
 			// 몬스터 출력, reward는 몬스터만 받으니까 몬스터가 죽은 경우 reward 획득을 출력하기
+			cout << "--------------------------------------------------\n"
+				<< "                  승  리  보  상                   \n"
+				<< "---------------------------------------------------" << endl;
 			dead->Reward.DropGold;
 			dead->Reward.DropItem;
 			std::cout << "[UI] " << dead->Reward.DropGold << "골드를 획득했습니다.\n";
 			std::cout << "[UI] " << dead->Reward.DropItem->getName() << "(을)를 획득했습니다.\n";
 		}
-		std::cout << "[UI] " << dead->CharacterName << "님이 사망했습니다.\n";
 	}
 	else if (auto itemEvent = std::dynamic_pointer_cast<IItemPurchasedEvent>(ev))
 	{
@@ -106,7 +111,6 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 		cout << "--------------------------------------------------\n"
 			<< "                  게 임 클 리 어                   \n"
 			<< "---------------------------------------------------" << endl;
-		Delay(1);
  	}
 	else if (auto gameclear = std::dynamic_pointer_cast<IPlayerGetItemEvent>(ev))
 	{
@@ -117,8 +121,6 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 		cout <<"--------------------------------------------------\n"
 			<< "                플 레 이 어 레 벨 업              \n"
 			<< "---------------------------------------------------" << endl;
-
-		Delay(1);
 	}
 	else if (auto stageclear = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
 	{
@@ -126,6 +128,7 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(ev))
 	{
+		CLEAR;
 		cout << "캐릭터 생성 완료" << endl;
 	}
 	else

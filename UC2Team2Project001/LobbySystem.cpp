@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "LobbySystem.h"
+#include "LobbySystemStates.h"
 #include "PlayerCharacter.h"
 
 LobbySystem::LobbySystem()
@@ -14,28 +15,28 @@ void LobbySystem::EnterSystem()
 	// 로그인, 로그인 검증 등
 	// 죽었으면 MAIN
 	// 
-	state = MAIN;
+	state = make_shared<LobbyMainState>();
 }
 
-void LobbySystem::Update()
-{
-	CLEAR;
-
-	switch (state)
-	{
-	case LobbyState::MAIN:
-		MainMenu();
-		break;
-	case LobbyState::START:
-		StartMenu();
-		break;
-	case LobbyState::EXIT:
-		exit(1);
-		break;
-	default:
-		break;
-	}
-}
+//void LobbySystem::Update()
+//{
+//	CLEAR;
+//
+//	switch (state)
+//	{
+//	case LobbyState::MAIN:
+//		MainMenu();
+//		break;
+//	case LobbyState::START:
+//		StartMenu();
+//		break;
+//	case LobbyState::EXIT:
+//		exit(1);
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
 void LobbySystem::MainMenu()
 {
@@ -45,10 +46,17 @@ void LobbySystem::MainMenu()
 		RangeValidator<int>(1, 2)
 	);
 	
-	state = input;
+	if (input == 1)
+	{
+		state = make_shared<LobbyCreateState>();
+	}
+	else
+	{
+		exit(1);
+	}
 }
 
-void LobbySystem::StartMenu()
+void LobbySystem::CreatePlayerMenu()
 {
 	CLEAR;
 	string userName = InputManagerSystem::GetInput(
@@ -62,7 +70,14 @@ void LobbySystem::StartMenu()
 	auto createEvent = make_shared<ICharacterCreateEvent>(userName);
 	GlobalEventManager::Get().Notify(createEvent);
 
+	auto player = GSystemContext->GetPlayer(GetSystemType());
+	CharacterUtility::PrintStatus(player.get());
+
 	InputManagerSystem::PauseUntilEnter();
 
 	ExitSystem(SystemType::BATTLE);
+}
+
+void LobbySystem::OnEvent(const std::shared_ptr<IEvent>& ev)
+{
 }

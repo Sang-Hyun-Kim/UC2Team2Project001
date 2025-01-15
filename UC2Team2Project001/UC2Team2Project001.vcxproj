@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
     <ClInclude Include="BattleSystem.h" />
+    <ClInclude Include="BattleSystemStates.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
     <ClInclude Include="CharacterUtility.h" />
@@ -190,6 +191,8 @@
     <ClInclude Include="ISkillAction.h" />
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="LobbySystemStates.h" />
+    <ClInclude Include="ShopSystemStates.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="LobbySystem.h" />

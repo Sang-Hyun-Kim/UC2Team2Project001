@@ -17,6 +17,8 @@ public:
     Item();
     Item(int itemNumber,const string& name, const string& description, int value);
 
+    string getInfoText(int type);
+
     int getItemNumber() const { return itemNumber; }
     string getName() const { return name; }
     string getDescription() const { return description; }

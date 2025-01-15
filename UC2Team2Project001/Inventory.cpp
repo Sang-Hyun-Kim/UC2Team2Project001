@@ -97,20 +97,20 @@ int Inventory::getGold() const {
 void Inventory::addGold(int amount) {
     if (amount > 0) {
         gold += amount;
-        cout << "추가된 골드 :  " << amount << " gold." << endl;
+        //cout << "추가된 골드 :  " << amount << " gold." << endl;
     }
     else {  
-        cout << "0보다 작은 수는 추가할 수 없습니다."  << endl;
+        //cout << "0보다 작은 수는 추가할 수 없습니다."  << endl;
     }
 }
 
 void Inventory::removeGold(int amount) {
     if (amount > 0 && gold >= amount) {
         gold -= amount;
-        cout << "빠져나간 골드 :  " << amount << " gold." << endl;
+        //cout << "빠져나간 골드 :  " << amount << " gold." << endl;
     }
     else {
-        cout << "골드가 부족하거나 0보다 작은 값입니다." << endl;
+        //cout << "골드가 부족하거나 0보다 작은 값입니다." << endl;
     }
 }
 
@@ -122,27 +122,27 @@ void Inventory::displayInventory(int intype) const {
     } else {
         for (size_t i = 0; i < inven.size(); ++i) {
             ostringstream itemInfo;
+            inven[i].item->getInfoText(intype);
             itemInfo << i + 1 << "." << inven[i].item->getName() << " : " << inven[i].item->getDescription();
+            inven[i].item->getInfoText(intype);
 
-            switch (intype) {
-            case 0: // 이름, 설명, 개수, 가치 출력
-                itemInfo << " [Count: " << inven[i].count << "]";
-                itemInfo << " - " << inven[i].item->getValue() << " Gold";
-                break;
-
-            case 1: // 이름, 설명, 개수 출력
-                itemInfo << " [Count: " << inven[i].count << "]";
-                break;
-
-            case 2: // 이름, 설명만 출력
-            default:
-                break;
-            }
             std::cout << itemInfo.str() << std::endl;
         }
     }
     cout << "Gold: " << gold << endl;
     cout << "==== 인벤토리 끝 ====" << endl;
+}
+
+vector<string> Inventory::GetInventoryInfoWithString(int type) const
+{
+    vector<string> inventoryInfos(inven.size(), "");
+
+    for (size_t i = 0; i < inven.size(); ++i)
+    {
+        inventoryInfos[i] = to_string(i + 1) + ". " + inven[i].item->getName() + " x" + to_string(inven[i].count) + " : " + inven[i].item->getDescription();
+    }
+
+    return inventoryInfos;
 }
 
 int Inventory::getInventorySize() const

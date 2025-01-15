@@ -12,7 +12,8 @@ class ShopSystem : public GameSystem
 		MAIN = 0,
 		INVENTORY = 1,
 		BUY = 2,
-		EXIT = 3
+		SELL = 3,
+		EXIT = 4
 	};
 
 	ShopSystem() 
@@ -24,16 +25,17 @@ class ShopSystem : public GameSystem
 public:
 
 	virtual void EnterSystem() override;
-	virtual void Update() override;
+	//virtual void Update() override;
 
 	inline SystemType GetSystemType() override { return SystemType::SHOP; }
-private:
+	void OnEvent(const std::shared_ptr<IEvent>& ev) override;
 	void MainMenu();
 	void DisplayInventory();
 	void BuyMenu();
 	void SellMenu();
+private:
 	void GetRandomItems();
 
 	vector<shared_ptr<Item>> itemList;
-	int state = MAIN;
+
 };

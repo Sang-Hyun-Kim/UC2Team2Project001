@@ -14,6 +14,7 @@ SystemContext::SystemContext()
 	shopSystem = new ShopSystem();
 
 	currentSystem = lobbySystem;
+	currentSystem->EnterSystem();
 }
 
 SystemContext::~SystemContext()

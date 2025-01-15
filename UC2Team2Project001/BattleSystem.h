@@ -21,8 +21,7 @@ class BattleSystem : public GameSystem
 
 public:
 	virtual void EnterSystem() override;
-	virtual void Update() override;
-
+	//virtual void ChangeState() override;
 	void MainMenu();
 	void Attack();
 	void DisplayStat();
@@ -31,8 +30,8 @@ public:
 	void GameOver();
 
 	inline SystemType GetSystemType() override { return SystemType::BATTLE; }
+	void OnEvent(const std::shared_ptr<IEvent>& ev) override;
 private:
 	shared_ptr<Monster> monster;
 
-	int state = MAINMENU;
 };

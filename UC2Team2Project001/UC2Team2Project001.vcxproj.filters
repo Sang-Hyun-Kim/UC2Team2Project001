@@ -52,6 +52,9 @@
     <Filter Include="헤더 파일\GameSystem\SubSystem">
       <UniqueIdentifier>{950193a1-11b6-4a47-959d-10ee24c4dcd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\GameSystem\SystemStates">
+      <UniqueIdentifier>{a6f1f99f-1b4f-4cbb-8414-a211671debd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainSystem.cpp">
@@ -180,17 +183,17 @@
     <ClCompile Include="CharacterUtility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="USkillComponent.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Skill.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
+    <ClCompile Include="ISkillAction.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ISkillEffect.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ISkillAction.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
+    <ClCompile Include="Skill.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="USkillComponent.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
     <ClInclude Include="StrategyFactory.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
@@ -305,12 +305,6 @@
     <ClInclude Include="IEventTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Status.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StatusComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -328,6 +322,21 @@
     </ClInclude>
     <ClInclude Include="SystemContext.h">
       <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventTypes.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEventManagerSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleSystemStates.h">
+      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbySystemStates.h">
+      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopSystemStates.h">
+      <Filter>헤더 파일\GameSystem\SystemStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

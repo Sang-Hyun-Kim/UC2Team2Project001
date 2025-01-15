@@ -48,7 +48,8 @@ public:
     // type = 1 : 이름, 설명, 개수 출력
     // type = 2 : 이름, 설명 출력 
     void displayInventory(int intype = 0) const;
-    
+    vector<string> GetInventoryInfoWithString(int type = 0) const;
+
     // 인벤토리 개수 확인
     int getInventorySize() const;
     
