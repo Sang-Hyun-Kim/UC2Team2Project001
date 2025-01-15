@@ -5,33 +5,32 @@
 GlobalEventManager::GlobalEventManager() {}
 GlobalEventManager::~GlobalEventManager() {}
 
-int GlobalEventManager::Subscribe(const std::shared_ptr<IEventManagerSystem>& system)
+int GlobalEventManager::Subscribe(const std::shared_ptr<IEventManagerSystem>& _system)
 {
 	int newId = NextId++;
 
-	system->SetID(newId);
+	_system->SetID(newId);
 
-	Listeners.push_back(system);
+	_listeners.push_back(_system);
 
 	return newId;
 }
 
-void GlobalEventManager::Unsubscribe(int subscriptionId)
+void GlobalEventManager::Unsubscribe(int _subscriptionId)
 {
-	auto it = std::remove_if(Listeners.begin(), Listeners.end(),
-		[subscriptionId](const std::shared_ptr<IEventManagerSystem>& sys)
+	auto it = std::remove_if(_listeners.begin(), _listeners.end(),
+		[_subscriptionId](const std::shared_ptr<IEventManagerSystem>& sys)
 		{
-			return (sys->GetID() == subscriptionId);
+			return (sys->GetID() == _subscriptionId);
 		}
 	);
-	Listeners.erase(it, Listeners.end());
+	_listeners.erase(it, _listeners.end());
 }
 
-void GlobalEventManager::Notify(const std::shared_ptr<IEvent>& ev)
+void GlobalEventManager::Notify(std::shared_ptr<IEvent> _callEv)
 {
-	// 모든 구독자에게 이벤트 알림 (다형성 호출)
-	for (auto& system : Listeners)
+	for (auto& system : _listeners)
 	{
-		system->OnEvent(ev);
+		system->OnEvent(_callEv);
 	}
 }

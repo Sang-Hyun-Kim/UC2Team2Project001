@@ -3,10 +3,12 @@
 #include "GameSystem.h"
 #include "ShopSystem.h"
 #include "GlobalEventManager.h"
-#include "IEventTypes.h"
+
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
+#include "ISystemTypes.h"
+#include "IItemEventTypes.h"
 #include "SystemContext.h"
 
 

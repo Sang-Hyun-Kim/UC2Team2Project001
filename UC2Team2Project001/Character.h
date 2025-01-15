@@ -9,15 +9,20 @@
 
 class USkillComponent;
 class CombatComponent;
-class Item;
 
 struct StatsData;
+
+class IAttackStrategy;
+class IDefenseStrategy;
+
+class Item;
+class UStatusComponent;
 
 class UStatsComponent;
 
 using namespace std;
 
-class Character 
+class Character
 {
 
 public:
@@ -27,7 +32,7 @@ public:
 	Character(const string& _name);
 
 public:
-	void Initialize(const StatsData& _stats);
+	virtual void Initialize();
 
 	virtual ~Character() {}
 
@@ -54,7 +59,15 @@ public:
 	// 스킬 매니저
 	shared_ptr<USkillComponent> skillManager;
 
+	shared_ptr<UStatusComponent> StatusComponent;
+
+protected:
+	// 공격/방어 전략
+	shared_ptr<IAttackStrategy> AttackStrategy;
+	shared_ptr<IDefenseStrategy> DefenseStrategy;
+
 public:
+
 	// 캐릭터 사망 보상
 	FCharacterReward characterReward;
 

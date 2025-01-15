@@ -2,51 +2,88 @@
 #include "Skill.h"
 #include "Character.h"
 #include "CombatComponent.h"
+#include "ISkillCondition.h"
 
-void ActiveSkill::UseSkill()
+
+bool Skill::CanUseSkill()
 {
-	if (!skillData.owner.get() && !skillData.target.get())
+	for (const auto& condition : skillData.conditions)
 	{
-		return;
+		if (!condition->Check(this))
+		{
+			return false;
+		}
 	}
-
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PreEffect();
-	}
-
-	
-	if (!skillData.target)
-		skillData.target = skillData.owner->combatManager.get()->GetTarget();
-
-	skillData.action->ExecuteAction(skillData.owner.get(), skillData.target.get());
-
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PostEffect();
-	}
-
-	//self->SetCoolDown(); 스킬 쿨다운 적용
-	//self->SetModify();
-
-	cout << "액티브 스킬 사용 완료" << endl;
+	return true;
 }
 
-void PassiveSkill::UseSkill()
+void Skill::SkillInit(Skill* _ownerSkill)
 {
-	if (!skillData.owner.get() && !skillData.target.get()) return;
-
+	if (skillData.action)
+	{
+		skillData.action.get()->SetSkill(_ownerSkill);
+	}
 	for (auto effect : skillData.effects)
 	{
-		effect.get()->PreEffect();
+		if (effect)
+		{
+			effect.get()->SetSkill(_ownerSkill);
+		}
 	}
+}
 
-	skillData.action->ExecuteAction(skillData.owner.get(), skillData.target.get());
-
-	for (auto effect : skillData.effects)
+bool Skill::UseSkill()
+{
+	if (!CanUseSkill())
 	{
-		effect.get()->PostEffect();
+		cout << "스킬을 사용할 수 없습니다: " << skillData.skillName << endl;
+		return false;
 	}
 
-	std::cout << "패시브 발동" << std::endl;
+	for (auto& effect : skillData.effects)
+	{
+		effect->PreEffect();
+	}
+	if (skillData.action)
+	{
+		skillData.action->ExecuteAction();
+	}
+	for (auto& effect : skillData.effects)
+	{
+		effect->PostEffect();
+	}
+
+	skillData.currentCooldown = skillData.maxCooldown;
+
+	return true;
+}
+
+Character* Skill::GetTarget()
+{
+	return skillData.owner->combatManager->GetTarget();
+}
+
+void PassiveSkill::PassiveSkillRegisterTrigger()
+{
+
+	//handlers.insert(typeid(ICharacterDamagedEvent));
+	//handlers.insert(typeid(ICharacterDeadEvent));
+
+	std::cout << "[PassiveSkill] RegisterTrigger() - " << "이벤트를 처리하도록 등록했습니다.\n";
+
+}
+
+void PassiveSkill::PassiveSkillUnRegisterTrigger()
+{
+
+	//handlers.erase(typeid(ICharacterDamagedEvent));
+	//handlers.erase(typeid(ICharacterDeadEvent));
+
+	std::cout << "[PassiveSkill] UnRegisterTrigger() - " << "이벤트 처리를 해제했습니다.\n";
+}
+
+void PassiveSkill::HandlePassiveEvent(std::shared_ptr<IEvent> ev)
+{
+	std::cout << "[PassiveSkill] HandlePassiveEvent() - 스킬 발동!\n";
+	UseSkill();
 }

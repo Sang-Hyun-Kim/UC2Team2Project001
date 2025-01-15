@@ -2,20 +2,54 @@
 #include "ISkillAction.h"
 #include "Character.h"
 #include "GlobalEventManager.h"
-#include "IEventTypes.h"
+#include "ICharacterEventTypes.h"
 #include "CombatComponent.h"
+#include "Skill.h"
+#include "UStatusComponent.h"
+#include "StatComponent.h"
 
-void AttackAction::ExecuteAction(Character* _self, Character* _target)
+void AttackAction::ExecuteAction()
 {
-	// 치명타 확률 계산
-	int CriticalChance = (int)(CharacterUtility::GetStat(_self, StatType::CriticalChance) * 100);
-	bool IsCritical = (rand() % 100) <= CriticalChance;
+	Character* self = parentSkill->GetSkillData().owner;
 
-	int BaseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
-	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
+	Character* target = parentSkill->GetTarget();
 
-	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), FianlDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), attackDamage);
 	GlobalEventManager::Get().Notify(Event);
 
-	_target->combatManager->TakeDamage(FianlDamage);
+	target->combatManager->TakeDamage((int)attackDamage);
+}
+
+void PoisonIntensifierAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	if (poisonState)
+	{
+		poisonState->ApplyStack(poisonState->poisonStack);
+	}
+}
+
+void PoisonPogAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	if (poisonState)
+	{
+		poisonState->ApplyStack(2);
+		poisonState->ApplyEffect(target);
+	}
+}
+
+void PoisonTriggerAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+
+	if (poisonState)
+	{
+		float TriggerPoisonDamage = poisonState->poisonStack* poisonState->GetDuration();
+		target->statManager->ModifyStat(StatType::HP, TriggerPoisonDamage);	
+		cout << "독을 격발하였습니다" << endl;
+	}
 }
