@@ -71,11 +71,6 @@ public:
 
 	}
 
-	virtual void EffectBeforeRemove()
-	{
-
-	}
-
 protected:
 	std::string StateName;
 	int Duration;
@@ -138,7 +133,7 @@ public:
 	void ApplyEffect(Character* _target) override
 	{
 	};
-}
+};
 
 /**
  * @brief 중독(Posion) 상태

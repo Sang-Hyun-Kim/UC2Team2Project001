@@ -20,12 +20,6 @@ public:
 
     ~UStatusComponent() = default;
 
-	}
-
-	UStatusComponent(Character* _owner);
-
-	~UStatusComponent() = default;
-
 	// 상태 추가 (이미 존재하는 상태이면 남은 턴을 '최대 턴'으로 갱신)
 	void AddState(const std::shared_ptr<ICharacterState>& NewState);
 

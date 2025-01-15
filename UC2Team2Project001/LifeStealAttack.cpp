@@ -15,5 +15,5 @@ LifeStealAttack::LifeStealAttack(Character* _owner) : ActiveSkill(_owner)
 	skillData.conditions.push_back(make_shared<CooldownCondition>());
 	skillData.conditions.push_back(make_shared<ManaCondition>());
 
-	SkillInit<Skill>();
+	SkillInit(this);
 }

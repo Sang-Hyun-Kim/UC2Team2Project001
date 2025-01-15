@@ -14,10 +14,10 @@ void AttackAction::ExecuteAction()
 
 	Character* target = parentSkill->GetTarget();
 
-	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), AttackDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), attackDamage);
 	GlobalEventManager::Get().Notify(Event);
 
-	target->combatManager->TakeDamage((int)AttackDamage);
+	target->combatManager->TakeDamage((int)attackDamage);
 }
 
 void PoisonIntensifierAction::ExecuteAction()

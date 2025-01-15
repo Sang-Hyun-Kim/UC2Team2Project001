@@ -2,6 +2,7 @@
 #include "BashAttack.h"
 #include "ISkillCondition.h"
 
+
 BashAttack::BashAttack(Character* _owner)
 {
 	skillData = FSkillData(_owner, "강타", 5, 0);
@@ -15,5 +16,5 @@ BashAttack::BashAttack(Character* _owner)
 	skillData.conditions.push_back(make_shared<CooldownCondition>());
 	skillData.conditions.push_back(make_shared<ManaCondition>());
 
-	SkillInit<Skill>();
+	SkillInit(this);
 }
