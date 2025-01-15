@@ -5,6 +5,8 @@
 #include "StatComponent.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
+#include "CombatComponent.h"
+
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
@@ -27,15 +29,15 @@ void BattleSystem::EnterSystem()
 	}
 
 	// 플레이어 레벨에 따른 monster 생성
-	monster = make_shared<Monster>(player->StatManager.get()->GetStat(StatType::Level));
-
+	monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level));
+	monster->combatManager->SetTarget(player);
 }
 
 void BattleSystem::Update()
 {
 	// 이번 라운드 시작 전 검증
 	// 플레이어 사망 여부
-	if (player->IsDead())
+	if (CharacterUtility::IsDead(player.get()))
 	{
 		// 로비 귀환 UI 출력
 		auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
@@ -44,7 +46,7 @@ void BattleSystem::Update()
 		return;
 	}
 
-	if (monster->IsDead())
+	if (CharacterUtility::IsDead(monster.get()))
 	{
 
 		if (monster->IsBoss()) 
@@ -64,14 +66,14 @@ void BattleSystem::Update()
 		{// 일반몬스터사망
 			// 일반 몬스터 사망 UI 출력
 			// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
-			player->InventoryComponent->addGold(monster->CharacterReward.DropGold); // 돈 넣기
-			if (monster->CharacterReward.DropItem != nullptr)
+			player->InventoryComponent->addGold(monster->characterReward.DropGold); // 돈 넣기
+			if (monster->characterReward.DropItem != nullptr)
 			{
 				auto playergetitem = make_shared<IPlayerGetItemEvent>();
 				GlobalEventManager::Get().Notify(playergetitem);
-				player->InventoryComponent->addItem(monster->CharacterReward.DropItem); // 템 넣기
+				player->InventoryComponent->addItem(monster->characterReward.DropItem); // 템 넣기
 			}
-			player->StatManager->ModifyStat(StatType::Experience, 50);
+			CharacterUtility::ModifyStat(player.get(), StatType::Experience, 50);
 			monster = nullptr;
 
 			auto battlestageclear = make_shared<IPlayerStageClearEvent>();
@@ -98,7 +100,7 @@ void BattleSystem::Update()
 	}
 	
 	// 라운드 시작할때 몬스터 현재 상태 출력
-	monster->StatManager->PrintStatus();
+	monster->statManager->PrintStatus();
 	int input = InputManagerSystem::GetInput<int>(
 		" 전투 메뉴",
 		{ "1. 공격하기" , "2. 내 현재 스탯 확인하기","3. 아이템 사용하기"},
@@ -110,7 +112,7 @@ void BattleSystem::Update()
 		auto battleplayerattack = make_shared<IBattleAttackEvent>();
 		GlobalEventManager::Get().Notify(battleplayerattack);
 
-		player->Attack(monster.get());
+		player->combatManager->Attack();
 		// 공격
 		// 플레이어 공격(몬스터) 	// 몬스터 사망 검증
 
@@ -120,7 +122,7 @@ void BattleSystem::Update()
 		//// 전투, 상점 선택지
 
 		// 몬스터 공격
-		monster->Attack(player.get());
+		monster->combatManager->Attack();
 		// 플레이어 사망 검증
 		// 로비 되돌아 가기
 	}
@@ -128,7 +130,7 @@ void BattleSystem::Update()
 	{
 		auto battlestatCheck = make_shared<IBattleStatCheckEvent>();
 		GlobalEventManager::Get().Notify(battlestatCheck);
-		player->StatManager.get()->PrintStatus();
+		CharacterUtility::PrintStatus(player.get());
 	}
 	else if (input == 3) // 아이템
 	{

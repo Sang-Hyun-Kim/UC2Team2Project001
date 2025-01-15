@@ -80,7 +80,7 @@ void UStatsComponent::ModifyStat(StatType type, float delta)
 		if (type == StatType::HP && Stats[type] == 0)
 		{
 			// 캐릭터 사망 이벤트
-			auto NewCharacterDeadEvent = std::make_shared<ICharacterDeadEvent>(OwnedCharacter->GetName(), OwnedCharacter->CharacterReward);
+			auto NewCharacterDeadEvent = std::make_shared<ICharacterDeadEvent>(OwnedCharacter->GetName(), OwnedCharacter->characterReward);
 			GlobalEventManager::Get().Notify(NewCharacterDeadEvent);
 		}
 	}

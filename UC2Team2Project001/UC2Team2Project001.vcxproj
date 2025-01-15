@@ -137,7 +137,13 @@
     <ClCompile Include="AttackBoostPotion.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterTypes.cpp" />
+    <ClCompile Include="CharacterUtility.cpp" />
+    <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
+    <ClCompile Include="ISkillAction.cpp" />
+    <ClCompile Include="ISkillEffect.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="StatType.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
     <ClCompile Include="EventManagerSystem.cpp" />
@@ -165,17 +171,24 @@
     <ClCompile Include="StatsLoader.cpp" />
     <ClCompile Include="ShopSystem.cpp" />
     <ClCompile Include="UIEventManagerSystem.cpp" />
+    <ClCompile Include="USkillComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
+    <ClInclude Include="CharacterUtility.h" />
+    <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
     <ClInclude Include="GameSystem.h" />
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="Inventory.h" />
+    <ClInclude Include="ISkillAction.h" />
+    <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="StatType.h" />
     <ClInclude Include="StrategyFactory.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameSystem.h" />
@@ -190,6 +203,7 @@
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
+    <ClInclude Include="USkillComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json" />
@@ -199,8 +213,6 @@
     <ClInclude Include="InputManagerSystem.h" />
     <ClInclude Include="Invoker.h" />
     <ClInclude Include="ShopSystem.h" />
-    <ClInclude Include="Status.h" />
-    <ClInclude Include="StatusComponent.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

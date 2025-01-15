@@ -12,7 +12,6 @@ private:
 	void SetMonsterStat(int PlayerLevel);
 
 public:
-
 	Monster(int PlayerLevel);
 
 	bool IsBoss() const;

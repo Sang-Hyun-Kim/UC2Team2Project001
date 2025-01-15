@@ -5,49 +5,50 @@
 #include <memory>
 #include "IEventTypes.h"
 #include "GlobalEventManager.h"
+#include "CombatComponent.h"
 
 using namespace std;
 
-void BasicAttackStrategy::Attack(Character* Self, Character* Target) 
+void BasicAttackStrategy::Attack(Character* _self, Character* _target)
 {
 	// 치명타 확률 계산
-	int CriticalChance = (int)(Self->StatManager->GetStat(StatType::CriticalChance) * 100);
+	int CriticalChance = (int)(CharacterUtility::GetStat(_self, StatType::CriticalChance) * 100);
 	bool IsCritical = (rand() % 100) <= CriticalChance;
 
-	int BaseDamage = (int) Self->StatManager->GetStat(StatType::AttackPower);
+	int BaseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
 	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
 
-	auto Event = make_shared<ICharacterAttackEvent>(Self->GetName(), FianlDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), FianlDamage);
 	GlobalEventManager::Get().Notify(Event);
 
-	Target->TakeDamage(FianlDamage);
+	_target->combatManager->TakeDamage(FianlDamage);
 }
 
-int BlockDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingDamage) 
+int BlockDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 
 {
-	int DefenseValue = (int)Self->StatManager->GetStat(StatType::Defense);
-	int finalDamage = IncomingDamage - DefenseValue;
+	int DefenseValue = (int)CharacterUtility::GetStat(_self, StatType::Defense);
+	int finalDamage = _incomingDamage - DefenseValue;
 
 	if (finalDamage < 0) finalDamage = 0;
 
-	auto Event = make_shared<ICharacterDefenseEvent>(Self->GetName(), IncomingDamage, DefenseValue);
+	auto Event = make_shared<ICharacterDefenseEvent>(_self->GetName(), _incomingDamage, DefenseValue);
 	GlobalEventManager::Get().Notify(Event);
 
 	return finalDamage;
 }
 
-//int EvadeDefenseStrategy::CalculateDamageReceived(Character* Self, int IncomingDamage) 
+//int EvadeDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 
 //{
 //	bool isEvaded = (rand() % 4 == 0);
 //
 //	if (isEvaded)
 //	{
-//		cout << Self->CharacterName << "이(가) 공격을 완전히 회피했습니다! (0 데미지)\n";
+//		cout << _self->GetName() << "이(가) 공격을 완전히 회피했습니다! (0 데미지)\n";
 //		return 0;
 //	}
 //	else 
 //	{
-//		cout << Self->CharacterName << "이(가) 회피에 실패했습니다. 데미지: " << IncomingDamage << endl;
-//		return IncomingDamage;
+//		cout << _self->GetName() << "이(가) 회피에 실패했습니다. 데미지: " << _incomingDamage << endl;
+//		return _incomingDamage;
 //	}
 //}

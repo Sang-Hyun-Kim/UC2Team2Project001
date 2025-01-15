@@ -55,7 +55,7 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 	else if (auto menuEvent = std::dynamic_pointer_cast<IDisplayMenuEvent>(ev))
 	{
-		system("cls");  //콘솔창 클리어 함수 (오류 메시지까지 보여주려면 delay 함수 필요)
+		//system("cls");  //콘솔창 클리어 함수 (오류 메시지까지 보여주려면 delay 함수 필요)
 
 		std::cout << menuEvent->title << "\n";
 		for (const string& option : menuEvent->options)
@@ -116,9 +116,5 @@ void UIEventManagerSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
 	else if (auto stageclear = std::dynamic_pointer_cast<IPlayerStageClearEvent>(ev))
 	{
 		cout << "몬스터 사망으로 스테이지 클리어" << endl;
-	}
-	else
-	{
-		std::cout << "[UI] 알 수 없는 이벤트.\n";
 	}
 }
