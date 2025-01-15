@@ -30,7 +30,7 @@ public:
 	void GameOver();
 
 	inline SystemType GetSystemType() override { return SystemType::BATTLE; }
-	void OnEvent(const std::shared_ptr<IEvent>& ev) override;
+	void OnEvent(const std::shared_ptr<IEvent> ev) override;
 private:
 	shared_ptr<Monster> monster;
 

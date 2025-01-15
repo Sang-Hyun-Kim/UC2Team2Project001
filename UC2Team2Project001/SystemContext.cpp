@@ -4,6 +4,9 @@
 #include "BattleSystem.h"
 #include "ShopSystem.h"
 #include "PlayerCharacter.h"
+#include "ICombatEventTypes.h"
+#include "ICharacterEventTypes.h"
+#include "ISystemTypes.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 
@@ -57,9 +60,10 @@ void SystemContext::MoveSystem(SystemType to, SystemType from)
 void SystemContext::CreateCharacter(string name)
 {
 	player = make_shared<Player>("Player");
+	player->Initialize();
 }
 
-void SystemContext::OnEvent(const std::shared_ptr<IEvent>& ev)
+void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)
 {
 	if (auto move = std::dynamic_pointer_cast<IMoveSystemEvent>(ev))
 	{
@@ -75,14 +79,4 @@ void SystemContext::OnEvent(const std::shared_ptr<IEvent>& ev)
 	}
 }
 
-shared_ptr<Player> SystemContext::GetPlayer(SystemType systemType)
-{
-	if (currentSystem->GetSystemType() == systemType)
-	{
-		return player;
-	}
-	else
-	{
-		throw std::runtime_error("현재 실행 중인 시스템 외에서 플레이어에게 접근을 시도했습니다.");
-	}
-}
+

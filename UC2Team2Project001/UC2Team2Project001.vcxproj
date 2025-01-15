@@ -206,7 +206,6 @@
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="ICharacterEventTypes.h" />
     <ClInclude Include="ICombatEventTypes.h" />
-    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="IInputEventTypes.h" />
     <ClInclude Include="IItemEventTypes.h" />
     <ClInclude Include="Inventory.h" />
@@ -228,8 +227,6 @@
     <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="CharacterStatus.h" />
     <ClInclude Include="StrategyFactory.h" />
-    <ClInclude Include="GlobalEventManager.h" />
-    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />

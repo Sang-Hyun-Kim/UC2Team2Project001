@@ -62,7 +62,7 @@ void Monster::SetMonsterStat(int PlayerLevel)
 
 void Monster::Initialize()
 {
-	
+	GSystemContext->GetPlayer();
 	//ToDo:
 	/*SetBlance(GLobbySystem->player->GetName());*/
 
