@@ -2,6 +2,7 @@
 
 #include "IEventTypes.h"
 #include <string>
+#include "CharacterTypes.h"
 
 using namespace std;
 

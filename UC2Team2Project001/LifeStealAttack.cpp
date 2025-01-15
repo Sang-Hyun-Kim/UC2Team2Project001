@@ -10,16 +10,13 @@
 
 LifeStealAttack::LifeStealAttack(Character* _owner) : ActiveSkill(_owner)
 {
-	
-	
-	skillData= FSkillData(_owner,"흡혈 공격", 10, 3);
-	
+	//skillData= FSkillData(_owner,"흡혈 공격", 10, 3);
+	//
+	//skillData.action = make_shared<AttackAction>();
 
-	skillData.action = make_shared<AttackAction>();
-
-	shared_ptr<ISkillEffect> lifeEffect = make_shared<ILifeStealEffect>(10);
-	skillData.effects.push_back(lifeEffect);
+	//shared_ptr<ISkillEffect> lifeEffect = make_shared<ILifeStealEffect>(10);
+	//skillData.effects.push_back(lifeEffect);
 
 
-	SkillInit<Skill>(); //여기 다음에 갑자기 캐릭터소멸자 호출? //왜 ?
+	//SkillInit<Skill>(); //여기 다음에 갑자기 캐릭터소멸자 호출? //왜 ?
 }

@@ -21,7 +21,10 @@ public:
 	{
 	}
 
-	virtual ~ICharacterState() = default;
+	virtual ~ICharacterState()
+	{
+
+	}
 
 	// 상태 효과 적용(데미지, 버프, 디버프 등)
 	virtual void ApplyEffect(Character* Target) = 0;
@@ -58,6 +61,16 @@ public:
 		Duration = NewDuration;
 	}
 
+	virtual void ApplyStack(int NewStack)
+	{
+
+	}
+
+	virtual void EffectBeforeRemove()
+	{
+
+	}
+
 protected:
 	std::string StateName;
 	int Duration;
@@ -76,11 +89,47 @@ public:
 	{
 	}
 
-	virtual ~BurnState() = default;
+	virtual ~BurnState()
+	{
+
+	}
 
 	// 상태 효과 적용
 	void ApplyEffect(Character* Target) override;
 
 private:
 	int DamagePerTurn;
+};
+
+
+/**
+ * @brief 중독(Posion) 상태
+ * - 매 턴마다 일정 데미지를 입힙니다.
+ * - 중독 스택이 존재합니다.
+ */
+class PoisonState : public ICharacterState
+{
+public:
+	PoisonState(int _inDuration, int _inDamagePerTurn, int _amountStack) : ICharacterState("PoisonState ", _inDuration), damagePerTurn(_inDamagePerTurn), amountStack(_amountStack)
+	{
+		poisonStack = amountStack;
+	}
+
+	virtual ~PoisonState()
+	{
+
+	}
+
+	// 중독 스텍을 적용합니다.
+	virtual void ApplyStack(int NewStack) override;
+
+	// 상태 효과 적용
+	void ApplyEffect(Character* Target) override;
+
+public:
+	int damagePerTurn = 0;
+
+	int poisonStack = 1;
+
+	int amountStack = 0;
 };

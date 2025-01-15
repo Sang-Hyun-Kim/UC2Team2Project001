@@ -29,12 +29,13 @@ void Character::ManagerRegister()
 {
 	statManager = std::make_shared<UStatsComponent>(this);
 	statManager.get()->BeginPlay();
+
 	combatManager = make_shared<CombatComponent>();
-
-	
-
 	combatManager->SetOwner(this);
-	skillManager = make_shared<USkillComponent>();
+
+	StatusComponent = std::make_shared<UStatusComponent>(this);
+
+	skillManager = make_shared<USkillComponent>(this);
 }
 
 void Character::Initialize()
@@ -58,6 +59,8 @@ void Character::Initialize()
 	// 전략 설정
 	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
 	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
+
+	GlobalEventManager::Get().Subscribe(skillManager);
 }
 
 void Character::UseItem(const string& ItemName)

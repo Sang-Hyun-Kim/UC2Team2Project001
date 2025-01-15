@@ -41,7 +41,7 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& AllCharacters)
 		//    (만약 턴마다 반복 적용이 필요하면 여기에 배치)
 		if (Ch->StatusComponent)
 		{
-			Ch->StatusComponent->ApplyAllEffects(Ch);
+			Ch->StatusComponent->ApplyAllEffects();
 		}
 	}
 
