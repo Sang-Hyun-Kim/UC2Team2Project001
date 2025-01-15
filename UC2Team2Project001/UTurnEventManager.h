@@ -30,6 +30,8 @@ public:
 
 	void EndTurn(std::vector<Character*>& AllCharacters);
 
+
+	//완전끝났을때
 	void TurnReset();
 
 private:

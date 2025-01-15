@@ -4,18 +4,22 @@
 #include "GlobalEventManager.h"
 #include "ICharacterEventTypes.h"
 #include "CombatComponent.h"
+#include "Skill.h"
 
-void AttackAction::ExecuteAction(Character* _self, Character* _target)
+void AttackAction::ExecuteAction()
 {
+	shared_ptr<Character> self = parentSkill->GetSkillData().owner;
+	shared_ptr<Character> target = parentSkill->GetTarget();
+
 	// 치명타 확률 계산
-	int CriticalChance = (int)(CharacterUtility::GetStat(_self, StatType::CriticalChance) * 100);
+	int CriticalChance = (int)(CharacterUtility::GetStat(self.get(), StatType::CriticalChance) * 100);
 	bool IsCritical = (rand() % 100) <= CriticalChance;
 
-	int BaseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
+	int BaseDamage = (int)CharacterUtility::GetStat(self.get(), StatType::AttackPower);
 	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
 
-	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), FianlDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), FianlDamage);
 	GlobalEventManager::Get().Notify(Event);
 
-	_target->combatManager->TakeDamage(FianlDamage);
+	target->combatManager->TakeDamage(FianlDamage);
 }

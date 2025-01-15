@@ -42,7 +42,16 @@ void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
 void USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 {
     auto skillList = ChooseSkillList(_skillType);
-    skillList[_skillName]->UseSkill();
+
+    if (skillList.count(_skillName))
+    {
+        skillList[_skillName]->UseSkill();
+    }
+    else
+    {
+        cout << _skillName <<"스킬이 없습니다" << endl;
+    }
+    
 }
 
 void USkillComponent::SetSkillCooldown(SkillType _skillType, string _skillName, int cooldown)

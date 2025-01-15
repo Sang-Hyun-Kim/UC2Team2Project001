@@ -142,6 +142,7 @@
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="ISkillAction.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
+    <ClCompile Include="LifeStealAttack.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="StatType.cpp" />
     <ClCompile Include="CharacterStatus.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="ISkillAction.h" />
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="LifeStealAttack.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="CharacterStatus.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
+    <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="USkillComponent.h" />
     <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>

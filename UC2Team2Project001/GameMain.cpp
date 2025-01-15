@@ -102,10 +102,13 @@ int main()
 
 #pragma region 스킬 사용 예제
 
-	//shared_ptr<Player> player = make_shared<Player>("Player");
-	//shared_ptr<Monster> monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level));
-	//monster->combatManager->SetTarget(player);
-	//monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 스킬");
+	shared_ptr<Player> player = make_shared<Player>("Player");
+	shared_ptr<Monster> monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level)); //Delete ?
+	monster->combatManager->SetTarget(player);
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "흡혈 공격");
 
 #pragma endregion
+
+	
+	
 }

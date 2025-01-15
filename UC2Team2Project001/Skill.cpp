@@ -5,7 +5,7 @@
 
 void ActiveSkill::UseSkill()
 {
-	if (!skillData.owner.get() && !skillData.target.get())
+	if (!skillData.owner.get())
 	{
 		return;
 	}
@@ -15,11 +15,7 @@ void ActiveSkill::UseSkill()
 		effect.get()->PreEffect();
 	}
 
-	
-	if (!skillData.target)
-		skillData.target = skillData.owner->combatManager.get()->GetTarget();
-
-	skillData.action->ExecuteAction(skillData.owner.get(), skillData.target.get());
+	skillData.action->ExecuteAction();
 
 	for (auto effect : skillData.effects)
 	{
@@ -34,14 +30,17 @@ void ActiveSkill::UseSkill()
 
 void PassiveSkill::UseSkill()
 {
-	if (!skillData.owner.get() && !skillData.target.get()) return;
+	if (!skillData.owner.get())
+	{
+		return;
+	}
 
 	for (auto effect : skillData.effects)
 	{
 		effect.get()->PreEffect();
 	}
 
-	skillData.action->ExecuteAction(skillData.owner.get(), skillData.target.get());
+	skillData.action->ExecuteAction();
 
 	for (auto effect : skillData.effects)
 	{
@@ -49,4 +48,9 @@ void PassiveSkill::UseSkill()
 	}
 
 	std::cout << "패시브 발동" << std::endl;
+}
+
+shared_ptr<Character> Skill::GetTarget()
+{
+	return skillData.owner->combatManager->GetTarget();
 }

@@ -11,6 +11,7 @@
 #include "ISkillAction.h"
 #include "ISkillEffect.h"
 #include "CombatComponent.h"
+#include "LifeStealAttack.h"
 
 Monster::Monster(int PlayerLevel)
 {
@@ -31,15 +32,42 @@ Monster::Monster(int PlayerLevel)
 	CreateCharacterReward();
 
 	// 몬스터 스킬 설정
-	shared_ptr<ISkillAction> action = make_shared<AttackAction>();
-	shared_ptr<ISkillEffect> effect = make_shared<ILifeStealEffect>(10);
-	FSkillData skillData("기본 스킬", 10, 3, action, { effect }, combatManager->GetOwner(), combatManager->GetTarget());
+	
 
-	shared_ptr<ActiveSkill> basicAttack = make_shared<ActiveSkill>(skillData);
-	effect->SetSkill(basicAttack);
+	//그냥 스킬을생성하고 추가하는거야.
 
-	skillManager.get()->AddSkill(basicAttack);
+	// 캐릭터 소멸자가 불리는 느낌?
+	// 캐릭터가 소멸되니까 오류가 발생해
+	//애를 주석치니까 일단은 캐릭터소멸자가 호출이 안됨
 
+	//캐릭터가 소멸자가 호출을해야?
+	//스킬을 만들었을분인데 왜 캐릭터가소멸하지?
+	//이렇게하면 널포인터가  move 그래
+
+	//charcter*
+	//만든건다!
+	//this 바라보는 쉐어드를만드는게
+	//캐릭터자체를 또 새로만들어서 그걸 바라노는 쉐어드포인터 x
+
+	//왜 캐릭터소멸자?
+	//  this -> Monster* A123
+	// 쉐어드포인터를 A123 ->
+	// MOnster* BFasdf45587
+	// 
+	//복사생성자 캐릭터가 하나 더 생성된다? 
+
+	//소멸자가 호출이 되는 과정 스텟매니저 
+
+	//캐릭터를 생성하지 않아요.
+	//this-> 바라보는 쉐어드포인터가 된다.
+	// 
+	//캐릭터를 새로만들어 <<쉐어드포인터
+	//캐릭터를 새로만들었으니까 임시객체로 만든 얘가 필요없으니 지워야지<< 지우니까 소멸자가 호출되는건지
+
+
+	shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(shared_ptr<Character>(this));
+	//shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(shared_from_this());
+	skillManager.get()->AddSkill(newLifeStealAttack);
 }
 
 void Monster::SetMonsterStat(int PlayerLevel)

@@ -2,7 +2,7 @@
 
 #include "Character.h"
 
-class Monster : public Character
+class Monster : public Character, public enable_shared_from_this<Monster>
 {
 private:
 	vector<string> MonsterNames{ "Dragon", "Goblin", "Orc", "Troll" };
