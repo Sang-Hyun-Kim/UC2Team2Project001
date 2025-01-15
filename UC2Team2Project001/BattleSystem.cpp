@@ -9,8 +9,9 @@
 #include "CombatComponent.h"
 #include "BattleSystemStates.h"
 #include "ICombatEventTypes.h"
+#include "UIEventManagerSystem.h"
 #include "IItemEventTypes.h"
-
+#include "USkillComponent.h"
 BattleSystem::BattleSystem()
 {
 }
@@ -130,40 +131,61 @@ void BattleSystem::Attack()
 
 	auto player = GSystemContext->GetPlayer();
 	player->combatManager->SetTarget(monster.get());
-	player->combatManager->Attack();
-	player->skillManager
+
 	/*
-		플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
-
+	플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
+	*/
 	CLEAR;
-
-	auto battleitemcheck = make_shared<IBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
+	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
 	GlobalEventManager::Get().Notify(battleitemcheck);
 
-	auto player = GSystemContext->GetPlayer(GetSystemType()); // Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
-	vector<string> ActiveSkillList = player->InventoryComponent->GetInventoryInfoWithString(1);
-	// => ItemInventory=>SkillManagerComponent로 변경해서 불러오기
-	// => Activeskill header
-	int lastIndex = ActiveSkillList.size() + 1; // Add return button
+	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
+	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
+	// 스킬 목록
+	vector<string> indexActiveSkillList;
+	int lastindex = activeSkillList.size();
+	int idx = 1;
+	for (auto activeSkill : activeSkillList)
+	{
+		string curoption = to_string(idx++) + ". " + activeSkill;
+		indexActiveSkillList.push_back(curoption);// idx. 스킬이름
+	}
+	// 1~n: 가지고 있는 스킬
+	// n+1: 일반공격
+	// n+2: 돌아가기
+	// 스킬이 아예 없는경우, 1. 일반공격, 2. 돌아가기
+	// 스킬이 하나인 경우 1. 스킬1, 2. 일반 공격, 3. 돌아가기
+	int commonAttack = activeSkillList.size() + 1; // 일반 공격
+	int returnButton = commonAttack + 1; // 돌아가기
 
-	ActiveSkillList.push_back(to_string(lastIndex) + ". 돌아가기");
+	activeSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
+	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
+
 	int input = InputManagerSystem::GetInput<int>(
 		"==================  스킬 사용 ===================",
-		ActiveSkillList,
-		RangeValidator<int>(1, lastIndex)
+		activeSkillList,
+		RangeValidator<int>(1, returnButton)
 	);
-
-	if (input != lastIndex)
+	if (input == commonAttack)
 	{
-		player->UseItem(input, player.get()); // UseSkill로 변경 예정
+		player->combatManager->Attack(); // 일반 공격 호출
+	}
+	else if (input == returnButton)
+	{
+		state = make_shared<BattleMainState>();
+		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
+	}
+	else
+	{ // 스킬 사용
+		player->skillManager->UseSkill(SkillType::ACTIVE, activeSkillList[input-2]); // UseSkill로 변경 예정
 		Delay(1);
 	}
-	*/
+
 
 	// 몬스터 공격
 	cout << endl;
 	monster->combatManager->SetTarget(player.get());
-	monster->combatManager->Attack();
+	monster->combatManager->Attack();// 몬스터 죽으면 공격 안함
 
 	InputManagerSystem::PauseUntilEnter();
 
