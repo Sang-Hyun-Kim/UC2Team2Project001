@@ -1,25 +1,54 @@
 #pragma once
 
+#include <functional>
+#include <typeindex>
 #include <memory>
+#include <unordered_map>
+#include <vector>
+#include "IEventTypes.h"
 
 class IEvent;
 
-/**
- * 이벤트를 처리하는 기본 인터페이스.
- * - 모든 구독자는 이 인터페이스를 구현해야 합니다.
- */
+using EventHandlerFunc = std::function<void(IEvent*)>;
+using HandlerList = std::vector<EventHandlerFunc>;
+
 class IEventManagerSystem
 {
 public:
-    virtual ~IEventManagerSystem() = default;
+	virtual ~IEventManagerSystem() = default;
 
-    // 순수 가상 함수: 이벤트를 처리하는 메서드
-    virtual void OnEvent(const std::shared_ptr<IEvent>& ev) = 0;
+	virtual void OnEvent(std::shared_ptr<IEvent> ev) = 0;
 
-    // 구독자 식별용 ID (GlobalEventManager에서 관리)
-    int GetID() const { return ID; }
-    void SetID(int newId) { ID = newId; }
+	int GetID() const { return ID; }
+
+	void SetID(int newId) { ID = newId; }
+
+	template<typename T>
+	int Subscribe(std::function<void(T*)> handler)
+	{
+		EventHandlerFunc wrapper = [handler](IEvent* ev) {
+			handler(static_cast<T*>(ev));
+			};
+
+		HandlerList& list = handlers[std::type_index(typeid(T))];
+		list.push_back(wrapper);
+		return ++NextId;
+	}
+
+	void Publish(std::shared_ptr<IEvent> ev)
+	{
+		auto it = handlers.find(std::type_index(typeid(*ev)));
+		if (it != handlers.end())
+		{
+			for (auto& func : it->second)
+			{
+				func(ev.get());
+			}
+		}
+	}
 
 private:
-    int ID = -1;
+	int ID = -1;
+	int NextId = 0;
+	std::unordered_map<std::type_index, HandlerList> handlers;
 };

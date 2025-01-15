@@ -2,7 +2,6 @@
 
 #include <string>
 #include <memory>
-#include "CharacterTypes.h"
 
 using namespace std;
 
@@ -13,188 +12,57 @@ public:
 	virtual ~IEvent() = default;
 };
 
-// 캐릭터가 데미지를 받는 이벤트
-class ICharacterDamagedEvent : public IEvent
-{
-public:
-	string CharacterName;
-	int Damage;
-	int HP;
-
-	ICharacterDamagedEvent(const std::string& name, int dmg, int InHP) : CharacterName(name), Damage(dmg), HP(InHP)
-	{
-	}
-};
-
-// 캐릭터가 죽는 이벤트
-class ICharacterDeadEvent : public IEvent
-{
-public:
-	string CharacterName;
-	FCharacterReward Reward;
-
-	ICharacterDeadEvent(const std::string& name, FCharacterReward InReward) : CharacterName(name), Reward(InReward)
-	{
-	}
-};
-
-// 캐릭터 공격 이벤트
-class ICharacterAttackEvent : public IEvent
-{
-public:
-	string CharacterName;
-	int Damage;
-	ICharacterAttackEvent(const string& InCharacterName, int InDamage)
-		: CharacterName(InCharacterName), Damage(InDamage) {
-	}
-};
-
-// 캐릭터 방어 이벤트
-class ICharacterDefenseEvent : public IEvent
-{
-public:
-	string CharacterName;
-	int IncomingDamage;
-	int DefenseValue;
-
-	ICharacterDefenseEvent(const string& InCharacterName, int InIncomingDamage, int InDefenseValue)
-		: CharacterName(InCharacterName), IncomingDamage(InIncomingDamage), DefenseValue(InDefenseValue) 
-	{
-	}
-};
-
-class ILevelUpEvent : public IEvent
-{
-public:
-	string CharacterName;
-	int Level;
-
-	ILevelUpEvent(const std::string& name, int InLevel) : CharacterName(name), Level(InLevel)
-	{
-	}
-};
 
 
-class IEnterEvent : public IEvent
-{
-	string PaseName;
 
-};
+#pragma region 더미코드
+
+//enum class EEventType
+//{
+//	CharacterDamaged,
+//	CharacterDead,
+//	ItemPurchased,
+//	// ...
+//};
+//
+//struct CharacterDamagedPayload
+//{
+//	std::string CharacterName;
+//	int Damage;
+//	int HP;
+//};
+//
+//struct CharacterDeadPayload
+//{
+//	std::string CharacterName;
+//	FCharacterReward Reward;
+//};
+//
+//struct ItemPurchasedPayload
+//{
+//	std::string BuyerName;
+//	std::string ItemName;
+//	int Cost;
+//};
+//
+//// ...
+//using EventPayload = std::variant<CharacterDamagedPayload,
+//	CharacterDeadPayload,
+//	ItemPurchasedPayload,
+//	/* ... */>;
+//
+//class GameEvent
+//{
+//public:
+//	EEventType Type;
+//	EventPayload Payload;
+//
+//	GameEvent(EEventType InType, const EventPayload& InPayload)
+//		: Type(InType), Payload(InPayload)
+//	{
+//	}
+//};
+#pragma endregion 더미코드
 
 
-//예시 코드
-// 아이템 구매 이벤트
-class IItemPurchasedEvent : public IEvent
-{
-public:
-	std::string BuyerName;
-	std::string ItemName;
-	int Cost;
 
-	IItemPurchasedEvent(const std::string& buyer, const std::string& item, int c) : BuyerName(buyer), ItemName(item), Cost(c)
-	{
-	}
-};
-
-class IItemSoldEvent : public IEvent
-{
-public:
-	std::string SellerName;
-	std::string ItemName;
-	int Cost;
-
-	IItemSoldEvent(const std::string& seller, const std::string& item, int c) : SellerName(seller), ItemName(item), Cost(c)
-	{
-	}
-};
-
-class IMoveEvent : public IEvent
-{
-public:
-	std::string to;
-	std::string from;
-
-	IMoveEvent(const std::string& to, const std::string& from) :to(to), from(from) {}
-};
-
-class IDisplayMenuEvent : public IEvent
-{
-public:
-	std::string title;
-	std::vector<string> options;
-	std::string inputText;
-
-	IDisplayMenuEvent() {}
-	IDisplayMenuEvent(const std::string& title, const std::vector<string>& options, const std::string& inputText) 
-		:title(title), options(options), inputText(inputText)
-	{
-	}
-};
-
-class IWrongInputEvent : public IEvent
-{
-public:
-	IWrongInputEvent() {}
-};
-
-// 게임 종료 이벤트
-class IGameExitEvent : public IEvent
-{
-public:
-	IGameExitEvent() {}
-};
-// 게임 종료 이벤트
-class IGameStartEvent : public IEvent
-{
-public:
-	IGameStartEvent() {}
-};
-
-// 전투 중 공격 이벤트
-class IBattleAttackEvent : public IEvent
-{
-public:
-	IBattleAttackEvent() {}
-};
-
-// 전투 중 스탯 확인 이벤트
-class IBattleStatCheckEvent : public IEvent
-{
-public:
-	IBattleStatCheckEvent() {}
-};
-
-// 전투 중 아이템 사용 이벤트
-class IBattleUseItemEvent : public IEvent
-{
-public:
-	IBattleUseItemEvent() {}
-};
-
-// 플레이어 사망 및 게임 패배 출력
-class IPlayerDefeatEvent : public IEvent
-{
-public:
-	IPlayerDefeatEvent() {}
-};
-
-// 보스 몬스터 사망 및 게임 승리 출력
-class IPlayerGameClearEvent : public IEvent
-{
-public:
-	IPlayerGameClearEvent() {}
-};
-
-// 일반 몬스터 사망 처리
-class IPlayerStageClearEvent : public IEvent
-{
-public:
-	IPlayerStageClearEvent() {}
-};
-
-// 플레이어 아이템 획득 이벤트
-class IPlayerGetItemEvent : public IEvent
-{
-public:
-	IPlayerGetItemEvent() {}
-};

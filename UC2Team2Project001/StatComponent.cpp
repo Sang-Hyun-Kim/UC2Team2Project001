@@ -1,10 +1,13 @@
 #include "pch.h"
+
 #include "StatComponent.h"
 #include "Character.h"
 #include "GlobalEventManager.h"
-#include "IEventTypes.h"
+
+
 #include <fstream>
 #include "StatsLoader.h"
+#include "ICharacterEventTypes.h"
 
 UStatsComponent::UStatsComponent(Character* InOwnedCharacter)
 {
@@ -154,7 +157,7 @@ void UStatsComponent::LevelUp()
 	Stats[StatType::MaxExperience] += 50;
 
 	// 레벨업 시점에 메시지 출력 (UI 이벤트를 보낼 수도 있음)
-	auto NewLevelUpEvent = make_shared<ILevelUpEvent>(OwnedCharacter->GetName(), (int)Stats[StatType::Level]);
+	auto NewLevelUpEvent = make_shared<ICharacterLevelUpEvent>(OwnedCharacter->GetName(), (int)Stats[StatType::Level]);
 	GlobalEventManager::Get().Notify(NewLevelUpEvent);
 }
 

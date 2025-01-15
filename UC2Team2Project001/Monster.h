@@ -2,7 +2,7 @@
 
 #include "Character.h"
 
-class Monster : public Character
+class Monster : public Character, public enable_shared_from_this<Monster>
 {
 private:
 	vector<string> MonsterNames{ "Dragon", "Goblin", "Orc", "Troll" };
@@ -11,8 +11,20 @@ private:
 
 	void SetMonsterStat(int PlayerLevel);
 
+	
+
+	int blanceLevel = 4;
+
+	void SetBlance(Character* Player);
 public:
-	Monster(int PlayerLevel);
+	Monster();
+
+	virtual  void Initialize() override;
+
+	//Character();
+
+	//Character(const string& _name);
+
 
 	bool IsBoss() const;
 
