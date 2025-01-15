@@ -155,6 +155,7 @@
     <ClCompile Include="PoisonInfusion.cpp" />
     <ClCompile Include="PoisonTrigger.cpp" />
     <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="StatType.cpp" />
     <ClCompile Include="LobbySystem.cpp" />
     <ClCompile Include="CharacterStatus.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="PoisonInfusion.h" />
     <ClInclude Include="PoisonTrigger.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="SkillManager.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="CharacterStatus.h" />
