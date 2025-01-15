@@ -46,8 +46,10 @@ int main()
 
 	//// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
+	auto UTurnSystem = std::make_shared<UTurnEventManager>();
 	eventManager.Subscribe(GSystemContext);
 	eventManager.Subscribe(UISystem);
+	eventManager.Subscribe(UTurnSystem);
 
 	while (true)
 	{
@@ -133,52 +135,52 @@ int main()
 
 #pragma region 스킬 사용 예제
 
-	shared_ptr<Player> player = make_shared<Player>("Player");
-	player->Initialize();
-
-	shared_ptr<Monster> monster = make_shared<Monster>();
-	monster->Initialize();
-
-	//타겟 설정합니다
-	monster->combatManager->SetTarget(player.get());
-	player->combatManager->SetTarget(monster.get());
-
-	std::vector<Character*> battleCharacters;
-	battleCharacters.push_back(player.get());
-	battleCharacters.push_back(monster.get());
-
+	//shared_ptr<Player> player = make_shared<Player>("Player");
+	//player->Initialize();
+	//
+	//shared_ptr<Monster> monster = make_shared<Monster>();
+	//monster->Initialize();
+	//
+	////타겟 설정합니다
+	//monster->combatManager->SetTarget(player.get());
+	//player->combatManager->SetTarget(monster.get());
+	//
+	//std::vector<Character*> battleCharacters;
+	//battleCharacters.push_back(player.get());
+	//battleCharacters.push_back(monster.get());
+	//
 	/*shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
 	monster->skillManager->AddSkill(newLifeStealAttack);*/
 
 
-	TurnEventManager->BeginTurn();
-
-	shared_ptr<PoisonedBlade> newPoisonedBlade= make_shared<PoisonedBlade>(monster.get());
-	monster->skillManager->AddSkill(newPoisonedBlade);
-
-	shared_ptr<PoisonInfusion> newPoisonInfusion = make_shared<PoisonInfusion>(monster.get());
-	monster->skillManager->AddSkill(newPoisonInfusion);
-
-	shared_ptr<PoisonFog> newPoisonFog = make_shared<PoisonFog>(monster.get());
-	monster->skillManager->AddSkill(newPoisonFog);
-
-	shared_ptr<PoisonTrigger> newPoisonTrigger = make_shared<PoisonTrigger>(monster.get());
-	monster->skillManager->AddSkill(newPoisonTrigger);
-
-	//패시브
-	shared_ptr<Plague> newPlague = make_shared<Plague>(player.get());
-	player->skillManager->AddSkill(newPlague);
-	
-	player->combatManager->Attack();
-	auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
-	eventManager.Notify(playerAttackEvent);
+	//TurnEventManager->BeginTurn();
+	//
+	//shared_ptr<PoisonedBlade> newPoisonedBlade= make_shared<PoisonedBlade>(monster.get());
+	//monster->skillManager->AddSkill(newPoisonedBlade);
+	//
+	//shared_ptr<PoisonInfusion> newPoisonInfusion = make_shared<PoisonInfusion>(monster.get());
+	//monster->skillManager->AddSkill(newPoisonInfusion);
+	//
+	//shared_ptr<PoisonFog> newPoisonFog = make_shared<PoisonFog>(monster.get());
+	//monster->skillManager->AddSkill(newPoisonFog);
+	//
+	//shared_ptr<PoisonTrigger> newPoisonTrigger = make_shared<PoisonTrigger>(monster.get());
+	//monster->skillManager->AddSkill(newPoisonTrigger);
+	//
+	////패시브
+	//shared_ptr<Plague> newPlague = make_shared<Plague>(player.get());
+	//player->skillManager->AddSkill(newPlague);
+	//
+	//player->combatManager->Attack();
+	//auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
+	//eventManager.Notify(playerAttackEvent);
 
 	/*monster->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "맹독 부여");
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 격발");*/
 
-	TurnEventManager->EndTurn(battleCharacters);
+	//TurnEventManager->EndTurn(battleCharacters);
 
 #pragma endregion
 }

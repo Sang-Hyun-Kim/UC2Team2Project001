@@ -20,7 +20,7 @@ public:
 	//virtual void Update();
 
 	inline SystemType GetSystemType() override { return SystemType::LOBBY; }
-	void OnEvent(const std::shared_ptr<IEvent>& ev) override;
+	void OnEvent(const std::shared_ptr<IEvent> ev) override;
 
 	void MainMenu();
 	void CreatePlayerMenu();

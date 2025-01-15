@@ -39,9 +39,8 @@ public:
 
 	void Update();
 
-	void OnEvent(const std::shared_ptr<IEvent>& ev) override;
-
-	shared_ptr<class Player> GetPlayer(SystemType systemType);
+	void OnEvent(const std::shared_ptr<IEvent> ev) override;
+	inline shared_ptr<class Player> GetPlayer() { return player; }
 private:
 	void MoveSystem(SystemType to, SystemType from);
 	void CreateCharacter(string name);
@@ -69,12 +68,3 @@ public:
 	}
 };
 
-class ICharacterCreateEvent : public IEvent
-{
-public:
-	string name;
-
-	ICharacterCreateEvent(string _name) : name(_name)
-	{
-	}
-};

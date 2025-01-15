@@ -68,7 +68,7 @@ void ShopSystem::MainMenu()
 void ShopSystem::DisplayInventory()
 {
 	CLEAR;
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	auto player = GSystemContext->GetPlayer();
 
 	player->InventoryComponent->displayInventory();
 
@@ -97,7 +97,7 @@ void ShopSystem::BuyMenu()
 
 	if (input <= itemSize)
 	{
-		auto player = GSystemContext->GetPlayer(GetSystemType());
+		auto player = GSystemContext->GetPlayer();
 		auto buyCommand = make_shared<BuyCommand>(player, itemList, input - 1);
 		GInvoker->ExecuteCommand(buyCommand);
 
@@ -112,7 +112,7 @@ void ShopSystem::SellMenu()
 	//인벤토리 사이즈 받아 조건 확인
 	string title = "==== 아이템 판매 ====";
 
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	auto player = GSystemContext->GetPlayer();
 	
 	int lastIndex = player->InventoryComponent->getInventorySize() + 1;
 	vector<string> inventoryInfos = player->InventoryComponent->GetInventoryInfoWithString(1);
@@ -151,7 +151,7 @@ void ShopSystem::GetRandomItems()
 	}
 }
 
-void ShopSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
+void ShopSystem::OnEvent(const std::shared_ptr<IEvent> ev)
 {
 	// 캐릭터가 (상품 가격 감소) 패시브 스킬을 획득하면 가격이 내려가도록 조정
 }

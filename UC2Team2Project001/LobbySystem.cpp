@@ -2,6 +2,7 @@
 #include "LobbySystem.h"
 #include "LobbySystemStates.h"
 #include "PlayerCharacter.h"
+#include "ICharacterEventTypes.h"
 
 LobbySystem::LobbySystem()
 {
@@ -70,8 +71,8 @@ void LobbySystem::CreatePlayerMenu()
 
 	auto createEvent = make_shared<ICharacterCreateEvent>(userName);
 	GlobalEventManager::Get().Notify(createEvent);
-
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	//GSystemContext->CreateCharacter(userName);
+	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 
 	InputManagerSystem::PauseUntilEnter();
@@ -79,6 +80,6 @@ void LobbySystem::CreatePlayerMenu()
 	ExitSystem(SystemType::BATTLE);
 }
 
-void LobbySystem::OnEvent(const std::shared_ptr<IEvent>& ev)
+void LobbySystem::OnEvent(const std::shared_ptr<IEvent> ev)
 {
 }

@@ -22,7 +22,6 @@ Character::Character()
 
 Character::Character(const string& _name) : characterName(_name)
 {
-	ManagerRegister();
 }
 
 void Character::ManagerRegister()
@@ -34,10 +33,14 @@ void Character::ManagerRegister()
 	combatManager->SetOwner(this);
 	skillManager = make_shared<USkillComponent>();
 	StatusComponent = make_shared<UStatusComponent>(this);
+
+	//GlobalEventManager::Get().Subscribe(skillManager);
 }
 
 void Character::Initialize()
 {
+	ManagerRegister();
+
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
 	// 스탯 설정
 	statManager->SetStat(StatType::HP, LoadStatsData.HP);
@@ -58,7 +61,6 @@ void Character::Initialize()
 	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
 	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
 
-	GlobalEventManager::Get().Subscribe(skillManager);
 }
 
 void Character::UseItem(const string& ItemName)

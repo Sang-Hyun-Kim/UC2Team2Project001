@@ -60,3 +60,12 @@ public:
 
 	ICharacterLevelUpEvent(const string& _name, int _level) : characterName(_name), level(_level) {}
 };
+
+class ICharacterCreateEvent : public IEvent
+{
+public:
+	string name;
+	ICharacterCreateEvent(const string& name) : name(name) 
+	{
+	}
+};

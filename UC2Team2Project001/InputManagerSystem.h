@@ -2,7 +2,7 @@
 
 #include "pch.h"
 #include "InputValidatorTypes.h"
-
+#include "IInputEventTypes.h"
 #include "GlobalEventManager.h"
 #include <sstream>
 

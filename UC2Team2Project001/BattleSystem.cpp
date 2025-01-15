@@ -8,6 +8,9 @@
 #include "Monster.h"
 #include "CombatComponent.h"
 #include "BattleSystemStates.h"
+#include "ICombatEventTypes.h"
+#include "IItemEventTypes.h"
+
 BattleSystem::BattleSystem()
 {
 }
@@ -18,10 +21,11 @@ void BattleSystem::EnterSystem()
 	cout << "                            전투 입장                           " << endl;
 	cout << "-----------------------------------------------------------------\n";
 	
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	auto player = GSystemContext->GetPlayer();
 	
 	// 플레이어 레벨에 따른 monster 생성
-	monster = make_shared<Monster>(CharacterUtility::GetStat(player.get(), StatType::Level));
+	monster = make_shared<Monster>();
+	monster->Initialize();
 	state = make_shared<BattleMainState>();
 }
 
@@ -124,13 +128,13 @@ void BattleSystem::Attack()
 {
 	cout << endl;
 
-	auto player = GSystemContext->GetPlayer(GetSystemType());
-	player->combatManager->SetTarget(monster);
+	auto player = GSystemContext->GetPlayer();
+	player->combatManager->SetTarget(monster.get());
 	player->combatManager->Attack();
 
 	// 몬스터 공격
 	cout << endl;
-	monster->combatManager->SetTarget(player);
+	monster->combatManager->SetTarget(player.get());
 	monster->combatManager->Attack();
 
 	InputManagerSystem::PauseUntilEnter();
@@ -152,7 +156,7 @@ void BattleSystem::Attack()
 void BattleSystem::DisplayStat()
 {
 	CLEAR;
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 
 	InputManagerSystem::PauseUntilEnter();
@@ -167,7 +171,7 @@ void BattleSystem::UseItem()
 	auto battleitemcheck = make_shared<IBattleUseItemEvent>();
 	GlobalEventManager::Get().Notify(battleitemcheck);
 	
-	auto player = GSystemContext->GetPlayer(GetSystemType());
+	auto player = GSystemContext->GetPlayer();
 	vector<string> itemList = player->InventoryComponent->GetInventoryInfoWithString(1);
 	
 	int lastIndex = itemList.size() + 1;
@@ -211,7 +215,7 @@ void BattleSystem::NextStage()
 		// 일반 몬스터 사망 UI 출력
 		// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
 
-		auto player = GSystemContext->GetPlayer(GetSystemType());
+		auto player = GSystemContext->GetPlayer();
 		player->InventoryComponent->addGold(monster->characterReward.DropGold); // 돈 넣기
 
 		if (monster->characterReward.DropItem != nullptr)
@@ -258,7 +262,7 @@ void BattleSystem::GameOver()
 	GlobalEventManager::Get().Notify(event);
 }
 
-void BattleSystem::OnEvent(const std::shared_ptr<IEvent>& ev)
+void BattleSystem::OnEvent(const std::shared_ptr<IEvent> ev)
 {
 
 }
