@@ -5,110 +5,59 @@
 #include "GlobalEventManager.h"
 #include "StatComponent.h"
 #include <memory>
-
 #include "StatsLoader.h"
 #include "StrategyFactory.h"
+#include "CombatComponent.h"
+#include "USkillComponent.h"
 
-
-Character::Character() : AttackStrategy(nullptr), DefenseStrategy(nullptr)
+Character::Character()
 {
-	StatManager = std::make_shared<UStatsComponent>(this);
-	StatManager.get()->BeginPlay();
-
-	//StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
-	//Initialize(LoadStatsData);
+	ManagerRegister();
 }
 
-Character::Character(const string& InName) : CharacterName(InName), AttackStrategy(nullptr), DefenseStrategy(nullptr)                                                                                                                                                                                                                                                          
+Character::Character(const string& _name) : characterName(_name)
 {
-	StatManager = std::make_shared<UStatsComponent>(this);
-	StatManager.get()->BeginPlay();
+	ManagerRegister();
 
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
-	Initialize(LoadStatsData);
+	StatsData loadStatsData = StatsLoader::LoadFromJSON(characterName);
+	Initialize(loadStatsData);
 }
 
-void Character::Initialize(const StatsData& stats)
+void Character::ManagerRegister()
+{
+	statManager = std::make_shared<UStatsComponent>(this);
+	statManager.get()->BeginPlay();
+	combatManager = make_shared<CombatComponent>();
+
+	shared_ptr<Character> tmp(this);
+	combatManager->SetOwner(tmp);
+	skillManager = make_shared<USkillComponent>();
+}
+
+void Character::Initialize(const StatsData& _stats)
 {
 	// 스탯 설정
-	if (StatManager->bIsLoadJson)
-	{
-		StatManager->SetStat(StatType::HP, stats.HP);
-		StatManager->SetStat(StatType::MaxHP, stats.MaxHP);
-		StatManager->SetStat(StatType::MP, stats.MP);
-		StatManager->SetStat(StatType::MaxMP, stats.MaxMP);
-		StatManager->SetStat(StatType::AttackPower, stats.AttackPower);
-		StatManager->SetStat(StatType::Defense, stats.Defense);
-		StatManager->SetStat(StatType::CriticalChance, stats.CriticalChance);
-		StatManager->SetStat(StatType::EvasionRate, stats.EvasionRate);
-		StatManager->SetStat(StatType::Level, stats.Level);
-		StatManager->SetStat(StatType::Experience, stats.Experience);
-		StatManager->SetStat(StatType::MaxExperience, stats.MaxExperience);
-		//StatManager->PrintStatus();
-	}
+	statManager->SetStat(StatType::HP, _stats.HP);
+	statManager->SetStat(StatType::MaxHP, _stats.MaxHP);
+	statManager->SetStat(StatType::MP, _stats.MP);
+	statManager->SetStat(StatType::MaxMP, _stats.MaxMP);
+	statManager->SetStat(StatType::AttackPower, _stats.AttackPower);
+	statManager->SetStat(StatType::Defense, _stats.Defense);
+	statManager->SetStat(StatType::CriticalChance, _stats.CriticalChance);
+	statManager->SetStat(StatType::EvasionRate, _stats.EvasionRate);
+	statManager->SetStat(StatType::Level, _stats.Level);
+	statManager->SetStat(StatType::Experience, _stats.Experience);
+	statManager->SetStat(StatType::MaxExperience, _stats.MaxExperience);
+	statManager->PrintStatus();
 
 
 	// 전략 설정
-	AttackStrategy = StrategyFactory::CreateAttackStrategy(stats.AttackStrategyData);
-	DefenseStrategy = StrategyFactory::CreateDefenseStrategy(stats.DefenseStrategyData);
+	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(_stats.AttackStrategyData));
+	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(_stats.DefenseStrategyData));
 }
-
-void Character::Attack(Character* Target)
-{
-	if (StatManager->IsDead())
-	{
-		return;
-	}
-
-	if (!Target)
-	{
-		std::cout << "타겟이 없습니다." << std::endl;
-		return;
-	}
-
-	if (!AttackStrategy)
-	{
-		std::cout << "공격 전략이 설정되지 않았습니다." << std::endl;
-		return;
-	}
-
-	// 공격 전략 실행
-	AttackStrategy->Attack(this, Target);
-}
-
-void Character::TakeDamage(int IncomingDamage)
-{
-	int finalDamage = IncomingDamage;
-
-	// 방어 전략 적용
-	if (DefenseStrategy)
-	{
-		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
-	}
-
-	//콜백을 리워드 시스템에 연결
-	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage, StatManager->GetStat(StatType::HP));
-	GlobalEventManager::Get().Notify(Event);
-
-	StatManager->ModifyStat(StatType::HP, (float) - finalDamage);
-}
-
-void Character::SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy)
-{
-	AttackStrategy = move(NewAttackStrategy);
-}
-
-void Character::SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy)
-{
-	DefenseStrategy = move(NewDefenseStrategy);
-}
-
 
 void Character::UseItem(const string& ItemName)
 {
 }
 
-bool Character::IsDead()
-{
-	return StatManager && StatManager->IsDead();
-}
+

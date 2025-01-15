@@ -10,7 +10,7 @@ public:
 	virtual ~IAttackStrategy() = default;
 
 	// 공격 행동을 정의하는 순수 가상 함수
-	virtual void Attack(Character* Self, Character* Target) = 0;
+	virtual void Attack(Character* _self, Character* _target) = 0;
 };
 
 // 방어 전략 인터페이스
@@ -20,7 +20,7 @@ public:
 	virtual ~IDefenseStrategy() = default;
 
 	// 방어로 인해 받는 피해를 계산하는 순수 가상 함수
-	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) = 0;
+	virtual int CalculateDamageReceived(Character* _self, int _incomingDamage) = 0;
 };
 
 // 기본 공격 전략
@@ -28,7 +28,7 @@ class BasicAttackStrategy : public IAttackStrategy
 {
 public:
 	// 기본 공격 동작 구현
-	virtual void Attack(Character* Self, Character* Target) override;
+	virtual void Attack(Character* _self, Character* _target) override;
 };
 
 // 방어 전략: 데미지를 차단(Block)
@@ -36,7 +36,7 @@ class BlockDefenseStrategy : public IDefenseStrategy
 {
 public:
 	// 방어 시 받는 최종 피해 계산 구현
-	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) override;
+	virtual int CalculateDamageReceived(Character* _self, int _incomingDamage) override;
 };
 
 //// 방어 전략: 회피(Evade)
@@ -44,5 +44,5 @@ public:
 //{
 //public:
 //	// 회피 시 받는 최종 피해 계산 구현
-//	virtual int CalculateDamageReceived(Character* Self, int IncomingDamage) override;
+//	virtual int CalculateDamageReceived(Character* _self, int _incomingDamage) override;
 //};

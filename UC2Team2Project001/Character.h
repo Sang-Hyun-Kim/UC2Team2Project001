@@ -1,19 +1,18 @@
 #pragma once
+// 캐릭터(공통 베이스 클래스)
 
 #include <iostream>
 #include <memory>
 #include <algorithm>
 #include "CharacterTypes.h"
+#include "StatType.h"
 
-class IAttackStrategy;
-class IDefenseStrategy;
+class USkillComponent;
+class CombatComponent;
 class Item;
 
 struct StatsData;
 
-using namespace std;
-
-// 캐릭터(공통 베이스 클래스)
 class UStatsComponent;
 
 using namespace std;
@@ -25,49 +24,42 @@ public:
 	//생성자 및 소멸자
 	Character();
 
-	Character(const string& InName);
+	Character(const string& _name);
 
 public:
-	void Initialize(const StatsData& stats);
+	void Initialize(const StatsData& _stats);
 
 	virtual ~Character() {}
 
-	// 공격 및 피해 처리
-	virtual void Attack(Character* Target);
-	virtual void TakeDamage(int IncomingDamage);
-
-	// 전략 설정
-	void SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy);
-
-	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy);
-
 	virtual void CreateCharacterReward() {}
 
-	virtual void UseItem(const string& ItemName);
+	virtual void UseItem(const string& _itemName);
+
+	// 매니저 등록
+	void ManagerRegister();
 
 public:
-	bool IsDead();
 
 	// 캐릭터 이름 반환
-	const string& GetName() { return CharacterName; }
+	const string& GetName() { return characterName; }
 
 public:
 
 	//스텟 컴포넌트
-	shared_ptr<UStatsComponent> StatManager;
+	shared_ptr<UStatsComponent> statManager;
 
-protected:
-	// 공격/방어 전략
-	shared_ptr<IAttackStrategy> AttackStrategy;
-	shared_ptr<IDefenseStrategy> DefenseStrategy;
+	// 컴뱃 매니저
+	shared_ptr<CombatComponent> combatManager;
+
+	// 스킬 매니저
+	shared_ptr<USkillComponent> skillManager;
 
 public:
-	
 	// 캐릭터 사망 보상
-	FCharacterReward CharacterReward;
+	FCharacterReward characterReward;
 
 protected:
-	string CharacterName;
+	string characterName;
 };
 
 

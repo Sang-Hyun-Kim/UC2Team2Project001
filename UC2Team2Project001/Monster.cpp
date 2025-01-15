@@ -6,6 +6,11 @@
 #include "Item.h"
 #include "StatsLoader.h"
 #include "StrategyFactory.h"
+#include "USkillComponent.h"
+#include "Skill.h"
+#include "ISkillAction.h"
+#include "ISkillEffect.h"
+#include "CombatComponent.h"
 
 Monster::Monster(int PlayerLevel)
 {
@@ -24,6 +29,17 @@ Monster::Monster(int PlayerLevel)
 
 	// 몬스터 생성시 지니고 있을 골드와 아이템을 설정
 	CreateCharacterReward();
+
+	// 몬스터 스킬 설정
+	shared_ptr<ISkillAction> action = make_shared<AttackAction>();
+	shared_ptr<ISkillEffect> effect = make_shared<ILifeStealEffect>(10);
+	FSkillData skillData("기본 스킬", 10, 3, action, { effect }, combatManager->GetOwner(), combatManager->GetTarget());
+
+	shared_ptr<ActiveSkill> basicAttack = make_shared<ActiveSkill>(skillData);
+	effect->SetSkill(basicAttack);
+
+	skillManager.get()->AddSkill(basicAttack);
+
 }
 
 void Monster::SetMonsterStat(int PlayerLevel)
@@ -51,22 +67,22 @@ void Monster::SetMonsterStat(int PlayerLevel)
 	}
 
 	// 몬스터 이름 설정
-	CharacterName = MonsterNames[randomIndex];
+	characterName = MonsterNames[randomIndex];
 
-	StatManager.get()->BeginPlay();
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
+	statManager.get()->BeginPlay();
+	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
 	Initialize(LoadStatsData);
 
 	// 체력 = 레벨 * (20 ~ 30)
 	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
 	float HP = (float)PlayerLevel * RandomHP;
-	StatManager->SetStat(StatType::MaxHP, HP);
-	StatManager->SetStat(StatType::HP, HP);
+	statManager->SetStat(StatType::MaxHP, HP);
+	statManager->SetStat(StatType::HP, HP);
 
 	// 공격력 = 레벨 * (5 ~ 10)
 	int RandomAttackPower = (rand() % (int)(5 * BossStat)) + (int)(10 * BossStat);
 	float AttackPower = (float)PlayerLevel * RandomAttackPower;
-	StatManager->SetStat(StatType::AttackPower, AttackPower);
+	statManager->SetStat(StatType::AttackPower, AttackPower);
 }
 
 bool Monster::IsBoss() const
@@ -77,7 +93,7 @@ bool Monster::IsBoss() const
 void Monster::CreateCharacterReward()
 {
 	// 골드는 10 ~ 15 범위로 랜덤 설정
-	CharacterReward.DropGold = (rand() % 10) + 15;
+	characterReward.DropGold = (rand() % 10) + 15;
 
 	// 아이템은 30% 확률로 드랍
 	// 0 ~ 99 범위로 랜덤 값 설정(총 100범위)
@@ -89,11 +105,11 @@ void Monster::CreateCharacterReward()
 	if (CanItemDrop)
 	{
 		// 아이템 랜덤으로 지정
-		CharacterReward.DropItem = ItemManager::GetInstance().getRandomItem();
+		characterReward.DropItem = ItemManager::GetInstance().getRandomItem();
 	}
 	else
 	{
 		// 아이템 없음 = nullptr
-		CharacterReward.DropItem = nullptr;
+		characterReward.DropItem = nullptr;
 	}
 }

@@ -5,33 +5,16 @@
 #include <string>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include "StatType.h"
 
 using json = nlohmann::json;
 
 class Character;
 
-// enum 혹은 문자열 키로 구분
-enum class StatType
-{
-	HP,
-	MaxHP,
-	MP,
-	MaxMP,
-	AttackPower,
-	Defense,
-	CriticalChance,
-	EvasionRate,
-	Level,
-	Experience,
-	MaxExperience
-	// ... 필요한 스탯들 추가
-};
-
-
-
 class UStatsComponent
 {
 public:
+	UStatsComponent() {};
 	UStatsComponent(Character* InOwnedCharacter);
 
 	virtual void BeginPlay();
@@ -60,9 +43,6 @@ public:
 
 protected:
 	void ClampStat(StatType type, float minValue, float maxValue);
-	
-public:
-	bool bIsLoadJson = true;
 
 private:
 	Character* OwnedCharacter;
