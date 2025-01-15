@@ -23,6 +23,8 @@ public:
     // 생성자
     Inventory(Character* owner = nullptr);
 
+    shared_ptr<Item> GetItemWithIndex(int index);
+
     // 아이템 추가
     void addItem(shared_ptr<Item> item, int count = 1);
 
@@ -53,9 +55,11 @@ public:
     // 인벤토리 개수 확인
     int getInventorySize() const;
     
+    int GetItemVelue(int index) const;
+
     //인벤토리가 비어있는지 확인
     bool IsEmpty() const;
-    
+
     // 소멸자
     ~Inventory() {}
 };

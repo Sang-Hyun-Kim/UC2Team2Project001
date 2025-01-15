@@ -110,14 +110,35 @@ void ShopSystem::SellMenu()
 {
 	//player->인벤토리 출력
 	//인벤토리 사이즈 받아 조건 확인
-	auto player = GSystemContext->GetPlayer(GetSystemType());
-
-	int inventorySize = player->InventoryComponent->getInventorySize();
-	player->InventoryComponent->displayInventory(0);
-
 	string title = "==== 아이템 판매 ====";
 
-	int input = InputManagerSystem::GetInput<int>(title, {}, RangeValidator<int>(1, inventorySize));
+	auto player = GSystemContext->GetPlayer(GetSystemType());
+	
+	int lastIndex = player->InventoryComponent->getInventorySize() + 1;
+	vector<string> inventoryInfos = player->InventoryComponent->GetInventoryInfoWithString(1);
+	
+	inventoryInfos.push_back(to_string(lastIndex) + ". 돌아가기");
+
+	int input = InputManagerSystem::GetInput<int>(title, inventoryInfos, RangeValidator<int>(1, lastIndex));
+
+	if (input == lastIndex)
+	{
+		state = make_shared<ShopMainState>();
+	}
+	else
+	{
+		//팔기
+		//몇 개?
+		auto item = player->InventoryComponent->GetItemWithIndex(input - 1);
+		auto itemCount = player->InventoryComponent->getItemCount(input - 1);
+		auto itemValue = item->getValue();
+
+		int sellCount = InputManagerSystem::GetInput<int>("판매할 갯수를 입력해주세요. ", {}, RangeValidator<int>(1, itemCount));
+		player->InventoryComponent->removeItem(input, sellCount);
+		int totalGainGold = itemValue * sellCount;
+		player->InventoryComponent->addGold(totalGainGold);
+		cout << item->getName() + "(을)를 " + to_string(itemValue) + "개 팔아 " + to_string(totalGainGold) + "골드를 얻었습니다." << endl;
+	}
 }
 
 void ShopSystem::GetRandomItems()

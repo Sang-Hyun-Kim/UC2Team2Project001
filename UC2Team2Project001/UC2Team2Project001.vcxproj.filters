@@ -338,6 +338,9 @@
     <ClInclude Include="ShopSystemStates.h">
       <Filter>헤더 파일\GameSystem\SystemStates</Filter>
     </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">

@@ -40,7 +40,8 @@ void LobbySystem::EnterSystem()
 
 void LobbySystem::MainMenu()
 {
-	int input = InputManagerSystem::GetInput<int>(
+	int input = InputManagerSystem::GetInput<int>
+	(
 		"==== 게임 로비 ====",
 		{ "1. 게임 시작" , "2. 게임 종료" },
 		RangeValidator<int>(1, 2)

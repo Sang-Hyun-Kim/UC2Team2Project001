@@ -186,6 +186,7 @@
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
+    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="ISkillAction.h" />

@@ -6,6 +6,11 @@
 Inventory::Inventory(Character* owner)
 	: owner(owner), gold(0){}
 
+shared_ptr<Item> Inventory::GetItemWithIndex(int index)
+{
+    return inven[index].item;
+}
+
 void Inventory::addItem(shared_ptr<Item> item, int count) {
     if (count <= 0) {
         cout << "0개 이하로 추가할 수 없습니다." << endl;
@@ -119,13 +124,25 @@ void Inventory::displayInventory(int intype) const {
 
     if (inven.empty()) {
         cout << "- 인벤토리가 비어있습니다." << endl;
-    } else {
+    }
+    else {
         for (size_t i = 0; i < inven.size(); ++i) {
             ostringstream itemInfo;
-            inven[i].item->getInfoText(intype);
-            itemInfo << i + 1 << "." << inven[i].item->getName() << " : " << inven[i].item->getDescription();
-            inven[i].item->getInfoText(intype);
+            itemInfo << i + 1 << "." << inven[i].item->getName() << "x" << inven[i].count << " ";
 
+            switch (intype) {
+            case 0: // 이름, 설명, 개수, 가치 출력
+                itemInfo << inven[i].item->getValue() << " Gold  [" << inven[i].item->getDescription() << "]";
+                break;
+
+            case 1: // 이름, 설명, 개수 출력
+                itemInfo << " [Count: " << inven[i].count << "]";
+                break;
+
+            case 2: // 이름, 설명만 출력
+            default:
+                break;
+            }
             std::cout << itemInfo.str() << std::endl;
         }
     }
@@ -137,9 +154,22 @@ vector<string> Inventory::GetInventoryInfoWithString(int type) const
 {
     vector<string> inventoryInfos(inven.size(), "");
 
-    for (size_t i = 0; i < inven.size(); ++i)
+    if (type == 0) //배틀, 인벤토리 열기
     {
-        inventoryInfos[i] = to_string(i + 1) + ". " + inven[i].item->getName() + " x" + to_string(inven[i].count) + " : " + inven[i].item->getDescription();
+        for (size_t i = 0; i < inven.size(); ++i)
+        {
+            inventoryInfos[i] = to_string(i + 1) + ". " + inven[i].item->getName() + " x" + to_string(inven[i].count) + " : " + inven[i].item->getDescription();
+        }
+    }
+    else //상점
+    {
+        for (size_t i = 0; i < inven.size(); ++i)
+        {
+            auto item = inven[i].item;
+            
+
+            inventoryInfos[i] = to_string(i + 1) + ". " + item->getInfoTextForShop();
+        }
     }
 
     return inventoryInfos;
@@ -148,6 +178,11 @@ vector<string> Inventory::GetInventoryInfoWithString(int type) const
 int Inventory::getInventorySize() const
 {
     return inven.size();
+}
+
+int Inventory::GetItemVelue(int index) const
+{
+    return inven[index].item->getValue();
 }
 
 bool Inventory::IsEmpty() const
