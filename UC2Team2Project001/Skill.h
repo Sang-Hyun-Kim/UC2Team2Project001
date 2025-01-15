@@ -2,15 +2,19 @@
 
 #include "ISkillAction.h"
 #include "ISkillEffect.h"
+#include <functional>
+#include <set>
 
 using namespace std;
 
 class Character;
 class ICharacterState;
 class ISkillCondition;
+class IEvent;
 
 struct FSkillData
 {
+public:
 	string skillName = ""; //스킬이름
 	int mpCost = 0; //스킬에 사용되는 코스트
 	int maxCooldown = 99; //스킬 쿨다운
@@ -23,22 +27,15 @@ struct FSkillData
 
 	vector<shared_ptr<ISkillCondition>> conditions; // 스킬 조건 리스트
 
+public:
 	FSkillData() = default;
 
-	FSkillData(const string& skillName, int mpCost, int maxCooldown)
-		: skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
-	{
-	}
+	FSkillData(const string& skillName, int mpCost, int maxCooldown);
+
 	FSkillData(Character* _owner, const string& skillName, int mpCost, int maxCooldown)
 		: owner(_owner), skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
 	{
 	}
-
-	FSkillData(const string& skillName, int mpCost, int maxCooldown, int currentCooldown)
-		: skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown), currentCooldown(currentCooldown)
-	{
-	}
-
 
 };
 
@@ -62,19 +59,7 @@ public:
 
 	~Skill() = default;
 
-	template<typename T>
-	void SkillInit()
-	{
-		if (skillData.action != nullptr)
-		{
-			skillData.action.get()->SetSkill(this);
-		}
-
-		for (auto effect : skillData.effects)
-		{
-			effect.get()->SetSkill(this);
-		}
-	}
+	void SkillInit(Skill* _ownerSkill);
 
 	virtual bool UseSkill();
 
@@ -108,6 +93,7 @@ public:
 	~ActiveSkill() = default;
 };
 
+
 class PassiveSkill : public Skill
 {
 public:
@@ -127,4 +113,16 @@ public:
 	};
 
 	~PassiveSkill() = default;
+
+	virtual void PassiveSkillRegisterTrigger();
+
+	virtual void PassiveSkillUnRegisterTrigger();
+
+
+	// 실제로 이벤트를 처리하는(혹은 스킬을 발동하는) 함수
+	void HandlePassiveEvent(std::shared_ptr<IEvent> ev);
+
+public:
+	// '어떤 이벤트 타입'들을 처리할지 저장
+	std::set<std::type_index> handlers;
 };

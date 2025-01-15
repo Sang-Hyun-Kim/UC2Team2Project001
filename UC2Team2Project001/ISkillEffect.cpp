@@ -5,6 +5,8 @@
 #include "CombatComponent.h"
 #include "UStatusComponent.h"
 #include "Monster.h"
+#include "CharacterStatus.h"
+#include "UStatusComponent.h"
 
 void ILifeStealEffect::PostEffect()
 {
@@ -56,4 +58,40 @@ void IStunEffect::PostEffect()
 {
 	parentSkill->GetTarget()->StatusComponent->AddState(stunState);
 	cout << "기절 상태 적용" << endl;
+}
+
+IPoisonEffect::IPoisonEffect(int amountStack)
+{
+	states.push_back(make_shared<PoisonState>(2, 5, amountStack));
+}
+
+void IPoisonEffect::PostEffect()
+{
+	const auto& skillData = parentSkill->GetSkillData();
+	Character* target = parentSkill->GetTarget();
+
+	for (auto state : states)
+	{
+		target->StatusComponent->AddState(state);
+	}
+}
+
+void IRemoveStateEffect::PostEffect()
+{
+	Character* target = parentSkill->GetTarget();
+
+	if (!target || !target->StatusComponent)
+	{
+		std::cout << "대상이 없거나 상태 컴포넌트가 없습니다.\n";
+		return;
+	}
+
+	auto& statusComponent = target->StatusComponent;
+
+	bool isSuccess = statusComponent->RemoveState(stateType);
+
+	if (isSuccess)
+		cout << "성공했습니다 상태제거에" << endl;
+	else
+		cout << "실패했습니다 상태제거에" << endl;
 }

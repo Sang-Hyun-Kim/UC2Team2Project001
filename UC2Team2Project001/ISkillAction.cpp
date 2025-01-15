@@ -5,15 +5,51 @@
 #include "ICharacterEventTypes.h"
 #include "CombatComponent.h"
 #include "Skill.h"
+#include "UStatusComponent.h"
+#include "StatComponent.h"
 
 void AttackAction::ExecuteAction()
 {
-    Character* self = parentSkill->GetSkillData().owner;
+	Character* self = parentSkill->GetSkillData().owner;
 
-    Character* target = parentSkill->GetTarget();
+	Character* target = parentSkill->GetTarget();
 
-    auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), attackDamage);
-    GlobalEventManager::Get().Notify(Event);
+	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), AttackDamage);
+	GlobalEventManager::Get().Notify(Event);
 
-    target->combatManager->TakeDamage(attackDamage);
+	target->combatManager->TakeDamage((int)AttackDamage);
+}
+
+void PoisonIntensifierAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	if (poisonState)
+	{
+		poisonState->ApplyStack(poisonState->poisonStack);
+	}
+}
+
+void PoisonPogAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	if (poisonState)
+	{
+		poisonState->ApplyStack(2);
+		poisonState->ApplyEffect(target);
+	}
+}
+
+void PoisonTriggerAction::ExecuteAction()
+{
+	Character* target = parentSkill->GetTarget();
+	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+
+	if (poisonState)
+	{
+		float TriggerPoisonDamage = poisonState->poisonStack* poisonState->GetDuration();
+		target->statManager->ModifyStat(StatType::HP, TriggerPoisonDamage);	
+		cout << "독을 격발하였습니다" << endl;
+	}
 }

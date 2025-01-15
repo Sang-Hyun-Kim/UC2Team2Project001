@@ -5,7 +5,7 @@
 
 UStatusComponent::UStatusComponent(Character* _owner)
 {
-	OwnerCharacter = _owner;
+    OwnerCharacter = _owner;
 }
 
 void UStatusComponent::AddState(const std::shared_ptr<ICharacterState>& NewState)
@@ -25,13 +25,13 @@ void UStatusComponent::AddState(const std::shared_ptr<ICharacterState>& NewState
 		(*it)->SetDuration(std::max(ExistingDuration, NewDuration));
 
 		// PoisonState의 경우, 스택을 추가로 처리
-		/*if (auto* ExistingPoisonState = dynamic_cast<PoisonState*>(it->get()))
+		if (auto* ExistingPoisonState = dynamic_cast<PoisonState*>(it->get()))
 		{
 			if (auto* NewPoisonState = dynamic_cast<PoisonState*>(NewState.get()))
 			{
 				ExistingPoisonState->ApplyStack(NewPoisonState->amountStack);
 			}
-		}*/
+		}
 	}
 	else
 	{
@@ -42,14 +42,14 @@ void UStatusComponent::AddState(const std::shared_ptr<ICharacterState>& NewState
 
 void UStatusComponent::ApplyAllEffects()
 {
-	// 만료되지 않은 상태들에 대해서만 Effect를 적용
-	for (auto& State : ActiveStates)
-	{
-		if (!State->IsExpired())
-		{
-			State->ApplyEffect(OwnerCharacter);
-		}
-	}
+    // 만료되지 않은 상태들에 대해서만 Effect를 적용
+    for (auto& State : ActiveStates)
+    {
+        if (!State->IsExpired())
+        {
+            State->ApplyEffect(OwnerCharacter);
+        }
+    }
 }
 
 void UStatusComponent::RemoveExpiredStates()
@@ -72,16 +72,34 @@ void UStatusComponent::RemoveExpiredStates()
 
 void UStatusComponent::DecrementAllDurations()
 {
-	for (auto& State : ActiveStates)
-	{
-		State->TickDuration();
-	}
+    for (auto& State : ActiveStates)
+    {
+        State->TickDuration();
+    }
 }
 
 void UStatusComponent::PrintStates() const
 {
-	for (auto& State : ActiveStates)
+    for (auto& State : ActiveStates)
+    {
+        std::cout << "[상태] " << State->GetStateName() << " (지속 시간: " << State->GetDuration() << ")\n";
+    }
+}
+
+bool UStatusComponent::RemoveState(std::type_index StateType)
+{
+	auto it = std::find_if(ActiveStates.begin(), ActiveStates.end(),
+		[&](const std::shared_ptr<ICharacterState>& State)
+		{
+			// typeid 결과를 std::type_index로 변환하여 비교
+			return std::type_index(typeid(*State.get())) == StateType;
+		});
+
+	if (it != ActiveStates.end())
 	{
-		std::cout << "[상태] " << State->GetStateName() << " (지속 시간: " << State->GetDuration() << ")\n";
+		ActiveStates.erase(it);     // 상태 제거
+		return true;                // 제거 성공
 	}
+
+	return false; // 해당 상태가 없으면 실패
 }

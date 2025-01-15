@@ -20,11 +20,20 @@
 #include "USkillComponent.h"
 #include "UTurnEventManager.h"
 #include "UStatusComponent.h"
+
+
 #include "LifeStealAttack.h"
 #include "BashAttack.h"
 #include "ShieldAttack.h"
 #include "MentalDiscipline.h"
 #include "OnePointAttack.h"
+#include "PoisonedBlade.h"
+#include "PoisonInfusion.h"
+#include "PoisonFog.h"
+#include "PoisonTrigger.h"
+#include "Plague.h"
+#include "ICombatEventTypes.h"
+
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
@@ -60,18 +69,16 @@ int main()
 	//Player* player = new Player("Player");
 	//Monster* monster = new Monster(1);
 
-	//TurnEventManager->BeginTurn();
+
 
 	//player->StatusComponent->AddState(make_shared<BurnState>(3, 10));
 
 	//player->combatManager->Attack();
 	//monster->combatManager->Attack();
 
-	//std::vector<Character*> battleCharacters;
-	//battleCharacters.push_back(player);
-	//battleCharacters.push_back(monster);
 
-	//TurnEventManager->EndTurn(battleCharacters);
+
+	
 
 	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
 	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
@@ -112,22 +119,47 @@ int main()
 
 	shared_ptr<Monster> monster = make_shared<Monster>();
 	monster->Initialize();
-	monster->combatManager->SetTarget(player.get());
 
-	//shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
-	//monster->skillManager->AddSkill(newLifeStealAttack);
-	//
-	//monster->skillManager->UseSkill(SkillType::ACTIVE, "흡혈 공격");
+	//타겟 설정합니다
+	monster->combatManager->SetTarget(player.get());
+	player->combatManager->SetTarget(monster.get());
+
+	std::vector<Character*> battleCharacters;
+	battleCharacters.push_back(player.get());
+	battleCharacters.push_back(monster.get());
+
+	/*shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
+	monster->skillManager->AddSkill(newLifeStealAttack);*/
+
 
 	TurnEventManager->BeginTurn();
 
-	player->combatManager->SetTarget(monster.get());
-	shared_ptr<MentalDiscipline> skill = make_shared<MentalDiscipline>(player.get());
-	player->skillManager->AddSkill(skill);
+	shared_ptr<PoisonedBlade> newPoisonedBlade= make_shared<PoisonedBlade>(monster.get());
+	monster->skillManager->AddSkill(newPoisonedBlade);
 
-	player->skillManager->UseSkill(SkillType::ACTIVE, "정신 수양");
-	vector<Character*> tmp = { player.get(), monster.get() };
-	TurnEventManager->EndTurn(tmp);
+	shared_ptr<PoisonInfusion> newPoisonInfusion = make_shared<PoisonInfusion>(monster.get());
+	monster->skillManager->AddSkill(newPoisonInfusion);
+
+	shared_ptr<PoisonFog> newPoisonFog = make_shared<PoisonFog>(monster.get());
+	monster->skillManager->AddSkill(newPoisonFog);
+
+	shared_ptr<PoisonTrigger> newPoisonTrigger = make_shared<PoisonTrigger>(monster.get());
+	monster->skillManager->AddSkill(newPoisonTrigger);
+
+	//패시브
+	shared_ptr<Plague> newPlague = make_shared<Plague>(player.get());
+	player->skillManager->AddSkill(newPlague);
+	
+	player->combatManager->Attack();
+	auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
+	eventManager.Notify(playerAttackEvent);
+
+	/*monster->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "맹독 부여");
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 격발");*/
+
+	TurnEventManager->EndTurn(battleCharacters);
 
 #pragma endregion
 }

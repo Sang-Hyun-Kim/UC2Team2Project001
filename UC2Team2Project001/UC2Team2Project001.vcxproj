@@ -148,6 +148,11 @@
     <ClCompile Include="MentalDiscipline.cpp" />
     <ClCompile Include="OnePointAttack.cpp" />
     <ClCompile Include="ShieldAttack.cpp" />
+    <ClCompile Include="Plague.cpp" />
+    <ClCompile Include="PoisonedBlade.cpp" />
+    <ClCompile Include="PoisonFog.cpp" />
+    <ClCompile Include="PoisonInfusion.cpp" />
+    <ClCompile Include="PoisonTrigger.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="StatType.cpp" />
     <ClCompile Include="CharacterStatus.cpp" />
@@ -208,6 +213,11 @@
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />
     <ClInclude Include="ShieldAttack.h" />
+    <ClInclude Include="Plague.h" />
+    <ClInclude Include="PoisonedBlade.h" />
+    <ClInclude Include="PoisonFog.h" />
+    <ClInclude Include="PoisonInfusion.h" />
+    <ClInclude Include="PoisonTrigger.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="CharacterStatus.h" />
