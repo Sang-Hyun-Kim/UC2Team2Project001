@@ -144,6 +144,10 @@
     <ClCompile Include="ISkillEffect.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="StatType.cpp" />
+    <ClCompile Include="CharacterStatus.cpp" />
+    <ClCompile Include="IInputEventTypes.cpp" />
+    <ClCompile Include="ISystemTypes.h" />
+    <ClCompile Include="UStatusComponent.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
     <ClCompile Include="EventManagerSystem.cpp" />
@@ -153,7 +157,6 @@
     <ClCompile Include="HealthPotion.cpp" />
     <ClCompile Include="GlobalEventManager.cpp" />
     <ClCompile Include="Inventory.cpp" />
-    <ClCompile Include="IEventTypes.cpp" />
     <ClCompile Include="InputManagerSystem.cpp" />
     <ClCompile Include="InputValidatorTypes.h" />
     <ClCompile Include="Invoker.cpp" />
@@ -170,6 +173,7 @@
     <ClCompile Include="StatComponent.cpp" />
     <ClCompile Include="StatsLoader.cpp" />
     <ClCompile Include="ShopSystem.cpp" />
+    <ClCompile Include="UTurnEventManager.cpp" />
     <ClCompile Include="UIEventManagerSystem.cpp" />
     <ClCompile Include="USkillComponent.cpp" />
   </ItemGroup>
@@ -182,18 +186,23 @@
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="GlobalEventManager.h" />
     <ClInclude Include="HealthPotion.h" />
+    <ClInclude Include="ICharacterEventTypes.h" />
+    <ClInclude Include="ICombatEventTypes.h" />
+    <ClInclude Include="IEventTypes.h" />
+    <ClInclude Include="IInputEventTypes.h" />
+    <ClInclude Include="IItemEventTypes.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="ISkillAction.h" />
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="StatType.h" />
+    <ClInclude Include="CharacterStatus.h" />
     <ClInclude Include="StrategyFactory.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameSystem.h" />
-    <ClInclude Include="GlobalEventManager.h" />
-    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />
@@ -204,16 +213,17 @@
     <ClInclude Include="StatsLoader.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="USkillComponent.h" />
+    <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json" />
     <None Include="ClassDiagram.cd" />
-    <ClInclude Include="GlobalEventManager.h" />
-    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="InputManagerSystem.h" />
     <ClInclude Include="Invoker.h" />
     <ClInclude Include="ShopSystem.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
+    <ClInclude Include="Status.h" />
+    <ClInclude Include="UStatusComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

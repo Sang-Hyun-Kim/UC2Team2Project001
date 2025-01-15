@@ -9,33 +9,33 @@ class IEvent;
 class GlobalEventManager
 {
 private:
-    GlobalEventManager();
-    ~GlobalEventManager();
+	GlobalEventManager();
+	~GlobalEventManager();
 
 public:
-    // 싱글톤 인스턴스 반환
-    static GlobalEventManager& Get()
-    {
-        static GlobalEventManager instance;
-        return instance;
-    }
+	static GlobalEventManager& Get()
+	{
+		static GlobalEventManager instance;
 
-    // 복사/대입 불가
-    GlobalEventManager(const GlobalEventManager&) = delete;
+		return instance;
+	}
 
-    GlobalEventManager& operator=(const GlobalEventManager&) = delete;
+	// 복사/대입 불가
+	GlobalEventManager(const GlobalEventManager&) = delete;
 
-    // 구독 등록
-    int Subscribe(const std::shared_ptr<IEventManagerSystem>& system);
+	GlobalEventManager& operator=(const GlobalEventManager&) = delete;
 
-    // 구독 해제
-    void Unsubscribe(int subscriptionId);
+	// 구독 등록
+	int Subscribe(const std::shared_ptr<IEventManagerSystem>& _system);
 
-    // 모든 구독자에게 이벤트 알림
-    void Notify(const std::shared_ptr<IEvent>& ev);
+	// 구독 해제
+	void Unsubscribe(int _subscriptionId);
+
+	// 모든 구독자에게 이벤트 알림
+	void Notify(std::shared_ptr<IEvent> _callEv);
 
 private:
-    int NextId = 1;
+	int NextId = 1;
 
-    std::vector<std::shared_ptr<IEventManagerSystem>> Listeners;
+	std::vector<std::shared_ptr<IEventManagerSystem>> _listeners;
 };

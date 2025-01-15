@@ -18,6 +18,9 @@
 #include "PlayerCharacter.h"
 #include "CombatComponent.h"
 #include "USkillComponent.h"
+#include "UTurnEventManager.h"
+#include "UStatusComponent.h"
+
 // 게임 시스템 코드가 돌아갈 main 함수
 
 using namespace std;
@@ -35,6 +38,9 @@ int main()
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	eventManager.Subscribe(UISystem);
 
+	auto TurnEventManager = std::make_shared<UTurnEventManager>();
+	eventManager.Subscribe(TurnEventManager);
+
 	//GSystemContext->currentSystem = GLobbySystem;
 
 
@@ -43,6 +49,56 @@ int main()
 	//	GSystemContext->currentSystem->Update(); // Update()로 변경해야함
 	//}
 
+
+#pragma region 캐릭터 테스트 예시 코드
+
+	Player* player = new Player("Player");
+	Monster* monster = new Monster(1);
+
+	//TurnEventManager->BeginTurn();
+
+	//player->StatusComponent->AddState(make_shared<BurnState>(3, 10));
+
+	player->Attack(monster);
+	monster->Attack(player);
+
+	//std::vector<Character*> battleCharacters;
+	//battleCharacters.push_back(player);
+	//battleCharacters.push_back(monster);
+
+	//TurnEventManager->EndTurn(battleCharacters);
+
+	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	//player->InventoryComponent->addItem(ItemManager::GetInstance().getRandomItem());
+	//player->InventoryComponent->addGold(50);
+
+	//inv.displayInventory();
+
+	//inv.useItem(0);
+	//inv.useItem(0);
+	//inv.useItem(0);
+	//inv.removeGold(10);
+
+	//player->InventoryComponent->displayInventory();
+	//player->UseItem(0, player);
+
+	
+	//BurnState burnState(3, 10); // 3턴 동안 매 턴 10 데미지
+
+	//while (!burnState.IsExpired())
+	//{
+	//	burnState.ApplyEffect(player);
+	//}
+
+	//while (!monster->StatManager->IsDead())
+	//{
+	//	GSystemContext->currentSystem->Update(); // Update()로 변경해야함
+	//}
+
+	delete player;
+	delete monster;
 
 #pragma region 스킬 사용 예제
 

@@ -69,7 +69,7 @@ void ShopSystem::BuyMenu()
 {
 	string title = "\n==== 아이템 구입 ====";
 
-	int itemSize = itemList.size();
+	int itemSize = (int)itemList.size();
 	vector<string> options(itemSize, "");
 	int index = 1;
 
