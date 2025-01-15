@@ -211,7 +211,6 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
-    <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="USkillComponent.h" />
     <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>
@@ -221,7 +220,6 @@
     <ClInclude Include="InputManagerSystem.h" />
     <ClInclude Include="Invoker.h" />
     <ClInclude Include="ShopSystem.h" />
-    <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="UStatusComponent.h" />
   </ItemGroup>

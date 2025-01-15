@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "StatComponent.h"
 #include "IStrategy.h"
-#include "IEventTypes.h"
+#include "ICharacterEventTypes.h"
 #include "GlobalEventManager.h"
 
 void CombatComponent::SetOwner(shared_ptr<Character> _owner)

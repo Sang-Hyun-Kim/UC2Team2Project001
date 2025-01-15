@@ -2,7 +2,7 @@
 #include "ISkillAction.h"
 #include "Character.h"
 #include "GlobalEventManager.h"
-#include "IEventTypes.h"
+#include "ICharacterEventTypes.h"
 #include "CombatComponent.h"
 
 void AttackAction::ExecuteAction(Character* _self, Character* _target)

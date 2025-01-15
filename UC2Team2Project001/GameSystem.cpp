@@ -133,9 +133,8 @@ void BattleSystem::Update()
 	}
 	else if (input == 2) // 스탯
 	{
-		CharacterUtility::PrintStatus(player.get());
 		cout << "스탯을 확인합니다" << endl;
-		player->StatManager.get()->PrintStatus();
+		CharacterUtility::PrintStatus(player.get());
 	}
 	else if (input == 3) // 아이템
 	{

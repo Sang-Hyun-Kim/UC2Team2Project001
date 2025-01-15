@@ -2,6 +2,7 @@
 #include "CharacterStatus.h"
 #include "Character.h"
 #include <iostream>
+#include "CombatComponent.h"
 
 void BurnState::ApplyEffect(Character* Target)
 {
@@ -10,6 +11,6 @@ void BurnState::ApplyEffect(Character* Target)
 	{
 		std::cout << Target->GetName() << "은(는) 불타고 있어 " << DamagePerTurn << "의 데미지를 받았습니다. " << "[남은 턴: " << GetDuration() << "]\n";
 
-		Target->TakeDamage(DamagePerTurn);
+		Target->combatManager->TakeDamage(DamagePerTurn);
 	}
 }

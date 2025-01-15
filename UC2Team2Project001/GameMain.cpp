@@ -52,15 +52,15 @@ int main()
 
 #pragma region 캐릭터 테스트 예시 코드
 
-	Player* player = new Player("Player");
-	Monster* monster = new Monster(1);
+	//Player* player = new Player("Player");
+	//Monster* monster = new Monster(1);
 
 	//TurnEventManager->BeginTurn();
 
 	//player->StatusComponent->AddState(make_shared<BurnState>(3, 10));
 
-	player->Attack(monster);
-	monster->Attack(player);
+	//player->combatManager->Attack();
+	//monster->combatManager->Attack();
 
 	//std::vector<Character*> battleCharacters;
 	//battleCharacters.push_back(player);
@@ -97,8 +97,8 @@ int main()
 	//	GSystemContext->currentSystem->Update(); // Update()로 변경해야함
 	//}
 
-	delete player;
-	delete monster;
+	//delete player;
+	//delete monster;
 
 #pragma region 스킬 사용 예제
 

@@ -24,7 +24,7 @@ Character::Character(const string& _name) : characterName(_name)
 {
 	ManagerRegister();
 
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
+	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
 	Initialize(LoadStatsData);
 }
 
@@ -59,55 +59,6 @@ void Character::Initialize(const StatsData& _stats)
 	// 전략 설정
 	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(_stats.AttackStrategyData));
 	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(_stats.DefenseStrategyData));
-}
-
-void Character::Attack(Character* Target)
-{
-	if (StatManager->IsDead())
-	{
-		return;
-	}
-
-	if (!Target)
-	{
-		std::cout << "타겟이 없습니다." << std::endl;
-		return;
-	}
-
-	if (!AttackStrategy)
-	{
-		std::cout << "공격 전략이 설정되지 않았습니다." << std::endl;
-		return;
-	}
-
-	// 공격 전략 실행
-	AttackStrategy->Attack(this, Target);
-}
-
-void Character::TakeDamage(int IncomingDamage)
-{
-	int finalDamage = IncomingDamage;
-
-	// 방어 전략 적용
-	if (DefenseStrategy)
-	{
-		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
-	}
-
-	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage, StatManager->GetStat(StatType::HP));
-	GlobalEventManager::Get().Notify(Event);
-
-	StatManager->ModifyStat(StatType::HP, (float) - finalDamage);
-}
-
-void Character::SetAttackStrategy(shared_ptr<IAttackStrategy> NewAttackStrategy)
-{
-	AttackStrategy = move(NewAttackStrategy);
-}
-
-void Character::SetDefenseStrategy(shared_ptr<IDefenseStrategy> NewDefenseStrategy)
-{
-	DefenseStrategy = move(NewDefenseStrategy);
 }
 
 void Character::UseItem(const string& ItemName)
