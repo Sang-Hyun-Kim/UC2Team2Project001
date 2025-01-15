@@ -3,8 +3,9 @@
 #include "Character.h"
 #include "StatComponent.h"
 #include <memory>
-#include "IEventTypes.h"
+
 #include "GlobalEventManager.h"
+#include "ICharacterEventTypes.h"
 
 using namespace std;
 

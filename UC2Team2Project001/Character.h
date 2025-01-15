@@ -5,11 +5,12 @@
 #include <algorithm>
 #include "CharacterTypes.h"
 
+struct StatsData;
+
 class IAttackStrategy;
 class IDefenseStrategy;
 class Item;
-
-struct StatsData;
+class UStatusComponent;
 
 using namespace std;
 
@@ -18,7 +19,7 @@ class UStatsComponent;
 
 using namespace std;
 
-class Character 
+class Character
 {
 
 public:
@@ -52,9 +53,9 @@ public:
 	const string& GetName() { return CharacterName; }
 
 public:
-
-	//스텟 컴포넌트
 	shared_ptr<UStatsComponent> StatManager;
+
+	shared_ptr<UStatusComponent> StatusComponent;
 
 protected:
 	// 공격/방어 전략
@@ -62,7 +63,7 @@ protected:
 	shared_ptr<IDefenseStrategy> DefenseStrategy;
 
 public:
-	
+
 	// 캐릭터 사망 보상
 	FCharacterReward CharacterReward;
 

@@ -4,16 +4,21 @@
 #include "IEventTypes.h"
 #include "GlobalEventManager.h"
 #include "StatComponent.h"
+#include "UStatusComponent.h"
 #include <memory>
 
 #include "StatsLoader.h"
 #include "StrategyFactory.h"
+#include "ICharacterEventTypes.h"
 
 
 Character::Character() : AttackStrategy(nullptr), DefenseStrategy(nullptr)
 {
 	StatManager = std::make_shared<UStatsComponent>(this);
 	StatManager.get()->BeginPlay();
+
+	// 상태 컴포넌트도 초기화
+	StatusComponent = std::make_shared<UStatusComponent>();
 
 	//StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
 	//Initialize(LoadStatsData);
@@ -23,6 +28,9 @@ Character::Character(const string& InName) : CharacterName(InName), AttackStrate
 {
 	StatManager = std::make_shared<UStatsComponent>(this);
 	StatManager.get()->BeginPlay();
+
+	// 상태 컴포넌트도 초기화
+	StatusComponent = std::make_shared<UStatusComponent>();
 
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
 	Initialize(LoadStatsData);
@@ -86,7 +94,6 @@ void Character::TakeDamage(int IncomingDamage)
 		finalDamage = DefenseStrategy->CalculateDamageReceived(this, IncomingDamage);
 	}
 
-	//콜백을 리워드 시스템에 연결
 	auto Event = make_shared<ICharacterDamagedEvent>(CharacterName, finalDamage, StatManager->GetStat(StatType::HP));
 	GlobalEventManager::Get().Notify(Event);
 

@@ -5,6 +5,9 @@
 #include "StatComponent.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
+#include "ISystemTypes.h"
+#include "ICombatEventTypes.h"
+#include "IItemEventTypes.h"
 shared_ptr<LobbySystem> GLobbySystem = make_shared<LobbySystem>();
 shared_ptr<BattleSystem> GBattleSystem = make_shared<BattleSystem>();
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
@@ -61,7 +64,8 @@ void BattleSystem::Update()
 			return;
 		}
 		else
-		{// 일반몬스터사망
+		{
+			// 일반몬스터사망
 			// 일반 몬스터 사망 UI 출력
 			// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
 			player->InventoryComponent->addGold(monster->CharacterReward.DropGold); // 돈 넣기
@@ -74,8 +78,9 @@ void BattleSystem::Update()
 			player->StatManager->ModifyStat(StatType::Experience, 50);
 			monster = nullptr;
 
-			auto battlestageclear = make_shared<IPlayerStageClearEvent>();
-			GlobalEventManager::Get().Notify(battlestageclear);
+			
+
+			cout << "몬스터 사망으로 스테이지 클리어" << endl;
 			int input = InputManagerSystem::GetInput<int>(
 				" 스테이지 클리어 메뉴",
 				{ "1. 다음 스테이지" , "2. 상점 방문하기"},
@@ -107,7 +112,7 @@ void BattleSystem::Update()
 	);
 	if (input == 1) // 공격
 	{
-		auto battleplayerattack = make_shared<IBattleAttackEvent>();
+		auto battleplayerattack = make_shared<IPlayerBattleAttackEvent>();
 		GlobalEventManager::Get().Notify(battleplayerattack);
 
 		player->Attack(monster.get());
@@ -126,8 +131,7 @@ void BattleSystem::Update()
 	}
 	else if (input == 2) // 스탯
 	{
-		auto battlestatCheck = make_shared<IBattleStatCheckEvent>();
-		GlobalEventManager::Get().Notify(battlestatCheck);
+		cout << "스탯을 확인합니다" << endl;
 		player->StatManager.get()->PrintStatus();
 	}
 	else if (input == 3) // 아이템

@@ -43,6 +43,9 @@
     <Filter Include="헤더 파일\JSONS">
       <UniqueIdentifier>{6ffeecce-19bd-48eb-a2f8-e56fddb61922}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\EventSystem\EventTypes">
+      <UniqueIdentifier>{52f5fb3d-9578-4956-a417-4e98e6e958a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -72,24 +75,6 @@
     <ClCompile Include="UIEventManagerSystem.cpp">
       <Filter>소스 파일\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="AttackBoostPotion.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsumableItem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthPotion.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Potion.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="StatComponent.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
     </ClCompile>
@@ -110,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="PlayerCharacter.cpp">
       <Filter>소스 파일\CharacterSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ICommand.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameState.cpp">
       <Filter>소스 파일</Filter>
@@ -141,36 +123,57 @@
     <ClCompile Include="CommandTypes.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="IEventTypes.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="InputManagerSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="InputValidatorTypes.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ShopSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Invoker.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Potion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterStatus.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthPotion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackBoostPotion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsumableItem.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UTurnEventManager.cpp">
+      <Filter>소스 파일\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UStatusComponent.cpp">
+      <Filter>소스 파일\CharacterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="IInputEventTypes.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ISystemTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="IEventTypes.h">
-      <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalEventManager.h">
-      <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
     <ClInclude Include="EventManagerSystem.h">
-      <Filter>헤더 파일\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
     <ClInclude Include="GameSystem.h">
@@ -185,32 +188,11 @@
     <ClInclude Include="StatComponent.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
-    <ClInclude Include="AttackBoostPotion.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsumableItem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthPotion.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Potion.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="StatsLoader.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
-	</ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>헤더 파일\GameSystem</Filter>
@@ -224,6 +206,75 @@
     <ClInclude Include="CharacterTypes.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterStatus.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackBoostPotion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsumableItem.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManagerSystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Potion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UTurnEventManager.h">
+      <Filter>헤더 파일\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UStatusComponent.h">
+      <Filter>헤더 파일\CharacterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthPotion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="ICharacterEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="IItemEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="ICombatEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="IInputEventTypes.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEventManagerSystem.h">
+      <Filter>헤더 파일\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalEventManager.h">
+      <Filter>헤더 파일\EventSystem\EventTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">
@@ -232,25 +283,10 @@
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UIEventManagerSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalEventManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IEventTypes.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManagerSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ShopSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Invoker.h">

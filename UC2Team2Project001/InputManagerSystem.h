@@ -2,8 +2,9 @@
 
 #include "pch.h"
 #include "InputValidatorTypes.h"
-#include "IEventTypes.h"
+
 #include "GlobalEventManager.h"
+#include "IInputEventTypes.h"
 
 class InputManagerSystem //선택지를 입력할 때 사용할 클래스
 {
