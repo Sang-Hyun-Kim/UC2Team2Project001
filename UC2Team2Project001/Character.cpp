@@ -14,7 +14,7 @@
 
 Character::Character()
 {
-	ManagerRegister();
+	//ManagerRegister();
 
 	//StatsData LoadStatsData = StatsLoader::LoadFromJSON(CharacterName);
 	//Initialize(LoadStatsData);
@@ -31,6 +31,7 @@ void Character::ManagerRegister()
 
 	combatManager = make_shared<CombatComponent>();
 	combatManager->SetOwner(this);
+
 	skillManager = make_shared<USkillComponent>();
 	StatusComponent = make_shared<UStatusComponent>(this);
 
@@ -42,6 +43,7 @@ void Character::Initialize()
 	ManagerRegister();
 
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
+
 	// 스탯 설정
 	statManager->SetStat(StatType::HP, LoadStatsData.HP);
 	statManager->SetStat(StatType::MaxHP, LoadStatsData.MaxHP);

@@ -11,9 +11,7 @@ private:
 
 	void SetMonsterStat(int PlayerLevel);
 
-	
-
-	int blanceLevel = 4;
+	int blanceLevel = 8;
 
 	void SetBlance(Character* Player);
 public:
