@@ -21,6 +21,10 @@
 #include "UTurnEventManager.h"
 #include "UStatusComponent.h"
 #include "LifeStealAttack.h"
+#include "BashAttack.h"
+#include "ShieldAttack.h"
+#include "MentalDiscipline.h"
+#include "OnePointAttack.h"
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
@@ -110,15 +114,20 @@ int main()
 	monster->Initialize();
 	monster->combatManager->SetTarget(player.get());
 
-	shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
-	monster->skillManager->AddSkill(newLifeStealAttack);
-	
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "흡혈 공격");
+	//shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
+	//monster->skillManager->AddSkill(newLifeStealAttack);
+	//
+	//monster->skillManager->UseSkill(SkillType::ACTIVE, "흡혈 공격");
+
+	TurnEventManager->BeginTurn();
+
+	player->combatManager->SetTarget(monster.get());
+	shared_ptr<MentalDiscipline> skill = make_shared<MentalDiscipline>(player.get());
+	player->skillManager->AddSkill(skill);
+
+	player->skillManager->UseSkill(SkillType::ACTIVE, "정신 수양");
+	vector<Character*> tmp = { player.get(), monster.get() };
+	TurnEventManager->EndTurn(tmp);
 
 #pragma endregion
-
-	//몬스터가 소멸되고 -> 몬스터가 스텟매니저 스킬매니저
-
-	
-	
 }

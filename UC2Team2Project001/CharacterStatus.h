@@ -41,6 +41,11 @@ public:
 		return Duration <= 0;
 	}
 
+	// 버프 삭제 전 기능
+	virtual void EffectBeforeRemove()
+	{
+	};
+
 	// 상태 이름 Get
 	virtual const std::string& GetStateName() const
 	{
@@ -83,4 +88,40 @@ public:
 
 private:
 	int DamagePerTurn;
+};
+
+// 방어력 증감 상태
+class ModifyDefenseState : public ICharacterState
+{
+public:
+	float modifyValue;
+	bool isApplied = false;
+	Character* target = nullptr;
+	ModifyDefenseState(int _inDuration, float _increaseValue) : ICharacterState("IncreaseDefense", _inDuration), modifyValue(_increaseValue)
+	{
+	};
+
+	virtual ~ModifyDefenseState() = default;
+
+	// 상태 효과 적용
+	void ApplyEffect(Character* _target) override;
+
+	// 버프 삭제 전 기능
+	virtual void EffectBeforeRemove() override;
+};
+
+// 기절
+class StunState : public ICharacterState
+{
+public:
+	StunState(int _inDuration) : ICharacterState("Stun", _inDuration)
+	{
+	};
+
+	virtual ~StunState() = default;
+
+	// 상태 효과 적용
+	void ApplyEffect(Character* _target) override
+	{
+	};
 };

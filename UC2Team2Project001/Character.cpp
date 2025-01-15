@@ -30,11 +30,9 @@ void Character::ManagerRegister()
 	statManager = std::make_shared<UStatsComponent>(this);
 	statManager.get()->BeginPlay();
 	combatManager = make_shared<CombatComponent>();
-
-	
-
 	combatManager->SetOwner(this);
 	skillManager = make_shared<USkillComponent>();
+	StatusComponent = make_shared<UStatusComponent>(this);
 }
 
 void Character::Initialize()

@@ -34,7 +34,7 @@ public:
 	void RemoveSkill(SkillType _skillType, string _skillName);
 
 	// 스킬 사용
-	void UseSkill(SkillType _skillType, string _skillName);
+	bool UseSkill(SkillType _skillType, string _skillName);
 
 	// 스킬 재사용 대기시간 설정
 	void SetSkillCooldown(SkillType _skillType, string _skillName, int cooldown);

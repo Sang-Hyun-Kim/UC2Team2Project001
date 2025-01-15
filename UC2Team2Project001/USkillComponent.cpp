@@ -39,17 +39,19 @@ void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
     skillList.erase(_skillName);
 }
 
-void USkillComponent::UseSkill(SkillType _skillType, string _skillName)
+bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 {
     auto skillList = ChooseSkillList(_skillType);
 
     if (skillList.count(_skillName))
     {
         skillList[_skillName]->UseSkill();
+        return true;
     }
     else
     {
         cout << _skillName <<"스킬이 없습니다" << endl;
+        return false;
     }
     
 }

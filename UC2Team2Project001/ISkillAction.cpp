@@ -8,18 +8,12 @@
 
 void AttackAction::ExecuteAction()
 {
-	Character* self = parentSkill->GetSkillData().owner;
-	Character* target = parentSkill->GetTarget();
+    Character* self = parentSkill->GetSkillData().owner;
 
-	// 치명타 확률 계산
-	int CriticalChance = (int)(CharacterUtility::GetStat(self, StatType::CriticalChance) * 100);
-	bool IsCritical = (rand() % 100) <= CriticalChance;
+    Character* target = parentSkill->GetTarget();
 
-	int BaseDamage = (int)CharacterUtility::GetStat(self, StatType::AttackPower);
-	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
+    auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), attackDamage);
+    GlobalEventManager::Get().Notify(Event);
 
-	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), FianlDamage);
-	GlobalEventManager::Get().Notify(Event);
-
-	target->combatManager->TakeDamage(FianlDamage);
+    target->combatManager->TakeDamage(attackDamage);
 }

@@ -3,6 +3,7 @@
 #include "Character.h"
 #include <iostream>
 #include "CombatComponent.h"
+#include "UStatusComponent.h"
 
 void BurnState::ApplyEffect(Character* Target)
 {
@@ -13,4 +14,21 @@ void BurnState::ApplyEffect(Character* Target)
 
 		Target->combatManager->TakeDamage(DamagePerTurn);
 	}
+}
+
+void ModifyDefenseState::ApplyEffect(Character* _target)
+{
+	if (!isApplied)
+	{
+		target = _target;
+		CharacterUtility::ModifyStat(_target, StatType::Defense, modifyValue);
+		isApplied = true;
+
+		cout << "방어력 증감 효과 발동" << endl;
+	}
+}
+
+void ModifyDefenseState::EffectBeforeRemove()
+{
+	CharacterUtility::ModifyStat(target, StatType::Defense, -modifyValue);
 }

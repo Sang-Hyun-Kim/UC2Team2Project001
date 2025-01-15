@@ -7,26 +7,38 @@ class Skill;
 class ISkillAction
 {
 public:
-	virtual ~ISkillAction() = default;
+    ISkillAction()
+    {
 
-	virtual void ExecuteAction() = 0;
+    }
 
-	void SetSkill(Skill* _skill)
-	{
-		parentSkill = _skill;
-	}
+    virtual ~ISkillAction() = default;
+
+    virtual void ExecuteAction() = 0;
+
+    void SetSkill(Skill* _skill)
+    {
+        parentSkill = _skill;
+    }
 
 public:
-	Skill* parentSkill;
+    Skill* parentSkill;
 };
 
 class AttackAction : public ISkillAction
 {
 public:
-	virtual void ExecuteAction() override;
+    AttackAction()
+    {
+    };
 
-	~AttackAction() = default;
+    AttackAction(float _attackDamage)
+    {
+        attackDamage = _attackDamage;
+    }
+    ~AttackAction() = default;
+
+    virtual void ExecuteAction() override;
+
+    float attackDamage = 0;
 };
-
-// 럭키스트라이크
-// 불사자

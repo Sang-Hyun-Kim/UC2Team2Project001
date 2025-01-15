@@ -1,21 +1,22 @@
 #pragma once
 
 class Character;
-
 class Skill;
+class ICharacterState;
 
 enum class StatType;
 
 class ISkillEffect
 {
 public:
-	Skill* skill;
+	Skill* parentSkill;
+	vector<shared_ptr<ICharacterState>> states; //상태
 public:
 	virtual ~ISkillEffect() = default;
 
 	void SetSkill(Skill* _skill)
 	{
-		skill = _skill;
+		parentSkill = _skill;
 	}
 
 	virtual void PreEffect() = 0;
@@ -43,12 +44,42 @@ public:
 class IBuffEffect : public ISkillEffect
 {
 public:
-	StatType type;
-	float modifyValue;
+	shared_ptr<ICharacterState> state;
+	IBuffEffect(shared_ptr<ICharacterState> _state);
 
-	IBuffEffect(StatType _type, float _modifyValue) : type(_type), modifyValue(_modifyValue)
+	virtual void PreEffect()
 	{
 	};
+	virtual void PostEffect() override;
+};
+
+// 방어력 기반 피해 효과
+class IDefenseBasedDamageEffect : public ISkillEffect
+{
+public:
+	virtual void PreEffect()
+	{
+	};
+	virtual void PostEffect() override;
+};
+
+// 일점 돌파 추가 효과
+class IOnePointAttackEffect : public ISkillEffect
+{
+public:
+	virtual void PreEffect()
+	{
+	};
+	virtual void PostEffect() override;
+};
+
+// 기절 효과
+class IStunEffect : public ISkillEffect
+{
+public:
+	shared_ptr<ICharacterState> stunState;
+
+	IStunEffect(int _duration);
 
 	virtual void PreEffect()
 	{

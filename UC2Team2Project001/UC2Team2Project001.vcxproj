@@ -135,14 +135,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackBoostPotion.cpp" />
+    <ClCompile Include="BashAttack.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterTypes.cpp" />
     <ClCompile Include="CharacterUtility.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="ISkillAction.cpp" />
+    <ClCompile Include="ISkillCondition.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
     <ClCompile Include="LifeStealAttack.cpp" />
+    <ClCompile Include="MentalDiscipline.cpp" />
+    <ClCompile Include="OnePointAttack.cpp" />
+    <ClCompile Include="ShieldAttack.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="StatType.cpp" />
     <ClCompile Include="CharacterStatus.cpp" />
@@ -180,13 +185,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
+    <ClInclude Include="BashAttack.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
     <ClInclude Include="CharacterUtility.h" />
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="EventManagerSystem.h" />
-    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="GlobalEventManager.h" />
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="ICharacterEventTypes.h" />
@@ -196,15 +201,18 @@
     <ClInclude Include="IItemEventTypes.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="ISkillAction.h" />
+    <ClInclude Include="ISkillCondition.h" />
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="LifeStealAttack.h" />
+    <ClInclude Include="MentalDiscipline.h" />
+    <ClInclude Include="OnePointAttack.h" />
+    <ClInclude Include="ShieldAttack.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="CharacterStatus.h" />
     <ClInclude Include="StrategyFactory.h" />
     <ClInclude Include="GameState.h" />
-    <ClInclude Include="GameSystem.h" />
     <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />

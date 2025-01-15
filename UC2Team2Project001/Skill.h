@@ -7,19 +7,21 @@ using namespace std;
 
 class Character;
 class ICharacterState;
+class ISkillCondition;
 
 struct FSkillData
 {
-	string skillName =""; //스킬이름
-	int mpCost =0; //스킬에 사용되는 코스트
-	int maxCooldown =99; //스킬 쿨다운
-	int currentCooldown =0; //현재 스킬쿨다운
+	string skillName = ""; //스킬이름
+	int mpCost = 0; //스킬에 사용되는 코스트
+	int maxCooldown = 99; //스킬 쿨다운
+	int currentCooldown = 0; //현재 스킬쿨다운
 
 	shared_ptr<ISkillAction> action; //액션
 	vector<shared_ptr<ISkillEffect>> effects; //효과가 여러개일수도있으니
-	
-	Character* owner;//이 스킬을 소유한 캐릭터오너 //ToDO: 원시 or 위크드
-	vector<shared_ptr<ICharacterState>> state; //상태
+
+	Character* owner = nullptr;
+
+	vector<shared_ptr<ISkillCondition>> conditions; // 스킬 조건 리스트
 
 	FSkillData() = default;
 
@@ -27,7 +29,7 @@ struct FSkillData
 		: skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
 	{
 	}
-	FSkillData(Character* _owner,const string& skillName, int mpCost, int maxCooldown)
+	FSkillData(Character* _owner, const string& skillName, int mpCost, int maxCooldown)
 		: owner(_owner), skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
 	{
 	}
@@ -51,37 +53,35 @@ public:
 	{
 	};
 
-	Skill(Character* _owner) 
+	Skill(Character* _owner)
 	{
 		skillData.owner = _owner;
 	};
+
+	virtual bool CanUseSkill();
 
 	~Skill() = default;
 
 	template<typename T>
 	void SkillInit()
 	{
-		skillData.action.get()->SetSkill(this);
+		if (skillData.action != nullptr)
+		{
+			skillData.action.get()->SetSkill(this);
+		}
+
 		for (auto effect : skillData.effects)
 		{
 			effect.get()->SetSkill(this);
 		}
 	}
 
-	bool IsCoolDown()
-	{
-		return true;
-	}
-
-	virtual void UseSkill() = 0;
-
+	virtual bool UseSkill();
 
 	virtual FSkillData GetSkillData()
 	{
 		return skillData;
 	}
-
-	//virtual vector<Character> GetSearchFindTarget();
 
 	virtual Character* GetTarget();
 
@@ -106,8 +106,6 @@ public:
 	};
 
 	~ActiveSkill() = default;
-
-	virtual void UseSkill() override;
 };
 
 class PassiveSkill : public Skill
@@ -129,6 +127,4 @@ public:
 	};
 
 	~PassiveSkill() = default;
-
-	virtual void UseSkill() override;
 };

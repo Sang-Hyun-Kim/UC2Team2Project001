@@ -1,25 +1,19 @@
 #include "pch.h"
 #include "LifeStealAttack.h"
-
-//LifeStealAttack::LifeStealAttack()
-//{
-//	shared_ptr<ISkillAction> action = make_shared<AttackAction>();
-//	shared_ptr<ISkillEffect> effect = make_shared<ILifeStealEffect>(10);
-//	FSkillData skillData("기본 스킬", 10, 3, action, { effect }, combatManager->GetOwner(), combatManager->GetTarget());
-//}
+#include "ISkillCondition.h"
 
 LifeStealAttack::LifeStealAttack(Character* _owner) : ActiveSkill(_owner)
 {
-	
-	
-	skillData= FSkillData(_owner,"흡혈 공격", 10, 3);
-	
+	skillData = FSkillData(_owner,"흡혈 공격", 10, 3);
 
-	skillData.action = make_shared<AttackAction>();
+	skillData.action = make_shared<AttackAction>(CharacterUtility::GetStat(_owner, StatType::AttackPower));
 
 	shared_ptr<ISkillEffect> lifeEffect = make_shared<ILifeStealEffect>(10);
 	skillData.effects.push_back(lifeEffect);
 
+	skillData.conditions.push_back(make_shared<AliveCondition>());
+	skillData.conditions.push_back(make_shared<CooldownCondition>());
+	skillData.conditions.push_back(make_shared<ManaCondition>());
 
-	SkillInit<Skill>(); //여기 다음에 갑자기 캐릭터소멸자 호출? //왜 ?
+	SkillInit<Skill>();
 }

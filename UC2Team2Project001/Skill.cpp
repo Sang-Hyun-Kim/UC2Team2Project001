@@ -2,55 +2,47 @@
 #include "Skill.h"
 #include "Character.h"
 #include "CombatComponent.h"
+#include "ISkillCondition.h"
 
-void ActiveSkill::UseSkill()
+
+bool Skill::CanUseSkill()
 {
-	if (!skillData.owner)
-	{
-		return;
-	}
-
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PreEffect();
-	}
-
-	skillData.action->ExecuteAction();
-
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PostEffect();
-	}
-
-	//self->SetCoolDown(); 스킬 쿨다운 적용
-	//self->SetModify();
-
-	cout << "액티브 스킬 사용 완료" << endl;
+    for (const auto& condition : skillData.conditions)
+    {
+        if (!condition->Check(this))
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
-void PassiveSkill::UseSkill()
+bool Skill::UseSkill()
 {
-	if (!skillData.owner)
-	{
-		return;
-	}
+    if (!CanUseSkill())
+    {
+        cout << "스킬을 사용할 수 없습니다: " << skillData.skillName << endl;
+        return false;
+    }
 
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PreEffect();
-	}
+    for (auto& effect : skillData.effects)
+    {
+        effect->PreEffect();
+    }
+    if (skillData.action)
+    {
+        skillData.action->ExecuteAction();
+    }
+    for (auto& effect : skillData.effects)
+    {
+        effect->PostEffect();
+    }
 
-	skillData.action->ExecuteAction();
-
-	for (auto effect : skillData.effects)
-	{
-		effect.get()->PostEffect();
-	}
-
-	std::cout << "패시브 발동" << std::endl;
+    skillData.currentCooldown = skillData.maxCooldown;
+    return true;
 }
 
 Character* Skill::GetTarget()
 {
-	return skillData.owner->combatManager->GetTarget();
+    return skillData.owner->combatManager->GetTarget();
 }
