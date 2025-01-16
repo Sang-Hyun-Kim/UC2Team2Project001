@@ -18,6 +18,7 @@
 #include "Sanctification.h"
 #include "PoisonedBlade.h"
 #include "PoisonFog.h"
+#include "MentalDiscipline.h"
 
 Character::Character()
 {
@@ -47,7 +48,8 @@ void Character::Initialize()
 	GlobalEventManager::Get().Subscribe(skillManager);
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonFog), this);
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(MentalDiscipline), this);
 }
 
 void Character::UseItem(const string& ItemName)

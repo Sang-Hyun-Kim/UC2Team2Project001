@@ -24,14 +24,18 @@ IBuffEffect::IBuffEffect(shared_ptr<ICharacterState> _state, bool _isSelf)
 
 void IBuffEffect::PostEffect()
 {
+	Character* target;
 	if (isSelf)
 	{
-		parentSkill->GetSkillData().owner->statusManager->AddState(state);
+		target = parentSkill->GetSkillData().owner;
 	}
 	else
 	{
-		parentSkill->GetTarget()->statusManager->AddState(state);
+		target = parentSkill->GetTarget();
 	}
+
+	target->statusManager->AddState(state);
+	state->ApplyEffect(target);
 }
 
 void IDefenseBasedDamageEffect::PostEffect()

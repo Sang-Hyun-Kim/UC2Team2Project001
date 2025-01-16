@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "ConsoleColorManager.h"
+#include "PlayerCharacter.h"
 
 
 void ICharacterState::TickDuration()
@@ -168,7 +169,7 @@ void CursedSealState::TickDuration()
 	ICharacterState::TickDuration(); // 부모 클래스의 지속 시간 감소 로직 호출
 }
 
-SanctificationState::SanctificationState(int _duration, float _increasValue): ICharacterState("신성화 상태", _duration), increasValue(_increasValue), target(nullptr), isApplied(false)
+SanctificationState::SanctificationState(int _duration, float _increasValue): ICharacterState("신성화", _duration), increasValue(_increasValue), target(nullptr), isApplied(false)
 {
 }
 
@@ -177,9 +178,26 @@ void SanctificationState::ApplyEffect(Character* _target)
 	if (!isApplied)
 	{
 		target = _target;
+
+		if (dynamic_cast<Player*>(target))
+		{
+			cout << target->GetName() << "이(가) 신성화를 사용 했습니다." << endl;
+		}
+
+		float beforeAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
+		float beforeDefense = CharacterUtility::GetStat(target, StatType::Defense);
+		float beforeEvasionRate = CharacterUtility::GetStat(target, StatType::EvasionRate);
+
 		CharacterUtility::ModifyStat(target, StatType::AttackPower, increasValue);
 		CharacterUtility::ModifyStat(target, StatType::Defense, increasValue);
 		CharacterUtility::ModifyStat(target, StatType::EvasionRate, increasValue / 100);
+
+		cout << endl;
+
+		cout << target->GetName() << "의 공격력 : " << beforeAttackPower << " ->" << CharacterUtility::GetStat(target, StatType::AttackPower) << endl;
+		cout << target->GetName() << "의 방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
+		cout << target->GetName() << "의 회피력 : " << beforeEvasionRate << " ->" << CharacterUtility::GetStat(target, StatType::EvasionRate) << endl;
+
 		isApplied = true;
 	}
 }
@@ -188,9 +206,18 @@ void SanctificationState::EffectBeforeRemove()
 {
 	if (isApplied && target)
 	{
+		float beforeAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
+		float beforeDefense = CharacterUtility::GetStat(target, StatType::Defense);
+		float beforeEvasionRate = CharacterUtility::GetStat(target, StatType::EvasionRate);
+
 		CharacterUtility::ModifyStat(target, StatType::AttackPower, -increasValue);
 		CharacterUtility::ModifyStat(target, StatType::Defense, -increasValue);
 		CharacterUtility::ModifyStat(target, StatType::EvasionRate, -(increasValue / 100));
+
+		cout << target->GetName() << "의 공격력 : " << beforeAttackPower << " ->" << CharacterUtility::GetStat(target, StatType::AttackPower) << endl;
+		cout << target->GetName() << "의 방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
+		cout << target->GetName() << "의 회피력 : " << beforeEvasionRate << " ->" << CharacterUtility::GetStat(target, StatType::EvasionRate) << endl;
+
 		isApplied = false;
 	}
 }
