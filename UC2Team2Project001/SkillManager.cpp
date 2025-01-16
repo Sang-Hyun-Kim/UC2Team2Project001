@@ -247,11 +247,9 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	if (!newSkill)
 	{
-		ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 		cerr << "스킬 생성에 실패했습니다. 스킬이 유효하지 않습니다." << endl;
 	}
 
-	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 
 	if (auto player = dynamic_cast<Player*>(_owner))
 	{

@@ -73,6 +73,12 @@
     <Filter Include="헤더 파일\SkillSystem\SkillEffect">
       <UniqueIdentifier>{305938c4-cc75-4241-bd1e-c1ec272171bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\WindowsDisplay">
+      <UniqueIdentifier>{14e6b749-26da-4b85-96ac-85105f8569ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\WindowDisplay">
+      <UniqueIdentifier>{7837a342-da14-44ba-b552-49f739d75a51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -295,7 +301,10 @@
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleColorManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\WindowDisplay</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleLayout.cpp">
+      <Filter>소스 파일\WindowDisplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -518,11 +527,14 @@
     <ClInclude Include="BattleSystemStates.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
-	  <ClInclude Include="Unbreakable.h">
-		  <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
-	  </ClInclude>
+    <ClInclude Include="Unbreakable.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleLayout.h">
+      <Filter>헤더 파일\WindowsDisplay</Filter>
+    </ClInclude>
     <ClInclude Include="ConsoleColorManager.h">
-      <Filter>헤더 파일\GameSystem</Filter>
+      <Filter>헤더 파일\WindowsDisplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

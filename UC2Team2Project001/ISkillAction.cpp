@@ -8,7 +8,7 @@
 #include "UStatusComponent.h"
 #include "StatComponent.h"
 #include "IStrategy.h"
-#include "ConsoleColorManager.h"
+
 
 
 void NormalAttackAction::ExecuteAction()

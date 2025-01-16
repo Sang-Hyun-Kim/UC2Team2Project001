@@ -143,6 +143,7 @@
     <ClCompile Include="CharacterUtility.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="ConsoleColorManager.cpp" />
+    <ClCompile Include="ConsoleLayout.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="CursedSeal.cpp" />
     <ClCompile Include="ISkillAction.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="CharacterUtility.h" />
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConsoleColorManager.h" />
+    <ClInclude Include="ConsoleLayout.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="CursedSeal.h" />
     <ClInclude Include="EventManagerSystem.h" />
