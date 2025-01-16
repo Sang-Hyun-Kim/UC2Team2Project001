@@ -60,23 +60,20 @@ void IOnePointAttackEffect::PostEffect()
 
 IStunEffect::IStunEffect(int _duration)
 {
-	states.push_back(make_shared<StunState>(_duration));
+	duration = _duration;
 }
 
 void IStunEffect::PostEffect()
 {
 	Character* target = parentSkill->GetTarget();
 
-	for (auto state : states)
-	{
-		target->statusManager->AddState(state);
-	}
+	target->statusManager->AddState(make_shared<StunState>(duration));
 	cout << "기절 상태 적용! " << target->GetName() << "이(가) 기절 했습니다." << endl;
 }
 
 IPoisonEffect::IPoisonEffect(int _amountStack)
 {
-	states.push_back(make_shared<PoisonState>(2, 5, _amountStack));
+	amountStack = _amountStack;
 }
 
 void IPoisonEffect::PostEffect()
@@ -84,10 +81,7 @@ void IPoisonEffect::PostEffect()
 	const auto& skillData = parentSkill->GetSkillData();
 	Character* target = parentSkill->GetTarget();
 
-	for (auto state : states)
-	{
-		target->statusManager->AddState(state);
-	}
+	target->statusManager->AddState(make_shared<PoisonState>(2, 5, amountStack));
 }
 
 void IRemoveStateEffect::PostEffect()
@@ -122,17 +116,13 @@ void IHealingEffect::PreEffect()
 
 IUnbreakableEffect::IUnbreakableEffect()
 {
-	states.push_back(make_shared<UnbreakableState>(4));
 }
 
 void IUnbreakableEffect::PostEffect()
 {
 	Character* target = parentSkill->GetSkillData().owner;
 
-	for (auto state : states)
-	{
-		target->statusManager->AddState(state);
-	}
+	target->statusManager->AddState(make_shared<UnbreakableState>(4));
 }
 
 void LuckyRewardEffect::PostEffect()

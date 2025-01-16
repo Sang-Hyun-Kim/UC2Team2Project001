@@ -19,7 +19,8 @@ void NormalAttackAction::ExecuteAction()
 
 	if (CharacterUtility::IsDead(self))
 	{
-		std::cout << "Self 캐릭터가 죽어서 액션을 사용할 수 없습니다" << std::endl;
+		// 디버그용 로그
+		//std::cout << "Self 캐릭터가 죽어서 액션을 사용할 수 없습니다" << std::endl;
 		return;
 	}
 

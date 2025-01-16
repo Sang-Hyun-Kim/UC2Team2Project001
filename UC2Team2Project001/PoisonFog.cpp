@@ -11,7 +11,7 @@ PoisonFog::PoisonFog(Character* _owner) :ActiveSkill(_owner)
 
 	skillData.action = make_shared<PoisonPogAction>();
 
-	shared_ptr<ISkillEffect> poisonEffect = make_shared<IPoisonEffect>();
+	shared_ptr<ISkillEffect> poisonEffect = make_shared<IPoisonEffect>(2);
 	skillData.effects.push_back(poisonEffect);
 
 	skillData.conditions.push_back(make_shared<CooldownCondition>());

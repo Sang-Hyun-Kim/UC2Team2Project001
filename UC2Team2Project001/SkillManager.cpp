@@ -19,6 +19,7 @@
 #include "CursedSeal.h"
 #include "BasicAttack.h" 
 #include "ConsoleColorManager.h"
+#include "PlayerCharacter.h"
 
 SkillManager::SkillManager()
 {
@@ -252,7 +253,10 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 
-	std::cout << _owner->GetName() <<" 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
+	if (auto player = dynamic_cast<Player*>(_owner))
+	{
+		std::cout << _owner->GetName() << " 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
+	}
 	
 	_owner->skillManager->AddSkill(newSkill);
 }

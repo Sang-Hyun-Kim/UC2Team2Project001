@@ -94,6 +94,8 @@ public:
 	{
 	}
 	virtual void PostEffect() override;
+
+	int duration;
 };
 
 
@@ -101,7 +103,7 @@ public:
 class IPoisonEffect : public ISkillEffect
 {
 public:
-	IPoisonEffect(int amountStack = 0);
+	IPoisonEffect(int _amountStack = 0);
 
 	virtual void PreEffect()
 	{
@@ -109,7 +111,7 @@ public:
 
 	virtual void PostEffect() override;
 
-
+	int amountStack = 0;
 };
 
 
