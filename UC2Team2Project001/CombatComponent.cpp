@@ -7,6 +7,7 @@
 #include "GlobalEventManager.h"
 #include "StatsLoader.h"
 #include "StrategyFactory.h"
+#include "ConsoleColorManager.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -50,6 +51,7 @@ void UCombatComponent::TakeDamage(int _incomingDamage)
 	GlobalEventManager::Get().Notify(Event);
 
 	CharacterUtility::ModifyStat(owner, StatType::HP, (float)-finalDamage);
+	ConsoleColorManager::GetInstance().SetDefaultColor();
 }
 
 void UCombatComponent::SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy)

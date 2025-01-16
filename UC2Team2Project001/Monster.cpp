@@ -54,6 +54,7 @@ void Monster::Initialize()
 	CreateCharacterReward();
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
+
 }
 
 void Monster::SetBlance(Character* _player)
@@ -68,7 +69,8 @@ std::string Monster::DetermineMonsterName(int _playerLevel)
 
 	if (_playerLevel <= 3) 
 	{
-		possibleNames = { "Slime", "Goblin" ,"RedSlime"};
+		possibleNames = { "Slime"};
+		//possibleNames = { "Slime", "Goblin" ,"RedSlime"};
 	}
 	else if (_playerLevel <= 5) 
 	{
@@ -101,11 +103,12 @@ void Monster::AdjustStatsForLevel(const StatsData& baseStats, int playerLevel)
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> variation(-0.25, 0.25); // ±25% 변동
 
-	float hp = baseStats.HP * levelMultiplier * (1.0f + variation(gen));
-	float mp = baseStats.MP * levelMultiplier * (1.0f + variation(gen));
-	float attackPower = baseStats.AttackPower * levelMultiplier * (1.0f + variation(gen));
-	float defense = baseStats.Defense * levelMultiplier * (1.0f + variation(gen));
+	float hp = std::round(baseStats.HP * levelMultiplier * (1.0f + variation(gen)));
+	float mp = std::round(baseStats.MP * levelMultiplier * (1.0f + variation(gen)));
+	float attackPower = std::round(baseStats.AttackPower * levelMultiplier * (1.0f + variation(gen)));
+	float defense = std::round(baseStats.Defense * levelMultiplier * (1.0f + variation(gen)));
 	float criticalChance = baseStats.CriticalChance * (1.0f + variation(gen));
+	float evasionRate = baseStats.EvasionRate * (1.0f + variation(gen));
 
 	// 스탯 설정
 	statManager->SetStat(StatType::HP, hp);

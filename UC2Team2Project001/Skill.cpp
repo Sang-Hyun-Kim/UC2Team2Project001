@@ -42,7 +42,7 @@ bool Skill::UseSkill()
 
 	Character* Owner  =  skillData.owner;
 	
-	CharacterUtility::ModifyStat(Owner, StatType::MP, GetSkillData().mpCost);
+	CharacterUtility::ModifyStat(Owner, StatType::MP, -GetSkillData().mpCost);
 
 	for (auto& effect : skillData.effects)
 	{

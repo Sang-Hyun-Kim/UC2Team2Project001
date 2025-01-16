@@ -13,10 +13,19 @@
 #include "Sanctification.h"
 #include "USkillComponent.h"
 #include "BasicAttack.h"
+#include "PoisonedBlade.h"
+#include "PoisonFog.h"
 
 
+
+// 실행 모드를 설정합니다.
+// GAME_MODE = 1 : 메인 게임 루프 실행
+// GAME_MODE = 0 : 디버그 테스트 실행
+#define GAME_MODE 0
 
 // 게임 시스템 코드가 돌아갈 main 함수
+
+
 
 
 
@@ -38,10 +47,61 @@ int main()
 	eventManager.Subscribe(UISystem);
 	eventManager.Subscribe(TurnEventManager);
 
+#if GAME_MODE == 1
+
 	while (true)
 	{
 		GSystemContext->Update(); // Update()로 변경해야함
 	}
+
+
+#elif GAME_MODE == 0
+	shared_ptr<Player> player = make_shared<Player>("Player");
+	player->Initialize();
+
+	shared_ptr<Monster> monster = make_shared<Monster>();
+	monster->Initialize();
+
+	//타겟 설정합니다
+	monster->combatManager->SetTarget(player.get());
+	player->combatManager->SetTarget(monster.get());
+
+	std::vector<Character*> battleCharacters;
+	battleCharacters.push_back(player.get());
+	battleCharacters.push_back(monster.get());
+
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), player.get());
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), player.get());
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonedBlade), player.get());
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonFog), player.get());
+
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), monster.get());
+
+	ConsoleColorManager::GetInstance().SetDefaultColor();
+
+	TurnEventManager->BeginTurn();
+
+
+	//player->combatManager->Attack();
+	//monster->combatManager->Attack();
+
+	//player->skillManager->UseSkill(SkillType::ACTIVE, "신성화");
+	//player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
+	player->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
+	player->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
+
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
+	
+	
+	TurnEventManager->EndTurn(battleCharacters);
+
+	CharacterUtility::PrintStatus(player.get());
+	CharacterUtility::PrintStatus(monster.get());
+
+#endif // !DEBUG_TEST
+
 
 
 #pragma region 스킬 매니저 테스트 코드
@@ -218,8 +278,6 @@ int main()
 	//
 	////auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
 	////eventManager.Notify(playerAttackEvent);
-
-	
 	
 
 #pragma endregion

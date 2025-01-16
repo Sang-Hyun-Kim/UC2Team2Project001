@@ -23,6 +23,13 @@ using namespace std;
 #include <chrono>
 #include <thread>
 
+
+// 디버그용 매크로 정의
+#define DEBUG_COUT(msg) \
+    std::cout << "[DEBUG] File: " << __FILE__ << ", Line: " << __LINE__ << ", Function: " << __FUNCTION__ << " -> " << msg << std::endl;
+
+
+
 #define CLEAR system("cls");  //콘솔창 클리어 함수
 
 static void Delay(int _sec, int _milliSec = 0)
