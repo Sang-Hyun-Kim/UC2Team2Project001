@@ -14,6 +14,8 @@
 #include "LifeStealAttack.h"
 #include "GameSystem.h"
 #include "PlayerCharacter.h"
+#include "BasicAttack.h"
+#include "SkillManager.h"
 
 Monster::Monster()
 {
@@ -48,6 +50,8 @@ void Monster::SetMonsterStat(int PlayerLevel)
 
 	statManager.get()->BeginPlay();
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
 
 	// 전략 설정
 	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));

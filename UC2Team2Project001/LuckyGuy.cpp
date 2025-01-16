@@ -7,7 +7,7 @@
 
 LuckyGuy::LuckyGuy(Character* _owner) : PassiveSkill(_owner)
 {
-	skillData = FSkillData(_owner, "행운의 사나이", 0, 0);
+	skillData = FSkillData(_owner, "행운의 사나이", "스테이지 클리어 시 100골드를 획득한다.", 0, 0);
 
 	handlers.insert(typeid(IPlayerStageClearEvent));
 

@@ -5,7 +5,7 @@
 
 MentalDiscipline::MentalDiscipline(Character* _owner) : ActiveSkill(_owner)
 {
-	skillData = FSkillData(_owner, "정신 수양", 10, 2);
+	skillData = FSkillData(_owner, "정신 수양", "4턴간 10의 방어력을 올려준다. 쿨타임 : 2턴", 10, 2);
 
 	skillData.action = nullptr;
 

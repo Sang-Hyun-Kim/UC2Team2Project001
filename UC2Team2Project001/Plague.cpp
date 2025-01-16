@@ -6,7 +6,7 @@
 
 Plague::Plague(Character* _owner) :PassiveSkill(_owner)
 {
-	skillData = FSkillData(_owner, "역병", 0, 0);
+	skillData = FSkillData(_owner, "역병", "매 자신의 턴이 끝날 시 랜덤한 적에게 중독 카운트 1개를 올린다.", 0, 0);
 
 	handlers.insert(typeid(IPlayerBattleAttackEvent));
 	

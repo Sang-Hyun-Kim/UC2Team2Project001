@@ -6,7 +6,7 @@
 
 PoisonInfusion::PoisonInfusion(Character* _owner) :ActiveSkill(_owner)
 {
-	skillData = FSkillData(_owner, "맹독 부여", 0, 2);
+	skillData = FSkillData(_owner, "맹독 부여", "타겟의 현재 중독 카운트를 2배로 늘린다. 쿨타임 : 2턴", 0, 2);
 
 	skillData.action = make_shared<PoisonIntensifierAction>();
 

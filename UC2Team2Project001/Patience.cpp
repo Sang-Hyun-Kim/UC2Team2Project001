@@ -5,7 +5,7 @@
 
 Patience::Patience(Character* _owner) : PassiveSkill(_owner)
 {
-	skillData = FSkillData(_owner, "인내심", 0, 0);
+	skillData = FSkillData(_owner, "인내심", "매 턴 시작 시 HP 10을 회복한다.", 0, 0);
 
 	//패시브 태그 설정
 	handlers.insert(typeid(ITurnStart));

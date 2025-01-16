@@ -16,6 +16,7 @@ struct FSkillData
 {
 public:
 	string skillName = ""; //스킬이름
+	string skillDescription = ""; // 스킬 내용
 	int mpCost = 0; //스킬에 사용되는 코스트
 	int maxCooldown = 99; //스킬 쿨다운
 	int currentCooldown = 0; //현재 스킬쿨다운
@@ -32,8 +33,8 @@ public:
 
 	FSkillData(const string& skillName, int mpCost, int maxCooldown);
 
-	FSkillData(Character* _owner, const string& skillName, int mpCost, int maxCooldown)
-		: owner(_owner), skillName(skillName), mpCost(mpCost), maxCooldown(maxCooldown)
+	FSkillData(Character* _owner, const string& _skillName, const string& _skillDescription,int _mpCost, int _maxCooldown)
+		: owner(_owner), skillName(_skillName), skillDescription(_skillDescription), mpCost(_mpCost), maxCooldown(_maxCooldown)
 	{
 	}
 

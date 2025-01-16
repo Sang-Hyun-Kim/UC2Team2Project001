@@ -30,8 +30,6 @@ void Character::ManagerRegister()
 	combatManager = make_shared<UCombatComponent>(this);
 	statusManager = make_shared<UStatusComponent>(this);
 	skillManager = make_shared<USkillComponent>(this);
-
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
 }
 
 void Character::Initialize()
@@ -44,6 +42,8 @@ void Character::Initialize()
 	combatManager->Initialize(LoadStatsData);
 
 	GlobalEventManager::Get().Subscribe(skillManager);
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
 }
 
 void Character::UseItem(const string& ItemName)
