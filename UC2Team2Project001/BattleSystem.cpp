@@ -21,7 +21,6 @@
 #include "Invoker.h"
 #include "CommandTypes.h"
 
-
 BattleSystem::BattleSystem()
 {
 	rewardSystem = make_shared<URewardEventManagerSystem>();
@@ -329,7 +328,7 @@ void BattleSystem::GetReward()
 
 		int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, reward.skillTypes.size()));
 
-		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input]);
+		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
 		GInvoker->ExecuteCommand(cmd);
 		
 		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());

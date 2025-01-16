@@ -214,6 +214,27 @@ private:
 	string skillName;
 };
 
+class UseItemCommand : public ICommand
+{
+public:
+	UseItemCommand(int _index) : index(_index)
+	{
+	}
+
+	void Execute() override
+	{
+		auto player = GSystemContext->GetPlayer();
+		player->InventoryComponent->useItem(index);
+	}
+
+	void Undo() override
+	{
+	}
+
+private:
+	int index;
+};
+
 class AddSkillCommand : public ICommand
 {
 public:
