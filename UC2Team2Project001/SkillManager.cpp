@@ -17,10 +17,12 @@
 #include "Sanctification.h"
 #include "LuckyGuy.h"
 #include "CursedSeal.h"
+#include "BasicAttack.h" 
 
 SkillManager::SkillManager()
 {
 	// 액티브 스킬 등록
+	RegisterSkill<BasicAttack>();
 	RegisterSkill<PoisonedBlade>();
 	RegisterSkill<PoisonFog>();
 	RegisterSkill<PoisonInfusion>();
@@ -28,6 +30,7 @@ SkillManager::SkillManager()
 	RegisterSkill<Sanctification>();
 
 
+	ActiveSkillList.push_back(typeid(BasicAttack));
 	ActiveSkillList.push_back(typeid(PoisonedBlade));
 	ActiveSkillList.push_back(typeid(PoisonFog));
 	ActiveSkillList.push_back(typeid(PoisonInfusion));

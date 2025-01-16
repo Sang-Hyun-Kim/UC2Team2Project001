@@ -10,6 +10,7 @@
 #include "USkillComponent.h"
 #include "SkillManager.h"
 #include "Skill.h"
+#include "BasicAttack.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 

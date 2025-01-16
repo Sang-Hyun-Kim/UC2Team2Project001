@@ -288,6 +288,12 @@
     <ClCompile Include="BattleSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
+    <ClCompile Include="URewardEventManagerSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -394,9 +400,6 @@
     </ClInclude>
     <ClInclude Include="GlobalEventManager.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ISkillCondition.h">
       <Filter>헤더 파일\SkillSystem</Filter>
@@ -507,6 +510,12 @@
     </ClInclude>
     <ClInclude Include="BattleSystem.h">
       <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="URewardEventManagerSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicAttack.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ public:
 	virtual ~IAttackStrategy() = default;
 
 	// 공격 행동을 정의하는 순수 가상 함수
-	virtual void Attack(Character* _self, Character* _target) = 0;
+	virtual void Attack(Character* _self, Character* _target, float _damage) = 0;
 };
 
 // 방어 전략 인터페이스
@@ -28,7 +28,7 @@ class BasicAttackStrategy : public IAttackStrategy
 {
 public:
 	// 기본 공격 동작 구현
-	virtual void Attack(Character* _self, Character* _target) override;
+	virtual void Attack(Character* _self, Character* _target, float _damage) override;
 };
 
 // 방어 전략: 데미지를 차단(Block)

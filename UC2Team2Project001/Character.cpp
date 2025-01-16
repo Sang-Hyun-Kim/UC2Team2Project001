@@ -13,6 +13,8 @@
 #include "CombatComponent.h"
 #include "USkillComponent.h"
 #include "ICharacterEventTypes.h"
+#include "BasicAttack.h"
+#include "SkillManager.h"
 
 Character::Character()
 {
@@ -28,6 +30,8 @@ void Character::ManagerRegister()
 	combatManager = make_shared<UCombatComponent>(this);
 	statusManager = make_shared<UStatusComponent>(this);
 	skillManager = make_shared<USkillComponent>(this);
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
 }
 
 void Character::Initialize()

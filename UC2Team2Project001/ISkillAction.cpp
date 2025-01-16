@@ -7,6 +7,7 @@
 #include "Skill.h"
 #include "UStatusComponent.h"
 #include "StatComponent.h"
+#include "IStrategy.h"
 
 void AttackAction::ExecuteAction()
 {
@@ -14,10 +15,25 @@ void AttackAction::ExecuteAction()
 
 	Character* target = parentSkill->GetTarget();
 
-	auto Event = make_shared<ICharacterAttackEvent>(self->GetName(), attackDamage);
-	GlobalEventManager::Get().Notify(Event);
+	if (CharacterUtility::IsDead(self))
+	{
+		return;
+	}
 
-	target->combatManager->TakeDamage((int)attackDamage);
+	if (!target)
+	{
+		cout << "타겟이 없습니다." << endl;
+		return;
+	}
+
+	if (!self->combatManager->GetAttackStrategy())
+	{
+		cout << "공격 전략이 설정되지 않았습니다." << endl;
+		return;
+	}
+
+	// 공격 전략 실행
+	self->combatManager->GetAttackStrategy()->Attack(self, target, attackDamage);
 }
 
 void PoisonIntensifierAction::ExecuteAction()

@@ -162,7 +162,7 @@ void BattleSystem::Attack()
 		GlobalEventManager::Get().Notify(playerAttackEv);
 
 		state = make_shared<BattleStartTurnState>();
-		player->combatManager->Attack(); // 일반 공격 호출
+		player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격"); // 일반 공격 호출
 	}
 	else
 	{ // 스킬 사용
@@ -181,7 +181,7 @@ void BattleSystem::Attack()
 
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
-	monster->combatManager->Attack();// 몬스터 죽으면 공격 안함
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
 
 	InputManagerSystem::PauseUntilEnter();
 

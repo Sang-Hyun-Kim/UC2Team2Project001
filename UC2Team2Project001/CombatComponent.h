@@ -15,8 +15,7 @@ public:
 
 	virtual void Initialize(StatsData LoadStatsData);
 
-	// 공격 및 피해 처리
-	virtual void Attack();
+	// 피해 처리
 	virtual void TakeDamage(int _incomingDamage);
 
 	Character* GetOwner()
@@ -37,6 +36,8 @@ public:
 	// 전투 전략 설정
 	void SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy);
 	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> _newDefenseStrategy);
+
+	shared_ptr<IAttackStrategy> GetAttackStrategy();
 
 private:
 	Character* owner;

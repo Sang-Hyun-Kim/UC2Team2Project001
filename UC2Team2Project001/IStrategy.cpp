@@ -10,14 +10,12 @@
 
 using namespace std;
 
-void BasicAttackStrategy::Attack(Character* _self, Character* _target)
+void BasicAttackStrategy::Attack(Character* _self, Character* _target, float _damge)
 {
-	int baseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
-
-	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), baseDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), _damge);
 	GlobalEventManager::Get().Notify(Event);
 
-	_target->combatManager->TakeDamage(baseDamage);
+	_target->combatManager->TakeDamage(_damge);
 }
 
 int BlockDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 

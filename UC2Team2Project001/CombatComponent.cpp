@@ -35,29 +35,6 @@ void UCombatComponent::SetTarget(Character* _target)
 	target = _target;
 }
 
-void UCombatComponent::Attack()
-{
-	if (CharacterUtility::IsDead(owner))
-	{
-		return;
-	}
-
-	if (!target)
-	{
-		cout << "타겟이 없습니다." << endl;
-		return;
-	}
-
-	if (!attackStrategy)
-	{
-		cout << "공격 전략이 설정되지 않았습니다." << endl;
-		return;
-	}
-
-	// 공격 전략 실행
-	attackStrategy->Attack(owner, target);
-}
-
 void UCombatComponent::TakeDamage(int _incomingDamage)
 {
 	int finalDamage = _incomingDamage;
@@ -83,4 +60,9 @@ void UCombatComponent::SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackS
 void UCombatComponent::SetDefenseStrategy(shared_ptr<IDefenseStrategy> _newDefenseStrategy)
 {
 	defenseStrategy = move(_newDefenseStrategy);
+}
+
+shared_ptr<IAttackStrategy> UCombatComponent::GetAttackStrategy()
+{
+	return attackStrategy;
 }
