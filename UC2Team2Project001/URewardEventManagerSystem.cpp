@@ -14,6 +14,7 @@ void URewardEventManagerSystem::OnEvent(std::shared_ptr<IEvent> _event)
 
 		reward.gold = dead->reward.dropGold;
 		reward.item = dead->reward.dropItem;
+		reward.exp = dead->reward.dropExperience;
 		reward.skillTypes = SkillManager::GetInstance().GetUniqueRandomSkillTypes((Character*)player.get(), SkillType::ACTIVE, 3);
 		// 스킬 추가
 		//플레이어

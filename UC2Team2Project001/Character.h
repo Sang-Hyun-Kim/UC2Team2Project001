@@ -62,6 +62,8 @@ public:
 	// 캐릭터 사망 보상
 	FCharacterReward characterReward;
 
+	bool bIsPlayer = false;
+
 protected:
 	// 캐릭터 이름(json에서 찾을 이름)
 	string characterName = "Player";

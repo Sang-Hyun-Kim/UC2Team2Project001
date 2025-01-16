@@ -103,6 +103,8 @@ void BattleSystem::MainMenu()
 	// 라운드 시작할때 몬스터 현재 상태 출력
 	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
 	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
 
 	auto player = GSystemContext->GetPlayer();
 	player.get()->PrintCharacterInfo();
@@ -190,7 +192,7 @@ void BattleSystem::Attack()
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
 
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
+	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
 	
 	turnSystem->EndTurn(activeCharacters);
 	
@@ -354,7 +356,7 @@ void BattleSystem::GetReward()
 		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());
 	}
 
-	CharacterUtility::ModifyStat(player.get(), StatType::Experience, 50);
+	CharacterUtility::ModifyStat(player.get(), StatType::Experience, rewardSystem->GetReward().exp);
 	monster = nullptr;
 
 	auto battlestageclear = make_shared<IPlayerStageClearEvent>();

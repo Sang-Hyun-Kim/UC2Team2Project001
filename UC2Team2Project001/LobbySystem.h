@@ -21,4 +21,7 @@ public:
 
 	virtual string GetSystemName() override { return "로비"; };
 private:
+	std::vector<std::string> orcArt;
+	std::vector<std::string> slimeArt;
+	std::vector<std::string> dragonArt;
 };

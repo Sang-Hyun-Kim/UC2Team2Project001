@@ -37,7 +37,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 80,
+        "Experience": 200,
         "Gold": 50
       },
       "AttackStrategy": {
@@ -62,7 +62,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 150,
+        "Experience": 300,
         "Gold": 9999
       },
       "AttackStrategy": {
@@ -87,7 +87,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 120,
+        "Experience": 200,
         "Gold": 100
       },
       "AttackStrategy": {
@@ -112,7 +112,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 120,
+        "Experience": 400,
         "Gold": 220
       },
       "AttackStrategy": {
@@ -137,7 +137,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 150,
+        "Experience": 500,
         "Gold": 550
       },
       "AttackStrategy": {
@@ -162,7 +162,7 @@
         "MaxExperience": 0
       },
       "Rewards": {
-        "Experience": 1000,
+        "Experience": 10000,
         "Gold": 999999
       },
       "AttackStrategy": {

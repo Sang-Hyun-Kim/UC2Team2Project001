@@ -21,6 +21,8 @@ void Player::ManagerRegister()
 
 void Player::Initialize()
 {
+	bIsPlayer = true;
+
 	Character::Initialize();
 }
 

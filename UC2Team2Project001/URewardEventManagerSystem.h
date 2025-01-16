@@ -14,6 +14,7 @@ public:
 	struct Reward
 	{
 		int gold;
+		int exp;
 		shared_ptr<Item> item;
 		vector<type_index> skillTypes;
 	};
