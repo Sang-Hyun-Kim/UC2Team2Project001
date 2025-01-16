@@ -62,6 +62,8 @@ public:
 
 	vector<std::string> GetPassiveSkillInfo() const;
 
+	vector<std::string> GetActiveSkillInfoWithString(int index) const;
+
 	/* IEventManager System*/
 public:
 	virtual void OnEvent(std::shared_ptr<IEvent> ev) override;

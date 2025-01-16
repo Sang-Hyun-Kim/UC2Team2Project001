@@ -77,7 +77,7 @@ void ShopSystem::BuyItemMenu()
 	if (input <= itemSize)
 	{
 		auto player = GSystemContext->GetPlayer();
-		auto buyCommand = make_shared<BuyCommand>(player, itemList, input - 1);
+		auto buyCommand = make_shared<BuyItemCommand>(player, itemList, input - 1);
 		GInvoker->ExecuteCommand(buyCommand);
 
 		InputManagerSystem::PauseUntilEnter();

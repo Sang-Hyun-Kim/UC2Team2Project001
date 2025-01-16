@@ -11,6 +11,11 @@
 #include "IItemEventTypes.h"
 #include "SystemContext.h"
 
+#include "SkillManager.h"
+#include "USkillComponent.h"
+
+#include "CombatComponent.h"
+
 #include "LobbySystemStates.h"
 #include "BattleSystemStates.h"
 #include "ShopSystemStates.h"
@@ -173,18 +178,19 @@ private:
 class CommonAttackCommand : public ICommand
 {
 public:
-	CommonAttackCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	CommonAttackCommand() 
+	{
+	}
 
 	void Execute() override
 	{
-		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+		auto player = GSystemContext->GetPlayer();
+		player->combatManager->Attack();
 	}
 
 	void Undo() override
 	{
-		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+
 	}
 
 private:
@@ -195,44 +201,43 @@ private:
 class UseSkillCommand : public ICommand
 {
 public:
-	UseSkillCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	UseSkillCommand(string _skillName): skillName(_skillName)
+	{
+	}
 
 	void Execute() override
 	{
-		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+		auto player = GSystemContext->GetPlayer();
+		player->skillManager->UseSkill(SkillType::ACTIVE, skillName);
 	}
 
 	void Undo() override
 	{
-		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
+	string skillName;
 };
 
 class AddSkillCommand : public ICommand
 {
 public:
-	AddSkillCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	AddSkillCommand(type_index _skillType) 
+		:skillType(_skillType) 
+	{
+	}
 
 	void Execute() override
 	{
-		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+		auto player = GSystemContext->GetPlayer();
+		SkillManager::GetInstance().AddSelectSkillToCharacter(skillType, player.get());
 	}
 
 	void Undo() override
 	{
-		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
+	type_index skillType;
 };
 

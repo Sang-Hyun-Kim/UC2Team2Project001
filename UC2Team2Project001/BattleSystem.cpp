@@ -95,8 +95,6 @@ void BattleSystem::MainMenu()
 	//CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
 
-	
-
 	CharacterUtility::PrintStatus(monster.get());
 
 	int input = InputManagerSystem::GetInput<int>(
@@ -135,15 +133,6 @@ void BattleSystem::Attack()
 
 	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
 	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
-	// 스킬 목록
-	vector<string> indexActiveSkillList;
-	int lastindex = activeSkillList.size();
-	int idx = 1;
-	for (auto activeSkill : activeSkillList)
-	{
-		string curoption = to_string(idx++) + ". " + activeSkill;
-		indexActiveSkillList.push_back(curoption);// idx. 스킬이름
-	}
 	// 1~n: 가지고 있는 스킬
 	// n+1: 일반공격
 	// n+2: 돌아가기
@@ -152,12 +141,13 @@ void BattleSystem::Attack()
 	int commonAttack = activeSkillList.size() + 1; // 일반 공격
 	int returnButton = commonAttack + 1; // 돌아가기
 
-	indexActiveSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
-	indexActiveSkillList.push_back(to_string(returnButton) + ". 돌아가기");
+
+	activeSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
+	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
 
 	int input = InputManagerSystem::GetInput<int>(
 		"==================  스킬 사용 ===================",
-		indexActiveSkillList,
+		activeSkillList,
 		RangeValidator<int>(1, returnButton)
 	);
 
@@ -168,20 +158,29 @@ void BattleSystem::Attack()
 	}
 	else if (input == commonAttack)
 	{
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
 		state = make_shared<BattleStartTurnState>();
 		player->combatManager->Attack(); // 일반 공격 호출
 	}
 	else
 	{ // 스킬 사용
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
 		state = make_shared<BattleStartTurnState>();
-		player->skillManager->UseSkill(SkillType::ACTIVE, activeSkillList[input-1]); // UseSkill로 변경 예정
+		player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
+		//player->skillManager->UseSkill(input - 1);
 		//Delay(1);
 	}
-
 
 	// 몬스터 공격
 	cout << endl;
 	monster->combatManager->SetTarget(player.get());
+
+	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
+	GlobalEventManager::Get().Notify(monsterAttackEv);
 	monster->combatManager->Attack();// 몬스터 죽으면 공격 안함
 
 	InputManagerSystem::PauseUntilEnter();
@@ -321,14 +320,15 @@ void BattleSystem::GetReward()
 
 		for (int i = 0; i < skillSize; i++)
 		{
-			Skill* skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
+			shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
 			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
 		}
 
 		int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, reward.skillTypes.size()));
-		//SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[input], player.get());
-		shared_ptr<ActiveSkill> activeSkill = make_shared<ActiveSkill>(player.get(), "테스트용", 0, 1);
-		player->skillManager->AddSkill(activeSkill);
+
+		auto skillManager = SkillManager::GetInstance();
+
+		skillManager.AddSelectSkillToCharacter(reward.skillTypes[input - 1], player.get());
 		
 		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());
 	}
