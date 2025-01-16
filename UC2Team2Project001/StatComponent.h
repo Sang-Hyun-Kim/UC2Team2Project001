@@ -10,14 +10,19 @@
 using json = nlohmann::json;
 
 class Character;
+struct StatsData;
 
 class UStatsComponent
 {
 public:
 	UStatsComponent() {};
+
 	UStatsComponent(Character* InOwnedCharacter);
 
 	virtual void BeginPlay();
+
+	virtual void Initialize(StatsData LoadStatsData);
+
 
 	~UStatsComponent();
 

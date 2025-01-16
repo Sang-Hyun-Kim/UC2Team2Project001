@@ -26,6 +26,7 @@ class IGameExitEvent : public IEvent
 public:
 	IGameExitEvent() {}
 };
+
 // 게임 종료 이벤트
 class IGameStartEvent : public IEvent
 {
@@ -38,4 +39,16 @@ class ITurnStart : public IEvent
 {
 public:
 	ITurnStart() {}
+};
+
+// 매 턴 끝날 때마다 호출되는 이벤트
+class ITurnEndEvent : public IEvent
+{
+public:
+	ITurnEndEvent(int _currentTurn)  : currentTurn(_currentTurn)
+	{
+	}
+
+public:
+	int currentTurn = 1;
 };

@@ -7,6 +7,7 @@
 #include "ISystemTypes.h"
 #include <iostream>
 #include "USkillComponent.h"
+#include "ISystemTypes.h"
 
 
 UTurnEventManager::UTurnEventManager() : currentTurn(1) // 초기 턴
@@ -57,6 +58,9 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& AllCharacters)
 			Ch->skillManager->AllReduceCooldown();
 		}
 	}
+	
+	auto newTurnEndEvent = make_shared<ITurnEndEvent>(currentTurn);
+	GlobalEventManager::Get().Notify(newTurnEndEvent);
 
 	// 턴 종료 출력
 	std::cout << "===== Turn " << currentTurn << " 종료 =====\n\n";

@@ -31,6 +31,6 @@ void GlobalEventManager::Notify(std::shared_ptr<IEvent> _callEv)
 {
 	for (int i = 0; i < _listeners.size(); i++)
 	{
-		_listeners[i]->OnEvent(_callEv);
-	}
+		_listeners[i].get()->OnEvent(_callEv);
+	}	
 }

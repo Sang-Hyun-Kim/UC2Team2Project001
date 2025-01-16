@@ -44,17 +44,36 @@ shared_ptr<Skill> USkillComponent::GetSkill(SkillType _skillType, string _skillN
 	return nullptr;
 }
 
-void USkillComponent::AddSkill(shared_ptr<ActiveSkill> _activeSkill)
+void USkillComponent::AddSkill(std::shared_ptr<Skill> skill)
 {
-	activeSkillList[_activeSkill->GetSkillData().skillName] = _activeSkill;
+	if (!skill)
+	{
+		std::cerr << "추가하려는 스킬이 유효하지 않습니다." << std::endl;
+		return;
+	}
+
+	if (auto activeSkill = std::dynamic_pointer_cast<ActiveSkill>(skill))
+	{
+		activeSkillList[skill->GetSkillData().skillName] = activeSkill;
+	}
+	else if (auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(skill))
+	{
+		passiveSkillList[skill->GetSkillData().skillName] = passiveSkill;
+		passiveSkill->PassiveSkillRegisterTrigger();
+	}
 }
 
-void USkillComponent::AddSkill(shared_ptr<PassiveSkill> _passiveSkill)
-{
-	passiveSkillList[_passiveSkill->GetSkillData().skillName] = _passiveSkill;
-
-	_passiveSkill->PassiveSkillRegisterTrigger();
-}
+//void USkillComponent::AddSkill(shared_ptr<ActiveSkill> _activeSkill)
+//{
+//	activeSkillList[_activeSkill->GetSkillData().skillName] = _activeSkill;
+//}
+//
+//void USkillComponent::AddSkill(shared_ptr<PassiveSkill> _passiveSkill)
+//{
+//	passiveSkillList[_passiveSkill->GetSkillData().skillName] = _passiveSkill;
+//
+//	_passiveSkill->PassiveSkillRegisterTrigger();
+//}
 
 void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
 {
@@ -121,3 +140,74 @@ void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
 }
 
 
+std::string USkillComponent::GetActiveSkillNameByIndex(int index) const
+{
+	if (index < 0 || index >= static_cast<int>(activeSkillList.size()))
+	{
+		return {};
+	}
+
+	auto it = activeSkillList.begin();
+	std::advance(it, index);
+	return it->second->GetSkillData().skillName;
+}
+
+std::string USkillComponent::GetPassiveSkillNameByIndex(int index) const
+{
+	if (index < 0 || index >= static_cast<int>(passiveSkillList.size()))
+	{
+		throw std::out_of_range("Invalid index for passive skill.");
+	}
+
+	auto it = passiveSkillList.begin();
+	std::advance(it, index);
+	return it->second->GetSkillData().skillName;
+}
+
+std::vector<std::string> USkillComponent::GetActiveSkillInfo() const
+{
+	std::vector<std::string> skillInfos(activeSkillList.size(), "");
+
+	if (activeSkillList.empty())
+	{
+		return {};
+	};
+
+	int index = 0;
+	for (const auto& pair : activeSkillList)
+	{
+		const auto& skill = pair.second;
+		if (skill)
+		{
+			skillInfos[index] = "[" + std::to_string(index) + "] 이름: " + skill->GetSkillData().skillName;
+		}
+		++index;
+	}
+
+	return skillInfos;
+}
+
+std::vector<std::string> USkillComponent::GetPassiveSkillInfo() const
+{
+	std::vector<std::string> skillInfos(passiveSkillList.size(), "");
+
+	if (passiveSkillList.empty())
+	{
+		return {};
+	};
+
+
+	int index = 0;
+	for (const auto& pair : passiveSkillList)
+	{
+		const auto& skill = pair.second;
+		if (skill)
+		{
+			skillInfos[index] = "[" + std::to_string(index) + "] 이름: " + skill->GetSkillData().skillName;
+		}
+		++index;
+	}
+
+
+	return skillInfos;
+}

@@ -26,7 +26,7 @@ public:
 
 	virtual void PreEffect() = 0;
 
-	virtual void PostEffect() = 0;	
+	virtual void PostEffect() = 0;
 };
 
 // 흡혈 효과
@@ -99,7 +99,7 @@ public:
 class IPoisonEffect : public ISkillEffect
 {
 public:
-	IPoisonEffect(int amountStack=0);
+	IPoisonEffect(int amountStack = 0);
 
 	virtual void PreEffect()
 	{
@@ -107,7 +107,7 @@ public:
 
 	virtual void PostEffect() override;
 
-	
+
 };
 
 
@@ -121,7 +121,7 @@ public:
 
 	}
 
-	virtual void PreEffect() override 
+	virtual void PreEffect() override
 	{
 	}
 
@@ -152,8 +152,20 @@ public:
 	IUnbreakableEffect();
 
 	virtual void PreEffect()
+}
+
+class LuckyRewardEffect : public ISkillEffect
+{
+public:
+	LuckyRewardEffect(int _goldAmount) : goldAmount(_goldAmount)
+	{
+	}
+
+	virtual void PreEffect() override
 	{
 	}
 
 	virtual void PostEffect() override;
+private:
+	int goldAmount = 100; // 획득할 골드 양
 };

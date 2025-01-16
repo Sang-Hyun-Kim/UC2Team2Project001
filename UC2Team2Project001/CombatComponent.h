@@ -4,39 +4,47 @@ class Character;
 class IAttackStrategy;
 class IDefenseStrategy;
 
+struct  StatsData;
 
-class CombatComponent
+class UCombatComponent
 {
-private:
-	Character* owner;
-	Character* target;
-protected:
-	// 공격/방어 전략
-	shared_ptr<IAttackStrategy> attackStrategy;
-	shared_ptr<IDefenseStrategy> defenseStrategy;
-
 public:
+	UCombatComponent();
+
+	UCombatComponent(Character* _owner);
+
+	virtual void Initialize(StatsData LoadStatsData);
+
+	// 공격 및 피해 처리
+	virtual void Attack();
+	virtual void TakeDamage(int _incomingDamage);
+
 	Character* GetOwner()
 	{
 		return owner;
 	}
+
+	void SetOwner(Character* _owner);
 
 	Character* GetTarget()
 	{
 		return target;
 	}
 
-	void SetOwner(Character* _owner);
-
 	// 상대 설정
 	void SetTarget(Character* _target);
-
-	// 공격 및 피해 처리
-	virtual void Attack();
-	virtual void TakeDamage(int _incomingDamage);
 
 	// 전투 전략 설정
 	void SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy);
 	void SetDefenseStrategy(shared_ptr<IDefenseStrategy> _newDefenseStrategy);
+
+private:
+	Character* owner;
+	Character* target;
+
+protected:
+	// 공격/방어 전략
+	shared_ptr<IAttackStrategy> attackStrategy;
+	shared_ptr<IDefenseStrategy> defenseStrategy;
 };
 

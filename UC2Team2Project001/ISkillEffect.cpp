@@ -6,6 +6,9 @@
 #include "UStatusComponent.h"
 #include "Monster.h"
 #include "CharacterStatus.h"
+#include "StatComponent.h"
+#include "PlayerCharacter.h"
+#include "Inventory.h"
 
 void ILifeStealEffect::PostEffect()
 {
@@ -21,7 +24,7 @@ IBuffEffect::IBuffEffect(shared_ptr<ICharacterState> _state)
 
 void IBuffEffect::PostEffect()
 {
-	parentSkill->GetTarget()->StatusComponent->AddState(state);
+	parentSkill->GetTarget()->statusManager->AddState(state);
 }
 
 void IDefenseBasedDamageEffect::PostEffect()
@@ -43,8 +46,8 @@ void IOnePointAttackEffect::PostEffect()
 	if (!target->IsBoss())
 	{
 		float defense = CharacterUtility::GetStat(target, StatType::Defense);
-		parentSkill->GetTarget()->StatusComponent->AddState(make_shared<ModifyDefenseState>(3, -defense));
-		parentSkill->GetTarget()->StatusComponent->AddState(make_shared<StunState>(1));
+		parentSkill->GetTarget()->statusManager->AddState(make_shared<ModifyDefenseState>(3, -defense));
+		parentSkill->GetTarget()->statusManager->AddState(make_shared<StunState>(1));
 	}
 }
 
@@ -76,7 +79,7 @@ void IPoisonEffect::PostEffect()
 
 	for (auto state : states)
 	{
-		target->StatusComponent->AddState(state);
+		target->statusManager->AddState(state);
 	}
 }
 
@@ -84,13 +87,13 @@ void IRemoveStateEffect::PostEffect()
 {
 	Character* target = parentSkill->GetTarget();
 
-	if (!target || !target->StatusComponent)
+	if (!target || !target->statusManager)
 	{
 		std::cout << "대상이 없거나 상태 컴포넌트가 없습니다.\n";
 		return;
 	}
 
-	auto& statusComponent = target->StatusComponent;
+	auto& statusComponent = target->statusManager;
 
 	bool isSuccess = statusComponent->RemoveState(stateType);
 
@@ -122,5 +125,24 @@ void IUnbreakableEffect::PostEffect()
 	for (auto state : states)
 	{
 		target->StatusComponent->AddState(state);
+	}
+}
+
+void LuckyRewardEffect::PostEffect()
+{
+	if (parentSkill && parentSkill->GetSkillData().owner)
+	{
+		Character* owner = parentSkill->GetSkillData().owner;
+		if (owner->statManager)
+		{
+			Player* playerCharacter = dynamic_cast<Player*>(owner);
+			if (playerCharacter)
+			{
+				playerCharacter->InventoryComponent->addGold(goldAmount);
+
+				// 캐릭터의 골드 스탯 증가			
+				std::cout << owner->GetName() << "은(는) 스테이지 클리어로 " << goldAmount << "골드를 획득했습니다.\n";
+			}			
+		}
 	}
 }

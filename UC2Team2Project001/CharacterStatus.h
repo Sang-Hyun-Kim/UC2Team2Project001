@@ -4,123 +4,99 @@
 #include <iostream>
 #include <memory>
 
+#define INFINITEDURATION 99999
+
+using namespace std;
 
 class Character;
 
-/**
- * @brief 캐릭터에게 적용되는 '상태'를 나타내는 인터페이스
- *
- * - ApplyEffect(Character* Target): 상태 효과를 적용
- * - TickDuration(): 매 턴마다 1씩 지속 시간 감소
- * - IsExpired(): 남은 지속 시간이 0 이하라면 true
- */
+// 캐릭터 상태 인터페이스
 class ICharacterState
 {
 public:
-	ICharacterState(const std::string& inStateName, int inDuration) : StateName(inStateName), Duration(inDuration)
+	ICharacterState(const string& _inStateName, int _inDuration) : stateName(_inStateName), duration(_inDuration)
 	{
 	}
 
 	virtual ~ICharacterState()
 	{
-
 	}
 
 	// 상태 효과 적용(데미지, 버프, 디버프 등)
 	virtual void ApplyEffect(Character* Target) = 0;
 
-	// 매 턴마다 1씩 줄여나가는 메서드
-	virtual void TickDuration()
-	{
-		if (Duration > 0)
-		{
-			--Duration;
-			cout << StateName << " 상태 남은 턴 : " << Duration << endl;
-		}
-	}
+	// 매 턴마다 지속 시간 감소
+	virtual void TickDuration();
 
-	// 남은 턴이 0 이하인지 확인
-	virtual bool IsExpired() const
-	{
-		return Duration <= 0;
-	}
 
-	// 버프 삭제 전 기능
+	// 상태가 만료되었는지 확인
+	virtual bool IsExpired() const;
+
+	// 상태가 제거되기 전에 호출 (복구 로직 등)
 	virtual void EffectBeforeRemove()
 	{
 	};
 
-	// 상태 이름 Get
-	virtual const std::string& GetStateName() const
-	{
-		return StateName;
-	}
+	// 상태 이름 반환
+	virtual const std::string& GetStateName() const;
 
-	// 현재 상태의 남은 지속 턴(읽기/쓰기)
-	virtual int GetDuration() const
-	{
-		return Duration;
-	}
+	// 지속 시간 반환 및 설정
+	virtual int GetDuration() const;
+	virtual void SetDuration(int NewDuration);
 
-	virtual void SetDuration(int NewDuration)
-	{
-		Duration = NewDuration;
-	}
-
-	virtual void ApplyStack(int NewStack)
-	{
-
-	}
+	// 상태 스택 추가(디폴트 구현)
+	virtual void ApplyStack(int NewStack);
 
 protected:
-	std::string StateName;
-	int Duration;
+	string stateName;	// 상태 이름
+	int duration;		// 상태 지속 시간
+
+public:
+	int currentStack = 1; // 상태 스택
 };
 
-/**
- * @brief 화상(Burn) 상태
- * - 매 턴마다 일정 데미지를 입힘
- */
+
+// 화상 상태
 class BurnState : public ICharacterState
 {
 public:
-	BurnState(int inDuration, int inDamagePerTurn) : ICharacterState("Burn", inDuration), DamagePerTurn(inDamagePerTurn)
+	BurnState(int _inDuration, int _inDamagePerTurn) : ICharacterState("Burn", _inDuration), damagePerTurn(_inDamagePerTurn)
 	{
 	}
 
 	virtual ~BurnState()
 	{
-
 	}
 
-	// 상태 효과 적용
 	void ApplyEffect(Character* Target) override;
 
 private:
-	int DamagePerTurn;
+	int damagePerTurn;
 };
 
-// 방어력 증감 상태
+
+// 방어력 수정 상태
 class ModifyDefenseState : public ICharacterState
 {
 public:
-	float modifyValue;
-	bool isApplied = false;
-	Character* target = nullptr;
 	ModifyDefenseState(int _inDuration, float _increaseValue) : ICharacterState("IncreaseDefense", _inDuration), modifyValue(_increaseValue)
 	{
 	};
 
 	virtual ~ModifyDefenseState();
 
-	// 상태 효과 적용
 	void ApplyEffect(Character* _target) override;
 
-	// 버프 삭제 전 기능
 	virtual void EffectBeforeRemove() override;
+
+public:
+	float modifyValue;
+	bool isApplied = false;
+	Character* target = nullptr;
 };
 
-// 기절
+
+// 기절 상태
 class StunState : public ICharacterState
 {
 public:
@@ -136,35 +112,26 @@ public:
 	};
 };
 
-/**
- * @brief 중독(Posion) 상태
- * - 매 턴마다 일정 데미지를 입힙니다.
- * - 중독 스택이 존재합니다.
- */
+
+// 중독 상태
 class PoisonState : public ICharacterState
 {
 public:
 	PoisonState(int _inDuration, int _inDamagePerTurn, int _amountStack) : ICharacterState("PoisonState", _inDuration), damagePerTurn(_inDamagePerTurn), amountStack(_amountStack)
 	{
-		poisonStack = amountStack;
+		currentStack = amountStack;
 	}
 
 	virtual ~PoisonState()
 	{
-
 	}
 
-	// 중독 스텍을 적용합니다.
 	virtual void ApplyStack(int NewStack) override;
 
-	// 상태 효과 적용
 	void ApplyEffect(Character* Target) override;
 
 public:
 	int damagePerTurn = 0;
-
-	int poisonStack = 1;
-
 	int amountStack = 0;
 };
 
@@ -183,4 +150,42 @@ public:
 
 	// 버프 삭제 전 기능
 	virtual void EffectBeforeRemove() override;
+};
+
+//스텟 수정 상태
+class ModifyStatState : public ICharacterState
+{
+public:
+	ModifyStatState(int _duration, StatType _statType, float _value) : ICharacterState("ModifyStat", _duration), statType(_statType), value(_value), isApplied(false), target(nullptr)
+	{
+	}
+
+	virtual void ApplyEffect(Character* _target) override;
+
+	virtual void EffectBeforeRemove() override;
+
+private:
+	StatType statType;
+	float value;
+	bool isApplied;
+	Character* target;
+};
+
+
+//저주 인장 상태
+class CursedSealState : public ICharacterState
+{
+public:
+	CursedSealState(int _duration, int _damage, int _interval) : ICharacterState("CursedSeal", _duration), damage(_damage), interval(_interval), turnCounter(0)
+	{
+	}
+
+	virtual void ApplyEffect(Character* target) override;
+
+	virtual void TickDuration() override;
+
+private:
+	int damage;       // 적용되는 데미지 양
+	int interval;     // 몇 턴마다 발동되는지
+	int turnCounter;  // 현재 턴을 추적
 };

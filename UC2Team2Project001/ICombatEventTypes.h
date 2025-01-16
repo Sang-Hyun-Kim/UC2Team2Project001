@@ -7,11 +7,18 @@ using namespace std;
 
 // ======================= 전투 관련 이벤트 =======================
 
-// 전투 중 공격 이벤트
+// 전투 중 플레이어가 스킬 또는 공격 이벤트
 class IPlayerBattleAttackEvent : public IEvent
 {
 public:
 	IPlayerBattleAttackEvent() {}
+};
+
+// 전투 중 몬스터가 스킬 또는 공격 이벤트
+class IMonsterBattleAttackEvent : public IEvent
+{
+public:
+	IMonsterBattleAttackEvent() {}
 };
 
 // 전투 중 아이템 사용 이벤트
@@ -43,13 +50,3 @@ public:
 };
 
 
-#pragma region 더미코드
-
-// 전투 중 스탯 확인 이벤트
-//class IBattleStatCheckEvent : public IEvent
-//{
-//public:
-//	IBattleStatCheckEvent() {}
-//};
-
-#pragma endregion 더미코드

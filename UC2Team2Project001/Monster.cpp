@@ -68,15 +68,9 @@ void Monster::SetMonsterStat(int PlayerLevel)
 
 void Monster::Initialize()
 {
-	//Character::Initialize();
-
 	shared_ptr<Player> player = GSystemContext->GetPlayer();
 
-	//blanceLevel = (int)player->statManager->GetStat(StatType::Level);
-	blanceLevel = 1;
-
-	//ToDo:
-	/*SetBlance(GLobbySystem->player->GetName());*/
+	blanceLevel = (int)player->statManager->GetStat(StatType::Level);
 
 	ManagerRegister();
 

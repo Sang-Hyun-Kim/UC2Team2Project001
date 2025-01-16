@@ -39,9 +39,11 @@ public:
 	shared_ptr<Skill> GetSkill(SkillType _skillType, string _skillName);
 
 	// 스킬 추가
-	void AddSkill(shared_ptr<ActiveSkill> _activeSkill);
+	void AddSkill(std::shared_ptr<Skill> skill);
 
-	void AddSkill(shared_ptr<PassiveSkill> _passiveSkill);
+	/*void AddSkill(shared_ptr<ActiveSkill> _activeSkill);
+
+	void AddSkill(shared_ptr<PassiveSkill> _passiveSkill);*/
 
 	// 스킬 삭제
 	void RemoveSkill(SkillType _skillType, string _skillName);
@@ -52,9 +54,18 @@ public:
 	// 매 턴 종료 시, 모든 스킬의 쿨타임을 1씩 감소
 	void AllReduceCooldown();
 
+	string GetActiveSkillNameByIndex(int index) const;
+
+	string GetPassiveSkillNameByIndex(int index) const;
+
+	vector<std::string> GetActiveSkillInfo() const;
+
+	vector<std::string> GetPassiveSkillInfo() const;
+
 	/* IEventManager System*/
 public:
 	virtual void OnEvent(std::shared_ptr<IEvent> ev) override;
+	
 	
 	Character* OwnerCharacter;
 };
