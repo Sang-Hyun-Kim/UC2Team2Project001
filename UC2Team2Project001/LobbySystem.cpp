@@ -60,7 +60,7 @@ void LobbySystem::MainMenu()
 
 void LobbySystem::CreatePlayerMenu()
 {
-	//CLEAR;
+	CLEAR;
 	string userName = InputManagerSystem::GetInput(
 		"캐릭터의 이름을 입력해주세요.(중간 공백 허용, 최대12자)",
 		{},

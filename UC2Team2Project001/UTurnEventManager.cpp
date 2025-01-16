@@ -42,14 +42,14 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& AllCharacters)
 	for (auto& Ch : AllCharacters)
 	{
 		// (만약 턴마다 반복 적용이 필요하면 여기에 배치)
-		if (Ch->StatusComponent)
+		if (Ch->statusManager)
 		{
 			// 1) 이번 턴에 적용된 상태 효과 적용
-			Ch->StatusComponent->ApplyAllEffects();
+			Ch->statusManager->ApplyAllEffects();
 
 			// 2) 턴 끝나고 상태 지속시간 차감
-			Ch->StatusComponent->DecrementAllDurations();
-			Ch->StatusComponent->RemoveExpiredStates();
+			Ch->statusManager->DecrementAllDurations();
+			Ch->statusManager->RemoveExpiredStates();
 		}
 
 		// 3) 스킬 쿨다운 차감 (추가 예정)

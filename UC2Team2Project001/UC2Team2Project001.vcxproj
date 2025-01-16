@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackBoostPotion.cpp" />
+    <ClCompile Include="BashAttack.cpp" />
     <ClCompile Include="BattleSystem.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterTypes.cpp" />
@@ -146,7 +147,9 @@
     <ClCompile Include="ISkillCondition.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
     <ClCompile Include="LifeStealAttack.cpp" />
+    <ClCompile Include="LobbySystem.cpp" />
     <ClCompile Include="LuckyGuy.cpp" />
+    <ClCompile Include="MainSystem.cpp" />
     <ClCompile Include="MentalDiscipline.cpp" />
     <ClCompile Include="OnePointAttack.cpp" />
     <ClCompile Include="Patience.cpp" />
@@ -195,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
+    <ClInclude Include="BashAttack.h" />
     <ClInclude Include="BattleSystem.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
@@ -216,6 +220,7 @@
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="LifeStealAttack.h" />
+    <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="LuckyGuy.h" />
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />

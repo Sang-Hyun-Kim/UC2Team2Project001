@@ -8,9 +8,6 @@
 #include "ICharacterEventTypes.h"
 #include "ISystemTypes.h"
 #include "USkillComponent.h"
-#include "Unbreakable.h"
-#include "Patience.h"
-#include "PoisonedBlade.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 
@@ -81,10 +78,6 @@ void SystemContext::CreateCharacter(string name)
 {
 	player = make_shared<Player>("Player");
 	player->Initialize();
-
-	//player->skillManager->AddSkill(make_shared<Unbreakable>(player.get()));
-	//player->skillManager->AddSkill(make_shared<Patience>(player.get()));
-	player->skillManager->AddSkill(make_shared<PoisonedBlade>(player.get()));
 }
 
 void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)

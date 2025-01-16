@@ -134,7 +134,6 @@ void BattleSystem::Attack()
 	auto player = GSystemContext->GetPlayer();
 	player->combatManager->SetTarget(monster.get());
 	player->combatManager->Attack();
-	player->skillManager
 	/*
 		플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
 

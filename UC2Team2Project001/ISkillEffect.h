@@ -123,7 +123,7 @@ public:
 
 	virtual void PreEffect() override
 	{
-	}
+	};
 
 	virtual void PostEffect() override;
 
@@ -151,8 +151,12 @@ class IUnbreakableEffect : public ISkillEffect
 public:
 	IUnbreakableEffect();
 
-	virtual void PreEffect()
-}
+	virtual void PreEffect() override
+	{
+	};
+
+	virtual void PostEffect() override;
+};
 
 class LuckyRewardEffect : public ISkillEffect
 {

@@ -219,9 +219,6 @@
     <ClCompile Include="CommandTypes.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="BashAttack.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
     <ClCompile Include="BattleSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
@@ -234,14 +231,8 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="LobbySystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Invoker.cpp">
       <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="MainSystem.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MentalDiscipline.cpp">
       <Filter>소스 파일\SkillSystem</Filter>
@@ -251,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="ShieldAttack.cpp">
       <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="SubSystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
     <ClCompile Include="SystemContext.cpp">
       <Filter>소스 파일\GameSystem</Filter>
@@ -290,6 +278,15 @@
     </ClCompile>
     <ClCompile Include="MainSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BashAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbySystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MainSystem.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,14 +368,10 @@
     <ClInclude Include="HealthPotion.h">
       <Filter>헤더 파일\ItemSystem</Filter>
     </ClInclude>
-
     <ClInclude Include="GlobalEventManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IEventTypes.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IEventTypes.h">
@@ -444,15 +437,6 @@
     <ClInclude Include="BattleSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BattleSystemStates.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LobbySystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SubSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SystemContext.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -510,14 +494,11 @@
     <ClInclude Include="ISkillEffect.h">
       <Filter>헤더 파일\SkillSystem\SkillEffect</Filter>
     </ClInclude>
-    <ClInclude Include="BashAttack.h">
-      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
-    </ClInclude>
     <ClInclude Include="Patience.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
-	<ClInclude Include="Unbreakable.h">
-	</ClInclude>
+    <ClInclude Include="Unbreakable.h">
+    </ClInclude>
     <ClInclude Include="BattleSystemStates.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
@@ -529,6 +510,12 @@
     </ClInclude>
     <ClInclude Include="CursedSeal.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="BashAttack.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbySystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

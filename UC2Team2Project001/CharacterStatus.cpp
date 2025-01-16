@@ -110,7 +110,7 @@ void UnbreakableState::ApplyEffect(Character* _target)
 
 	if (CharacterUtility::IsDead(target->combatManager->GetTarget()))
 	{
-		target->StatusComponent->RemoveState(typeid(UnbreakableState));
+		target->statusManager->RemoveState(typeid(UnbreakableState));
 		CharacterUtility::ModifyStat(target, StatType::HP, 20);
 		cout << target->GetName() << "의 불굴의 의지 상태가 해제되었습니다." << endl;
 		cout << target->GetName() << "의 체력이 20 회복 되었습니다." << endl;

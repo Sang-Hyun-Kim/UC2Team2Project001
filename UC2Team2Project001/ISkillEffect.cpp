@@ -62,7 +62,7 @@ void IStunEffect::PostEffect()
 
 	for (auto state : states)
 	{
-		target->StatusComponent->AddState(state);
+		target->statusManager->AddState(state);
 	}
 	cout << "기절 상태 적용! " << target->GetName() << "이(가) 기절 했습니다." << endl;
 }
@@ -124,7 +124,7 @@ void IUnbreakableEffect::PostEffect()
 
 	for (auto state : states)
 	{
-		target->StatusComponent->AddState(state);
+		target->statusManager->AddState(state);
 	}
 }
 
