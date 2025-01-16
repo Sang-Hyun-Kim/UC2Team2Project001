@@ -2,6 +2,7 @@
 #include "GameSystem.h"
 
 class Item;
+class Skill;
 class SystemContext;
 class ShopSystem : public GameSystem
 {
@@ -31,11 +32,12 @@ public:
 	void OnEvent(const std::shared_ptr<IEvent> ev) override;
 	void MainMenu();
 	void DisplayInventory();
-	void BuyMenu();
+	void BuyItemMenu();
+	void BuySkillMenu();
 	void SellMenu();
 private:
-	void GetRandomItems();
+	void GetRandomItemsAndSkills();
 
 	vector<shared_ptr<Item>> itemList;
-
+	vector<shared_ptr<Skill>> skillList;
 };

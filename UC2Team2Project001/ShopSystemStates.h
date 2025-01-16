@@ -33,7 +33,7 @@ public:
 	}
 };
 
-class ShopBuyState : public ISystemState
+class ShopBuyItemState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
@@ -43,7 +43,22 @@ public:
 
 		if (shop)
 		{
-			shop->BuyMenu();
+			shop->BuyItemMenu();
+		}
+	}
+};
+
+class ShopBuySkillState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* system) override
+	{
+		auto shop = dynamic_cast<ShopSystem*>(system);
+
+		if (shop)
+		{
+			shop->BuySkillMenu();
 		}
 	}
 };

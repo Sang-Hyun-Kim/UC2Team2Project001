@@ -16,7 +16,7 @@ USkillComponent::USkillComponent(Character* _Owner)
 
 void USkillComponent::InitializeComponent()
 {
-	
+
 }
 
 unordered_map<string, shared_ptr<Skill>> USkillComponent::ChooseSkillList(SkillType _skillType)
@@ -109,3 +109,74 @@ void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
 }
 
 
+std::string USkillComponent::GetActiveSkillNameByIndex(int index) const
+{
+	if (index < 0 || index >= static_cast<int>(activeSkillList.size()))
+	{
+		return {};
+	}
+
+	auto it = activeSkillList.begin();
+	std::advance(it, index);
+	return it->second->GetSkillData().skillName;
+}
+
+std::string USkillComponent::GetPassiveSkillNameByIndex(int index) const
+{
+	if (index < 0 || index >= static_cast<int>(passiveSkillList.size()))
+	{
+		throw std::out_of_range("Invalid index for passive skill.");
+	}
+
+	auto it = passiveSkillList.begin();
+	std::advance(it, index);
+	return it->second->GetSkillData().skillName;
+}
+
+std::vector<std::string> USkillComponent::GetActiveSkillInfo() const
+{
+	std::vector<std::string> skillInfos(activeSkillList.size(), "");
+
+	if (activeSkillList.empty())
+	{
+		return {};
+	};
+
+	int index = 0;
+	for (const auto& pair : activeSkillList)
+	{
+		const auto& skill = pair.second;
+		if (skill)
+		{
+			skillInfos[index] = "[" + std::to_string(index) + "] 이름: " + skill->GetSkillData().skillName;
+		}
+		++index;
+	}
+
+	return skillInfos;
+}
+
+std::vector<std::string> USkillComponent::GetPassiveSkillInfo() const
+{
+	std::vector<std::string> skillInfos(passiveSkillList.size(), "");
+
+	if (passiveSkillList.empty())
+	{
+		return {};
+	};
+
+
+	int index = 0;
+	for (const auto& pair : passiveSkillList)
+	{
+		const auto& skill = pair.second;
+		if (skill)
+		{
+			skillInfos[index] = "[" + std::to_string(index) + "] 이름: " + skill->GetSkillData().skillName;
+		}
+		++index;
+	}
+
+
+	return skillInfos;
+}
