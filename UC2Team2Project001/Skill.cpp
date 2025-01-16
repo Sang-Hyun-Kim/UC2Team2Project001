@@ -40,6 +40,10 @@ bool Skill::UseSkill()
 		return false;
 	}
 
+	Character* Owner  =  skillData.owner;
+	
+	CharacterUtility::ModifyStat(Owner, StatType::MP, GetSkillData().mpCost);
+
 	for (auto& effect : skillData.effects)
 	{
 		effect->PreEffect();

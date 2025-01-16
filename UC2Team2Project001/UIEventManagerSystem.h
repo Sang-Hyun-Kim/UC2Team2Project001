@@ -11,5 +11,4 @@ public:
 	virtual ~UIEventManagerSystem();
 
 	virtual void OnEvent(std::shared_ptr<IEvent> ev) override;
-	
 };

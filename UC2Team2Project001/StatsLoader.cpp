@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "StatsLoader.h"
 #include <iostream>
+#include "CharacterTypes.h"
 
 const std::string DefaultFileName = "CharacterStat.json";
 //const std::string DefaultFileName = "ItemData.json";
@@ -86,4 +87,32 @@ void StatsLoader::SaveToJSON(const StatsData& stats, const std::string& characte
 		throw std::runtime_error("JSON 파일을 저장할 수 없습니다: " + DefaultFileName);
 	}
 	outFile << jsonData.dump(4); // 4칸 들여쓰기
+}
+
+FCharacterReward StatsLoader::LoadRewardFromJSON(const std::string& characterName) {
+	std::ifstream file(DefaultFileName);
+	if (!file.is_open()) {
+		throw std::runtime_error("JSON 파일을 열 수 없습니다: " + DefaultFileName);
+	}
+
+	json jsonData;
+	file >> jsonData;
+
+	if (!jsonData.contains("Characters")) {
+		throw std::runtime_error("JSON 파일에 'Characters' 키가 없습니다.");
+	}
+
+	const auto& characters = jsonData["Characters"];
+	if (!characters.contains(characterName)) {
+		throw std::runtime_error("캐릭터 이름 '" + characterName + "'에 해당하는 데이터가 없습니다.");
+	}
+
+	FCharacterReward reward;
+	if (characters[characterName].contains("Rewards")) {
+		const auto& rewardsData = characters[characterName]["Rewards"];
+		reward.DropGold = rewardsData.value("Gold", 0);
+		reward.DropExperience = rewardsData.value("Experience", 0);
+	}
+
+	return reward;
 }

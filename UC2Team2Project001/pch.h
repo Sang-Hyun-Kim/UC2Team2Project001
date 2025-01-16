@@ -3,7 +3,7 @@
 #include <vector>
 #include <random>
 #include <unordered_map>
-#include <memory> // 스마트 포인터
+#include <memory>
 #include <sstream>
 
 using namespace std;

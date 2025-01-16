@@ -34,7 +34,7 @@ public:
 	virtual void UseItem(const string& _itemName);
 
 	// 컴포넌트 등록
-	void ManagerRegister();
+	virtual void ManagerRegister();
 
 public:
 	// 캐릭터 이름 반환

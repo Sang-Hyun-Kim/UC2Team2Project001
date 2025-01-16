@@ -34,7 +34,7 @@ public:
 	void SetStat(StatType type, float value);
 
 	// 스탯 증감 (경험치 증가 시 레벨업 체크)
-	void ModifyStat(StatType type, float delta);
+	void ModifyStat(StatType _type, float _delta);
 
 	// 사망 판정
 	bool IsDead();
@@ -47,10 +47,15 @@ public:
 
 
 protected:
-	void ClampStat(StatType type, float minValue, float maxValue);
+	void ClampStat(StatType type, float _minValue, float _maxValue);
+
+	void HandleCharacterDeath();
+	
+
+	void HandleExperienceGain();
 
 private:
-	Character* OwnedCharacter;
+	Character* OwnedCharacter =nullptr;
 
 	std::map<StatType, float> Stats;
 };

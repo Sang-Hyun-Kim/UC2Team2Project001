@@ -3,6 +3,8 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+struct FCharacterReward;
+
 using json = nlohmann::json;
 
 struct StatsData
@@ -31,4 +33,6 @@ public:
 
 	// 특정 캐릭터 데이터를 저장
 	static void SaveToJSON(const StatsData& stats, const std::string& characterName);
+
+	static FCharacterReward LoadRewardFromJSON(const std::string& characterName);
 };

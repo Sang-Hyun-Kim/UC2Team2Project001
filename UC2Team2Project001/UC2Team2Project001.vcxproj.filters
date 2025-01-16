@@ -294,6 +294,9 @@
     <ClCompile Include="MentalDiscipline.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleColorManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -523,14 +526,14 @@
     <ClInclude Include="BattleSystemStates.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ConsoleColorManager.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">
       <Filter>헤더 파일\JSONS</Filter>
     </None>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="IEventTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

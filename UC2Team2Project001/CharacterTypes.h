@@ -4,10 +4,14 @@ class Item;
 
 struct FCharacterReward
 {
+public:
 	int DropGold = 0;
+
+	int DropExperience = 0;
 
 	shared_ptr<Item> DropItem = nullptr;
 
+public:
 	FCharacterReward() {}
 
 	FCharacterReward(int InDropGold, shared_ptr<Item> InDropItem) : DropGold(InDropGold), DropItem(InDropItem) {}

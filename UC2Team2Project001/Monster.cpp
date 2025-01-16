@@ -21,82 +21,97 @@ Monster::Monster()
 {
 }
 
-void Monster::SetMonsterStat(int PlayerLevel)
-{
-	// 보스 몬스터라면 능력치 1.5배 범위에서 설정
-	// 보스가 아닐경우 배수는 1
-	float BossStat = 1.0f;
-	// 보스 몬스터 이름 인덱스 = 0
-	int randomIndex = 0;
-	if (bIsBoss)
-	{
-		BossStat = 1.5f;
-	}
-	else
-	{
-		// 랜덤 엔진 및 실수형 분포 설정
-		random_device rd;
-		mt19937 gen(rd());
-		// 보스 몬스터 인덱스 0을 제외한 범위로 난수 생성
-		uniform_real_distribution<> dis(1.0, (unsigned int)MonsterNames.size() - 1);
-
-		// 실수형 랜덤 값 -> 정수로 변환
-		// 일반 몬스터 이름 인덱스 랜덤 설정
-		randomIndex = static_cast<int>(dis(gen));
-	}
-
-	// 몬스터 이름 설정
-	characterName = MonsterNames[randomIndex];
-
-	statManager.get()->BeginPlay();
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
-
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-
-	// 전략 설정
-	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
-	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
-
-	// 체력 = 레벨 * (20 ~ 30)
-	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
-	float HP = (float)PlayerLevel * RandomHP;
-	statManager->SetStat(StatType::MaxHP, HP);
-	statManager->SetStat(StatType::HP, HP);
-
-	// 공격력 = 레벨 * (5 ~ 10)
-	int RandomAttackPower = (rand() % (int)(5 * BossStat)) + (int)(10 * BossStat);
-	float AttackPower = (float)PlayerLevel * RandomAttackPower;
-	statManager->SetStat(StatType::AttackPower, AttackPower);
-}
-
 void Monster::Initialize()
 {
-	shared_ptr<Player> player = GSystemContext->GetPlayer();
-
-	blanceLevel = (int)player->statManager->GetStat(StatType::Level);
-
 	ManagerRegister();
 
-	// 입력받은 플레이어의 레벨이 10 이상인 경우 보스 몬스터 생성
-	if (blanceLevel >= 10)
+	// 플레이어 레벨 가져오기
+	std::shared_ptr<Player> player = GSystemContext->GetPlayer();
+	if (player) 
 	{
-		bIsBoss = true;
+		balanceLevel = static_cast<int>(player->statManager->GetStat(StatType::Level));
 	}
 	else
 	{
-		bIsBoss = false;
+		balanceLevel = 3;
 	}
 
-	// 몬스터 스탯 설정
-	SetMonsterStat(blanceLevel);
+	
 
-	// 몬스터 생성시 지니고 있을 골드와 아이템을 설정
+	// 몬스터 이름 설정
+	characterName = DetermineMonsterName(balanceLevel);
+
+	// JSON에서 몬스터 기본 스탯 로드
+	StatsData baseStats = StatsLoader::LoadFromJSON(characterName);
+	
+	// 플레이어 레벨에 따라 스탯 조정
+	AdjustStatsForLevel(baseStats, balanceLevel);
+
+	// 처치 보상 생성
 	CreateCharacterReward();
+
+	SkillManager::GetInstance().CreateSkillFromType(typeid(BasicAttack), this);
 }
 
 void Monster::SetBlance(Character* Player)
 {
-	blanceLevel = (int)CharacterUtility::GetStat(Player, StatType::Level);
+	balanceLevel = (int)CharacterUtility::GetStat(Player, StatType::Level);
+}
+
+std::string Monster::DetermineMonsterName(int _playerLevel)
+{
+	// 플레이어 레벨에 따라 몬스터 이름 결정
+	std::vector<std::string> possibleNames;
+
+	if (_playerLevel <= 3) 
+	{
+		possibleNames = { "Slime", "Goblin" ,"RedSlime"};
+	}
+	else if (_playerLevel <= 5) 
+	{
+		possibleNames = { "Goblin", "Troll" };
+	}
+	else if (_playerLevel <= 9) 
+	{
+		possibleNames = { "Troll", "Orc" };
+	}
+	else 
+	{
+		possibleNames = { "Dragon" };
+		bIsBoss = true; // 레벨 10 이상일 때 보스 설정
+	}
+
+	// 랜덤으로 이름 선택
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(0, possibleNames.size() - 1);
+
+	return possibleNames[dis(gen)];
+}
+
+void Monster::AdjustStatsForLevel(const StatsData& baseStats, int playerLevel)
+{
+	// JSON에서 불러온 기본 스탯을 기준으로 플레이어 레벨에 따라 스탯 조정
+	float levelMultiplier = 1.0f + (playerLevel * 0.1f);
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> variation(-0.25, 0.25); // ±25% 변동
+
+	float hp = baseStats.HP * levelMultiplier * (1.0f + variation(gen));
+	float mp = baseStats.MP * levelMultiplier * (1.0f + variation(gen));
+	float attackPower = baseStats.AttackPower * levelMultiplier * (1.0f + variation(gen));
+	float defense = baseStats.Defense * levelMultiplier * (1.0f + variation(gen));
+	float criticalChance = baseStats.CriticalChance * (1.0f + variation(gen));
+
+	// 스탯 설정
+	statManager->SetStat(StatType::HP, hp);
+	statManager->SetStat(StatType::MaxHP, hp);
+	statManager->SetStat(StatType::MP, mp);
+	statManager->SetStat(StatType::MaxMP, mp);
+	statManager->SetStat(StatType::AttackPower, attackPower);
+	statManager->SetStat(StatType::Defense, defense);
+	statManager->SetStat(StatType::CriticalChance, criticalChance);
 }
 
 bool Monster::IsBoss() const
@@ -106,24 +121,19 @@ bool Monster::IsBoss() const
 
 void Monster::CreateCharacterReward()
 {
-	// 골드는 10 ~ 15 범위로 랜덤 설정
-	characterReward.DropGold = (rand() % 10) + 15;
+	FCharacterReward reward = StatsLoader::LoadRewardFromJSON(characterName);
 
-	// 아이템은 30% 확률로 드랍
-	// 0 ~ 99 범위로 랜덤 값 설정(총 100범위)
-	int RandomValue = rand() % 99;
+	characterReward.DropGold = reward.DropGold;
 
-	// 해당 랜덤 값이 30미만 인지 판별(0~29 => 총 30범위)
-	bool CanItemDrop = RandomValue < 30;
+	characterReward.DropExperience = reward.DropExperience;
 
-	if (CanItemDrop)
+	// 아이템 드랍 확률: 30%
+	if (rand() % 100 < 30) 
 	{
-		// 아이템 랜덤으로 지정
 		characterReward.DropItem = ItemManager::GetInstance().getRandomItem();
 	}
-	else
+	else 
 	{
-		// 아이템 없음 = nullptr
 		characterReward.DropItem = nullptr;
 	}
 }
