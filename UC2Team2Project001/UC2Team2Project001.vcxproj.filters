@@ -517,14 +517,17 @@
     <ClInclude Include="BasicAttack.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
+    <ClInclude Include="LobbySystemStates.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleSystemStates.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">
       <Filter>헤더 파일\JSONS</Filter>
     </None>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

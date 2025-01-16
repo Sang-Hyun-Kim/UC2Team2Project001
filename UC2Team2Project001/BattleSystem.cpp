@@ -18,6 +18,10 @@
 #include "UTurnEventManager.h"
 #include "ICharacterEventTypes.h"
 
+#include "Invoker.h"
+#include "CommandTypes.h"
+
+
 BattleSystem::BattleSystem()
 {
 	rewardSystem = make_shared<URewardEventManagerSystem>();
@@ -105,15 +109,21 @@ void BattleSystem::MainMenu()
 
 	if (input == 1)
 	{
-		state = make_shared<BattleAttackState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleAttackState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleAttackState>();
 	}
 	else if (input == 2)
 	{
-		state = make_shared<BattleDisplayState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleDisplayState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleDisplayState>();
 	}
 	else
 	{
-		state = make_shared<BattleUseItemState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleUseItemState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleUseItemState>();
 	}
 }
 
@@ -127,22 +137,21 @@ void BattleSystem::Attack()
 	/*
 	플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
 	*/
+	
 	CLEAR;
 	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
 	GlobalEventManager::Get().Notify(battleitemcheck);
 
-	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
 	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
+	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
 	// 1~n: 가지고 있는 스킬
 	// n+1: 일반공격
 	// n+2: 돌아가기
 	// 스킬이 아예 없는경우, 1. 일반공격, 2. 돌아가기
 	// 스킬이 하나인 경우 1. 스킬1, 2. 일반 공격, 3. 돌아가기
-	int commonAttack = activeSkillList.size() + 1; // 일반 공격
-	int returnButton = commonAttack + 1; // 돌아가기
+	int returnButton = activeSkillList.size() + 1; // 일반 공격
 
 
-	activeSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
 	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
 
 	int input = InputManagerSystem::GetInput<int>(
@@ -153,24 +162,17 @@ void BattleSystem::Attack()
 
 	if (input == returnButton)
 	{
-		state = make_shared<BattleMainState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleMainState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleMainState>();
 		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
-	}
-	else if (input == commonAttack)
-	{
-		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
-		GlobalEventManager::Get().Notify(playerAttackEv);
-
-		state = make_shared<BattleStartTurnState>();
-		player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격"); // 일반 공격 호출
 	}
 	else
 	{ // 스킬 사용
-		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
-		GlobalEventManager::Get().Notify(playerAttackEv);
-
-		state = make_shared<BattleStartTurnState>();
-		player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
+		auto cmd = make_shared<UseSkillCommand>(player->skillManager->GetActiveSkillNameByIndex(input - 1));
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleStartTurnState>();
+		//player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
 		//player->skillManager->UseSkill(input - 1);
 		//Delay(1);
 	}
@@ -220,7 +222,8 @@ void BattleSystem::UseItem()
 
 	if (input != lastIndex)
 	{
-		player->UseItem(input, player.get());
+		auto cmd = make_shared<UseItemCommand>(input - 1);
+		GInvoker->ExecuteCommand(cmd);
 		Delay(1);
 	}
 	else state = make_shared<BattleMainState>();
@@ -261,8 +264,8 @@ void BattleSystem::NextStage()
 		}
 		else if (input == 2)
 		{
-			auto event = make_shared<IMoveSystemEvent>(SystemType::SHOP, GetSystemType());
-			GlobalEventManager::Get().Notify(event);
+			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType());
+			GInvoker->ExecuteCommand(cmd);
 		}
 	}
 }
@@ -326,9 +329,8 @@ void BattleSystem::GetReward()
 
 		int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, reward.skillTypes.size()));
 
-		auto skillManager = SkillManager::GetInstance();
-
-		skillManager.AddSelectSkillToCharacter(reward.skillTypes[input - 1], player.get());
+		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input]);
+		GInvoker->ExecuteCommand(cmd);
 		
 		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());
 	}

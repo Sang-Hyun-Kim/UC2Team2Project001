@@ -203,6 +203,7 @@
     <ClInclude Include="BashAttack.h" />
     <ClInclude Include="BasicAttack.h" />
     <ClInclude Include="BattleSystem.h" />
+    <ClInclude Include="BattleSystemStates.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
     <ClInclude Include="CharacterUtility.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="LifeStealAttack.h" />
     <ClInclude Include="LobbySystem.h" />
+    <ClInclude Include="LobbySystemStates.h" />
     <ClInclude Include="LuckyGuy.h" />
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />

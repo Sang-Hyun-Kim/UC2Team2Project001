@@ -2,14 +2,17 @@
 #include "pch.h"
 #include "GameSystem.h"
 #include "ShopSystem.h"
+#include "ISystemTypes.h"
 #include "GlobalEventManager.h"
 
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
-#include "ISystemTypes.h"
-#include "IItemEventTypes.h"
 #include "SystemContext.h"
+
+#include "IItemEventTypes.h"
+#include "ICombatEventTypes.h"
+#include "ICharacterEventTypes.h"
 
 #include "SkillManager.h"
 #include "USkillComponent.h"
@@ -31,23 +34,34 @@ public:
 class SellItemCommand : public ICommand
 {
 public:
-	SellItemCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	SellItemCommand(vector<shared_ptr<Item>>& _itemList, int _index) : itemList(itemList), index(_index) 
+	{
+	}
 
 	void Execute() override
 	{
-		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+		auto player = GSystemContext->GetPlayer();
+
+		auto item = player->InventoryComponent->GetItemWithIndex(index - 1);
+		auto itemCount = player->InventoryComponent->getItemCount(index - 1);
+		auto itemValue = item->getValue();
+
+		int sellCount = InputManagerSystem::GetInput<int>("판매할 갯수를 입력해주세요. ", {}, RangeValidator<int>(1, itemCount));
+
+		player->InventoryComponent->removeItem(index - 1, sellCount);
+		int totalGainGold = itemValue * sellCount;
+		player->InventoryComponent->addGold(totalGainGold);
+		cout << item->getName() + "(을)를 " + to_string(itemValue) + "개 팔아 " + to_string(totalGainGold) + "골드를 얻었습니다." << endl;
 	}
 
 	void Undo() override
 	{
-		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
+
 	}
 
 private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
+	vector<shared_ptr<Item>> itemList;
+	int index;
 };
 
 class BuyItemCommand : public ICommand
@@ -98,7 +112,8 @@ public:
 
 	void Execute() override
 	{
-		IMoveSystemEvent(to, from);
+		auto event = make_shared<IMoveSystemEvent>(to, from);
+		GlobalEventManager::Get().Notify(event);
 	}
 
 	void Undo() override
@@ -113,18 +128,17 @@ private:
 class SystemChangeStateCommand : public ICommand
 {
 public:
-	SystemChangeStateCommand(shared_ptr<ISystemState> _state): state()
+	SystemChangeStateCommand(shared_ptr<ISystemState> _state): state(_state)
 	{
 	}
 
 	void Execute() override
 	{
+		GSystemContext->GetCurrentSystem()->SetState(state);
 	}
 
 	void Undo() override
 	{
-		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
-		GlobalEventManager::Get().Notify(Event);*/
 	}
 
 private:
@@ -134,10 +148,13 @@ private:
 class ExitCommand : public ICommand
 {
 public:
-	ExitCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	ExitCommand() 
+	{
+	}
 
 	void Execute() override
 	{
+		exit(1);
 		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
 		GlobalEventManager::Get().Notify(Event);*/
 	}
@@ -149,8 +166,6 @@ public:
 	}
 
 private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
 };
 
 class CreateCharacterCommand : public ICommand
@@ -175,28 +190,28 @@ private:
 	shared_ptr<Item> item;
 };
 
-class CommonAttackCommand : public ICommand
+class UseItemCommand : public ICommand
 {
 public:
-	CommonAttackCommand() 
+	UseItemCommand(int _itemIndex) : itemIndex(_itemIndex)
 	{
 	}
 
 	void Execute() override
 	{
 		auto player = GSystemContext->GetPlayer();
-		player->combatManager->Attack();
+		player->UseItem(itemIndex, player.get());
 	}
 
 	void Undo() override
 	{
-
 	}
 
 private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
+	int itemIndex;
 };
+
+
 
 class UseSkillCommand : public ICommand
 {
@@ -207,6 +222,9 @@ public:
 
 	void Execute() override
 	{
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
 		auto player = GSystemContext->GetPlayer();
 		player->skillManager->UseSkill(SkillType::ACTIVE, skillName);
 	}

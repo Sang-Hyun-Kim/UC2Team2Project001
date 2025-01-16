@@ -1,11 +1,13 @@
 #include "pch.h"
-#include "ShopSystem.h"
-#include "BattleSystem.h"
 #include "InputManagerSystem.h"
-#include "ItemManager.h"
-#include "Invoker.h"
-#include "CommandTypes.h"
+
+#include "ShopSystem.h"
 #include "ShopSystemStates.h"
+
+#include "ItemManager.h"
+#include "CommandTypes.h"
+#include "Invoker.h"
+
 #include "Skill.h"
 #include "SkillManager.h"
 #include "USkillComponent.h"
@@ -28,19 +30,23 @@ void ShopSystem::MainMenu()
 
 	if (input == 1)
 	{
-		state = make_shared<ShopDisplayInventoryState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<ShopDisplayInventoryState>());
+		GInvoker->ExecuteCommand(cmd);
 	}
 	else if (input == 2)
 	{
-		state = make_shared<ShopBuyItemState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<ShopBuyItemState>());
+		GInvoker->ExecuteCommand(cmd);
 	}
 	else if (input == 3)
 	{
-		state = make_shared<ShopSellState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<ShopSellState>());
+		GInvoker->ExecuteCommand(cmd);
 	}
 	else if (input == 4)
 	{
-		ExitSystem(SystemType::BATTLE);
+		auto cmd = make_shared<SystemMoveCommand>(SystemType::BATTLE, GetSystemType());
+		GInvoker->ExecuteCommand(cmd);
 	}
 }
 
@@ -102,21 +108,13 @@ void ShopSystem::SellMenu()
 
 	if (input == lastIndex)
 	{
-		state = make_shared<ShopMainState>();
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<ShopMainState>());
+		GInvoker->ExecuteCommand(cmd);
 	}
 	else
 	{
-		//팔기
-		//몇 개?
-		auto item = player->InventoryComponent->GetItemWithIndex(input - 1);
-		auto itemCount = player->InventoryComponent->getItemCount(input - 1);
-		auto itemValue = item->getValue();
-
-		int sellCount = InputManagerSystem::GetInput<int>("판매할 갯수를 입력해주세요. ", {}, RangeValidator<int>(1, itemCount));
-		player->InventoryComponent->removeItem(input, sellCount);
-		int totalGainGold = itemValue * sellCount;
-		player->InventoryComponent->addGold(totalGainGold);
-		cout << item->getName() + "(을)를 " + to_string(itemValue) + "개 팔아 " + to_string(totalGainGold) + "골드를 얻었습니다." << endl;
+		auto cmd = make_shared<SellItemCommand>(itemList, input);
+		GInvoker->ExecuteCommand(cmd);
 	}
 }
 
