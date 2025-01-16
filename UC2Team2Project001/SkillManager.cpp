@@ -20,6 +20,8 @@
 #include "BasicAttack.h" 
 #include "ConsoleColorManager.h"
 #include "PlayerCharacter.h"
+#include "ICharacterEventTypes.h"
+#include "GlobalEventManager.h"
 
 SkillManager::SkillManager()
 {
@@ -131,7 +133,7 @@ void SkillManager::AddRandomSkillToCharacter(Character* _owner, SkillType _skill
 	if (!_owner)
 	{
 		DEBUG_COUT("");
-		cerr << "소유자가 유효하지 않습니다: nullptr" << endl;
+		//ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "소유자가 유효하지 않습니다: nullptr");
 		return;
 	}
 
@@ -148,14 +150,17 @@ void SkillManager::AddRandomSkillToCharacter(Character* _owner, SkillType _skill
 
 	if (!newSkill)
 	{
-		cerr << "소유자를 위한 스킬 생성에 실패했습니다." << endl;
+		//ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "소유자를 위한 스킬 생성에 실패했습니다.");
 		return;
 	}
 
 	_owner->skillManager->AddSkill(newSkill);
-	cout << "스킬 " << newSkill->GetSkillData().skillName << "이(가) " << _owner->GetName() << "에게 추가되었습니다." << endl;
+	if (auto player = dynamic_cast<Player*>(_owner))
+	{
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+		GlobalEventManager::Get().Notify(event);
+	}
 }
-
 void SkillManager::AddUniqueSkillToCharacter(Character* _owner, SkillType _skillType)
 {
 	if (!_owner)
@@ -179,8 +184,13 @@ void SkillManager::AddUniqueSkillToCharacter(Character* _owner, SkillType _skill
 		return;
 	}
 
-	_owner->skillManager->AddSkill(newSkill);
-	cout << "스킬 " << newSkill->GetSkillData().skillName << "이(가) " << _owner->GetName() << "에게 추가되었습니다." << endl;
+	_owner->skillManager->AddSkill(newSkill);	
+
+	if (auto player = dynamic_cast<Player*>(_owner))
+	{
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+		GlobalEventManager::Get().Notify(event);
+	}
 }
 
 vector<type_index> SkillManager::GetUniqueRandomSkillTypes(Character* _owner, SkillType _skillType, int _count)
@@ -247,14 +257,14 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	if (!newSkill)
 	{
-		cerr << "스킬 생성에 실패했습니다. 스킬이 유효하지 않습니다." << endl;
+		cerr << "[System] 스킬 생성에 실패했습니다. 스킬이 유효하지 않습니다." << endl;
 	}
 
+	_owner->skillManager->AddSkill(newSkill);
 
 	if (auto player = dynamic_cast<Player*>(_owner))
 	{
-		std::cout << _owner->GetName() << " 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+		GlobalEventManager::Get().Notify(event);
 	}
-	
-	_owner->skillManager->AddSkill(newSkill);
 }

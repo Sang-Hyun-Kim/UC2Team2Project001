@@ -2,6 +2,7 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "Character.h"
+#include "ConsoleLayout.h"
 
 Inventory::Inventory(Character* _owner)
 	: owner(_owner), gold(0){}
@@ -120,34 +121,35 @@ void Inventory::removeGold(int _amount) {
 }
 
 void Inventory::displayInventory(int _intype) const {
-    cout << "==== 인벤토리 아이템 정보 ====" << endl;
+    ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftTop, "==== 인벤토리 아이템 정보 ====");
 
     if (inven.empty()) {
-        cout << "- 인벤토리가 비어있습니다." << endl;
+        ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftTop, "- 인벤토리가 비어있습니다.");
     }
     else {
         for (size_t i = 0; i < inven.size(); ++i) {
-            ostringstream itemInfo;
-            itemInfo << i + 1 << "." << inven[i].item->getName() << "x" << inven[i].count << " ";
+            string itemInfo;
+            itemInfo = to_string(i + 1) + "." + inven[i].item->getName() + "x" + to_string(inven[i].count) + " ";
 
             switch (_intype) {
             case 0: // 이름, 설명, 개수, 가치 출력
-                itemInfo << inven[i].item->getValue() << " Gold  [" << inven[i].item->getDescription() << "]";
+                itemInfo += to_string(inven[i].item->getValue()) + " Gold  [" + inven[i].item->getDescription() + "]";
                 break;
 
             case 1: // 이름, 설명, 개수 출력
-                itemInfo << " [Count: " << inven[i].count << "]";
+                itemInfo += " [Count: " + to_string(inven[i].count) + "]";
                 break;
 
             case 2: // 이름, 설명만 출력
             default:
                 break;
             }
-            std::cout << itemInfo.str() << std::endl;
+
+            ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftTop, itemInfo);
         }
     }
-    cout << "Gold: " << gold << endl;
-    cout << "==== 인벤토리 끝 ====" << endl;
+    ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftTop, "Gold: " + to_string(gold));
+    ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftTop, "==== 인벤토리 끝 ====");
 }
 
 vector<string> Inventory::GetInventoryInfoWithString(int _type) const
@@ -158,7 +160,7 @@ vector<string> Inventory::GetInventoryInfoWithString(int _type) const
     {
         for (size_t i = 0; i < inven.size(); ++i)
         {
-            inventoryInfos[i] = to_string(i + 1) + ". " + inven[i].item->getName() + " x" + to_string(inven[i].count) + " : " + inven[i].item->getDescription();
+            inventoryInfos[i] = to_string(i + 1) + ". " + inven[i].item->getName() + " x" + to_string(inven[i].count) /* + " : " + inven[i].item->getDescription()*/;
         }
     }
     else //상점

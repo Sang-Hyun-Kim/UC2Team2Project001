@@ -10,6 +10,8 @@
 #include "ICharacterEventTypes.h"
 #include "USkillComponent.h"
 
+#include "ConsoleLayout.h"
+
 UStatsComponent::UStatsComponent(Character* _inOwnedCharacter)
 {
 	ownedCharacter = _inOwnedCharacter;
@@ -123,23 +125,55 @@ bool UStatsComponent::IsDead()
 	return (stats[StatType::HP] <= 0);
 }
 
-void UStatsComponent::PrintStatus()
+std::string UStatsComponent::FormatFloat(float value, int precision) {
+	std::ostringstream oss;
+	oss << std::fixed << std::setprecision(precision) << value;
+	return oss.str();
+}
+
+void UStatsComponent::PrintStatus(int type)
 {
-	std::cout << "================ Character Status ================\n";
-	std::cout << "Name: " << (ownedCharacter ? ownedCharacter->GetName(): "None") << "\n";
-	std::cout << "Level: " << stats[StatType::Level] << "\n";
-	std::cout << "Experience: " << stats[StatType::Experience]
-		<< " / " << stats[StatType::MaxExperience] << "\n";
-	std::cout << "HP: " << stats[StatType::HP]
-		<< " / " << stats[StatType::MaxHP] << "\n";
-	std::cout << "MP: " << stats[StatType::MP]
-		<< " / " << stats[StatType::MaxMP] << "\n";
-	std::cout << "Attack Power: " << stats[StatType::AttackPower] << "\n";
-	std::cout << "Defense: " << stats[StatType::Defense] << "\n";
-	std::cout << "Critical Chance: " << (stats[StatType::CriticalChance] * 100) << "%\n";
-	std::cout << "Evasion Rate: " << (stats[StatType::EvasionRate] * 100) << "%\n";
-	std::cout << "==================================================\n";
-	cout << endl;
+
+	ConsoleRegionType _consoleRegion;
+
+	if (type == 0)
+	{
+		_consoleRegion = ConsoleRegionType::LeftTop;
+	}
+	else if (type == 1)
+	{
+		_consoleRegion = ConsoleRegionType::RightTop;
+	}
+	else if (type == 2)
+	{
+		_consoleRegion = ConsoleRegionType::LeftBottom;
+	}
+	else if (type == 3)
+	{
+		_consoleRegion = ConsoleRegionType::RightBottom;
+	}
+
+	auto& layout = ConsoleLayout::GetInstance();
+
+	vector<string> statusLines;
+	std::ostringstream oss;
+	oss.precision(1); // 소수점 이하 1자리
+
+	layout.AppendLine(_consoleRegion, "=================== 캐릭터 정보 ===================");
+	layout.AppendLine(_consoleRegion, "이름    : " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
+	layout.AppendLine(_consoleRegion, "레벨    : " + std::to_string(int(stats[StatType::Level])));
+	layout.AppendLine(_consoleRegion, "경험치  : " + FormatFloat(stats[StatType::Experience]) + " / " + FormatFloat(stats[StatType::MaxExperience]));
+
+	//layout.AppendLine(ConsoleRegionType::LeftTop, "================ 캐릭터 스테이터스 ================");
+
+	layout.AppendLine(_consoleRegion, "HP      : " + std::to_string(int(stats[StatType::HP])) + " / " + std::to_string(int(stats[StatType::MaxHP])));
+	layout.AppendLine(_consoleRegion, "MP      : " + std::to_string(int(stats[StatType::MP])) + " / " + std::to_string(int(stats[StatType::MaxMP])));
+	
+	layout.AppendLine(_consoleRegion, "공격력  : " + FormatFloat(stats[StatType::AttackPower]));
+	layout.AppendLine(_consoleRegion, "방어력  : " + FormatFloat(stats[StatType::Defense]));
+	layout.AppendLine(_consoleRegion, "치명타율: " + FormatFloat(stats[StatType::CriticalChance] * 100) + "%");
+	layout.AppendLine(_consoleRegion, "회피율  : " + FormatFloat(stats[StatType::EvasionRate]) + "%");
+	layout.AppendLine(_consoleRegion, "==================================================");
 }
 
 void UStatsComponent::LevelUp()

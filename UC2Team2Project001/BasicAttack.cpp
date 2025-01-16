@@ -10,7 +10,7 @@ BasicAttack::BasicAttack(Character* _owner) : ActiveSkill(_owner)
 	skillData.action = make_shared<NormalAttackAction>();
 
 	skillData.conditions.push_back(make_shared<AliveCondition>());
-	//skillData.conditions.push_back(make_shared<StunCondition>());
+	skillData.conditions.push_back(make_shared<StunCondition>());
 
 	SkillInit(this);
 }

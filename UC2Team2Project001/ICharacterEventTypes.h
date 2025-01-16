@@ -87,3 +87,13 @@ public:
 	{
 	}
 };
+
+class IPlayerAddSkillEvent : public IEvent
+{
+public:
+	string skillName;
+	string ownerName;
+	IPlayerAddSkillEvent(const string& _skillName, const string& _ownerName) : skillName(_skillName), ownerName(_ownerName)
+	{
+	}
+};

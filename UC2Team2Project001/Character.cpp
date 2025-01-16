@@ -36,6 +36,11 @@ void Character::ManagerRegister()
 	skillManager = make_shared<USkillComponent>(this);
 }
 
+void Character::PrintCharacterInfo(int type)
+{
+	statManager->PrintStatus(type);
+}
+
 void Character::Initialize()
 {
 	ManagerRegister();
@@ -48,8 +53,8 @@ void Character::Initialize()
 	GlobalEventManager::Get().Subscribe(skillManager);
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(MentalDiscipline), this);
+	//SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
+	//SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(MentalDiscipline), this);
 }
 
 void Character::UseItem(const string& ItemName)

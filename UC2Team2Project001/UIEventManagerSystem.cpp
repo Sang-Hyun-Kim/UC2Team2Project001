@@ -14,29 +14,31 @@
 
 #include "InputManagerSystem.h"
 
+#include "ConsoleLayout.h"
+
 UIEventManagerSystem::UIEventManagerSystem()
 {
 	// ICharacterDamagedEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDamagedEvent>([](ICharacterDamagedEvent* e)
 		{
-			std::cout << "[UI] " << e->characterName << "님이 " << e->damage << "의 피해를 입었습니다.\n";
-			Delay(0, 900);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Battle] " + e->characterName + "님이 " + to_string(e->damage) + "의 피해를 입었습니다.");
+			Delay(1);
 		});
 
 	// ICharacterDeadEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDeadEvent>([](ICharacterDeadEvent* e)
 		{
-			std::cout << "[UI] " << e->characterName << "님이 사망했습니다.\n";
-			Delay(0, 9000);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Battle] " + e->characterName + "님이 사망했습니다.");
+			Delay(1);
 
 			if (!e->reward.IsEmpty())
 			{
-				std::cout << "[" << e->characterName << "]에게서 " << e->reward.dropGold << "만 큼의 Gold를(을) 획득했습니다.\n";
-				Delay(0, 9000);
+				ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[System] " + e->characterName + "에게서 " + to_string(e->reward.dropGold) + " Gold를 획득했습니다.");
+				Delay(1);
 
 				if (e->reward.dropItem != nullptr)
 				{
-					std::cout << "[" << e->characterName << "]의 " << e->reward.dropItem->getName()<< "를 획득했습니다.\n";
+					ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[System] " + e->reward.dropItem->getName() + "를 획득했습니다.");
 				}
 			}
 		});
@@ -44,69 +46,78 @@ UIEventManagerSystem::UIEventManagerSystem()
 	// IItemPurchasedEvent를 처리하는 핸들러 등록
 	Subscribe<IItemPurchasedEvent>([](IItemPurchasedEvent* e)
 		{
-			std::cout << "[UI] " << e->buyerName << "님이 " << e->itemName << "을(를) " << e->cost << "에 구매했습니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Shop] " + e->buyerName + "님이 " + e->itemName + "을(를) " + to_string(e->cost) + "에 구매했습니다.");
 		});
 
 	// ICharacterAttackEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterAttackEvent>([](ICharacterAttackEvent* e)
 		{
-			std::cout << "[UI] " << e->characterName << "이(가) 공격했습니다!\n";
-			Delay(0, 9000);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Battle] " + e->characterName + "이(가) 공격했습니다!");
+			Delay(0, 900);
 		});
 
 	// ICharacterDefenseEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDefenseEvent>([](ICharacterDefenseEvent* e)
 		{
-			std::cout << "[UI] " << e->characterName << "이(가) " << e->defenseValue << " 만큼 방어했습니다!\n";
-			Delay(0, 9000);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Battle] " + e->characterName + "이(가) " + to_string(e->defenseValue) + " 만큼 방어했습니다!");
+			Delay(0, 900);
 		});
 
 	// IItemSoldEvent를 처리하는 핸들러 등록
 	Subscribe<IItemSoldEvent>([](IItemSoldEvent* e)
 		{
-			std::cout << "[UI] " << e->sellerName << "님이 " << e->itemName << "을(를) " << e->cost << "에 판매했습니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[Battle] " + e->sellerName + "님이 " + e->itemName + "을(를) " + to_string(e->cost) + "에 판매했습니다.");
 		});
 
 	// IMoveEvent를 처리하는 핸들러 등록
 	Subscribe<IMoveSystemEvent>([](IMoveSystemEvent* e)
 		{
-			std::cout << "[UI] " << e->fromName << "에서 " << e->toName << "로 이동했습니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[System] " + e->fromName + "에서 " + e->toName + "로 이동했습니다.");
 			Delay(1);
+			ConsoleLayout::GetInstance().AllClear();
 		});
 
 	// IDisplayMenuEvent를 처리하는 핸들러 등록
 	Subscribe<IDisplayMenuEvent>([](IDisplayMenuEvent* e)
 		{
-			std::cout << e->title << "\n";
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightBottom);
+
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::RightBottom, e->title);
+
 			for (const auto& option : e->options)
 			{
-				std::cout << option << "\n";
+				ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::RightBottom, option);
 			}
-			std::cout << e->inputText;
+
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::RightBottom, e->inputText);
 		});
 
 	// IWrongInputEvent를 처리하는 핸들러 등록
 	Subscribe<IWrongInputEvent>([](IWrongInputEvent*)
 		{
-			std::cout << "잘못된 입력입니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::RightBottom, "[System] 잘못된 입력입니다.");
 			InputManagerSystem::PauseUntilEnter();
 		});
 
 	// IGameExitEvent를 처리하는 핸들러 등록
 	Subscribe<IGameExitEvent>([](IGameExitEvent*)
 		{
-			std::cout << "게임을 종료합니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[System] 게임을 종료합니다.");
 			exit(1);
 		});
 
 	// IGameStartEvent를 처리하는 핸들러 등록
 	Subscribe<IGameStartEvent>([](IGameStartEvent*)
 		{
-			CLEAR;
-			std::cout << "게임을 시작합니다.\n";
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "[System] 게임을 시작합니다.");
 			Delay(1);
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 		});
-
+	Subscribe<IPlayerAddSkillEvent>([](IPlayerAddSkillEvent* e)
+		{
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "스킬 " + e->skillName + "이(가) " + e->ownerName + "에게 추가되었습니다.");
+		});
+	
 	// IPlayerBattleAttackEvent를 처리하는 핸들러 등록
 	//Subscribe<IPlayerBattleAttackEvent>([](IPlayerBattleAttackEvent*)
 	//	{
@@ -114,10 +125,10 @@ UIEventManagerSystem::UIEventManagerSystem()
 	//	});
 
 	// IBattleUseItemEvent를 처리하는 핸들러 등록
-	Subscribe<IBattleUseItemEvent>([](IBattleUseItemEvent*)
-		{
-			std::cout << "아이템을 사용합니다.\n";
-		});
+	//Subscribe<IBattleUseItemEvent>([](IBattleUseItemEvent*)
+	//	{
+	//		std::cout << "아이템을 사용합니다.\n";
+	//	});
 
 	// IPlayerDefeatEvent를 처리하는 핸들러 등록
 	Subscribe<IPlayerDefeatEvent>([](IPlayerDefeatEvent*)
@@ -144,7 +155,10 @@ UIEventManagerSystem::UIEventManagerSystem()
 				<< "                플 레 이 어 레 벨 업              \n"
 				<< "---------------------------------------------------\n";
 		});
-
+	Subscribe<IPauseEnterEvent>([](IPauseEnterEvent* ev)
+		{
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::RightBottom, "계속하려면 엔터를 누르세요.");
+		});
 	// IPlayerStageClearEvent를 처리하는 핸들러 등록
 	//Subscribe<IPlayerStageClearEvent>([](IPlayerStageClearEvent*)
 	//	{

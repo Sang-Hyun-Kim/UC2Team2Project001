@@ -207,6 +207,22 @@ private:
 	std::shared_ptr<AppendableRegion> rightBottom;
 
 private:
+	ConsoleLayout() : consoleWidth(160), consoleHeight(40)
+	{
+		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		InitializeConsoleSize(consoleWidth, consoleHeight);
+		system("cls"); // 콘솔 초기화
+
+		// 4개 영역 생성
+		int halfW = consoleWidth / 2;
+		int halfH = consoleHeight / 2;
+
+		leftTop = std::make_shared<AppendableRegion>(0, 0, halfW, halfH);
+		leftBottom = std::make_shared<AppendableRegion>(0, halfH, halfW, halfH);
+		rightTop = std::make_shared<AppendableRegion>(halfW, 0, halfW, halfH);
+		rightBottom = std::make_shared<AppendableRegion>(halfW, halfH, halfW, halfH);
+	}
+
 	ConsoleLayout(int width, int height) : consoleWidth(width), consoleHeight(height)
 	{
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -226,15 +242,10 @@ private:
 public:
 	// 싱글톤 전역 접근 함수
 	//  - 이미 인스턴스가 있으면 재사용, 없으면 (140,50)로 생성
-	static ConsoleLayout& GetInstance(int width = 140, int height = 50)
+	static ConsoleLayout& GetInstance()
 	{
-		static ConsoleLayout instance = ConsoleLayout(width, height);
+		static ConsoleLayout instance = ConsoleLayout(160, 40);
 		return instance;
-	}
-
-	ConsoleLayout()
-	{
-
 	}
 
 	// 소멸자
@@ -403,3 +414,59 @@ private:
 	}
 };
 
+
+
+#pragma region 예시 코드
+// 싱글톤 객체 획득 (140×50)
+//auto& layout = ConsoleLayout::GetInstance(180, 50);
+//
+//// 4등분 라인
+//layout.DrawFourSplit();
+//
+//// 좌상에 한 줄 추가
+//layout.AppendLine(ConsoleRegionType::LeftTop, "[좌상] Hello World");
+//// 좌하에 한 줄 추가
+//layout.AppendLine(ConsoleRegionType::LeftBottom, "[좌하] 전투 로그 시작");
+//// 우상에 한 줄 추가
+//layout.AppendLine(ConsoleRegionType::RightTop, "[우상] 몬스터 정보");
+//// 우하에 한 줄 추가
+//layout.AppendLine(ConsoleRegionType::RightBottom, "[우하] 시스템 메세지");
+//
+//
+//std::cin.get();
+//
+//// 좌상 0번 줄 수정
+//layout.UpdateLine(ConsoleRegionType::LeftTop, 0, "[좌상] 업데이트된 텍스트");
+//// 우상 0번 줄 삭제
+//layout.RemoveLine(ConsoleRegionType::RightTop, 0);
+//
+//
+//
+//std::cin.get();
+//
+//// 우하단 ClearAll
+//layout.SelectClear(ConsoleRegionType::RightBottom);
+//
+//// 1) 기본 AppendLine (흰색, 검정)
+//layout.AppendLine(ConsoleRegionType::LeftTop, "기본색 텍스트(색상 안 지정)");
+//
+//// 2) 색상 지정 AppendLine (연두색 LightGreen=10, 배경=Black=0)
+//layout.AppendLine(ConsoleRegionType::LeftTop, "이 라인은 녹색!",
+//	true,
+//	ConsoleColor::LightGreen,
+//	ConsoleColor::Black);
+//
+//// 3) 또 다른 라인(빨강, 검정)
+//layout.AppendLine(ConsoleRegionType::RightTop, "이 라인은 빨강!",
+//	true,
+//	ConsoleColor::LightRed,
+//	ConsoleColor::Black);
+//
+//// 4) 다시 기본색
+//layout.AppendLine(ConsoleRegionType::RightBottom, "다시 기본색(매개변수 생략)");
+//
+//
+//
+//std::cin.get();
+//return 0;
+#pragma endregion 예시 코드

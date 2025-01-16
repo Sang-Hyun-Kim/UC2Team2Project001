@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include "ICharacterEventTypes.h"
 #include "GlobalEventManager.h"
-
+//#include ""
 USkillComponent::USkillComponent()
 {
 }
@@ -104,7 +104,7 @@ bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 		return skillList[_skillName]->UseSkill();
 	}
 
-	cout << _skillName << "스킬이 없습니다" << endl;
+	//cout << _skillName << "스킬이 없습니다" << endl;
 	return false;
 }
 

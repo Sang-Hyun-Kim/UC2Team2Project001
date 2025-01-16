@@ -2,6 +2,7 @@
 #include "UStatusComponent.h"
 #include "CharacterStatus.h"
 #include <iostream>
+#include "Character.h"
 
 UStatusComponent::UStatusComponent(Character* _owner)
 {
