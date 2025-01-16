@@ -50,9 +50,8 @@ void BurnState::ApplyEffect(Character* _target)
 	// 만료되지 않았다면 데미지 적용
 	if (_target && !IsExpired())
 	{
+		CharacterUtility::ModifyStat(_target, StatType::HP, damagePerTurn);
 		std::cout << _target->GetName() << "은(는) 불타고 있어 " << damagePerTurn << "의 데미지를 받았습니다. " << "[남은 턴: " << GetDuration() << "]\n";
-
-		_target->combatManager->TakeDamage(damagePerTurn);
 	}
 }
 
@@ -94,8 +93,6 @@ void PoisonState::ApplyEffect(Character* _target)
 		std::cout << _target->GetName() << "은(는) 중독되어 " << CalculatedDamage << "의 데미지를 받았습니다. " << "[스택: " << currentStack << ", 남은 턴: " << GetDuration() << "]\n";
 		_target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
 	}
-
-	
 }
 
 UnbreakableState::UnbreakableState(int _duration) : ICharacterState("불굴의 의지", _duration)
@@ -134,7 +131,11 @@ void ModifyStatState::ApplyEffect(Character* _target)
 	if (!isApplied)
 	{
 		target = _target;
+
 		CharacterUtility::ModifyStat(target, statType, value); // 스탯 증가/감소
+
+		cout << "스탯 상승 효과 발동!" << endl;
+
 		isApplied = true;
 	}
 }
@@ -144,6 +145,9 @@ void ModifyStatState::EffectBeforeRemove()
 	if (isApplied && target)
 	{
 		CharacterUtility::ModifyStat(target, statType, -value); // 원래 값 복구
+
+		cout << "스탯 상승 효과 해제" << endl;
+
 		isApplied = false;
 	}
 }

@@ -3,11 +3,19 @@
 
 #include "HealthPotion.h"
 #include "AttackBoostPotion.h"
+#include "ManaPotion.h"
+#include "DefenseBoostPotion.h"
+#include "PoisonBottle.h"
+#include "FireBottle.h"
 
 ItemManager::ItemManager()
 {
-   items[nextKey++] = make_shared<HealthPotion>();
-   items[nextKey++] = make_shared<AttackBoostPotion>();    
+   items[nextKey++] = make_shared<HealthPotion>(nextKey);
+   items[nextKey++] = make_shared<ManaPotion>(nextKey);
+   items[nextKey++] = make_shared<AttackBoostPotion>(nextKey);
+   items[nextKey++] = make_shared<DefenseBoostPotion>(nextKey);
+   items[nextKey++] = make_shared<PoisonBottle>(nextKey);
+   items[nextKey++] = make_shared<FireBottle>(nextKey);
 }
 
 ItemManager::~ItemManager()

@@ -10,6 +10,8 @@
 #include "ICharacterEventTypes.h"
 #include "USkillComponent.h"
 
+#include "ConsoleLayout.h"
+
 UStatsComponent::UStatsComponent(Character* _inOwnedCharacter)
 {
 	ownedCharacter = _inOwnedCharacter;
@@ -125,21 +127,41 @@ bool UStatsComponent::IsDead()
 
 void UStatsComponent::PrintStatus()
 {
-	std::cout << "================ Character Status ================\n";
-	std::cout << "Name: " << (ownedCharacter ? ownedCharacter->GetName(): "None") << "\n";
-	std::cout << "Level: " << stats[StatType::Level] << "\n";
-	std::cout << "Experience: " << stats[StatType::Experience]
-		<< " / " << stats[StatType::MaxExperience] << "\n";
-	std::cout << "HP: " << stats[StatType::HP]
-		<< " / " << stats[StatType::MaxHP] << "\n";
-	std::cout << "MP: " << stats[StatType::MP]
-		<< " / " << stats[StatType::MaxMP] << "\n";
-	std::cout << "Attack Power: " << stats[StatType::AttackPower] << "\n";
-	std::cout << "Defense: " << stats[StatType::Defense] << "\n";
-	std::cout << "Critical Chance: " << (stats[StatType::CriticalChance] * 100) << "%\n";
-	std::cout << "Evasion Rate: " << (stats[StatType::EvasionRate] * 100) << "%\n";
-	std::cout << "==================================================\n";
-	cout << endl;
+	/*vector<string> statList = {
+
+	"================ Character Status ================",
+	"Name: " + (ownedCharacter ? ownedCharacter->GetName() : "None"),
+	"Level: " + to_string(stats[StatType::Level]),
+	"Experience: " + stats[StatType::Experience] + " / " + stats[StatType::MaxExperience],
+	"HP: " + stats[StatType::HP]+ " / " << stats[StatType::MaxHP],
+	"MP: " + stats[StatType::MP]+ " / " << stats[StatType::MaxMP],
+	"Attack Power: " + stats[StatType::AttackPower] << "\n";
+	"Defense: " + stats[StatType::Defense] + "\n";
+	"Critical Chance: " + (stats[StatType::CriticalChance] * 100) << "%";
+	"Evasion Rate: " + (stats[StatType::EvasionRate] * 100) + "%";
+	"==================================================\n"; };*/
+
+	// 1) 레이아웃 싱글톤 획득
+	auto& layout = ConsoleLayout::GetInstance();
+
+	vector<string> statusLines;
+
+	statusLines.push_back("================ Character Status ================");
+	statusLines.push_back("Name: " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
+	statusLines.push_back("Level: " + to_string(stats[StatType::Level]));
+	statusLines.push_back("Experience: " + std::to_string(stats[StatType::Experience]) + " / " + std::to_string(stats[StatType::MaxExperience]));
+	statusLines.push_back("HP: " + std::to_string(stats[StatType::HP]) + " / " + std::to_string(stats[StatType::MaxHP]));
+	statusLines.push_back("MP: " + std::to_string(stats[StatType::MP]) + " / " + std::to_string(stats[StatType::MaxMP]));
+	statusLines.push_back("Attack Power: " + std::to_string(stats[StatType::AttackPower]));
+	statusLines.push_back("Defense: " + std::to_string(stats[StatType::Defense]));
+	statusLines.push_back("Critical Chance: " + std::to_string(stats[StatType::CriticalChance] * 100) + "%");
+	statusLines.push_back("Evasion Rate: " + std::to_string(stats[StatType::EvasionRate] * 100) + "%");
+	statusLines.push_back("==================================================");
+
+	for (string stat : statusLines)
+	{
+		layout.AppendLine(ConsoleRegionType::LeftTop, stat, true, ConsoleColor::Magenta);
+	}
 }
 
 void UStatsComponent::LevelUp()

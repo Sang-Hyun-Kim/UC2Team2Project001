@@ -3,6 +3,7 @@
 #include "Inventory.h"
 #include "SkillManager.h"
 #include "BasicAttack.h"
+#include "ItemManager.h"
 
 Player::Player()
 {

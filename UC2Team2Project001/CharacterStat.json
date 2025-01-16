@@ -3,7 +3,7 @@
   "Characters": {
     "Player": {
       "Stats": {
-        "HP": 120,
+        "HP": 100,
         "MaxHP": 100,
         "MP": 50,
         "MaxMP": 50,

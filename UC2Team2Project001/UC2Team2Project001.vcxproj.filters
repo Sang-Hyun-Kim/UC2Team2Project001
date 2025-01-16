@@ -306,6 +306,21 @@
     <ClCompile Include="ConsoleLayout.cpp">
       <Filter>소스 파일\WindowDisplay</Filter>
     </ClCompile>
+    <ClCompile Include="ManaPotion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DefenseBoostPotion.cpp">
+      <Filter>소스 파일\ItemSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ThrowableItem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PoisonBottle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBottle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -535,6 +550,21 @@
     </ClInclude>
     <ClInclude Include="ConsoleColorManager.h">
       <Filter>헤더 파일\WindowsDisplay</Filter>
+    </ClInclude>
+    <ClInclude Include="ManaPotion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DefenseBoostPotion.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowableItem.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PoisonBottle.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBottle.h">
+      <Filter>헤더 파일\ItemSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

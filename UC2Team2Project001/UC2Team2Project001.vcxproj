@@ -146,6 +146,8 @@
     <ClCompile Include="ConsoleLayout.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
     <ClCompile Include="CursedSeal.cpp" />
+    <ClCompile Include="DefenseBoostPotion.cpp" />
+    <ClCompile Include="FireBottle.cpp" />
     <ClCompile Include="ISkillAction.cpp" />
     <ClCompile Include="ISkillCondition.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
@@ -153,9 +155,11 @@
     <ClCompile Include="LobbySystem.cpp" />
     <ClCompile Include="LuckyGuy.cpp" />
     <ClCompile Include="MainSystem.cpp" />
+    <ClCompile Include="ManaPotion.cpp" />
     <ClCompile Include="MentalDiscipline.cpp" />
     <ClCompile Include="OnePointAttack.cpp" />
     <ClCompile Include="Patience.cpp" />
+    <ClCompile Include="PoisonBottle.cpp" />
     <ClCompile Include="Sanctification.cpp" />
     <ClCompile Include="ShieldAttack.cpp" />
     <ClCompile Include="Plague.cpp" />
@@ -169,6 +173,7 @@
     <ClCompile Include="CharacterStatus.cpp" />
     <ClCompile Include="IInputEventTypes.cpp" />
     <ClCompile Include="ISystemTypes.h" />
+    <ClCompile Include="ThrowableItem.cpp" />
     <ClCompile Include="Unbreakable.cpp" />
     <ClCompile Include="SystemContext.cpp" />
     <ClCompile Include="URewardEventManagerSystem.cpp" />
@@ -214,7 +219,9 @@
     <ClInclude Include="ConsoleLayout.h" />
     <ClInclude Include="ConsumableItem.h" />
     <ClInclude Include="CursedSeal.h" />
+    <ClInclude Include="DefenseBoostPotion.h" />
     <ClInclude Include="EventManagerSystem.h" />
+    <ClInclude Include="FireBottle.h" />
     <ClInclude Include="GlobalEventManager.h" />
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="ICharacterEventTypes.h" />
@@ -231,9 +238,11 @@
     <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="LobbySystemStates.h" />
     <ClInclude Include="LuckyGuy.h" />
+    <ClInclude Include="ManaPotion.h" />
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />
     <ClInclude Include="Patience.h" />
+    <ClInclude Include="PoisonBottle.h" />
     <ClInclude Include="Sanctification.h" />
     <ClInclude Include="ShieldAttack.h" />
     <ClInclude Include="Plague.h" />
@@ -255,6 +264,7 @@
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
     <ClInclude Include="SystemContext.h" />
+    <ClInclude Include="ThrowableItem.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="Unbreakable.h" />
     <ClInclude Include="URewardEventManagerSystem.h" />

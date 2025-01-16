@@ -2,6 +2,7 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "Character.h"
+#include "ConsoleLayout.h"
 
 Inventory::Inventory(Character* _owner)
 	: owner(_owner), gold(0){}
@@ -70,19 +71,21 @@ void Inventory::useItem(int _index, Character* _target)
     {
         FItemData& itemData = inven[_index];
 
-        cout << itemData.item.get()->getName() <<"이 사용되었습니다!" << endl;
-
         // 아이템의 use 메서드 호출
-        itemData.item->use(_target);
+        // 아이템이 실제로 사용 되면 true
+        if (itemData.item->use(_target))
+        {
+            ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, itemData.item.get()->getName() + "이 사용되었습니다!", true, ConsoleColor::LightBlue);
 
-        // 사용 후 아이템 수량 감소
-        itemData.count -= 1;
-        if (itemData.count <= 0) {
-            inven.erase(inven.begin() + _index);
+            // 사용 후 아이템 수량 감소
+            itemData.count -= 1;
+            if (itemData.count <= 0) {
+                inven.erase(inven.begin() + _index);
+            }
         }
     }
     else {
-        cout << "해당 인덱스에 아이템이 존재하지 않습니다!" << endl;
+        ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "해당 인덱스에 아이템이 존재하지 않습니다!", true, ConsoleColor::Magenta);
     }
 }
 

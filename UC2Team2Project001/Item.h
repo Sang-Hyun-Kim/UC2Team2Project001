@@ -36,7 +36,7 @@ public:
         return value; 
     }
 
-    virtual void use(Character* _target) = 0; // 순수 가상 함수
+    virtual bool use(Character* _target) = 0; // 순수 가상 함수
 
     //프로토 타입 패턴을 위한 clone 함수
     virtual shared_ptr<Item> clone() const = 0;

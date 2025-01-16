@@ -40,6 +40,8 @@ void BattleSystem::EnterSystem()
 	monster = make_shared<Monster>();
 	monster->Initialize();
 
+	player->combatManager->SetTarget(monster.get());
+
 	activeCharacters.clear();
 	activeCharacters.push_back(player.get());
 	activeCharacters.push_back(monster.get());
@@ -131,7 +133,7 @@ void BattleSystem::Attack()
 	cout << endl;
 
 	auto player = GSystemContext->GetPlayer();
-	player->combatManager->SetTarget(monster.get());
+	//player->combatManager->SetTarget(monster.get());
 
 	/*
 	플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
