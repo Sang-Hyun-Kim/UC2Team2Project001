@@ -38,21 +38,10 @@ int main()
 	eventManager.Subscribe(UISystem);
 	eventManager.Subscribe(TurnEventManager);
 
-	//while (true)
-	//{
-	//	GSystemContext->Update(); // Update()로 변경해야함
-	//}
-
-
-
-
-
-
-
-
-
-
-
+	while (true)
+	{
+		GSystemContext->Update(); // Update()로 변경해야함
+	}
 
 
 #pragma region 스킬 매니저 테스트 코드
@@ -188,47 +177,47 @@ int main()
 
 #pragma region 스킬 사용 예제
 
-	shared_ptr<Player> player = make_shared<Player>("Player");
-	player->Initialize();
-	
-	shared_ptr<Monster> monster = make_shared<Monster>();
-	monster->Initialize();
-	
-	//타겟 설정합니다
-	monster->combatManager->SetTarget(player.get());
-	player->combatManager->SetTarget(monster.get());
-	
-	std::vector<Character*> battleCharacters;
-	battleCharacters.push_back(player.get());
-	battleCharacters.push_back(monster.get());
-	
-	
+	//shared_ptr<Player> player = make_shared<Player>("Player");
+	//player->Initialize();
+	//
+	//shared_ptr<Monster> monster = make_shared<Monster>();
+	//monster->Initialize();
+	//
+	////타겟 설정합니다
+	//monster->combatManager->SetTarget(player.get());
+	//player->combatManager->SetTarget(monster.get());
+	//
+	//std::vector<Character*> battleCharacters;
+	//battleCharacters.push_back(player.get());
+	//battleCharacters.push_back(monster.get());
+	//
+	//
 
-	
+	//
 
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), player.get());
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), player.get());
-	
-	TurnEventManager->BeginTurn();
-
-
-	//player->combatManager->Attack();
-	//monster->combatManager->Attack();
-
-	//player->skillManager->UseSkill(SkillType::ACTIVE, "신성화");
-	player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
-
-	CharacterUtility::PrintStatus(player.get());
-	CharacterUtility::PrintStatus(monster.get());
-	
-
-	TurnEventManager->EndTurn(battleCharacters);
+	//SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), player.get());
+	//SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), player.get());
+	//
+	//TurnEventManager->BeginTurn();
 
 
-	
-	
-	//auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
-	//eventManager.Notify(playerAttackEvent);
+	////player->combatManager->Attack();
+	////monster->combatManager->Attack();
+
+	////player->skillManager->UseSkill(SkillType::ACTIVE, "신성화");
+	//player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
+
+	//CharacterUtility::PrintStatus(player.get());
+	//CharacterUtility::PrintStatus(monster.get());
+	//
+
+	//TurnEventManager->EndTurn(battleCharacters);
+
+
+	//
+	//
+	////auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
+	////eventManager.Notify(playerAttackEvent);
 
 	
 	

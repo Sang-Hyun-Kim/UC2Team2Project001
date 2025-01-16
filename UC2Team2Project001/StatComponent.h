@@ -57,7 +57,7 @@ protected:
 	void HandleExperienceGain();
 
 private:
-	Character* OwnedCharacter =nullptr;
+	Character* ownedCharacter =nullptr;
 
 	std::map<StatType, float> stats;
 };

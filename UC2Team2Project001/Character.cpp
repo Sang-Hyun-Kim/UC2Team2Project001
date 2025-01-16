@@ -16,6 +16,7 @@
 #include "BasicAttack.h"
 #include "SkillManager.h"
 #include "Sanctification.h"
+#include "PoisonedBlade.h"
 
 Character::Character()
 {
@@ -45,7 +46,7 @@ void Character::Initialize()
 	GlobalEventManager::Get().Subscribe(skillManager);
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonedBlade), this);
 }
 
 void Character::UseItem(const string& ItemName)

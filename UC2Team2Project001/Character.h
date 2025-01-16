@@ -38,7 +38,10 @@ public:
 
 public:
 	// 캐릭터 이름 반환
-	const string& GetName() { return displayName; }
+	const string& GetName()
+	{
+		return displayName;
+	}
 
 public:
 	//스텟 컴포넌트

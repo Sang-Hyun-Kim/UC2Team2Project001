@@ -90,9 +90,9 @@ void StatsLoader::SaveToJSON(const StatsData& _stats, const std::string& _charac
 }
 
 FCharacterReward StatsLoader::LoadRewardFromJSON(const std::string& characterName) {
-	std::ifstream file(DefaultFileName);
+	std::ifstream file(defaultFileName);
 	if (!file.is_open()) {
-		throw std::runtime_error("JSON 파일을 열 수 없습니다: " + DefaultFileName);
+		throw std::runtime_error("JSON 파일을 열 수 없습니다: " + defaultFileName);
 	}
 
 	json jsonData;
@@ -110,8 +110,8 @@ FCharacterReward StatsLoader::LoadRewardFromJSON(const std::string& characterNam
 	FCharacterReward reward;
 	if (characters[characterName].contains("Rewards")) {
 		const auto& rewardsData = characters[characterName]["Rewards"];
-		reward.DropGold = rewardsData.value("Gold", 0);
-		reward.DropExperience = rewardsData.value("Experience", 0);
+		reward.dropGold = rewardsData.value("Gold", 0);
+		reward.dropExperience = rewardsData.value("Experience", 0);
 	}
 
 	return reward;

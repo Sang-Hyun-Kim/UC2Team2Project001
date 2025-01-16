@@ -34,7 +34,7 @@ void Skill::SkillInit(Skill* _ownerSkill)
 
 bool Skill::UseSkill()
 {
-	if (!CanUseSkill())
+	if (!CanUseSkill() && !CharacterUtility::IsDead(skillData.owner))
 	{
 		cout << skillData.owner->GetName() << "은(는) 스킬을 사용할 수 없습니다: " << skillData.skillName << endl;
 		return false;

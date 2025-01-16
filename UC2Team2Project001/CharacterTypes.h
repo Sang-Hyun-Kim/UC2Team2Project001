@@ -6,6 +6,8 @@ struct FCharacterReward
 {
 	int dropGold = 0;
 
+	int dropExperience = 0;
+
 	shared_ptr<Item> dropItem = nullptr;
 
 	FCharacterReward()

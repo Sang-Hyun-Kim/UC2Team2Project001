@@ -170,7 +170,7 @@ void BattleSystem::Attack()
 	{ // 스킬 사용
 		auto cmd = make_shared<UseSkillCommand>(player->skillManager->GetActiveSkillNameByIndex(input - 1));
 		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleStartTurnState>();
+		state = make_shared<BattleStartTurnState>();
 		//player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
 		//player->skillManager->UseSkill(input - 1);
 		//Delay(1);
@@ -184,9 +184,9 @@ void BattleSystem::Attack()
 	GlobalEventManager::Get().Notify(monsterAttackEv);
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
 
-	InputManagerSystem::PauseUntilEnter();
-
 	turnSystem->EndTurn(activeCharacters);
+
+	InputManagerSystem::PauseUntilEnter();
 }
 
 void BattleSystem::DisplayStat()

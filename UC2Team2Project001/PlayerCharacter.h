@@ -22,5 +22,5 @@ public:
 	void UseItem(int _index, Character* _target);
 
 public:
-	shared_ptr<Inventory> InventoryComponent;
+	shared_ptr<Inventory> inventoryComponent;
 };

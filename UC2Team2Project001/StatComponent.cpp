@@ -56,7 +56,7 @@ void UStatsComponent::LoadFromJSON()
 		// StatsLoader를 통해 JSON에서 스탯 로드
 		StatsData loadStatsData = StatsLoader::LoadFromJSON(characterName);
 
-		Stats = {
+		stats = {
 		  {StatType::HP, loadStatsData.HP},
 		  {StatType::MaxHP, loadStatsData.MaxHP},
 		  {StatType::MP, loadStatsData.MP},
@@ -94,11 +94,11 @@ void UStatsComponent::SetStat(StatType _type, float _value)
 void UStatsComponent::ModifyStat(StatType _type, float _delta)
 {
 	// 스탯 변경
-	Stats[_type] += _delta;
+	stats[_type] += _delta;
 
-	if (Stats[_type] < 0)
+	if (stats[_type] < 0)
 	{
-		Stats[_type] = 0;
+		stats[_type] = 0;
 	}
 
 	// HP, MP 경계값 처리
@@ -107,7 +107,7 @@ void UStatsComponent::ModifyStat(StatType _type, float _delta)
 		StatType maxStatType = (_type == StatType::HP) ? StatType::MaxHP : StatType::MaxMP;
 		ClampStat(_type, 0.0f, GetStat(maxStatType));
 
-		if (_type == StatType::HP && Stats[StatType::HP] == 0)
+		if (_type == StatType::HP && stats[StatType::HP] == 0)
 		{
 			HandleCharacterDeath();
 		}
@@ -148,22 +148,22 @@ void UStatsComponent::LevelUp()
 	stats[StatType::Level] += 1;
 
 	// 체력/최대체력 증가
-	Stats[StatType::MaxHP] += 20;
+	stats[StatType::MaxHP] += 20;
 	// 체력은 새로 오른 최대체력으로 보충
 	stats[StatType::HP] = stats[StatType::MaxHP];
 
 	// MP/최대MP 증가
-	Stats[StatType::MaxMP] += 10;
-	Stats[StatType::MP] = Stats[StatType::MaxMP];
+	stats[StatType::MaxMP] += 10;
+	stats[StatType::MP] = stats[StatType::MaxMP];
 
 	// 공격력 증가
-	Stats[StatType::AttackPower] += 5;
+	stats[StatType::AttackPower] += 5;
 
 	// 방어력 증가
-	Stats[StatType::Defense] += 2;
+	stats[StatType::Defense] += 2;
 
 	// 다음 레벨에 필요한 경험치 증가(예: +20)
-	Stats[StatType::MaxExperience] += 20;
+	stats[StatType::MaxExperience] += 20;
 
 	// 레벨업 시점에 메시지 출력 (UI 이벤트를 보낼 수도 있음)
 	auto NewLevelUpEvent = make_shared<ICharacterLevelUpEvent>(ownedCharacter->GetName(), (int)stats[StatType::Level]);
@@ -172,39 +172,39 @@ void UStatsComponent::LevelUp()
 
 void UStatsComponent::ClampStat(StatType type, float _minValue, float _maxValue) 
 {
-	Stats[type] = std::clamp(Stats[type], _minValue, _maxValue);
+	stats[type] = std::clamp(stats[type], _minValue, _maxValue);
 }
 
 
 void UStatsComponent::HandleCharacterDeath()
 {
 	// 불굴의 의지 스킬 확인
-	if (OwnedCharacter->skillManager->GetSkill(SkillType::PASSIVE, "불굴의 의지"))
+	if (ownedCharacter->skillManager->GetSkill(SkillType::PASSIVE, "불굴의 의지"))
 	{
-		auto characterStatZeroEvent = std::make_shared<ICharacterStatZeroEvent>(OwnedCharacter->GetName());
+		auto characterStatZeroEvent = std::make_shared<ICharacterStatZeroEvent>(ownedCharacter->GetName());
 		GlobalEventManager::Get().Notify(characterStatZeroEvent);
 	}
 	else
 	{
-		auto characterDeadEvent = std::make_shared<ICharacterDeadEvent>(OwnedCharacter->GetName(), OwnedCharacter->characterReward);
+		auto characterDeadEvent = std::make_shared<ICharacterDeadEvent>(ownedCharacter->GetName(), ownedCharacter->characterReward);
 		GlobalEventManager::Get().Notify(characterDeadEvent);
 	}
 }
 
 void UStatsComponent::HandleExperienceGain()
 {
-	float currentExp = Stats[StatType::Experience];
-	float maxExp = Stats[StatType::MaxExperience];
+	float currentExp = stats[StatType::Experience];
+	float maxExp = stats[StatType::MaxExperience];
 
 	// 여러 레벨이 한 번에 오를 수 있도록 while 루프 사용
 	while (currentExp >= maxExp)
 	{
 		float leftover = currentExp - maxExp;
-		Stats[StatType::Experience] = leftover;
+		stats[StatType::Experience] = leftover;
 		LevelUp();
 
 		// 레벨업 이후 maxExp 값이 변경될 수 있으므로 다시 확인
-		currentExp = Stats[StatType::Experience];
-		maxExp = Stats[StatType::MaxExperience];
+		currentExp = stats[StatType::Experience];
+		maxExp = stats[StatType::MaxExperience];
 	}
 }

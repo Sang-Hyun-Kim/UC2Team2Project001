@@ -2,7 +2,7 @@
 
 #include "Character.h"
 
-class Monster : public Character, public enable_shared_from_this<Monster>
+class Monster : public Character
 {
 public:
 	Monster();
@@ -33,7 +33,7 @@ private:
 
 
 private:
-	bool bIsBoss = false;
+	bool isBoss = false;
 
 	int balanceLevel = 4;
 };
