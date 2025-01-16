@@ -161,6 +161,7 @@
     <ClCompile Include="CharacterStatus.cpp" />
     <ClCompile Include="IInputEventTypes.cpp" />
     <ClCompile Include="ISystemTypes.h" />
+    <ClCompile Include="URewardEventManagerSystem.cpp" />
     <ClCompile Include="UStatusComponent.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="SubSystem.h" />
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
+    <ClInclude Include="URewardEventManagerSystem.h" />
     <ClInclude Include="USkillComponent.h" />
     <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>
