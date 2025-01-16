@@ -11,9 +11,9 @@ public:
 	virtual ~InputValidator() = default;
 
 	// 유효성 검사를 담당하는 함수입니다. 실패할 경우 자동으로 오류 메시지 출력합니다.
-	bool IsValidate(const T& input) const
+	bool IsValidate(const T& _input) const
 	{
-		if (!IsValid(input)) {
+		if (!IsValid(_input)) {
 			PrintErrorMessage();  // 유효하지 않으면 오류 메시지를 출력
 			return false;
 		}
@@ -22,7 +22,7 @@ public:
 
 protected:
 	// 유효성 검사 로직은 자식 클래스에서 정의해주세요.
-	virtual bool IsValid(const T& input) const = 0;
+	virtual bool IsValid(const T& _input) const = 0;
 
 	// 오류 메시지를 출력하는 함수입니다. 마찬가지로 자식 클래스에서 정의해주세요.
 	virtual void PrintErrorMessage() const = 0;
@@ -33,9 +33,16 @@ template<typename T>
 class NoValidator : public InputValidator<T>
 {
 public:
-	NoValidator() {};
-	virtual bool IsValid(const T& input) const { return true; } ;
-	virtual void PrintErrorMessage() const {} ;
+	NoValidator()
+	{
+	}
+	virtual bool IsValid(const T& input) const
+	{
+		return true; 
+	};
+	virtual void PrintErrorMessage() const
+	{
+	}
 };
 
 // 범위 검사 최소, 최댓값을 매개변수로 받습니다.
@@ -43,12 +50,12 @@ template<typename T>
 class RangeValidator : public InputValidator<T>
 {
 public:
-	RangeValidator(T min, T max) : min(min), max(max) {}
+	RangeValidator(T _min, T _max) : min(_min), max(_max) {}
 
 protected:
-	bool IsValid(const T& input) const override
+	bool IsValid(const T& _input) const override
 	{
-		return (input >= min) && (input <= max);
+		return (_input >= min) && (_input <= max);
 	}
 
 	void PrintErrorMessage() const override
@@ -64,12 +71,12 @@ private:
 class NameRangeValidator : public InputValidator<string>
 {
 public:
-	NameRangeValidator(int min = 0, int max = MAX_NAME_LENGTH) : min(min), max(max) {}
+	NameRangeValidator(int _min = 0, int _max = MAX_NAME_LENGTH) : min(_min), max(_max) {}
 
 protected:
-	bool IsValid(const string& input) const override
+	bool IsValid(const string& _input) const override
 	{
-		return (input.length() >= min) && (input.length() <= max);
+		return (_input.length() >= min) && (_input.length() <= max);
 	}
 
 	void PrintErrorMessage() const override
@@ -84,14 +91,16 @@ private:
 class NameSpaceValidator : public InputValidator<string>
 {
 public:
-	NameSpaceValidator() {}
+	NameSpaceValidator()
+	{
+	}
 
 protected:
-	bool IsValid(const string& input) const override
+	bool IsValid(const string& _input) const override
 	{
-		return !std::all_of(input.begin(), input.end(), [](const char c)
+		return !std::all_of(_input.begin(), _input.end(), [](const char _char)
 			{ 
-				return std::isspace(c);
+				return std::isspace(_char);
 			});
 		// std::all_of: iterator 구간 사이 모든 인자가 조건문을 만족하는 경우 true 아닌 경우 false
 		// isspace(): 공백인경우 true 반환
@@ -114,10 +123,10 @@ public:
 		
 
 protected:
-	bool IsValid(const string& input) const override
+	bool IsValid(const string& _input) const override
 	{
 		// 정규식 패턴: 알파벳 대소문자, 숫자, 공백만 허용
-		return regex_match(input, regex("^[a-zA-Z0-9 ]*$"));
+		return regex_match(_input, regex("^[a-zA-Z0-9 ]*$"));
 	}
 
 	void PrintErrorMessage() const override
@@ -130,16 +139,16 @@ class RegexValidator : public InputValidator<string>
 {
 public:
 	// 정규식 패턴과, 정규식이 일치하지 않을 경우 출력할 오류 메시지를 넣어주세요.
-	RegexValidator(const string& pattern, const string& errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
-		: errorMessage(errorMessage) 
+	RegexValidator(const string& _pattern, const string& _errorMessage = "입력값이 규칙과 맞지 않습니다.\n")
+		: errorMessage(_errorMessage) 
 	{
-		regexPattern = regex(pattern);
+		regexPattern = regex(_pattern);
 	}
 
 protected:
-	bool IsValid(const string& input) const override
+	bool IsValid(const string& _input) const override
 	{
-		return regex_match(input, regexPattern);
+		return regex_match(_input, regexPattern);
 	}
 
 	void PrintErrorMessage() const override

@@ -37,11 +37,11 @@ public:
 
 	ILifeStealEffect(float _lifeAmount) : lifeAmount(_lifeAmount)
 	{
-	};
+	}
 
 	virtual void PreEffect()
 	{
-	};
+	}
 	virtual void PostEffect() override;
 };
 
@@ -56,7 +56,7 @@ public:
 
 	virtual void PreEffect()
 	{
-	};
+	}
 	virtual void PostEffect() override;
 
 	bool isSelf;
@@ -68,7 +68,7 @@ class IDefenseBasedDamageEffect : public ISkillEffect
 public:
 	virtual void PreEffect()
 	{
-	};
+	}
 	virtual void PostEffect() override;
 };
 
@@ -78,7 +78,7 @@ class IOnePointAttackEffect : public ISkillEffect
 public:
 	virtual void PreEffect()
 	{
-	};
+	}
 	virtual void PostEffect() override;
 };
 
@@ -92,7 +92,7 @@ public:
 
 	virtual void PreEffect()
 	{
-	};
+	}
 	virtual void PostEffect() override;
 };
 
@@ -105,7 +105,7 @@ public:
 
 	virtual void PreEffect()
 	{
-	};
+	}
 
 	virtual void PostEffect() override;
 
@@ -125,7 +125,7 @@ public:
 
 	virtual void PreEffect() override
 	{
-	};
+	}
 
 	virtual void PostEffect() override;
 
@@ -144,7 +144,7 @@ public:
 
 	virtual void PostEffect()
 	{
-	};
+	}
 };
 
 // 불굴 상태
@@ -155,7 +155,7 @@ public:
 
 	virtual void PreEffect() override
 	{
-	};
+	}
 
 	virtual void PostEffect() override;
 };

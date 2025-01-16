@@ -11,10 +11,13 @@ public:
 
 	//virtual void Update();
 
-	inline SystemType GetSystemType() override { return SystemType::LOBBY; }
-	void OnEvent(const std::shared_ptr<IEvent> ev) override;
+	inline SystemType GetSystemType() override
+	{ 
+		return SystemType::LOBBY;
+	}
+
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
 
 	void MainMenu();
 	void CreatePlayerMenu();
-private:
 };

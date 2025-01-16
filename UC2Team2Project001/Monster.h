@@ -5,15 +5,15 @@
 class Monster : public Character, public enable_shared_from_this<Monster>
 {
 private:
-	vector<string> MonsterNames{ "Dragon", "Goblin", "Orc", "Troll" };
+	vector<string> monsterNames{ "Dragon", "Goblin", "Orc", "Troll" };
 
-	bool bIsBoss;
+	bool isBoss;
 
-	void SetMonsterStat(int PlayerLevel);
+	void SetMonsterStat(int _playerLevel);
 
 	int blanceLevel = 8;
 
-	void SetBlance(Character* Player);
+	void SetBlance(Character* _player);
 public:
 	Monster();
 

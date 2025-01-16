@@ -18,11 +18,11 @@ UCombatComponent::UCombatComponent(Character* _owner)
 	owner = _owner;
 }
 
-void UCombatComponent::Initialize(StatsData LoadStatsData)
+void UCombatComponent::Initialize(StatsData _loadStatsData)
 {
 	// 전략 설정
-	SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
-	SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
+	SetAttackStrategy(StrategyFactory::CreateAttackStrategy(_loadStatsData.AttackStrategyData));
+	SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(_loadStatsData.DefenseStrategyData));
 }
 
 void UCombatComponent::SetOwner(Character* _owner)

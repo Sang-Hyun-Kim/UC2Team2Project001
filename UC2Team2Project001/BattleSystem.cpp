@@ -208,7 +208,7 @@ void BattleSystem::UseItem()
 	GlobalEventManager::Get().Notify(battleitemcheck);
 	
 	auto player = GSystemContext->GetPlayer();
-	vector<string> itemList = player->InventoryComponent->GetInventoryInfoWithString(1);
+	vector<string> itemList = player->inventoryComponent->GetInventoryInfoWithString(1);
 	
 	int lastIndex = itemList.size() + 1;
 
@@ -284,9 +284,9 @@ void BattleSystem::StartTurn()
 	state = make_shared<BattleMainState>();
 }
 
-void BattleSystem::OnEvent(const std::shared_ptr<IEvent> ev)
+void BattleSystem::OnEvent(const std::shared_ptr<IEvent> _event)
 {
-	if (auto deadEvent = dynamic_pointer_cast<ICharacterDeadEvent>(ev))
+	if (auto deadEvent = dynamic_pointer_cast<ICharacterDeadEvent>(_event))
 	{
 		auto player = GSystemContext->GetPlayer();
 		if (monster->statManager->IsDead())
@@ -305,13 +305,13 @@ void BattleSystem::GetReward()
 	auto player = GSystemContext->GetPlayer();
 	auto reward = rewardSystem->GetReward();
 
-	player->InventoryComponent->addGold(reward.gold); // 돈 넣기
+	player->inventoryComponent->addGold(reward.gold); // 돈 넣기
 
-	if (monster->characterReward.DropItem != nullptr)
+	if (monster->characterReward.dropItem != nullptr)
 	{
 		auto playergetitem = make_shared<IPlayerGetItemEvent>();
 		GlobalEventManager::Get().Notify(playergetitem);
-		player->InventoryComponent->addItem(reward.item); // 템 넣기
+		player->inventoryComponent->addItem(reward.item); // 템 넣기
 	}
 
 	int skillSize = reward.skillTypes.size();

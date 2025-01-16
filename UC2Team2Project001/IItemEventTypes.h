@@ -29,7 +29,7 @@ public:
 	string itemName;   // 아이템 이름
 	int cost;          // 가격
 
-	IItemSoldEvent(const string& seller, const string& item, int cost)	: sellerName(seller), itemName(item), cost(cost) 
+	IItemSoldEvent(const string& _seller, const string& _item, int _cost)	: sellerName(_seller), itemName(_item), cost(_cost) 
 	{
 	}
 };
@@ -39,6 +39,8 @@ public:
 class IPlayerGetItemEvent : public IEvent
 {
 public:
-	IPlayerGetItemEvent() {}
+	IPlayerGetItemEvent()
+	{
+	}
 };
 #pragma endregion 더미코드

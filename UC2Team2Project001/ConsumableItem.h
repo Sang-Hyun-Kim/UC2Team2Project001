@@ -5,5 +5,5 @@ class ConsumableItem : public Item {
 public:
     ConsumableItem();
 
-    ConsumableItem(int itemNumber,const string& name, const string& description, int value);
+    ConsumableItem(int _itemNumber,const string& _name, const string& _description, int _value);
 };

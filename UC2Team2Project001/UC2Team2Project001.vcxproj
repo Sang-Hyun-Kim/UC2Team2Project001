@@ -242,7 +242,6 @@
     <ClInclude Include="StatType.h" />
     <ClInclude Include="CharacterStatus.h" />
     <ClInclude Include="StrategyFactory.h" />
-    <ClInclude Include="GameState.h" />
     <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />
@@ -264,7 +263,6 @@
     <ClInclude Include="InputManagerSystem.h" />
     <ClInclude Include="Invoker.h" />
     <ClInclude Include="ShopSystem.h" />
-    <ClInclude Include="Status.h" />
     <ClInclude Include="UStatusComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

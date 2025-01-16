@@ -38,7 +38,7 @@ public:
 
 public:
 	// 캐릭터 이름 반환
-	const string& GetName() { return characterName; }
+	const string& GetName() { return displayName; }
 
 public:
 	//스텟 컴포넌트
@@ -58,8 +58,8 @@ public:
 	FCharacterReward characterReward;
 
 protected:
-	// 캐릭터 이름
-	string characterName;
+	// 캐릭터 이름(json에서 찾을 이름)
+	string characterName = "Player";
 
 	// 화면에 표시 될 이름
 	string displayName;

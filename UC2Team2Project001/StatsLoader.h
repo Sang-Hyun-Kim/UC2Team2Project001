@@ -27,8 +27,8 @@ class StatsLoader
 {
 public:
 	// 특정 캐릭터 데이터를 로드
-	static StatsData LoadFromJSON(const std::string& characterName);
+	static StatsData LoadFromJSON(const std::string& _characterName);
 
 	// 특정 캐릭터 데이터를 저장
-	static void SaveToJSON(const StatsData& stats, const std::string& characterName);
+	static void SaveToJSON(const StatsData& _stats, const std::string& _characterName);
 };

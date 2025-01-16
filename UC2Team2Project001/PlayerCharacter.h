@@ -9,17 +9,17 @@ class Player : public Character
 public:
 	Player();
 
-	Player(const std::string& InName);
+	Player(const std::string& _inName);
 
 	virtual ~Player() = default;
 
 
 	// 아이템 사용
 
-	void UseItem(int index, Character* target);
+	void UseItem(int _index, Character* _target);
 
 public:
 
-	shared_ptr<Inventory> InventoryComponent;
+	shared_ptr<Inventory> inventoryComponent;
 
 };

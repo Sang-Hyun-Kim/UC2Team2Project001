@@ -21,7 +21,7 @@ public:
 	~UStatusComponent() = default;
 
 	// 상태 추가 (이미 존재하는 상태이면 남은 턴을 '최대 턴'으로 갱신)
-	void AddState(const std::shared_ptr<ICharacterState>& NewState);
+	void AddState(const std::shared_ptr<ICharacterState>& _newState);
 
 	// 캐릭터에게 적용된 모든 상태의 효과를 적용 (매 턴마다 호출)
 	void ApplyAllEffects();
@@ -38,20 +38,20 @@ public:
 	template <typename T>
 	std::shared_ptr<T> GetState() const
 	{
-		for (const auto& State : ActiveStates)
+		for (const auto& state : activeStates)
 		{
-			if (auto CastedState = std::dynamic_pointer_cast<T>(State))
+			if (auto castedState = std::dynamic_pointer_cast<T>(state))
 			{
-				return CastedState;
+				return castedState;
 			}
 		}
 		return nullptr; // 원하는 상태가 없으면 nullptr 반환
 	}
 
-	bool RemoveState(std::type_index StateType);
+	bool RemoveState(std::type_index _stateType);
 
 public:
-	Character* OwnerCharacter;
+	Character* ownerCharacter;
 
-	std::vector<std::shared_ptr<ICharacterState>> ActiveStates;
+	std::vector<std::shared_ptr<ICharacterState>> activeStates;
 };

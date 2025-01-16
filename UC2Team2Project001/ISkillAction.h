@@ -28,14 +28,15 @@ public:
 class AttackAction : public ISkillAction
 {
 public:
-    AttackAction()
-    {
-    };
+	AttackAction()
+	{
+	}
 
     AttackAction(float _attackDamage)
     {
         attackDamage = _attackDamage;
     }
+
     ~AttackAction() = default;
 
     virtual void ExecuteAction() override;

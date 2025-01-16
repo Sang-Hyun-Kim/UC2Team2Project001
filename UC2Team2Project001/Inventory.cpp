@@ -3,16 +3,16 @@
 #include "Item.h"
 #include "Character.h"
 
-Inventory::Inventory(Character* owner)
-	: owner(owner), gold(0){}
+Inventory::Inventory(Character* _owner)
+	: owner(_owner), gold(0){}
 
-shared_ptr<Item> Inventory::GetItemWithIndex(int index)
+shared_ptr<Item> Inventory::GetItemWithIndex(int _index)
 {
-    return inven[index].item;
+    return inven[_index].item;
 }
 
-void Inventory::addItem(shared_ptr<Item> item, int count) {
-    if (count <= 0) {
+void Inventory::addItem(shared_ptr<Item> _item, int _count) {
+    if (_count <= 0) {
         cout << "0개 이하로 추가할 수 없습니다." << endl;
         return;
     }
@@ -22,35 +22,35 @@ void Inventory::addItem(shared_ptr<Item> item, int count) {
         find_if(
         inven.begin(),
         inven.end(),
-        [&item](const FItemData& data)
+        [&_item](const FItemData& data)
             {
-            return data.item->getItemNumber() == item->getItemNumber();
+            return data.item->getItemNumber() == _item->getItemNumber();
             }
         );
 
     if (it != inven.end()) {
         // 아이템이 이미 존재하면 개수만 증가
-        it->count += count;
+        it->count += _count;
     }
     else {
         // 신규 아이템 추가
-        inven.push_back(FItemData(item, count));
+        inven.push_back(FItemData(_item, _count));
     }
 }
 
-void Inventory::removeItem(int index, int count) {
+void Inventory::removeItem(int _index, int _count) {
     //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
     //index--;
-    if (index >= 0 && index < inven.size()) {
-        FItemData& data = inven[index];
+    if (_index >= 0 && _index < inven.size()) {
+        FItemData& data = inven[_index];
 
-        if (data.count <= count) {
+        if (data.count <= _count) {
             // 아이템의 수량이 요청된 값보다 작거나 같으면 삭제
-            inven.erase(inven.begin() + index);
+            inven.erase(inven.begin() + _index);
         }
         else {
             // 아이템 수량 감소
-            data.count -= count;
+            data.count -= _count;
         }
     }
     else {
@@ -58,27 +58,27 @@ void Inventory::removeItem(int index, int count) {
     }
 }
 
-void Inventory::useItem(int index, Character* target)
+void Inventory::useItem(int _index, Character* _target)
 {
     // 타겟이 없으면 owner를 기본값으로 설정
-    if (!target) {
-        target = owner;
+    if (!_target) {
+        _target = owner;
     }
     //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
     //index--;
-    if (index >= 0 && index < inven.size()) 
+    if (_index >= 0 && _index < inven.size()) 
     {
-        FItemData& itemData = inven[index];
+        FItemData& itemData = inven[_index];
 
         cout << itemData.item.get()->getName() <<"이 사용되었습니다!" << endl;
 
         // 아이템의 use 메서드 호출
-        itemData.item->use(target);
+        itemData.item->use(_target);
 
         // 사용 후 아이템 수량 감소
         itemData.count -= 1;
         if (itemData.count <= 0) {
-            inven.erase(inven.begin() + index);
+            inven.erase(inven.begin() + _index);
         }
     }
     else {
@@ -86,11 +86,11 @@ void Inventory::useItem(int index, Character* target)
     }
 }
 
-int Inventory::getItemCount(int index) const {
+int Inventory::getItemCount(int _index) const {
     //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
     //index--;
-    if (index >= 0 && index < inven.size()) {
-        return inven[index].count;
+    if (_index >= 0 && _index < inven.size()) {
+        return inven[_index].count;
     }
     return 0;  // 인덱스에 아이템이 없으면 0 반환
 }
@@ -99,9 +99,9 @@ int Inventory::getGold() const {
     return gold;
 }
 
-void Inventory::addGold(int amount) {
-    if (amount > 0) {
-        gold += amount;
+void Inventory::addGold(int _amount) {
+    if (_amount > 0) {
+        gold += _amount;
         //cout << "추가된 골드 :  " << amount << " gold." << endl;
     }
     else {  
@@ -109,9 +109,9 @@ void Inventory::addGold(int amount) {
     }
 }
 
-void Inventory::removeGold(int amount) {
-    if (amount > 0 && gold >= amount) {
-        gold -= amount;
+void Inventory::removeGold(int _amount) {
+    if (_amount > 0 && gold >= _amount) {
+        gold -= _amount;
         //cout << "빠져나간 골드 :  " << amount << " gold." << endl;
     }
     else {
@@ -119,7 +119,7 @@ void Inventory::removeGold(int amount) {
     }
 }
 
-void Inventory::displayInventory(int intype) const {
+void Inventory::displayInventory(int _intype) const {
     cout << "==== 인벤토리 아이템 정보 ====" << endl;
 
     if (inven.empty()) {
@@ -130,7 +130,7 @@ void Inventory::displayInventory(int intype) const {
             ostringstream itemInfo;
             itemInfo << i + 1 << "." << inven[i].item->getName() << "x" << inven[i].count << " ";
 
-            switch (intype) {
+            switch (_intype) {
             case 0: // 이름, 설명, 개수, 가치 출력
                 itemInfo << inven[i].item->getValue() << " Gold  [" << inven[i].item->getDescription() << "]";
                 break;
@@ -150,11 +150,11 @@ void Inventory::displayInventory(int intype) const {
     cout << "==== 인벤토리 끝 ====" << endl;
 }
 
-vector<string> Inventory::GetInventoryInfoWithString(int type) const
+vector<string> Inventory::GetInventoryInfoWithString(int _type) const
 {
     vector<string> inventoryInfos(inven.size(), "");
 
-    if (type == 0) //배틀, 인벤토리 열기
+    if (_type == 0) //배틀, 인벤토리 열기
     {
         for (size_t i = 0; i < inven.size(); ++i)
         {
@@ -180,9 +180,9 @@ int Inventory::getInventorySize() const
     return inven.size();
 }
 
-int Inventory::GetItemVelue(int index) const
+int Inventory::GetItemVelue(int _index) const
 {
-    return inven[index].item->getValue();
+    return inven[_index].item->getValue();
 }
 
 bool Inventory::IsEmpty() const

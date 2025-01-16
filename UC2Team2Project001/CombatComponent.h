@@ -13,7 +13,7 @@ public:
 
 	UCombatComponent(Character* _owner);
 
-	virtual void Initialize(StatsData LoadStatsData);
+	virtual void Initialize(StatsData _loadStatsData);
 
 	// 피해 처리
 	virtual void TakeDamage(int _incomingDamage);

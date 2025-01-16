@@ -5,5 +5,5 @@ class Potion: public ConsumableItem {
 public:
     Potion();
 
-    Potion(int itemNumber, const string& name, const string& description, int value);
+    Potion(int _itemNumber, const string& _name, const string& _description, int _value);
 };

@@ -4,7 +4,7 @@ class HealthPotion : public Potion
 {
 public:
     HealthPotion();
-    void use(Character* Target) override;
+    void use(Character* _target) override;
     shared_ptr<Item> clone() const override;
 
 };

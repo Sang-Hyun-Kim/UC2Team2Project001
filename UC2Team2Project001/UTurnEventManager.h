@@ -20,15 +20,15 @@ public:
 
 	virtual ~UTurnEventManager();
 
-	virtual void OnEvent(std::shared_ptr<IEvent> ev)  override;
+	virtual void OnEvent(std::shared_ptr<IEvent> _event)  override;
 	
 
 	// 턴 진행
 	void BeginTurn();
 
-	void ExecuteTurnActions(Character* Player, Character* Monster);
+	void ExecuteTurnActions(Character* _player, Character* _monster);
 
-	void EndTurn(std::vector<Character*>& AllCharacters);
+	void EndTurn(std::vector<Character*>& _allCharacters);
 
 
 	//완전끝났을때

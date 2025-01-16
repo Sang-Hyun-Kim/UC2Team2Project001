@@ -55,7 +55,7 @@ void ShopSystem::DisplayInventory()
 	CLEAR;
 	auto player = GSystemContext->GetPlayer();
 
-	player->InventoryComponent->displayInventory();
+	player->inventoryComponent->displayInventory();
 
 	InputManagerSystem::PauseUntilEnter();
 
@@ -99,8 +99,8 @@ void ShopSystem::SellMenu()
 
 	auto player = GSystemContext->GetPlayer();
 	
-	int lastIndex = player->InventoryComponent->getInventorySize() + 1;
-	vector<string> inventoryInfos = player->InventoryComponent->GetInventoryInfoWithString(1);
+	int lastIndex = player->inventoryComponent->getInventorySize() + 1;
+	vector<string> inventoryInfos = player->inventoryComponent->GetInventoryInfoWithString(1);
 	
 	inventoryInfos.push_back(to_string(lastIndex) + ". 돌아가기");
 
@@ -138,7 +138,7 @@ void ShopSystem::GetRandomItemsAndSkills()
 	}
 }
 
-void ShopSystem::OnEvent(const std::shared_ptr<IEvent> ev)
+void ShopSystem::OnEvent(const std::shared_ptr<IEvent> _event)
 {
 	// 캐릭터가 (상품 가격 감소) 패시브 스킬을 획득하면 가격이 내려가도록 조정
 }

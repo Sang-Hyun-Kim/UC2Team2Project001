@@ -15,7 +15,8 @@ public:
 	std::string inputText;
 
 	IDisplayMenuEvent() {}
-	IDisplayMenuEvent(const std::string& title, const std::vector<string>& options, const std::string& inputText) :title(title), options(options), inputText(inputText)
+	IDisplayMenuEvent(const std::string& _title, const std::vector<string>& _options, const std::string& _inputText)
+		: title(_title), options(_options), inputText(_inputText)
 	{
 	}
 };
@@ -23,5 +24,7 @@ public:
 class IWrongInputEvent : public IEvent
 {
 public:
-	IWrongInputEvent() {}
+	IWrongInputEvent()
+	{
+	}
 };

@@ -17,7 +17,9 @@ public:
 	int damage;           // 받은 데미지
 	int hp;               // 남은 HP
 
-	ICharacterDamagedEvent(const string& _name, int _dmg, int _hp) : characterName(_name), damage(_dmg), hp(_hp) {}
+	ICharacterDamagedEvent(const string& _name, int _dmg, int _hp) : characterName(_name), damage(_dmg), hp(_hp)
+	{
+	}
 };
 
 // 캐릭터가 사망하는 이벤트
@@ -27,7 +29,9 @@ public:
 	string characterName;     // 캐릭터 이름
 	FCharacterReward reward;  // 사망 시 보상
 
-	ICharacterDeadEvent(const string& _name, FCharacterReward _reward) : characterName(_name), reward(_reward) {}
+	ICharacterDeadEvent(const string& _name, FCharacterReward _reward) : characterName(_name), reward(_reward)
+	{
+	}
 };
 
 // 캐릭터가 공격하는 이벤트
@@ -36,7 +40,9 @@ class ICharacterAttackEvent : public IEvent
 public:
 	string characterName; // 캐릭터 이름
 	int damage;           // 공격 데미지
-	ICharacterAttackEvent(const string& _name, int _dmg) : characterName(_name), damage(_dmg) {}
+	ICharacterAttackEvent(const string& _name, int _dmg) : characterName(_name), damage(_dmg)
+	{
+	}
 };
 
 // 캐릭터가 방어하는 이벤트
@@ -58,14 +64,16 @@ public:
 	string characterName; // 캐릭터 이름
 	int level;            // 레벨
 
-	ICharacterLevelUpEvent(const string& _name, int _level) : characterName(_name), level(_level) {}
+	ICharacterLevelUpEvent(const string& _name, int _level) : characterName(_name), level(_level)
+	{
+	}
 };
 
 class ICharacterCreateEvent : public IEvent
 {
 public:
 	string name;
-	ICharacterCreateEvent(const string& name) : name(name) 
+	ICharacterCreateEvent(const string& _name) : name(_name) 
 	{
 	}
 };

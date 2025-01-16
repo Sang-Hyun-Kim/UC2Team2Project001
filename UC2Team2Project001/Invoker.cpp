@@ -4,10 +4,10 @@
 
 shared_ptr<Invoker> GInvoker = make_shared<Invoker>();
 
-void Invoker::ExecuteCommand(std::shared_ptr<ICommand> command)
+void Invoker::ExecuteCommand(std::shared_ptr<ICommand> _command)
 {
-    command->Execute();               // 명령 실행
-    undoStack.push(command);          // Undo 스택에 추가
+    _command->Execute();               // 명령 실행
+    undoStack.push(_command);          // Undo 스택에 추가
     while (!redoStack.empty())        // Redo 스택 초기화
     {      
         redoStack.pop();

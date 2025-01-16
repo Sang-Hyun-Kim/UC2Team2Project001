@@ -15,13 +15,15 @@ struct StatsData;
 class UStatsComponent
 {
 public:
-	UStatsComponent() {};
+	UStatsComponent()
+	{
+	}
 
-	UStatsComponent(Character* InOwnedCharacter);
+	UStatsComponent(Character* _inOwnedCharacter);
 
 	virtual void BeginPlay();
 
-	virtual void Initialize(StatsData LoadStatsData);
+	virtual void Initialize(StatsData _loadStatsData);
 
 
 	~UStatsComponent();
@@ -29,12 +31,12 @@ public:
 	void LoadFromJSON();
 
 	// 스탯 접근/설정 함수
-	float GetStat(StatType type) const;
+	float GetStat(StatType _type) const;
 
-	void SetStat(StatType type, float value);
+	void SetStat(StatType _type, float _value);
 
 	// 스탯 증감 (경험치 증가 시 레벨업 체크)
-	void ModifyStat(StatType type, float delta);
+	void ModifyStat(StatType _type, float _delta);
 
 	// 사망 판정
 	bool IsDead();
@@ -47,10 +49,10 @@ public:
 
 
 protected:
-	void ClampStat(StatType type, float minValue, float maxValue);
+	void ClampStat(StatType _type, float _minValue, float _maxValue);
 
 private:
-	Character* OwnedCharacter;
+	Character* ownedCharacter;
 
-	std::map<StatType, float> Stats;
+	std::map<StatType, float> stats;
 };

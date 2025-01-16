@@ -21,7 +21,7 @@ Character::Character()
 {
 }
 
-Character::Character(const string& _name) : characterName(_name)
+Character::Character(const string& _name) : displayName(_name)
 {
 }
 
@@ -45,6 +45,7 @@ void Character::Initialize()
 	GlobalEventManager::Get().Subscribe(skillManager);
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
 }
 
 void Character::UseItem(const string& ItemName)

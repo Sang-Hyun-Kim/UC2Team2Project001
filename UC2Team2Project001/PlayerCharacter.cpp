@@ -4,15 +4,15 @@
 
 Player::Player()
 {
-	InventoryComponent = make_shared<Inventory>(this);
+	inventoryComponent = make_shared<Inventory>(this);
 }
 
-Player::Player(const std::string& InName) :Character(InName)
+Player::Player(const std::string& _inName) :Character(_inName)
 {
-	InventoryComponent = make_shared<Inventory>(this);
+	inventoryComponent = make_shared<Inventory>(this);
 }
 
-void Player::UseItem(int index, Character* target)
+void Player::UseItem(int _index, Character* _target)
 {
-	InventoryComponent->useItem(index, target);
+	inventoryComponent->useItem(_index, _target);
 }

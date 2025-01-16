@@ -35,7 +35,7 @@ public:
 	void Notify(std::shared_ptr<IEvent> _callEv);
 
 private:
-	int NextId = 1;
+	int nextId = 1;
 
 	vector<shared_ptr<IEventManagerSystem>> _listeners;
 };

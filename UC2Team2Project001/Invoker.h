@@ -7,7 +7,7 @@ class Invoker
 {
 public:
     // 명령 실행
-    void ExecuteCommand(std::shared_ptr<ICommand> command);
+    void ExecuteCommand(std::shared_ptr<ICommand> _command);
 
     void Undo();
 

@@ -2,15 +2,15 @@
 #include "StatsLoader.h"
 #include <iostream>
 
-const std::string DefaultFileName = "CharacterStat.json";
+const std::string defaultFileName = "CharacterStat.json";
 //const std::string DefaultFileName = "ItemData.json";
 
 
-StatsData StatsLoader::LoadFromJSON(const std::string& characterName)
+StatsData StatsLoader::LoadFromJSON(const std::string& _characterName)
 {
-	std::ifstream file(DefaultFileName);
+	std::ifstream file(defaultFileName);
 	if (!file.is_open()) {
-		throw std::runtime_error("JSON 파일을 열 수 없습니다: " + DefaultFileName);
+		throw std::runtime_error("JSON 파일을 열 수 없습니다: " + defaultFileName);
 	}
 
 	json jsonData;
@@ -24,12 +24,12 @@ StatsData StatsLoader::LoadFromJSON(const std::string& characterName)
 	}
 
 	const auto& characters = jsonData["Characters"];
-	if (!characters.contains(characterName))
+	if (!characters.contains(_characterName))
 	{
-		std::cerr << "캐릭터 이름 '" + characterName + "'에 해당하는 데이터가 없습니다.";
+		std::cerr << "캐릭터 이름 '" + _characterName + "'에 해당하는 데이터가 없습니다.";
 	}
 
-	const auto& statsData = characters[characterName]["Stats"];
+	const auto& statsData = characters[_characterName]["Stats"];
 	StatsData stats;
 	stats.HP = statsData.value("HP", 0.0f);
 	stats.MaxHP = statsData.value("MaxHP", 0.0f);
@@ -43,16 +43,16 @@ StatsData StatsLoader::LoadFromJSON(const std::string& characterName)
 	stats.Experience = statsData.value("Experience", 0.0f);
 	stats.MaxExperience = statsData.value("MaxExperience", 0.0f);
 
-	stats.AttackStrategyData = characters[characterName]["AttackStrategy"];
-	stats.DefenseStrategyData = characters[characterName]["DefenseStrategy"];
+	stats.AttackStrategyData = characters[_characterName]["AttackStrategy"];
+	stats.DefenseStrategyData = characters[_characterName]["DefenseStrategy"];
 
 	return stats;
 }
 
 
-void StatsLoader::SaveToJSON(const StatsData& stats, const std::string& characterName)
+void StatsLoader::SaveToJSON(const StatsData& _stats, const std::string& _characterName)
 {
-	std::ifstream file(DefaultFileName);
+	std::ifstream file(defaultFileName);
 	json jsonData;
 
 	if (file.is_open())
@@ -61,29 +61,29 @@ void StatsLoader::SaveToJSON(const StatsData& stats, const std::string& characte
 		file.close();
 	}
 
-	auto& characterData = jsonData["Characters"][characterName];
+	auto& characterData = jsonData["Characters"][_characterName];
 	auto& statsData = characterData["Stats"];
-	statsData["HP"] = stats.HP;
-	statsData["MaxHP"] = stats.MaxHP;
-	statsData["MP"] = stats.MP;
-	statsData["MaxMP"] = stats.MaxMP;
-	statsData["AttackPower"] = stats.AttackPower;
-	statsData["Defense"] = stats.Defense;
-	statsData["CriticalChance"] = stats.CriticalChance;
-	statsData["EvasionRate"] = stats.EvasionRate;
-	statsData["Level"] = stats.Level;
-	statsData["Experience"] = stats.Experience;
-	statsData["MaxExperience"] = stats.MaxExperience;
+	statsData["HP"] = _stats.HP;
+	statsData["MaxHP"] = _stats.MaxHP;
+	statsData["MP"] = _stats.MP;
+	statsData["MaxMP"] = _stats.MaxMP;
+	statsData["AttackPower"] = _stats.AttackPower;
+	statsData["Defense"] = _stats.Defense;
+	statsData["CriticalChance"] = _stats.CriticalChance;
+	statsData["EvasionRate"] = _stats.EvasionRate;
+	statsData["Level"] = _stats.Level;
+	statsData["Experience"] = _stats.Experience;
+	statsData["MaxExperience"] = _stats.MaxExperience;
 
 	// 공격 전략과 방어 전략 저장
-	characterData["AttackStrategy"] = stats.AttackStrategyData;
-	characterData["DefenseStrategy"] = stats.DefenseStrategyData;
+	characterData["AttackStrategy"] = _stats.AttackStrategyData;
+	characterData["DefenseStrategy"] = _stats.DefenseStrategyData;
 
 	// JSON 저장
-	std::ofstream outFile(DefaultFileName);
+	std::ofstream outFile(defaultFileName);
 	if (!outFile.is_open())
 	{
-		throw std::runtime_error("JSON 파일을 저장할 수 없습니다: " + DefaultFileName);
+		throw std::runtime_error("JSON 파일을 저장할 수 없습니다: " + defaultFileName);
 	}
 	outFile << jsonData.dump(4); // 4칸 들여쓰기
 }

@@ -34,13 +34,13 @@ void SystemContext::Update()
 	currentSystem->Update();
 }
 
-void SystemContext::MoveSystem(SystemType to, SystemType from)
+void SystemContext::MoveSystem(SystemType _to, SystemType _from)
 {
 	// System from 에서 System to 로 이동
 
-	if (to != from)
+	if (_to != _from)
 	{
-		switch (to)
+		switch (_to)
 		{
 		case SystemType::LOBBY:
 			currentSystem = lobbySystem;
@@ -59,9 +59,9 @@ void SystemContext::MoveSystem(SystemType to, SystemType from)
 	}
 }
 
-void SystemContext::CreateCharacter(string name)
+void SystemContext::CreateCharacter(string _name)
 {
-	player = make_shared<Player>("Player");
+	player = make_shared<Player>(_name);
 	player->Initialize();
 
 	auto skills = SkillManager::GetInstance().GetUniqueRandomSkillTypes(player.get(), SkillType::ACTIVE, 3);
@@ -82,22 +82,22 @@ void SystemContext::CreateCharacter(string name)
 	skillManager.AddSelectSkillToCharacter(skills[input - 1], player.get());
 }
 
-void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)
+void SystemContext::OnEvent(const std::shared_ptr<IEvent> _event)
 {
-	if (auto move = std::dynamic_pointer_cast<IMoveSystemEvent>(ev))
+	if (auto move = std::dynamic_pointer_cast<IMoveSystemEvent>(_event))
 	{
 		MoveSystem(move->to, move->from);
 	}
-	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(ev))
+	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(_event))
 	{
 		CreateCharacter(create->name);
 	}
-	else if (auto gameOver = std::dynamic_pointer_cast<IPlayerDefeatEvent>(ev))
+	else if (auto gameOver = std::dynamic_pointer_cast<IPlayerDefeatEvent>(_event))
 	{
 		player.reset();
 	}
 
-	Publish(ev);
+	Publish(_event);
 }
 
 

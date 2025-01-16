@@ -31,7 +31,7 @@ public:
 public:
 	FSkillData() = default;
 
-	FSkillData(const string& skillName, int mpCost, int maxCooldown);
+	FSkillData(const string& _skillName, int _mpCost, int _maxCooldown);
 
 	FSkillData(Character* _owner, const string& _skillName, const string& _skillDescription,int _mpCost, int _maxCooldown)
 		: owner(_owner), skillName(_skillName), skillDescription(_skillDescription), mpCost(_mpCost), maxCooldown(_maxCooldown)
@@ -92,11 +92,11 @@ public:
 	{
 	};
 
-	ActiveSkill(Character* _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
+	ActiveSkill(Character* _owner, const string& _skillName, int _mpCost, int _maxCooldown) : Skill(_owner)
 	{
-		skillData.skillName = skillName;
-		skillData.mpCost = mpCost;
-		skillData.maxCooldown = maxCooldown;
+		skillData.skillName = _skillName;
+		skillData.mpCost = _mpCost;
+		skillData.maxCooldown = _maxCooldown;
 	};
 
 	~ActiveSkill() = default;
@@ -114,11 +114,11 @@ public:
 	{
 	};
 
-	PassiveSkill(Character* _owner, const string& skillName, int mpCost, int maxCooldown) : Skill(_owner)
+	PassiveSkill(Character* _owner, const string& _skillName, int _mpCost, int _maxCooldown) : Skill(_owner)
 	{
-		skillData.skillName = skillName;
-		skillData.mpCost = mpCost;
-		skillData.maxCooldown = maxCooldown;
+		skillData.skillName = _skillName;
+		skillData.mpCost = _mpCost;
+		skillData.maxCooldown = _maxCooldown;
 	};
 
 	~PassiveSkill() = default;
@@ -129,7 +129,7 @@ public:
 
 
 	// 실제로 이벤트를 처리하는(혹은 스킬을 발동하는) 함수
-	void HandlePassiveEvent(std::shared_ptr<IEvent> ev);
+	void HandlePassiveEvent(std::shared_ptr<IEvent> _event);
 
 public:
 	// '어떤 이벤트 타입'들을 처리할지 저장

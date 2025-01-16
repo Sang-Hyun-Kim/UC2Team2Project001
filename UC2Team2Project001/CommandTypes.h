@@ -42,15 +42,15 @@ public:
 	{
 		auto player = GSystemContext->GetPlayer();
 
-		auto item = player->InventoryComponent->GetItemWithIndex(index - 1);
-		auto itemCount = player->InventoryComponent->getItemCount(index - 1);
+		auto item = player->inventoryComponent->GetItemWithIndex(index - 1);
+		auto itemCount = player->inventoryComponent->getItemCount(index - 1);
 		auto itemValue = item->getValue();
 
 		int sellCount = InputManagerSystem::GetInput<int>("판매할 갯수를 입력해주세요. ", {}, RangeValidator<int>(1, itemCount));
 
-		player->InventoryComponent->removeItem(index - 1, sellCount);
+		player->inventoryComponent->removeItem(index - 1, sellCount);
 		int totalGainGold = itemValue * sellCount;
-		player->InventoryComponent->addGold(totalGainGold);
+		player->inventoryComponent->addGold(totalGainGold);
 		cout << item->getName() + "(을)를 " + to_string(itemValue) + "개 팔아 " + to_string(totalGainGold) + "골드를 얻었습니다." << endl;
 	}
 
@@ -67,11 +67,11 @@ private:
 class BuyItemCommand : public ICommand
 {
 public:
-	BuyItemCommand(shared_ptr<Player> player, vector<shared_ptr<Item>>& itemList, int index) :player(player), itemList(itemList), index(index) {}
+	BuyItemCommand(shared_ptr<Player> _player, vector<shared_ptr<Item>>& _itemList, int _index) :player(_player), itemList(_itemList), index(_index) {}
 
 	void Execute() override // Creature 로 둔다면 형변환
 	{
-		int gold = player->InventoryComponent->getGold();
+		int gold = player->inventoryComponent->getGold();
 		auto item = itemList[index];
 		int itemValue = item->getValue();
 
@@ -80,8 +80,8 @@ public:
 			auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->getName(), item->getValue());
 			GlobalEventManager::Get().Notify(Event);
 
-			player->InventoryComponent->removeGold(itemValue);
-			player->InventoryComponent->addItem(item);
+			player->inventoryComponent->removeGold(itemValue);
+			player->inventoryComponent->addItem(item);
 			itemList.erase(itemList.begin() + index);
 		}
 		else
@@ -171,7 +171,7 @@ private:
 class CreateCharacterCommand : public ICommand
 {
 public:
-	CreateCharacterCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	CreateCharacterCommand(shared_ptr<Player> _player, shared_ptr<Item> _item) :player(_player), item(_item) {}
 
 	void Execute() override
 	{
@@ -224,7 +224,7 @@ public:
 	void Execute() override
 	{
 		auto player = GSystemContext->GetPlayer();
-		player->InventoryComponent->useItem(index);
+		player->inventoryComponent->useItem(index);
 	}
 
 	void Undo() override

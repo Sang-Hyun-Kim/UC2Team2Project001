@@ -74,9 +74,9 @@ void IStunEffect::PostEffect()
 	cout << "기절 상태 적용! " << target->GetName() << "이(가) 기절 했습니다." << endl;
 }
 
-IPoisonEffect::IPoisonEffect(int amountStack)
+IPoisonEffect::IPoisonEffect(int _amountStack)
 {
-	states.push_back(make_shared<PoisonState>(2, 5, amountStack));
+	states.push_back(make_shared<PoisonState>(2, 5, _amountStack));
 }
 
 void IPoisonEffect::PostEffect()
@@ -145,7 +145,7 @@ void LuckyRewardEffect::PostEffect()
 			Player* playerCharacter = dynamic_cast<Player*>(owner);
 			if (playerCharacter)
 			{
-				playerCharacter->InventoryComponent->addGold(goldAmount);
+				playerCharacter->inventoryComponent->addGold(goldAmount);
 
 				// 캐릭터의 골드 스탯 증가			
 				std::cout << owner->GetName() << "은(는) 스테이지 클리어로 " << goldAmount << "골드를 획득했습니다.\n";

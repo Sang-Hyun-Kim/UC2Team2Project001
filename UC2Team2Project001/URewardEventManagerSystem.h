@@ -9,7 +9,7 @@ public:
 	URewardEventManagerSystem() = default;
 	~URewardEventManagerSystem() = default;
 
-	void OnEvent(std::shared_ptr<IEvent> ev) override;
+	void OnEvent(std::shared_ptr<IEvent> _event) override;
 
 	struct Reward
 	{
@@ -20,7 +20,10 @@ public:
 	
 	void Initialize();
 
-	Reward GetReward() { return reward; }
+	Reward GetReward()
+	{
+		return reward; 
+	}
 private:
 	Reward reward;
 };

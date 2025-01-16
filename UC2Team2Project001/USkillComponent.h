@@ -19,7 +19,7 @@ class USkillComponent : public IEventManagerSystem
 public:
 	USkillComponent();
 
-	USkillComponent(Character* _Owner);
+	USkillComponent(Character* _owner);
 
 	void InitializeComponent();
 
@@ -39,7 +39,7 @@ public:
 	shared_ptr<Skill> GetSkill(SkillType _skillType, string _skillName);
 
 	// 스킬 추가
-	void AddSkill(std::shared_ptr<Skill> skill);
+	void AddSkill(std::shared_ptr<Skill> _skill);
 
 	/*void AddSkill(shared_ptr<ActiveSkill> _activeSkill);
 
@@ -54,20 +54,20 @@ public:
 	// 매 턴 종료 시, 모든 스킬의 쿨타임을 1씩 감소
 	void AllReduceCooldown();
 
-	string GetActiveSkillNameByIndex(int index) const;
+	string GetActiveSkillNameByIndex(int _index) const;
 
-	string GetPassiveSkillNameByIndex(int index) const;
+	string GetPassiveSkillNameByIndex(int _index) const;
 
 	vector<std::string> GetActiveSkillInfo() const;
 
 	vector<std::string> GetPassiveSkillInfo() const;
 
-	vector<std::string> GetActiveSkillInfoWithString(int index) const;
+	vector<std::string> GetActiveSkillInfoWithString(int _index) const;
 
 	/* IEventManager System*/
 public:
-	virtual void OnEvent(std::shared_ptr<IEvent> ev) override;
+	virtual void OnEvent(std::shared_ptr<IEvent> _event) override;
 	
 	
-	Character* OwnerCharacter;
+	Character* ownerCharacter;
 };

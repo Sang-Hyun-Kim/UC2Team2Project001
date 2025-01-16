@@ -19,11 +19,11 @@ enum class SystemType
 class IEnterSystemEvent : public IEvent
 {
 public:
-	string CharacterName;
-	int Damage;
-	int HP;
+	string characterName;
+	int damage;
+	int hp;
 
-	IEnterSystemEvent(const std::string& name, int dmg, int InHP) : CharacterName(name), Damage(dmg), HP(InHP)
+	IEnterSystemEvent(const std::string& _name, int _dmg, int _inHP) : characterName(_name), damage(_dmg), hp(_inHP)
 	{
 	}
 };
@@ -39,15 +39,21 @@ public:
 
 	void Update();
 
-	void OnEvent(const std::shared_ptr<IEvent> ev) override;
-	inline shared_ptr<class Player> GetPlayer() { return player; }
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+	inline shared_ptr<class Player> GetPlayer() 
+	{
+		return player; 
+	}
 
-	shared_ptr<GameSystem> GetCurrentSystem() { return currentSystem; }
+	shared_ptr<GameSystem> GetCurrentSystem()
+	{ 
+		return currentSystem; 
+	}
 private:
-	void MoveSystem(SystemType to, SystemType from);
+	void MoveSystem(SystemType _to, SystemType _from);
 
 public:
-	void CreateCharacter(string name);
+	void CreateCharacter(string _name);
 
 	shared_ptr<GameSystem> currentSystem = nullptr;
 

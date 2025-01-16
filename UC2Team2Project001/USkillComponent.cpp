@@ -9,9 +9,9 @@ USkillComponent::USkillComponent()
 {
 }
 
-USkillComponent::USkillComponent(Character* _Owner)
+USkillComponent::USkillComponent(Character* _owner)
 {
-	OwnerCharacter = _Owner;
+	ownerCharacter = _owner;
 }
 
 void USkillComponent::InitializeComponent()
@@ -44,21 +44,21 @@ shared_ptr<Skill> USkillComponent::GetSkill(SkillType _skillType, string _skillN
 	return nullptr;
 }
 
-void USkillComponent::AddSkill(std::shared_ptr<Skill> skill)
+void USkillComponent::AddSkill(std::shared_ptr<Skill> _skill)
 {
-	if (!skill)
+	if (!_skill)
 	{
 		std::cerr << "추가하려는 스킬이 유효하지 않습니다." << std::endl;
 		return;
 	}
 
-	if (auto activeSkill = std::dynamic_pointer_cast<ActiveSkill>(skill))
+	if (auto activeSkill = std::dynamic_pointer_cast<ActiveSkill>(_skill))
 	{
-		activeSkillList[skill->GetSkillData().skillName] = activeSkill;
+		activeSkillList[_skill->GetSkillData().skillName] = activeSkill;
 	}
-	else if (auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(skill))
+	else if (auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(_skill))
 	{
-		passiveSkillList[skill->GetSkillData().skillName] = passiveSkill;
+		passiveSkillList[_skill->GetSkillData().skillName] = passiveSkill;
 		passiveSkill->PassiveSkillRegisterTrigger();
 	}
 }
@@ -120,7 +120,7 @@ void USkillComponent::AllReduceCooldown()
 	}
 }
 
-void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
+void USkillComponent::OnEvent(std::shared_ptr<IEvent> _event)
 {
 	for (auto& passive : passiveSkillList)
 	{
@@ -132,35 +132,35 @@ void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
 			continue;
 		}
 
-		if (passiveSkill->handlers.find(std::type_index(typeid(*ev))) != passiveSkill->handlers.end())
+		if (passiveSkill->handlers.find(std::type_index(typeid(*_event))) != passiveSkill->handlers.end())
 		{
-			passiveSkill->HandlePassiveEvent(ev);
+			passiveSkill->HandlePassiveEvent(_event);
 		}
 	}
 }
 
 
-std::string USkillComponent::GetActiveSkillNameByIndex(int index) const
+std::string USkillComponent::GetActiveSkillNameByIndex(int _index) const
 {
-	if (index < 0 || index >= static_cast<int>(activeSkillList.size()))
+	if (_index < 0 || _index >= static_cast<int>(activeSkillList.size()))
 	{
-		return {};
+		return "";
 	}
 
 	auto it = activeSkillList.begin();
-	std::advance(it, index);
+	std::advance(it, _index);
 	return it->second->GetSkillData().skillName;
 }
 
-std::string USkillComponent::GetPassiveSkillNameByIndex(int index) const
+std::string USkillComponent::GetPassiveSkillNameByIndex(int _index) const
 {
-	if (index < 0 || index >= static_cast<int>(passiveSkillList.size()))
+	if (_index < 0 || _index >= static_cast<int>(passiveSkillList.size()))
 	{
 		throw std::out_of_range("Invalid index for passive skill.");
 	}
 
 	auto it = passiveSkillList.begin();
-	std::advance(it, index);
+	std::advance(it, _index);
 	return it->second->GetSkillData().skillName;
 }
 
@@ -213,10 +213,10 @@ std::vector<std::string> USkillComponent::GetPassiveSkillInfo() const
 }
 
 
-vector<string> USkillComponent::GetActiveSkillInfoWithString(int type) const
+vector<string> USkillComponent::GetActiveSkillInfoWithString(int _type) const
 {
-	vector<string> SkillListInfo;
-	if (type == 0) //배틀, 인벤토리 열기
+	vector<string> skillListInfo;
+	if (_type == 0) //배틀, 인벤토리 열기
 	{
 		int i = 1;
 		for (auto activeSkill : activeSkillList)
@@ -228,12 +228,12 @@ vector<string> USkillComponent::GetActiveSkillInfoWithString(int type) const
 			string cooldownString = cooldown == 0 ? "" : (" CoolDown: " + to_string(cooldown));
 			string result = index + ". " + name + " " + " MP: " + mp + cooldownString;
 			
-			SkillListInfo.push_back(result) ;
+			skillListInfo.push_back(result) ;
 		}
 	}
 	else //상점
 	{
 		// 상점에서 스킬을 팔기 위한 정보 함수를 불러와주세요
 	}
-	return SkillListInfo;
+	return skillListInfo;
 }

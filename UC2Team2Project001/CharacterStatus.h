@@ -23,7 +23,7 @@ public:
 	}
 
 	// 상태 효과 적용(데미지, 버프, 디버프 등)
-	virtual void ApplyEffect(Character* Target) = 0;
+	virtual void ApplyEffect(Character* _target) = 0;
 
 	// 매 턴마다 지속 시간 감소
 	virtual void TickDuration();
@@ -42,10 +42,10 @@ public:
 
 	// 지속 시간 반환 및 설정
 	virtual int GetDuration() const;
-	virtual void SetDuration(int NewDuration);
+	virtual void SetDuration(int _newDuration);
 
 	// 상태 스택 추가(디폴트 구현)
-	virtual void ApplyStack(int NewStack);
+	virtual void ApplyStack(int _newStack);
 
 protected:
 	string stateName;	// 상태 이름
@@ -68,7 +68,7 @@ public:
 	{
 	}
 
-	void ApplyEffect(Character* Target) override;
+	void ApplyEffect(Character* _target) override;
 
 private:
 	int damagePerTurn;
@@ -126,9 +126,9 @@ public:
 	{
 	}
 
-	virtual void ApplyStack(int NewStack) override;
+	virtual void ApplyStack(int _newStack) override;
 
-	void ApplyEffect(Character* Target) override;
+	void ApplyEffect(Character* _target) override;
 
 public:
 	int damagePerTurn = 0;
@@ -194,7 +194,7 @@ public:
 	{
 	}
 
-	virtual void ApplyEffect(Character* target) override;
+	virtual void ApplyEffect(Character* _target) override;
 
 	virtual void TickDuration() override;
 

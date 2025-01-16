@@ -81,7 +81,7 @@ void PassiveSkill::PassiveSkillUnRegisterTrigger()
 	//std::cout << "[PassiveSkill] UnRegisterTrigger() - " << "이벤트 처리를 해제했습니다.\n";
 }
 
-void PassiveSkill::HandlePassiveEvent(std::shared_ptr<IEvent> ev)
+void PassiveSkill::HandlePassiveEvent(std::shared_ptr<IEvent> _event)
 {
 	std::cout << "[PassiveSkill] " << skillData.skillName  <<" - 스킬 발동!\n";
 	UseSkill();

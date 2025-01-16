@@ -4,9 +4,9 @@
 
 
 
-std::shared_ptr<IAttackStrategy> StrategyFactory::CreateAttackStrategy(const json& strategyData) 
+std::shared_ptr<IAttackStrategy> StrategyFactory::CreateAttackStrategy(const json& _strategyData) 
 {
-	std::string type = strategyData.at("Type");
+	std::string type = _strategyData.at("Type");
 	if (type == "BasicAttack") 
 	{
 		return std::make_shared<BasicAttackStrategy>();
@@ -14,9 +14,9 @@ std::shared_ptr<IAttackStrategy> StrategyFactory::CreateAttackStrategy(const jso
 	throw std::invalid_argument("알 수 없는 공격 전략 유형: " + type);
 }
 
-std::shared_ptr<IDefenseStrategy> StrategyFactory::CreateDefenseStrategy(const json& strategyData) 
+std::shared_ptr<IDefenseStrategy> StrategyFactory::CreateDefenseStrategy(const json& _strategyData) 
 {
-	std::string type = strategyData.at("Type");
+	std::string type = _strategyData.at("Type");
 	if (type == "BlockDefense") 
 	{
 		return std::make_shared<BlockDefenseStrategy>();

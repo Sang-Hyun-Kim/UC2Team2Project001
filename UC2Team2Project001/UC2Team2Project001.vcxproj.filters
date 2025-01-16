@@ -317,9 +317,6 @@
     <ClInclude Include="Monster.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
-    <ClInclude Include="GameState.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
     <ClInclude Include="IStrategy.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
@@ -349,9 +346,6 @@
     </ClInclude>
     <ClInclude Include="ItemManager.h">
       <Filter>헤더 파일\ItemSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Status.h">
-      <Filter>헤더 파일\CharacterSystem</Filter>
     </ClInclude>
     <ClInclude Include="ShopSystem.h">
       <Filter>헤더 파일\GameSystem</Filter>
@@ -491,8 +485,6 @@
     <ClInclude Include="Patience.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
-    <ClInclude Include="Unbreakable.h">
-    </ClInclude>
     <ClInclude Include="Sanctification.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
@@ -523,14 +515,14 @@
     <ClInclude Include="BattleSystemStates.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Unbreakable.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CharacterStat.json">
       <Filter>헤더 파일\JSONS</Filter>
     </None>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="IEventTypes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

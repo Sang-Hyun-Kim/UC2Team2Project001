@@ -7,7 +7,7 @@ GlobalEventManager::~GlobalEventManager() {}
 
 int GlobalEventManager::Subscribe(const std::shared_ptr<IEventManagerSystem>& _system)
 {
-	int newId = NextId++;
+	int newId = nextId++;
 
 	_system->SetID(newId);
 

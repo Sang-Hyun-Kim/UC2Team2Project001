@@ -6,9 +6,9 @@ class BattleStartTurnState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -22,9 +22,9 @@ class BattleMainState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -37,9 +37,9 @@ class BattleAttackState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -51,9 +51,9 @@ public:
 class BattleDisplayState : public ISystemState
 {
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -66,9 +66,9 @@ class BattleUseItemState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -81,9 +81,9 @@ class BattleNextStageState : public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{
@@ -96,9 +96,9 @@ class BattleGameOverState: public ISystemState
 {
 public:
 	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* system) override
+	void Excute(GameSystem* _system) override
 	{
-		auto battle = dynamic_cast<BattleSystem*>(system);
+		auto battle = dynamic_cast<BattleSystem*>(_system);
 
 		if (battle)
 		{

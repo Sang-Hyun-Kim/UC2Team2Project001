@@ -20,12 +20,12 @@ void BasicAttackStrategy::Attack(Character* _self, Character* _target, float _da
 
 int BlockDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 
 {
-	int DefenseValue = (int)CharacterUtility::GetStat(_self, StatType::Defense);
-	int finalDamage = _incomingDamage - DefenseValue;
+	int defenseValue = (int)CharacterUtility::GetStat(_self, StatType::Defense);
+	int finalDamage = _incomingDamage - defenseValue;
 
 	if (finalDamage < 0) finalDamage = 0;
 
-	auto Event = make_shared<ICharacterDefenseEvent>(_self->GetName(), _incomingDamage, DefenseValue);
+	auto Event = make_shared<ICharacterDefenseEvent>(_self->GetName(), _incomingDamage, defenseValue);
 	GlobalEventManager::Get().Notify(Event);
 
 	return finalDamage;

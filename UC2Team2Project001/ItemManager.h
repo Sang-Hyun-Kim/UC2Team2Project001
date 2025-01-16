@@ -29,10 +29,10 @@ public:
    static ItemManager& GetInstance();
  
    // 아이템 추가 메서드
-    void addItem(shared_ptr<Item> item);
+    void addItem(shared_ptr<Item> _item);
 
    // 아이템 가져오기 메서드
-    shared_ptr<Item> getItem(int key);
+    shared_ptr<Item> getItem(int _key);
 
    //아이템 개수 출력
    int getItemCount() const;

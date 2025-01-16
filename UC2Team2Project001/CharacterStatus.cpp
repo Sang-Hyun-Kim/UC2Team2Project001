@@ -32,25 +32,25 @@ int ICharacterState::GetDuration() const
 	return duration;
 }
 
-void ICharacterState::SetDuration(int NewDuration)
+void ICharacterState::SetDuration(int _newDuration)
 {
-	duration = NewDuration;
+	duration = _newDuration;
 }
 
-void ICharacterState::ApplyStack(int NewStack)
+void ICharacterState::ApplyStack(int _newStack)
 {
-	currentStack += NewStack;
+	currentStack += _newStack;
 	currentStack = clamp(currentStack, 0, currentStack);
 }
 
-void BurnState::ApplyEffect(Character* Target)
+void BurnState::ApplyEffect(Character* _target)
 {
 	// 만료되지 않았다면 데미지 적용
-	if (Target && !IsExpired())
+	if (_target && !IsExpired())
 	{
-		std::cout << Target->GetName() << "은(는) 불타고 있어 " << damagePerTurn << "의 데미지를 받았습니다. " << "[남은 턴: " << GetDuration() << "]\n";
+		std::cout << _target->GetName() << "은(는) 불타고 있어 " << damagePerTurn << "의 데미지를 받았습니다. " << "[남은 턴: " << GetDuration() << "]\n";
 
-		Target->combatManager->TakeDamage(damagePerTurn);
+		_target->combatManager->TakeDamage(damagePerTurn);
 	}
 }
 
@@ -78,19 +78,19 @@ void ModifyDefenseState::EffectBeforeRemove()
 	cout << "방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
 }
 
-void PoisonState::ApplyStack(int NewStack)
+void PoisonState::ApplyStack(int _newStack)
 {
-	currentStack += NewStack;
+	currentStack += _newStack;
 	currentStack = clamp(currentStack, 0, currentStack);
 }
 
-void PoisonState::ApplyEffect(Character* Target)
+void PoisonState::ApplyEffect(Character* _target)
 {
-	if (Target && !IsExpired())
+	if (_target && !IsExpired())
 	{
 		int CalculatedDamage = damagePerTurn * currentStack;
-		std::cout << Target->GetName() << "은(는) 중독되어 " << CalculatedDamage << "의 데미지를 받았습니다. " << "[스택: " << currentStack << ", 남은 턴: " << GetDuration() << "]\n";
-		Target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
+		std::cout << _target->GetName() << "은(는) 중독되어 " << CalculatedDamage << "의 데미지를 받았습니다. " << "[스택: " << currentStack << ", 남은 턴: " << GetDuration() << "]\n";
+		_target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
 	}
 }
 
@@ -144,15 +144,15 @@ void ModifyStatState::EffectBeforeRemove()
 	}
 }
 
-void CursedSealState::ApplyEffect(Character* target)
+void CursedSealState::ApplyEffect(Character* _target)
 {
 	// 주기적 데미지 적용
-	if (turnCounter % interval == 0 && target)
+	if (turnCounter % interval == 0 && _target)
 	{
-		if (target->statManager)
+		if (_target->statManager)
 		{
-			target->statManager->ModifyStat(StatType::HP, -(float)damage);
-			std::cout << target->GetName() << "은(는) 저주의 인장 효과로 " << damage << "의 데미지를 받았습니다. [남은 HP: " << target->statManager->GetStat(StatType::HP) << "]\n";
+			_target->statManager->ModifyStat(StatType::HP, -(float)damage);
+			std::cout << _target->GetName() << "은(는) 저주의 인장 효과로 " << damage << "의 데미지를 받았습니다. [남은 HP: " << _target->statManager->GetStat(StatType::HP) << "]\n";
 		}
 	}
 }

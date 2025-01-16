@@ -17,28 +17,36 @@ public:
 	std::string to;
 	std::string from;
 
-	IMoveEvent(const std::string& to, const std::string& from) :to(to), from(from) {}
+	IMoveEvent(const std::string& _to, const std::string& _from) :to(_to), from(_from)
+	{
+	}
 };
 
 // 게임 종료 이벤트
 class IGameExitEvent : public IEvent
 {
 public:
-	IGameExitEvent() {}
+	IGameExitEvent()
+	{
+	}
 };
 
 // 게임 종료 이벤트
 class IGameStartEvent : public IEvent
 {
 public:
-	IGameStartEvent() {}
+	IGameStartEvent() 
+	{
+	}
 };
 
 // 턴 시작 이벤트
 class ITurnStart : public IEvent
 {
 public:
-	ITurnStart() {}
+	ITurnStart() 
+	{
+	}
 };
 
 // 매 턴 끝날 때마다 호출되는 이벤트

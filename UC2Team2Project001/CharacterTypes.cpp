@@ -4,5 +4,5 @@
 
 bool FCharacterReward::IsEmpty() const
 {
-	return DropGold <= 0 && DropItem == nullptr;
+	return dropGold <= 0 && dropItem == nullptr;
 }
