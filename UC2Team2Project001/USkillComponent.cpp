@@ -63,18 +63,6 @@ void USkillComponent::AddSkill(std::shared_ptr<Skill> skill)
 	}
 }
 
-//void USkillComponent::AddSkill(shared_ptr<ActiveSkill> _activeSkill)
-//{
-//	activeSkillList[_activeSkill->GetSkillData().skillName] = _activeSkill;
-//}
-//
-//void USkillComponent::AddSkill(shared_ptr<PassiveSkill> _passiveSkill)
-//{
-//	passiveSkillList[_passiveSkill->GetSkillData().skillName] = _passiveSkill;
-//
-//	_passiveSkill->PassiveSkillRegisterTrigger();
-//}
-
 void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
 {
 	auto& skillList = ChooseSkillListRef(_skillType);
@@ -122,21 +110,25 @@ void USkillComponent::AllReduceCooldown()
 
 void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
 {
-	for (auto& passive : passiveSkillList)
+	if (!CharacterUtility::IsDead(OwnerCharacter))
 	{
-		auto skillPtr = passive.second;
-		auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(skillPtr);
-
-		if (!passiveSkill)
+		for (auto& passive : passiveSkillList)
 		{
-			continue;
-		}
+			auto skillPtr = passive.second;
+			auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(skillPtr);
 
-		if (passiveSkill->handlers.find(std::type_index(typeid(*ev))) != passiveSkill->handlers.end())
-		{
-			passiveSkill->HandlePassiveEvent(ev);
+			if (!passiveSkill)
+			{
+				continue;
+			}
+
+			if (passiveSkill->handlers.find(std::type_index(typeid(*ev))) != passiveSkill->handlers.end())
+			{
+				passiveSkill->HandlePassiveEvent(ev);
+			}
 		}
 	}
+	
 }
 
 
