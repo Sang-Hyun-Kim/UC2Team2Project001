@@ -44,17 +44,36 @@ shared_ptr<Skill> USkillComponent::GetSkill(SkillType _skillType, string _skillN
 	return nullptr;
 }
 
-void USkillComponent::AddSkill(shared_ptr<ActiveSkill> _activeSkill)
+void USkillComponent::AddSkill(std::shared_ptr<Skill> skill)
 {
-	activeSkillList[_activeSkill->GetSkillData().skillName] = _activeSkill;
+	if (!skill)
+	{
+		std::cerr << "추가하려는 스킬이 유효하지 않습니다." << std::endl;
+		return;
+	}
+
+	if (auto activeSkill = std::dynamic_pointer_cast<ActiveSkill>(skill))
+	{
+		activeSkillList[skill->GetSkillData().skillName] = activeSkill;
+	}
+	else if (auto passiveSkill = std::dynamic_pointer_cast<PassiveSkill>(skill))
+	{
+		passiveSkillList[skill->GetSkillData().skillName] = passiveSkill;
+		passiveSkill->PassiveSkillRegisterTrigger();
+	}
 }
 
-void USkillComponent::AddSkill(shared_ptr<PassiveSkill> _passiveSkill)
-{
-	passiveSkillList[_passiveSkill->GetSkillData().skillName] = _passiveSkill;
-
-	_passiveSkill->PassiveSkillRegisterTrigger();
-}
+//void USkillComponent::AddSkill(shared_ptr<ActiveSkill> _activeSkill)
+//{
+//	activeSkillList[_activeSkill->GetSkillData().skillName] = _activeSkill;
+//}
+//
+//void USkillComponent::AddSkill(shared_ptr<PassiveSkill> _passiveSkill)
+//{
+//	passiveSkillList[_passiveSkill->GetSkillData().skillName] = _passiveSkill;
+//
+//	_passiveSkill->PassiveSkillRegisterTrigger();
+//}
 
 void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
 {
@@ -87,6 +106,18 @@ bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 
 	cout << _skillName << "스킬이 없습니다" << endl;
 	return false;
+}
+
+void USkillComponent::AllReduceCooldown()
+{
+	for (auto& skill : activeSkillList)
+	{
+		int currentCooldown = skill.second->GetSkillData().currentCooldown;
+		if (currentCooldown > 0)
+		{
+			skill.second->ReduceCooldown();
+		}
+	}
 }
 
 void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
@@ -131,23 +162,6 @@ std::string USkillComponent::GetPassiveSkillNameByIndex(int index) const
 	auto it = passiveSkillList.begin();
 	std::advance(it, index);
 	return it->second->GetSkillData().skillName;
-}
-
-vector<string> USkillComponent::GetActiveSkillInfoWithString(int type) const
-{
-	vector<string> SkillListInfo;
-	if (type == 0) //배틀, 인벤토리 열기
-	{
-		for (auto activeSkill : activeSkillList)
-		{
-			SkillListInfo.push_back(activeSkill.first);
-		}
-	}
-	else //상점
-	{
-		// 상점에서 스킬을 팔기 위한 정보 함수를 불러와주세요
-	}
-	return SkillListInfo;
 }
 
 std::vector<std::string> USkillComponent::GetActiveSkillInfo() const

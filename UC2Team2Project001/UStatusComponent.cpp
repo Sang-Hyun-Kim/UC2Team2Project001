@@ -61,6 +61,8 @@ void UStatusComponent::RemoveExpiredStates()
 				if (_state->IsExpired())
 				{
 					_state->EffectBeforeRemove();
+
+					cout << _state->GetStateName() << " 상태가 해제되었습니다." << endl;
 					return true;
 				}
 				return false;

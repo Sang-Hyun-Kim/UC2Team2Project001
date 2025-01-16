@@ -7,6 +7,7 @@
 #include "ICombatEventTypes.h"
 #include "ICharacterEventTypes.h"
 #include "ISystemTypes.h"
+#include "USkillComponent.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 
@@ -75,6 +76,8 @@ void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)
 	{
 		player.reset();
 	}
+
+	Publish(ev);
 }
 
 

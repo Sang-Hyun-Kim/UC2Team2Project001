@@ -2,7 +2,7 @@
 #include "OnePointAttack.h"
 #include "ISkillCondition.h"
 
-OnePointAttack::OnePointAttack(Character* _owner)
+OnePointAttack::OnePointAttack(Character* _owner) : ActiveSkill(_owner)
 {
 	skillData = FSkillData(_owner, "일점 돌파", 10, 5);
 

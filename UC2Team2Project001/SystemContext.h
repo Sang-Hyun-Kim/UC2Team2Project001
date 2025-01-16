@@ -43,6 +43,8 @@ public:
 	inline shared_ptr<class Player> GetPlayer() { return player; }
 private:
 	void MoveSystem(SystemType to, SystemType from);
+
+public:
 	void CreateCharacter(string name);
 
 	shared_ptr<GameSystem> currentSystem = nullptr;

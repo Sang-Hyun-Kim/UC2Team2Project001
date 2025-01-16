@@ -29,6 +29,9 @@
 #include "PoisonTrigger.h"
 #include "Plague.h"
 #include "ICombatEventTypes.h"
+#include "SkillManager.h"
+#include "Patience.h"
+#include "Unbreakable.h"
 
 
 // 게임 시스템 코드가 돌아갈 main 함수
@@ -54,6 +57,60 @@ int main()
 	{
 		GSystemContext->Update(); // Update()로 변경해야함
 	}
+
+#pragma region 스킬 매니저 테스트 코드
+	 // 스킬 매니저 초기화
+	//SkillManager& skillManager = SkillManager::GetInstance();
+
+	// 테스트 캐릭터 생성
+	/*shared_ptr<Player> player = make_shared<Player>("Player");
+	player->Initialize();
+
+	shared_ptr<Monster> monster = make_shared<Monster>();
+	monster->Initialize();
+
+	player->combatManager->SetTarget(monster.get());
+	monster->combatManager->SetTarget(player.get());*/
+
+	// 스킬 매니저를 통해 랜덤 액티브 스킬 추가
+	//skillManager.AddRandomSkillToCharacter(player.get(), SkillType::ACTIVE);
+	//skillManager.AddRandomSkillToCharacter(monster.get(), SkillType::ACTIVE);
+
+	// 스킬 매니저를 통해 랜덤 패시브 스킬 추가
+	//skillManager.AddRandomSkillToCharacter(player.get(), SkillType::PASSIVE);
+	//skillManager.AddRandomSkillToCharacter(monster.get(), SkillType::PASSIVE);
+
+	// 특정 스킬을 직접 추가
+	//skillManager.AddSelectSkillToCharacter(typeid(PoisonedBlade), player.get());
+	//skillManager.AddSelectSkillToCharacter(typeid(Plague), player.get());
+
+	//UTurnSystem->BeginTurn();
+	//vector<Character*> characterList{ player.get(),monster.get() };
+
+	//// 플레이어와 몬스터의 스킬 정보 출력
+	//cout << "Player Active Skills:" << endl;
+	//for (const auto& skillInfo : player->skillManager->GetActiveSkillInfo())
+	//{
+	//	cout << skillInfo << endl;
+	//}
+
+	//cout << "Player Passive Skills:" << endl;
+	//for (const auto& skillInfo : player->skillManager->GetPassiveSkillInfo())
+	//{
+	//	cout << skillInfo << endl;
+	//}
+
+	//auto newPlayerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+	//GlobalEventManager::Get().Notify(newPlayerAttackEv);
+
+	//// 스킬 사용 테스트
+	//if (!player->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼"))
+	//{
+	//	cout << "스킬 사용 실패: 독이 묻은 칼" << endl;
+	//}
+
+	//UTurnSystem->EndTurn(characterList);
+#pragma endregion
 
 
 #pragma region 캐릭터 테스트 예시 코드
@@ -148,12 +205,25 @@ int main()
 	//battleCharacters.push_back(player.get());
 	//battleCharacters.push_back(monster.get());
 	//
-	/*shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
-	monster->skillManager->AddSkill(newLifeStealAttack);*/
+	//shared_ptr<LifeStealAttack> newLifeStealAttack = make_shared<LifeStealAttack>(monster.get());
+	//monster->skillManager->AddSkill(newLifeStealAttack);
 
 
-	//TurnEventManager->BeginTurn();
-	//
+	//SkillManager::GetInstance().CreateSkillFromType(typeid(Patience), player.get());
+	//SkillManager::GetInstance().CreateSkillFromType(typeid(Patience), monster.get());
+
+	//player->skillManager->AddSkill(make_shared<Unbreakable>(player.get()));
+
+	//while (!CharacterUtility::IsDead(player.get()) && !CharacterUtility::IsDead(monster.get()))
+	//{
+	//	UTurnSystem->BeginTurn();
+
+	//	player->combatManager->Attack();
+	//	monster->combatManager->Attack();
+
+	//	UTurnSystem->EndTurn(battleCharacters);
+	//}
+
 	//shared_ptr<PoisonedBlade> newPoisonedBlade= make_shared<PoisonedBlade>(monster.get());
 	//monster->skillManager->AddSkill(newPoisonedBlade);
 	//
@@ -174,12 +244,10 @@ int main()
 	//auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
 	//eventManager.Notify(playerAttackEvent);
 
-	/*monster->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "맹독 부여");
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "독 격발");*/
-
-	//TurnEventManager->EndTurn(battleCharacters);
+	//monster->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
+	//monster->skillManager->UseSkill(SkillType::ACTIVE, "맹독 부여");
+	//monster->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
+	//monster->skillManager->UseSkill(SkillType::ACTIVE, "독 격발");
 
 #pragma endregion
 }

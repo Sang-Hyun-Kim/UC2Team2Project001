@@ -3,7 +3,7 @@
 #include "ISkillCondition.h"
 #include "UStatusComponent.h"
 
-MentalDiscipline::MentalDiscipline(Character* _owner)
+MentalDiscipline::MentalDiscipline(Character* _owner) : ActiveSkill(_owner)
 {
 	skillData = FSkillData(_owner, "정신 수양", 10, 2);
 
