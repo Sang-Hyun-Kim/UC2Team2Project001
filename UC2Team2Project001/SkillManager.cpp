@@ -129,6 +129,7 @@ void SkillManager::AddRandomSkillToCharacter(Character* owner, SkillType skillTy
 {
 	if (!owner)
 	{
+		DEBUG_COUT("");
 		cerr << "소유자가 유효하지 않습니다: nullptr" << endl;
 		return;
 	}
@@ -158,6 +159,7 @@ void SkillManager::AddUniqueSkillToCharacter(Character* owner, SkillType skillTy
 {
 	if (!owner)
 	{
+		DEBUG_COUT("");
 		cerr << "소유자가 유효하지 않습니다: nullptr" << endl;
 		return;
 	}
@@ -184,6 +186,7 @@ vector<type_index> SkillManager::GetUniqueRandomSkillTypes(Character* owner, Ski
 {
 	if (!owner)
 	{
+		DEBUG_COUT("");
 		cerr << "소유자가 유효하지 않습니다: nullptr" << endl;
 		return {};
 	}
@@ -229,6 +232,7 @@ shared_ptr<Skill> SkillManager::CreateSkillFromType(const type_index& skillType,
 
 	if (!owner)
 	{
+		DEBUG_COUT("");
 		cerr << "소유자가 유효하지 않습니다: nullptr" << endl;
 		return nullptr;
 	}
@@ -247,6 +251,7 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& skillType, Charac
 	}
 
 	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
-	std::cout << newSkill->GetSkillData().skillName <<"스킬을 획득했습니다" << endl;
+	std::cout <<owner->GetName() <<" 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
+	
 	owner->skillManager->AddSkill(newSkill);
 }

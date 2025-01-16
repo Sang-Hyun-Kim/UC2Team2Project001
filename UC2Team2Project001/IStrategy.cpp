@@ -7,6 +7,7 @@
 #include "GlobalEventManager.h"
 #include "CombatComponent.h"
 #include "ICharacterEventTypes.h"
+#include "ConsoleColorManager.h"
 
 using namespace std;
 
@@ -15,7 +16,10 @@ void BasicAttackStrategy::Attack(Character* _self, Character* _target, float _da
 	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), _damge);
 	GlobalEventManager::Get().Notify(Event);
 
+	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Yellow, ConsoleColor::Black);
+	std::cout << "공격을 수행하여" << _damge << "의 피해를 주었습니다!" << std::endl;
 	_target->combatManager->TakeDamage(_damge);
+
 }
 
 int BlockDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 
