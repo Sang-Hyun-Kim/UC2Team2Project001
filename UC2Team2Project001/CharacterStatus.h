@@ -35,6 +35,7 @@ public:
 		if (Duration > 0)
 		{
 			--Duration;
+			cout << StateName << " 상태 남은 턴 : " << Duration << endl;
 		}
 	}
 
@@ -110,7 +111,7 @@ public:
 	{
 	};
 
-	virtual ~ModifyDefenseState() = default;
+	virtual ~ModifyDefenseState();
 
 	// 상태 효과 적용
 	void ApplyEffect(Character* _target) override;
@@ -171,15 +172,11 @@ public:
 class UnbreakableState : public ICharacterState
 {
 public:
-	Character* target;
+	Character* target = nullptr;
 
-	UnbreakableState(int _duration) : ICharacterState("UnbreakableState", _duration)
-	{
-	}
+	UnbreakableState(int _duration);
 
-	virtual ~UnbreakableState()
-	{
-	}
+	virtual ~UnbreakableState();
 
 	// 상태 효과 적용
 	void ApplyEffect(Character* _target) override;

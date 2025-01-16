@@ -9,6 +9,8 @@
 #include "MentalDiscipline.h"
 #include "ShieldAttack.h"
 #include "OnePointAttack.h"
+#include "Unbreakable.h"
+#include "Patience.h"
 #include "USkillComponent.h"
 #include "Character.h"
 #include <unordered_set>
@@ -39,8 +41,12 @@ SkillManager::SkillManager()
 
 	// 패시브 스킬 등록
 	RegisterSkill<Plague>();
+	RegisterSkill<Unbreakable>();
+	RegisterSkill<Patience>();
 
 	PassiveSkillList.push_back(typeid(Plague));
+	PassiveSkillList.push_back(typeid(Unbreakable));
+	PassiveSkillList.push_back(typeid(Patience));
 }
 
 SkillManager::~SkillManager()
@@ -253,4 +259,16 @@ Skill* SkillManager::CreateSkillFromType(const std::type_index& skillType, Chara
 		std::cerr << "스킬 생성에 실패했습니다: " << skillType.name() << std::endl;
 	}
 	return newSkill;
+}
+
+void SkillManager::AddSelectSkillToCharacter(const type_index& skillType, Character* owner)
+{
+	//shared_ptr<skillType> newSkill = make_shared<skillType>(CreateSkillFromType(skillType, owner));
+
+	//if (!newSkill)
+	//{
+	//	//typeid(Patience)
+	//	auto skill = dynamic_pointer_cast<skillType>(newSkill);
+	//	//owner->skillManager->AddSkill();
+	//}
 }

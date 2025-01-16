@@ -29,8 +29,8 @@ void GlobalEventManager::Unsubscribe(int _subscriptionId)
 
 void GlobalEventManager::Notify(std::shared_ptr<IEvent> _callEv)
 {
-	for (auto& system : _listeners)
+	for (int i = 0; i < _listeners.size(); i++)
 	{
-		system->OnEvent(_callEv);
+		_listeners[i]->OnEvent(_callEv);
 	}
 }

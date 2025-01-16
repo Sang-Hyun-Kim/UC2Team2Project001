@@ -10,8 +10,8 @@ Patience::Patience(Character* _owner) : PassiveSkill(_owner)
 	//패시브 태그 설정
 	handlers.insert(typeid(ITurnStart));
 
-	shared_ptr<ISkillEffect> lifeEffect = make_shared<IHealingEffect>(10);
-	skillData.effects.push_back(lifeEffect);
+	shared_ptr<IHealingEffect> healingEffect = make_shared<IHealingEffect>(10);
+	skillData.effects.push_back(healingEffect);
 
 	skillData.conditions.push_back(make_shared<AliveCondition>());
 

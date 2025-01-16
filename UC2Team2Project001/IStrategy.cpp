@@ -12,17 +12,12 @@ using namespace std;
 
 void BasicAttackStrategy::Attack(Character* _self, Character* _target)
 {
-	// 치명타 확률 계산
-	int CriticalChance = (int)(CharacterUtility::GetStat(_self, StatType::CriticalChance) * 100);
-	bool IsCritical = (rand() % 100) <= CriticalChance;
+	int baseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
 
-	int BaseDamage = (int)CharacterUtility::GetStat(_self, StatType::AttackPower);
-	int FianlDamage = IsCritical ? (BaseDamage * 2) : BaseDamage;
-
-	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), FianlDamage);
+	auto Event = make_shared<ICharacterAttackEvent>(_self->GetName(), baseDamage);
 	GlobalEventManager::Get().Notify(Event);
 
-	_target->combatManager->TakeDamage(FianlDamage);
+	_target->combatManager->TakeDamage(baseDamage);
 }
 
 int BlockDefenseStrategy::CalculateDamageReceived(Character* _self, int _incomingDamage) 

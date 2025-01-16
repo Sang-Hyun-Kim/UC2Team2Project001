@@ -5,7 +5,6 @@
 #include "CombatComponent.h"
 #include "UStatusComponent.h"
 #include "StatComponent.h"
-#include "UStatusComponent.h"
 
 void BurnState::ApplyEffect(Character* Target)
 {
@@ -18,21 +17,28 @@ void BurnState::ApplyEffect(Character* Target)
 	}
 }
 
+ModifyDefenseState::~ModifyDefenseState()
+{
+}
+
 void ModifyDefenseState::ApplyEffect(Character* _target)
 {
 	if (!isApplied)
 	{
 		target = _target;
+		float beforeDefense = CharacterUtility::GetStat(target, StatType::Defense);
 		CharacterUtility::ModifyStat(_target, StatType::Defense, modifyValue);
 		isApplied = true;
 
-		cout << "방어력 증감 효과 발동" << endl;
+		cout << "방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
 	}
 }
 
 void ModifyDefenseState::EffectBeforeRemove()
 {
+	float beforeDefense = CharacterUtility::GetStat(target, StatType::Defense);
 	CharacterUtility::ModifyStat(target, StatType::Defense, -modifyValue);
+	cout << "방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
 }
 
 void PoisonState::ApplyStack(int NewStack)
@@ -51,22 +57,33 @@ void PoisonState::ApplyEffect(Character* Target)
 	}
 }
 
+UnbreakableState::UnbreakableState(int _duration) : ICharacterState("불굴의 의지", _duration)
+{
+}
+
+UnbreakableState::~UnbreakableState()
+{
+}
+
 void UnbreakableState::ApplyEffect(Character* _target)
 {
 	target = _target;
+
+	CharacterUtility::ModifyStat(_target, StatType::HP, 1);
+
 	if (CharacterUtility::IsDead(target->combatManager->GetTarget()))
 	{
 		target->StatusComponent->RemoveState(typeid(UnbreakableState));
 		CharacterUtility::ModifyStat(target, StatType::HP, 20);
+		cout << target->GetName() << "의 불굴의 의지 상태가 해제되었습니다." << endl;
+		cout << target->GetName() << "의 체력이 20 회복 되었습니다." << endl;
+		return;
 	}
-	else
-	{
-		_target->statManager->minHP = 1.0f;
-	}
+
+	cout << target->GetName() << "의 현제 체력 : " << CharacterUtility::GetStat(target, StatType::HP) << endl;
 }
 
 void UnbreakableState::EffectBeforeRemove()
 {
-	target->statManager->minHP = 0.0f;
 	CharacterUtility::ModifyStat(target, StatType::HP, -9999);
 }

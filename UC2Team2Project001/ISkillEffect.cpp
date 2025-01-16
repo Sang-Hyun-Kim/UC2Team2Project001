@@ -6,7 +6,6 @@
 #include "UStatusComponent.h"
 #include "Monster.h"
 #include "CharacterStatus.h"
-#include "UStatusComponent.h"
 
 void ILifeStealEffect::PostEffect()
 {
@@ -30,11 +29,11 @@ void IDefenseBasedDamageEffect::PostEffect()
 	Character* self = parentSkill->GetSkillData().owner;
 	Character* target = parentSkill->GetTarget();
 
-	float armour = CharacterUtility::GetStat(self, StatType::Defense);
+	float defense = CharacterUtility::GetStat(self, StatType::Defense);
 
-	cout << "방어력 " << armour << "만큼 추가 대미지가 발생 했습니다." << endl;
+	cout << "방어력 " << defense << "만큼 추가 대미지가 발생 했습니다." << endl;
 
-	target->combatManager->TakeDamage(armour);
+	target->combatManager->TakeDamage(defense);
 }
 
 void IOnePointAttackEffect::PostEffect()
@@ -51,13 +50,18 @@ void IOnePointAttackEffect::PostEffect()
 
 IStunEffect::IStunEffect(int _duration)
 {
-	stunState = make_shared<StunState>(_duration);
+	states.push_back(make_shared<StunState>(_duration));
 }
 
 void IStunEffect::PostEffect()
 {
-	parentSkill->GetTarget()->StatusComponent->AddState(stunState);
-	cout << "기절 상태 적용" << endl;
+	Character* target = parentSkill->GetTarget();
+
+	for (auto state : states)
+	{
+		target->StatusComponent->AddState(state);
+	}
+	cout << "기절 상태 적용! " << target->GetName() << "이(가) 기절 했습니다." << endl;
 }
 
 IPoisonEffect::IPoisonEffect(int amountStack)
@@ -103,18 +107,17 @@ IHealingEffect::IHealingEffect(float _healAmount) : healAmount(_healAmount)
 void IHealingEffect::PreEffect()
 {
 	CharacterUtility::ModifyStat(parentSkill->GetTarget(), StatType::HP, healAmount);
+	cout << "인내심 발동! " << parentSkill->GetTarget()->GetName() << "이(가) 체력을 " << healAmount << "만큼 회복 했습니다." << endl;
 }
 
 IUnbreakableEffect::IUnbreakableEffect()
 {
-	// todo 불굴 상태 작성
-	states.push_back(make_shared<PoisonState>(4));
+	states.push_back(make_shared<UnbreakableState>(4));
 }
 
 void IUnbreakableEffect::PostEffect()
 {
-	const auto& skillData = parentSkill->GetSkillData();
-	Character* target = parentSkill->GetTarget();
+	Character* target = parentSkill->GetSkillData().owner;
 
 	for (auto state : states)
 	{

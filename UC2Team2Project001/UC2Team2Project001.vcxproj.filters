@@ -234,9 +234,6 @@
     <ClCompile Include="LobbySystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MainSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SubSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -263,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="Patience.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -346,9 +346,6 @@
     </ClInclude>
     <ClInclude Include="HealthPotion.h">
       <Filter>헤더 파일\ItemSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GlobalEventManager.h">
       <Filter>헤더 파일</Filter>

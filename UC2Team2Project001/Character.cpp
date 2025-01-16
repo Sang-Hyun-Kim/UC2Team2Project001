@@ -32,10 +32,10 @@ void Character::ManagerRegister()
 	combatManager = make_shared<CombatComponent>();
 	combatManager->SetOwner(this);
 
-	skillManager = make_shared<USkillComponent>();
+	skillManager = make_shared<USkillComponent>(this);
 	StatusComponent = make_shared<UStatusComponent>(this);
 
-	//GlobalEventManager::Get().Subscribe(skillManager);
+	GlobalEventManager::Get().Subscribe(skillManager);
 }
 
 void Character::Initialize()

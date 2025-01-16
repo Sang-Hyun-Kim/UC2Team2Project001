@@ -55,13 +55,14 @@ void Monster::SetMonsterStat(int PlayerLevel)
 
 	// 체력 = 레벨 * (20 ~ 30)
 	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
-	float HP = (float)PlayerLevel * RandomHP;
+	//float HP = (float)PlayerLevel * RandomHP;
+	float HP = 20;
 	statManager->SetStat(StatType::MaxHP, HP);
 	statManager->SetStat(StatType::HP, HP);
 
 	// 공격력 = 레벨 * (5 ~ 10)
 	int RandomAttackPower = (rand() % (int)(5 * BossStat)) + (int)(10 * BossStat);
-	float AttackPower = (float)PlayerLevel * RandomAttackPower;
+	float AttackPower = (float)PlayerLevel * RandomAttackPower + 9999;
 	statManager->SetStat(StatType::AttackPower, AttackPower);
 }
 
@@ -71,7 +72,8 @@ void Monster::Initialize()
 
 	shared_ptr<Player> player = GSystemContext->GetPlayer();
 
-	blanceLevel = (int)player->statManager->GetStat(StatType::Level);
+	//blanceLevel = (int)player->statManager->GetStat(StatType::Level);
+	blanceLevel = 1;
 
 	//ToDo:
 	/*SetBlance(GLobbySystem->player->GetName());*/

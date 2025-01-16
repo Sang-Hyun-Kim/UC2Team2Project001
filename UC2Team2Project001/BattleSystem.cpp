@@ -100,8 +100,11 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::MainMenu()
 {
-	CLEAR;
+	//CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
+
+	
+
 	CharacterUtility::PrintStatus(monster.get());
 
 	int input = InputManagerSystem::GetInput<int>(
@@ -183,7 +186,7 @@ void BattleSystem::Attack()
 
 void BattleSystem::DisplayStat()
 {
-	CLEAR;
+	//CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 
