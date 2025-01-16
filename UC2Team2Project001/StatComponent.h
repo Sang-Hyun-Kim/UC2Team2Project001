@@ -6,7 +6,6 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include "StatType.h"
-
 using json = nlohmann::json;
 
 class Character;
@@ -42,7 +41,7 @@ public:
 	bool IsDead();
 
 	// 현재 스탯 콘솔 출력
-	void PrintStatus();
+	void PrintStatus(int type = 0);
 
 	// 레벨 업 기능
 	void LevelUp();
@@ -55,7 +54,7 @@ protected:
 	
 
 	void HandleExperienceGain();
-
+	string FormatFloat(float value, int precision = 1);
 private:
 	Character* ownedCharacter =nullptr;
 

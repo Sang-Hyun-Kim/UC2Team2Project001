@@ -20,6 +20,7 @@
 
 #include "Invoker.h"
 #include "CommandTypes.h"
+#include "ConsoleLayout.h"
 
 BattleSystem::BattleSystem()
 {
@@ -35,10 +36,12 @@ void BattleSystem::EnterSystem()
 	//cout << "-----------------------------------------------------------------\n";
 	//cout << "                            전투 입장                           " << endl;
 	//cout << "-----------------------------------------------------------------\n";
-	CLEAR;
+	//CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	monster = make_shared<Monster>();
 	monster->Initialize();
+	monster->combatManager->SetTarget(player.get());
+	player->combatManager->SetTarget(monster.get());
 
 	player->combatManager->SetTarget(monster.get());
 
@@ -47,7 +50,7 @@ void BattleSystem::EnterSystem()
 	activeCharacters.push_back(monster.get());
 	
 	// 플레이어 레벨에 따른 monster 생성
-	state = make_shared<BattleStartTurnState>();
+	state = make_shared<BattleMainState>();
 
 	rewardSystem->Initialize();
 	turnSystem->TurnReset();
@@ -97,15 +100,18 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::MainMenu()
 {
-	CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
 
-	CharacterUtility::PrintStatus(monster.get());
+	auto player = GSystemContext->GetPlayer();
+	player.get()->PrintCharacterInfo();
+	monster.get()->PrintCharacterInfo(1);
 
 	int input = InputManagerSystem::GetInput<int>(
 		"==== 전투 메뉴 ====",
-		{ "1. 공격하기" , "2. 내 현재 스탯 확인하기","3. 아이템 사용하기" },
-		RangeValidator<int>(1, 3)
+		{ "1. 공격하기" ,"2. 아이템 사용하기" },
+		RangeValidator<int>(1, 2)
 	);
 
 	if (input == 1)
@@ -113,12 +119,6 @@ void BattleSystem::MainMenu()
 		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleAttackState>());
 		GInvoker->ExecuteCommand(cmd);
 		//state = make_shared<BattleAttackState>();
-	}
-	else if (input == 2)
-	{
-		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleDisplayState>());
-		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleDisplayState>();
 	}
 	else
 	{
@@ -130,18 +130,10 @@ void BattleSystem::MainMenu()
 
 void BattleSystem::Attack()
 {
-	cout << endl;
-
-	auto player = GSystemContext->GetPlayer();
-	//player->combatManager->SetTarget(monster.get());
-
-	/*
-	플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
-	*/
-	
-	CLEAR;
 	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
 	GlobalEventManager::Get().Notify(battleitemcheck);
+
+	auto player = GSystemContext->GetPlayer();
 
 	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
 	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
@@ -170,7 +162,7 @@ void BattleSystem::Attack()
 	}
 	else
 	{ // 스킬 사용
-		CLEAR;
+		//CLEAR;
 		//auto cmd = make_shared<UseSkillCommand>(player->skillManager->GetActiveSkillNameByIndex(input - 1));
 		//GInvoker->ExecuteCommand(cmd);
 		//player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
@@ -182,7 +174,7 @@ void BattleSystem::Attack()
 
 		auto player = GSystemContext->GetPlayer();
 
-		state = make_shared<BattleStartTurnState>();
+		state = make_shared<BattleMainState>();
 		
 		if (!player->skillManager->UseSkill(player->skillManager->GetActiveSkillNameByIndex(input - 1)))
 		{
@@ -192,34 +184,37 @@ void BattleSystem::Attack()
 	}
 
 	// 몬스터 공격
-	cout << endl;
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
 	monster->combatManager->SetTarget(player.get());
 
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
-	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
-	cout << "\n\n";
+
+	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
 	
 	turnSystem->EndTurn(activeCharacters);
 	
-	cout << "\n";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
+
 	InputManagerSystem::PauseUntilEnter();
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 }
 
 void BattleSystem::DisplayStat()
 {
-	CLEAR;
+	//CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 
 	InputManagerSystem::PauseUntilEnter();
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 
 	state = make_shared<BattleMainState>();
 }
 
 void BattleSystem::UseItem()
 {
-	CLEAR;
+	//CLEAR;
 
 	auto battleitemcheck = make_shared<IBattleUseItemEvent>();
 	GlobalEventManager::Get().Notify(battleitemcheck);
@@ -247,7 +242,7 @@ void BattleSystem::UseItem()
 
 void BattleSystem::NextStage()
 {
-	CLEAR;
+	//CLEAR;
 
 	if (monster->IsBoss())
 	{	
@@ -262,12 +257,13 @@ void BattleSystem::NextStage()
 		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
 		GlobalEventManager::Get().Notify(event);
 		InputManagerSystem::PauseUntilEnter();
+		ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 		return;
 	}
 	else
 	{	
 		GetReward();
-		CLEAR;
+		//CLEAR;
 
 		int input = InputManagerSystem::GetInput<int>(
 			"==== 스테이지 클리어 메뉴 ====",
@@ -298,10 +294,10 @@ void BattleSystem::GameOver()
 
 void BattleSystem::StartTurn()
 {
-	CLEAR;
-	turnSystem->BeginTurn();
-	cout << "\n\n";
-	state = make_shared<BattleMainState>();
+	//CLEAR;
+	//turnSystem->BeginTurn();
+	//cout << "\n\n";
+	//state = make_shared<BattleMainState>();
 }
 
 void BattleSystem::OnEvent(const std::shared_ptr<IEvent> _event)
@@ -317,6 +313,10 @@ void BattleSystem::OnEvent(const std::shared_ptr<IEvent> _event)
 		{
 			state = make_shared<BattleGameOverState>();
 		}
+	}
+	else if (auto turnEvent = dynamic_pointer_cast<ITurnStartEvent>(_event))
+	{
+		turnSystem->BeginTurn();
 	}
 }
 

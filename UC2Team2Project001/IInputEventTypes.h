@@ -28,3 +28,11 @@ public:
 	{
 	}
 };
+
+class IPauseEnterEvent : public IEvent
+{
+public:
+	IPauseEnterEvent()
+	{
+	}
+};

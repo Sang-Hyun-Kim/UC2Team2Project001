@@ -7,8 +7,7 @@
 #include "ISystemTypes.h"
 #include <iostream>
 #include "USkillComponent.h"
-
-
+#include "ConsoleLayout.h"
 
 UTurnEventManager::UTurnEventManager() : currentTurn(1) // 초기 턴
 {
@@ -25,10 +24,10 @@ void UTurnEventManager::OnEvent(std::shared_ptr<IEvent> _event)
 
 void UTurnEventManager::BeginTurn()
 {
-	std::cout << "================== Turn " << currentTurn << " 시작 ===================\n";
+	 ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "================== Turn " + to_string(currentTurn) + " 시작 ===================");
 
-	auto turnStartEvent = make_shared<ITurnStart>();
-	GlobalEventManager::Get().Notify(turnStartEvent);
+	//auto turnStartEvent = make_shared<ITurnStartEvent>();
+	//GlobalEventManager::Get().Notify(turnStartEvent);
 }
 
 void UTurnEventManager::ExecuteTurnActions(Character* _player, Character* _monster)
@@ -66,7 +65,7 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& _allCharacters)
 	GlobalEventManager::Get().Notify(newTurnEndEvent);
 
 	// 턴 종료 출력
-	std::cout << "================== Turn " << currentTurn << " 종료 ===================\n\n";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "================== Turn " + to_string(currentTurn) + " 종료 ===================");
 
 	// 다음 턴으로
 	++currentTurn;

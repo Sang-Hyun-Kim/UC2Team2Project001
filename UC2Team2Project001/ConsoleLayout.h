@@ -332,7 +332,7 @@ public:
 	//  - 이미 인스턴스가 있으면 재사용, 없으면 (140,50)로 생성
 	static ConsoleLayout& GetInstance()
 	{
-		static ConsoleLayout instance = ConsoleLayout(160,40);
+		static ConsoleLayout instance = ConsoleLayout(160, 40);
 		return instance;
 	}
 

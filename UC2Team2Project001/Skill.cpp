@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Skill.h"
-#include "Character.h"
 #include "CombatComponent.h"
 #include "ISkillCondition.h"
-
+#include "ISystemTypes.h"
+#include "GlobalEventManager.h"
+#include "PlayerCharacter.h"
 
 bool Skill::CanUseSkill()
 {
@@ -36,8 +37,14 @@ bool Skill::UseSkill()
 {
 	if (!CanUseSkill() && !CharacterUtility::IsDead(skillData.owner))
 	{
-		cout << skillData.owner->GetName() << "은(는) 스킬을 사용할 수 없습니다: " << skillData.skillName << endl;
+		//cout << skillData.owner->GetName() << "은(는) 스킬을 사용할 수 없습니다: " << skillData.skillName << endl;
 		return false;
+	}
+	if (auto p = dynamic_cast<Player*>(GetSkillData().owner))
+	{
+	auto eve = make_shared<ITurnStartEvent>();
+	GlobalEventManager::Get().Notify(eve);
+
 	}
 
 	Character* Owner  =  skillData.owner;

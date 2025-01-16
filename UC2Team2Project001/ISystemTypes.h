@@ -41,10 +41,10 @@ public:
 };
 
 // 턴 시작 이벤트
-class ITurnStart : public IEvent
+class ITurnStartEvent : public IEvent
 {
 public:
-	ITurnStart() 
+	ITurnStartEvent()
 	{
 	}
 };

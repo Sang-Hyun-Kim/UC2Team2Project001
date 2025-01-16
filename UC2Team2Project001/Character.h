@@ -36,6 +36,8 @@ public:
 	// 컴포넌트 등록
 	virtual void ManagerRegister();
 
+	void PrintCharacterInfo(int type = 0);
+
 public:
 	// 캐릭터 이름 반환
 	const string& GetName()

@@ -75,7 +75,6 @@ void SystemContext::CreateCharacter(string _name)
 		options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
 	}
 
-	CLEAR;
 	int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, skillSize));
 
 	auto skillManager = SkillManager::GetInstance();

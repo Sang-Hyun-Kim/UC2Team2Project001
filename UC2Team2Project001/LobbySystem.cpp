@@ -4,7 +4,7 @@
 #include "PlayerCharacter.h"
 #include "ISystemTypes.h"
 #include "ICharacterEventTypes.h"
-
+#include "ConsoleLayout.h"
 LobbySystem::LobbySystem()
 {
 }
@@ -63,7 +63,6 @@ void LobbySystem::MainMenu()
 
 void LobbySystem::CreatePlayerMenu()
 {
-	CLEAR;
 	string userName = InputManagerSystem::GetInput(
 		"캐릭터의 이름을 입력해주세요.(중간 공백 허용, 최대12자)",
 		{},
@@ -77,9 +76,10 @@ void LobbySystem::CreatePlayerMenu()
 
 	auto player = GSystemContext->GetPlayer();
 
-	CLEAR;
+
 	CharacterUtility::PrintStatus(player.get());
 	InputManagerSystem::PauseUntilEnter();
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 
 	auto moveEvent = make_shared<IMoveSystemEvent>(SystemType::BATTLE, GetSystemType(), "배틀", "로비");
 	GlobalEventManager::Get().Notify(moveEvent);

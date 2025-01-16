@@ -36,6 +36,11 @@ void Character::ManagerRegister()
 	skillManager = make_shared<USkillComponent>(this);
 }
 
+void Character::PrintCharacterInfo(int type)
+{
+	statManager->PrintStatus(type);
+}
+
 void Character::Initialize()
 {
 	ManagerRegister();

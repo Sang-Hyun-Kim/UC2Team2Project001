@@ -5,6 +5,7 @@
 #include "ISystemTypes.h"
 #include "GlobalEventManager.h"
 
+#include "ItemManager.h"
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
@@ -40,18 +41,7 @@ public:
 
 	void Execute() override
 	{
-		auto player = GSystemContext->GetPlayer();
 
-		auto item = player->inventoryComponent->GetItemWithIndex(index - 1);
-		auto itemCount = player->inventoryComponent->getItemCount(index - 1);
-		auto itemValue = item->getValue();
-
-		int sellCount = InputManagerSystem::GetInput<int>("판매할 갯수를 입력해주세요. ", {}, RangeValidator<int>(1, itemCount));
-
-		player->inventoryComponent->removeItem(index - 1, sellCount);
-		int totalGainGold = itemValue * sellCount;
-		player->inventoryComponent->addGold(totalGainGold);
-		cout << item->getName() + "(을)를 " + to_string(itemValue) + "개 팔아 " + to_string(totalGainGold) + "골드를 얻었습니다." << endl;
 	}
 
 	void Undo() override
@@ -71,23 +61,7 @@ public:
 
 	void Execute() override // Creature 로 둔다면 형변환
 	{
-		int gold = player->inventoryComponent->getGold();
-		auto item = itemList[index];
-		int itemValue = item->getValue();
-
-		if (gold >= itemValue)
-		{
-			auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->getName(), item->getValue());
-			GlobalEventManager::Get().Notify(Event);
-
-			player->inventoryComponent->removeGold(itemValue);
-			player->inventoryComponent->addItem(item);
-			itemList.erase(itemList.begin() + index);
-		}
-		else
-		{
-			cout << "골드가 부족합니다.\n";
-		}
+		
 	}
 
 	void Undo() override

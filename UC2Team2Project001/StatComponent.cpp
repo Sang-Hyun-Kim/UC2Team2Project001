@@ -11,6 +11,8 @@
 #include "USkillComponent.h"
 #include "ConsoleLayout.h"
 
+#include "ConsoleLayout.h"
+
 UStatsComponent::UStatsComponent(Character* _inOwnedCharacter)
 {
 	ownedCharacter = _inOwnedCharacter;
@@ -124,43 +126,54 @@ bool UStatsComponent::IsDead()
 	return (stats[StatType::HP] <= 0);
 }
 
-void UStatsComponent::PrintStatus()
+std::string UStatsComponent::FormatFloat(float value, int precision) {
+	std::ostringstream oss;
+	oss << std::fixed << std::setprecision(precision) << value;
+	return oss.str();
+}
+
+void UStatsComponent::PrintStatus(int type)
 {
-	/*vector<string> statList = {
+	ConsoleRegionType _consoleRegion;
 
-	"================ Character Status ================",
-	"Name: " + (ownedCharacter ? ownedCharacter->GetName() : "None"),
-	"Level: " + to_string(stats[StatType::Level]),
-	"Experience: " + stats[StatType::Experience] + " / " + stats[StatType::MaxExperience],
-	"HP: " + stats[StatType::HP]+ " / " << stats[StatType::MaxHP],
-	"MP: " + stats[StatType::MP]+ " / " << stats[StatType::MaxMP],
-	"Attack Power: " + stats[StatType::AttackPower] << "\n";
-	"Defense: " + stats[StatType::Defense] + "\n";
-	"Critical Chance: " + (stats[StatType::CriticalChance] * 100) << "%";
-	"Evasion Rate: " + (stats[StatType::EvasionRate] * 100) + "%";
-	"==================================================\n"; };*/
+	if (type == 0)
+	{
+		_consoleRegion = ConsoleRegionType::LeftTop;
+	}
+	else if (type == 1)
+	{
+		_consoleRegion = ConsoleRegionType::RightTop;
+	}
+	else if (type == 2)
+	{
+		_consoleRegion = ConsoleRegionType::LeftBottom;
+	}
+	else if (type == 3)
+	{
+		_consoleRegion = ConsoleRegionType::RightBottom;
+	}
 
-	// 1) 레이아웃 싱글톤 획득
 	auto& layout = ConsoleLayout::GetInstance();
 
 	vector<string> statusLines;
+	std::ostringstream oss;
+	oss.precision(1); // 소수점 이하 1자리
 
-	statusLines.push_back("================ Character Status ================");
-	statusLines.push_back("Name: " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
-	statusLines.push_back("Level: " + to_string(stats[StatType::Level]));
-	statusLines.push_back("Experience: " + std::to_string(stats[StatType::Experience]) + " / " + std::to_string(stats[StatType::MaxExperience]));
-	statusLines.push_back("HP: " + std::to_string(stats[StatType::HP]) + " / " + std::to_string(stats[StatType::MaxHP]));
-	statusLines.push_back("MP: " + std::to_string(stats[StatType::MP]) + " / " + std::to_string(stats[StatType::MaxMP]));
-	statusLines.push_back("Attack Power: " + std::to_string(stats[StatType::AttackPower]));
-	statusLines.push_back("Defense: " + std::to_string(stats[StatType::Defense]));
-	statusLines.push_back("Critical Chance: " + std::to_string(stats[StatType::CriticalChance] * 100) + "%");
-	statusLines.push_back("Evasion Rate: " + std::to_string(stats[StatType::EvasionRate] * 100) + "%");
-	statusLines.push_back("==================================================");
+	layout.AppendLine(_consoleRegion, "=================== 캐릭터 정보 ===================");
+	layout.AppendLine(_consoleRegion, "이름    : " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
+	layout.AppendLine(_consoleRegion, "레벨    : " + std::to_string(int(stats[StatType::Level])));
+	layout.AppendLine(_consoleRegion, "경험치  : " + FormatFloat(stats[StatType::Experience]) + " / " + FormatFloat(stats[StatType::MaxExperience]));
 
-	for (string stat : statusLines)
-	{
-		layout.AppendLine(ConsoleRegionType::LeftTop, stat, true, ConsoleColor::Magenta);
-	}
+	//layout.AppendLine(ConsoleRegionType::LeftTop, "================ 캐릭터 스테이터스 ================");
+
+	layout.AppendLine(_consoleRegion, "HP      : " + std::to_string(int(stats[StatType::HP])) + " / " + std::to_string(int(stats[StatType::MaxHP])));
+	layout.AppendLine(_consoleRegion, "MP      : " + std::to_string(int(stats[StatType::MP])) + " / " + std::to_string(int(stats[StatType::MaxMP])));
+	
+	layout.AppendLine(_consoleRegion, "공격력  : " + FormatFloat(stats[StatType::AttackPower]));
+	layout.AppendLine(_consoleRegion, "방어력  : " + FormatFloat(stats[StatType::Defense]));
+	layout.AppendLine(_consoleRegion, "치명타율: " + FormatFloat(stats[StatType::CriticalChance] * 100) + "%");
+	layout.AppendLine(_consoleRegion, "회피율  : " + FormatFloat(stats[StatType::EvasionRate]) + "%");
+	layout.AppendLine(_consoleRegion, "==================================================");
 }
 
 void UStatsComponent::LevelUp()
