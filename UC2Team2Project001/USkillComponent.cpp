@@ -95,7 +95,7 @@ void USkillComponent::RemoveSkill(SkillType _skillType, string _skillName)
 	}
 }
 
-bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
+bool USkillComponent::UseSkill(string _skillName, SkillType _skillType/*= SkillType::ACTIVE*/)
 {
 	auto skillList = ChooseSkillList(_skillType);
 
@@ -105,6 +105,54 @@ bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 	}
 
 	cout << _skillName << "스킬이 없습니다" << endl;
+	return false;
+}
+
+bool USkillComponent::UseSkillByType(const std::type_index& _type, SkillType _skillType /*= SkillType::ACTIVE*/)
+{
+	auto& skillList = ChooseSkillListRef(_skillType);
+
+	for (const auto& [name, skill] : skillList)
+	{
+		// std::type_index를 사용해 비교
+		if (std::type_index(typeid(*skill)) == _type)
+		{
+			if (skill)
+			{
+				return skill->UseSkill();
+			}
+
+			DEBUG_COUT("");
+			std::cerr << "타입에 해당하는 유효한 스킬을 찾을 수 없습니다: " << _type.name() << std::endl;
+			return false;
+		}
+	}
+
+	DEBUG_COUT("");
+	std::cerr << "타입에 해당하는 스킬을 찾을 수 없습니다: " << _type.name() << std::endl;
+	return false;
+}
+
+bool USkillComponent::UseSkillByIndex(int _index,SkillType _skillType)
+{
+	auto& skillList = ChooseSkillListRef(_skillType);
+
+	if (_index < 0 || _index >= static_cast<int>(skillList.size()))
+	{
+		std::cerr << "잘못된 인덱스입니다. 범위를 초과했습니다: " << _index << std::endl;
+		return false;
+	}
+
+	// 인덱스를 기반으로 스킬 검색
+	auto it = skillList.begin();
+	std::advance(it, _index);
+
+	if (it->second)
+	{
+		return it->second->UseSkill();
+	}
+
+	std::cerr << "해당 인덱스에 유효한 스킬이 없습니다: " << _index << std::endl;
 	return false;
 }
 

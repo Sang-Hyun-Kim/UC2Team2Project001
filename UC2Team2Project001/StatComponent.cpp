@@ -9,6 +9,7 @@
 #include "StatsLoader.h"
 #include "ICharacterEventTypes.h"
 #include "USkillComponent.h"
+#include "ConsoleLayout.h"
 
 UStatsComponent::UStatsComponent(Character* _inOwnedCharacter)
 {

@@ -206,7 +206,7 @@ public:
 
 		auto player = GSystemContext->GetPlayer();
 
-		if (player->skillManager->UseSkill(SkillType::ACTIVE, skillName))
+		if (player->skillManager->UseSkill(skillName))
 		{
 
 		}

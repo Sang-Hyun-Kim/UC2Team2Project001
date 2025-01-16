@@ -12,17 +12,17 @@ public:
 
 	}
 
-    virtual ~ISkillAction() = default;
+	virtual ~ISkillAction() = default;
 
-    virtual void ExecuteAction() = 0;
+	virtual void ExecuteAction() = 0;
 
-    void SetSkill(Skill* _skill)
-    {
-        parentSkill = _skill;
-    }
+	void SetSkill(Skill* _skill)
+	{
+		parentSkill = _skill;
+	}
 
 public:
-    Skill* parentSkill;
+	Skill* parentSkill;
 };
 
 class NormalAttackAction : public ISkillAction
@@ -45,16 +45,16 @@ public:
 	{
 	}
 
-    AttackAction(float _attackDamage)
-    {
-        attackDamage = _attackDamage;
-    }
+	AttackAction(float _attackDamage)
+	{
+		attackDamage = _attackDamage;
+	}
 
-    ~AttackAction() = default;
+	~AttackAction() = default;
 
-    virtual void ExecuteAction() override;
+	virtual void ExecuteAction() override;
 
-    float attackDamage = 0;
+	float attackDamage = 0;
 };
 
 
@@ -99,4 +99,33 @@ public:
 	~PoisonTriggerAction() = default;
 
 	virtual void ExecuteAction() override;
+};
+
+
+// 빙하의 파편 동작 정의
+class GlacialShardAction : public ISkillAction
+{
+public:
+	GlacialShardAction(float _damageMultiplier, float _defenseReduction, int _defenseDuration) : damageMultiplier(_damageMultiplier), defenseReduction(_defenseReduction), defenseDuration(_defenseDuration)
+	{
+	}
+
+	virtual void ExecuteAction() override;
+
+private:
+	float damageMultiplier;  // 공격력 배율
+	float defenseReduction;  // 방어력 감소 비율
+	int defenseDuration;     // 방어력 감소 지속 시간
+};
+
+// 분노모으기 동작 정의
+class ChargeRageAction : public ISkillAction
+{
+public:
+	ChargeRageAction(float _rageMultiplier) : rageMultiplier(_rageMultiplier) {}
+
+	virtual void ExecuteAction() override;
+
+private:
+	float rageMultiplier; // 다음 공격에 추가될 피해 배율
 };

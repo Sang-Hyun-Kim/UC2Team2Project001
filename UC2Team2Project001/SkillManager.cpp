@@ -20,6 +20,10 @@
 #include "BasicAttack.h" 
 #include "ConsoleColorManager.h"
 #include "PlayerCharacter.h"
+#include "GlacialShard.h"
+#include "RageGatheringSkill.h"
+#include "ConsoleLayout.h"
+#include "ManaMastery.h"
 
 SkillManager::SkillManager()
 {
@@ -30,6 +34,8 @@ SkillManager::SkillManager()
 	RegisterSkill<PoisonInfusion>();
 	RegisterSkill<PoisonTrigger>();
 	RegisterSkill<Sanctification>();
+	RegisterSkill<GlacialShard>();
+	RegisterSkill<RageGatheringSkill>();
 
 
 	activeSkillList.push_back(typeid(BasicAttack));
@@ -38,8 +44,10 @@ SkillManager::SkillManager()
 	activeSkillList.push_back(typeid(PoisonInfusion));
 	activeSkillList.push_back(typeid(PoisonTrigger));
 	activeSkillList.push_back(typeid(Sanctification));
+	activeSkillList.push_back(typeid(GlacialShard));
+	activeSkillList.push_back(typeid(RageGatheringSkill));
 
-	//명관님꺼 넣어주세요.
+
 	RegisterSkill<BashAttack>();
 	RegisterSkill<MentalDiscipline>();
 	RegisterSkill<ShieldAttack>();
@@ -55,10 +63,12 @@ SkillManager::SkillManager()
 
 	RegisterSkill<Unbreakable>();
 	RegisterSkill<Patience>();
+	RegisterSkill<ManaMastery>();
 
 	passiveSkillList.push_back(typeid(Plague));
 	passiveSkillList.push_back(typeid(Unbreakable));
 	passiveSkillList.push_back(typeid(Patience));
+	passiveSkillList.push_back(typeid(ManaMastery));
 
 	RegisterSkill<LuckyGuy>();
 	RegisterSkill<CursedSeal>();
@@ -227,6 +237,7 @@ shared_ptr<Skill> SkillManager::CreateSkillFromType(const type_index& _skillType
 {
 	if (skillFactory.find(_skillType) == skillFactory.end())
 	{
+		DEBUG_COUT("");
 		cerr << "등록되지 않은 스킬 타입입니다: " << _skillType.name() << endl;
 		return nullptr;
 	}
@@ -256,5 +267,8 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 		std::cout << _owner->GetName() << " 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
 	}
 	
+	std::string skillNotify = newSkill->GetSkillData().skillName + " 스킬 획득에 성공했습니다.";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillNotify, true, ConsoleColor::Green);
 	_owner->skillManager->AddSkill(newSkill);
+	
 }

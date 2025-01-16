@@ -48,8 +48,6 @@ void Character::Initialize()
 	GlobalEventManager::Get().Subscribe(skillManager);
 
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), this);
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(MentalDiscipline), this);
 }
 
 void Character::UseItem(const string& ItemName)
