@@ -54,6 +54,8 @@ public:
 
 	string GetPassiveSkillNameByIndex(int index) const;
 
+	vector<string> GetActiveSkillInfoWithString(int type) const;
+
 	vector<std::string> GetActiveSkillInfo() const;
 
 	vector<std::string> GetPassiveSkillInfo() const;

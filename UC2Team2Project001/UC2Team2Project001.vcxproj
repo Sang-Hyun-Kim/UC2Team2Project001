@@ -135,7 +135,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackBoostPotion.cpp" />
-    <ClCompile Include="BashAttack.cpp" />
     <ClCompile Include="BattleSystem.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterTypes.cpp" />
@@ -146,9 +145,8 @@
     <ClCompile Include="ISkillCondition.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
     <ClCompile Include="LifeStealAttack.cpp" />
-    <ClCompile Include="MentalDiscipline.cpp" />
-    <ClCompile Include="OnePointAttack.cpp" />
-    <ClCompile Include="ShieldAttack.cpp" />
+    <ClCompile Include="LobbySystem.cpp" />
+    <ClCompile Include="MainSystem.cpp" />
     <ClCompile Include="Plague.cpp" />
     <ClCompile Include="PoisonedBlade.cpp" />
     <ClCompile Include="PoisonFog.cpp" />
@@ -157,7 +155,6 @@
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="StatType.cpp" />
-    <ClCompile Include="LobbySystem.cpp" />
     <ClCompile Include="CharacterStatus.cpp" />
     <ClCompile Include="IInputEventTypes.cpp" />
     <ClCompile Include="ISystemTypes.h" />
@@ -166,7 +163,6 @@
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
     <ClCompile Include="EventManagerSystem.cpp" />
-    <ClCompile Include="MainSystem.cpp" />
     <ClCompile Include="GameSystem.cpp" />
     <ClCompile Include="HealthPotion.cpp" />
     <ClCompile Include="GlobalEventManager.cpp" />
@@ -187,17 +183,13 @@
     <ClCompile Include="StatComponent.cpp" />
     <ClCompile Include="StatsLoader.cpp" />
     <ClCompile Include="ShopSystem.cpp" />
-    <ClCompile Include="SubSystem.cpp" />
-    <ClCompile Include="SystemContext.cpp" />
     <ClCompile Include="UTurnEventManager.cpp" />
     <ClCompile Include="UIEventManagerSystem.cpp" />
     <ClCompile Include="USkillComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackBoostPotion.h" />
-    <ClInclude Include="BashAttack.h" />
     <ClInclude Include="BattleSystem.h" />
-    <ClInclude Include="BattleSystemStates.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterTypes.h" />
     <ClInclude Include="CharacterUtility.h" />
@@ -208,6 +200,7 @@
     <ClInclude Include="HealthPotion.h" />
     <ClInclude Include="ICharacterEventTypes.h" />
     <ClInclude Include="ICombatEventTypes.h" />
+    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="IInputEventTypes.h" />
     <ClInclude Include="IItemEventTypes.h" />
     <ClInclude Include="Inventory.h" />
@@ -216,9 +209,7 @@
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="LifeStealAttack.h" />
-    <ClInclude Include="MentalDiscipline.h" />
-    <ClInclude Include="OnePointAttack.h" />
-    <ClInclude Include="ShieldAttack.h" />
+    <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="Plague.h" />
     <ClInclude Include="PoisonedBlade.h" />
     <ClInclude Include="PoisonFog.h" />
@@ -227,9 +218,9 @@
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillManager.h" />
     <ClInclude Include="StatType.h" />
-    <ClInclude Include="LobbySystem.h" />
     <ClInclude Include="CharacterStatus.h" />
     <ClInclude Include="StrategyFactory.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="IStrategy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="pch.h" />
@@ -238,7 +229,6 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="StatsLoader.h" />
-    <ClInclude Include="SubSystem.h" />
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="URewardEventManagerSystem.h" />
@@ -248,7 +238,6 @@
   <ItemGroup>
     <None Include="CharacterStat.json" />
     <None Include="ClassDiagram.cd" />
-    <ClInclude Include="IEventTypes.h" />
     <ClInclude Include="InputManagerSystem.h" />
     <ClInclude Include="Invoker.h" />
     <ClInclude Include="ShopSystem.h" />

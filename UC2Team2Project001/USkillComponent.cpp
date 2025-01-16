@@ -133,6 +133,23 @@ std::string USkillComponent::GetPassiveSkillNameByIndex(int index) const
 	return it->second->GetSkillData().skillName;
 }
 
+vector<string> USkillComponent::GetActiveSkillInfoWithString(int type) const
+{
+	vector<string> SkillListInfo;
+	if (type == 0) //배틀, 인벤토리 열기
+	{
+		for (auto activeSkill : activeSkillList)
+		{
+			SkillListInfo.push_back(activeSkill.first);
+		}
+	}
+	else //상점
+	{
+		// 상점에서 스킬을 팔기 위한 정보 함수를 불러와주세요
+	}
+	return SkillListInfo;
+}
+
 std::vector<std::string> USkillComponent::GetActiveSkillInfo() const
 {
 	std::vector<std::string> skillInfos(activeSkillList.size(), "");

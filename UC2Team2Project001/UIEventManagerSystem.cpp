@@ -64,7 +64,7 @@ UIEventManagerSystem::UIEventManagerSystem()
 	// IDisplayMenuEvent를 처리하는 핸들러 등록
 	Subscribe<IDisplayMenuEvent>([](IDisplayMenuEvent* e)
 		{
-			system("cls");
+			//system("cls");
 			std::cout << e->title << "\n";
 			for (const auto& option : e->options)
 			{
