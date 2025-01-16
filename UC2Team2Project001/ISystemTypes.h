@@ -32,3 +32,10 @@ class IGameStartEvent : public IEvent
 public:
 	IGameStartEvent() {}
 };
+
+// 턴 시작 이벤트
+class ITurnStart : public IEvent
+{
+public:
+	ITurnStart() {}
+};

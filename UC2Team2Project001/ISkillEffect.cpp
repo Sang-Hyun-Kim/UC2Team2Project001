@@ -95,3 +95,29 @@ void IRemoveStateEffect::PostEffect()
 	else
 		cout << "실패했습니다 상태제거에" << endl;
 }
+
+IHealingEffect::IHealingEffect(float _healAmount) : healAmount(_healAmount)
+{
+}
+
+void IHealingEffect::PreEffect()
+{
+	CharacterUtility::ModifyStat(parentSkill->GetTarget(), StatType::HP, healAmount);
+}
+
+IUnbreakableEffect::IUnbreakableEffect()
+{
+	// todo 불굴 상태 작성
+	states.push_back(make_shared<PoisonState>(4));
+}
+
+void IUnbreakableEffect::PostEffect()
+{
+	const auto& skillData = parentSkill->GetSkillData();
+	Character* target = parentSkill->GetTarget();
+
+	for (auto state : states)
+	{
+		target->StatusComponent->AddState(state);
+	}
+}

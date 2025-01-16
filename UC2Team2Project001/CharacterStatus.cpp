@@ -50,3 +50,23 @@ void PoisonState::ApplyEffect(Character* Target)
 		Target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
 	}
 }
+
+void UnbreakableState::ApplyEffect(Character* _target)
+{
+	target = _target;
+	if (CharacterUtility::IsDead(target->combatManager->GetTarget()))
+	{
+		target->StatusComponent->RemoveState(typeid(UnbreakableState));
+		CharacterUtility::ModifyStat(target, StatType::HP, 20);
+	}
+	else
+	{
+		_target->statManager->minHP = 1.0f;
+	}
+}
+
+void UnbreakableState::EffectBeforeRemove()
+{
+	target->statManager->minHP = 0.0f;
+	CharacterUtility::ModifyStat(target, StatType::HP, -9999);
+}

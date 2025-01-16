@@ -143,7 +143,7 @@ public:
 class PoisonState : public ICharacterState
 {
 public:
-	PoisonState(int _inDuration, int _inDamagePerTurn, int _amountStack) : ICharacterState("PoisonState ", _inDuration), damagePerTurn(_inDamagePerTurn), amountStack(_amountStack)
+	PoisonState(int _inDuration, int _inDamagePerTurn, int _amountStack) : ICharacterState("PoisonState", _inDuration), damagePerTurn(_inDamagePerTurn), amountStack(_amountStack)
 	{
 		poisonStack = amountStack;
 	}
@@ -165,4 +165,25 @@ public:
 	int poisonStack = 1;
 
 	int amountStack = 0;
+};
+
+// 불굴 상태
+class UnbreakableState : public ICharacterState
+{
+public:
+	Character* target;
+
+	UnbreakableState(int _duration) : ICharacterState("UnbreakableState", _duration)
+	{
+	}
+
+	virtual ~UnbreakableState()
+	{
+	}
+
+	// 상태 효과 적용
+	void ApplyEffect(Character* _target) override;
+
+	// 버프 삭제 전 기능
+	virtual void EffectBeforeRemove() override;
 };

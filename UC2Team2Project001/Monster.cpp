@@ -46,10 +46,12 @@ void Monster::SetMonsterStat(int PlayerLevel)
 	// 몬스터 이름 설정
 	characterName = MonsterNames[randomIndex];
 
-
-
 	statManager.get()->BeginPlay();
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
+
+	// 전략 설정
+	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
+	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
 
 	// 체력 = 레벨 * (20 ~ 30)
 	int RandomHP = (rand() % (int)(20 * BossStat)) + (int)(30 * BossStat);
@@ -91,16 +93,6 @@ void Monster::Initialize()
 
 	// 몬스터 생성시 지니고 있을 골드와 아이템을 설정
 	CreateCharacterReward();
-
-
-	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
-	
-
-	// 전략 설정
-	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
-	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
-
-
 }
 
 void Monster::SetBlance(Character* Player)

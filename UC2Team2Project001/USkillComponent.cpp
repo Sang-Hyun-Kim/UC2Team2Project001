@@ -89,6 +89,18 @@ bool USkillComponent::UseSkill(SkillType _skillType, string _skillName)
 	return false;
 }
 
+void USkillComponent::AllReduceCooldown()
+{
+	for (auto& skill : activeSkillList)
+	{
+		int currentCooldown = skill.second->GetSkillData().currentCooldown;
+		if (currentCooldown > 0)
+		{
+			skill.second->ReduceCooldown();
+		}
+	}
+}
+
 void USkillComponent::OnEvent(std::shared_ptr<IEvent> ev)
 {
 	for (auto& passive : passiveSkillList)

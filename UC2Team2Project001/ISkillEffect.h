@@ -130,3 +130,30 @@ public:
 private:
 	std::type_index stateType; // 제거할 상태의 타입
 };
+
+// 체력 회복 효과
+class IHealingEffect : public ISkillEffect
+{
+public:
+	float healAmount;
+	IHealingEffect(float _healAmount);
+	
+	virtual void PreEffect() override;
+
+	virtual void PostEffect()
+	{
+	};
+};
+
+// 불굴 상태
+class IUnbreakableEffect : public ISkillEffect
+{
+public:
+	IUnbreakableEffect();
+
+	virtual void PreEffect()
+	{
+	}
+
+	virtual void PostEffect() override;
+};

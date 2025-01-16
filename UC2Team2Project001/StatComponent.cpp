@@ -78,7 +78,7 @@ void UStatsComponent::ModifyStat(StatType type, float delta)
 
 	if (type == StatType::HP || type == StatType::MP)
 	{
-		ClampStat(type, 0.0f, GetStat(type == StatType::HP ? StatType::MaxHP : StatType::MaxMP));
+		ClampStat(type, minHP, GetStat(type == StatType::HP ? StatType::MaxHP : StatType::MaxMP));
 
 		if (type == StatType::HP && Stats[type] == 0)
 		{

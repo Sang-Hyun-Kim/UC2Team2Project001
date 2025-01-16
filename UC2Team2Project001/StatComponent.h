@@ -48,4 +48,6 @@ private:
 	Character* OwnedCharacter;
 
 	std::map<StatType, float> Stats;
+public:
+	float minHP = 0.0f;
 };

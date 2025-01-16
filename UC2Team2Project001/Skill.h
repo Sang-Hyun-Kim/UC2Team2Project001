@@ -70,6 +70,14 @@ public:
 
 	virtual Character* GetTarget();
 
+	// 매 턴마다 재사용 대기시간 감소
+	virtual void ReduceCooldown()
+	{
+		if (skillData.currentCooldown > 0)
+		{
+			skillData.currentCooldown--;
+		}
+	}
 };
 
 class ActiveSkill : public Skill

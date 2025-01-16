@@ -228,19 +228,7 @@
     <ClCompile Include="Plague.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
-    <ClCompile Include="BashAttack.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="BattleSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MentalDiscipline.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OnePointAttack.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LobbySystem.cpp">
@@ -257,6 +245,24 @@
     </ClCompile>
     <ClCompile Include="SkillManager.cpp">
       <Filter>소스 파일\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="OnePointAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="MentalDiscipline.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="BashAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Unbreakable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Patience.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +295,6 @@
     </ClInclude>
     <ClInclude Include="CharacterTypes.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CombatComponent.h">
       <Filter>헤더 파일\CharacterSystem</Filter>
@@ -422,22 +425,10 @@
     <ClInclude Include="Plague.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
-    <ClInclude Include="BashAttack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="BattleSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BattleSystemStates.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MentalDiscipline.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OnePointAttack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ShieldAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LobbySystem.h">
@@ -451,6 +442,24 @@
     </ClInclude>
     <ClInclude Include="SkillManager.h">
       <Filter>헤더 파일\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldAttack.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="OnePointAttack.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="MentalDiscipline.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="BashAttack.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Patience.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Unbreakable.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

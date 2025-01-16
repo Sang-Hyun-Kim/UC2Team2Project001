@@ -7,6 +7,7 @@
 #include "ICombatEventTypes.h"
 #include "ICharacterEventTypes.h"
 #include "ISystemTypes.h"
+#include "USkillComponent.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 

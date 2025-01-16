@@ -148,6 +148,7 @@
     <ClCompile Include="LifeStealAttack.cpp" />
     <ClCompile Include="MentalDiscipline.cpp" />
     <ClCompile Include="OnePointAttack.cpp" />
+    <ClCompile Include="Patience.cpp" />
     <ClCompile Include="ShieldAttack.cpp" />
     <ClCompile Include="Plague.cpp" />
     <ClCompile Include="PoisonedBlade.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="CharacterStatus.cpp" />
     <ClCompile Include="IInputEventTypes.cpp" />
     <ClCompile Include="ISystemTypes.h" />
+    <ClCompile Include="Unbreakable.cpp" />
     <ClCompile Include="UStatusComponent.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
@@ -217,6 +219,7 @@
     <ClInclude Include="LifeStealAttack.h" />
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />
+    <ClInclude Include="Patience.h" />
     <ClInclude Include="ShieldAttack.h" />
     <ClInclude Include="Plague.h" />
     <ClInclude Include="PoisonedBlade.h" />
@@ -240,6 +243,7 @@
     <ClInclude Include="SubSystem.h" />
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
+    <ClInclude Include="Unbreakable.h" />
     <ClInclude Include="USkillComponent.h" />
     <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>

@@ -5,6 +5,10 @@
 #include "PoisonFog.h"
 #include "PoisonInfusion.h"
 #include "PoisonTrigger.h"
+#include "BashAttack.h"
+#include "MentalDiscipline.h"
+#include "ShieldAttack.h"
+#include "OnePointAttack.h"
 #include "USkillComponent.h"
 #include "Character.h"
 #include <unordered_set>
@@ -23,7 +27,15 @@ SkillManager::SkillManager()
 	ActiveSkillList.push_back(typeid(PoisonTrigger));
 
 	//명관님꺼 넣어주세요.
+	RegisterSkill<BashAttack>();
+	RegisterSkill<MentalDiscipline>();
+	RegisterSkill<ShieldAttack>();
+	RegisterSkill<OnePointAttack>();
 
+	ActiveSkillList.push_back(typeid(BashAttack));
+	ActiveSkillList.push_back(typeid(MentalDiscipline));
+	ActiveSkillList.push_back(typeid(ShieldAttack));
+	ActiveSkillList.push_back(typeid(OnePointAttack));
 
 	// 패시브 스킬 등록
 	RegisterSkill<Plague>();
