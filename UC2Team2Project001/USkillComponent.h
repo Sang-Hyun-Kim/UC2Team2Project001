@@ -14,7 +14,7 @@ enum class SkillType
 	PASSIVE
 };
 
-class USkillComponent: public IEventManagerSystem
+class USkillComponent : public IEventManagerSystem
 {
 public:
 	USkillComponent();
@@ -22,7 +22,7 @@ public:
 	USkillComponent(Character* _Owner);
 
 	void InitializeComponent();
-	
+
 private:
 	// 액티브 스킬 리스트
 	unordered_map<string, shared_ptr<Skill>> activeSkillList;
@@ -62,6 +62,8 @@ public:
 
 	vector<std::string> GetPassiveSkillInfo() const;
 
+	vector<std::string> GetActiveSkillInfoWithString(int index) const;
+
 	/* IEventManager System*/
 public:
 	virtual void OnEvent(std::shared_ptr<IEvent> ev) override;
@@ -69,4 +71,3 @@ public:
 	
 	Character* OwnerCharacter;
 };
-

@@ -16,7 +16,7 @@
 #include "USkillComponent.h"
 #include "UTurnEventManager.h"
 #include "UStatusComponent.h"
-
+#include "URewardEventManagerSystem.h"
 
 #include "LifeStealAttack.h"
 #include "BashAttack.h"
@@ -49,10 +49,9 @@ int main()
 
 	//// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
-	auto UTurnSystem = std::make_shared<UTurnEventManager>();
+	
 	eventManager.Subscribe(GSystemContext);
 	eventManager.Subscribe(UISystem);
-	eventManager.Subscribe(UTurnSystem);
 
 	while (true)
 	{

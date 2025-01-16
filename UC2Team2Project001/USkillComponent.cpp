@@ -16,7 +16,7 @@ USkillComponent::USkillComponent(Character* _Owner)
 
 void USkillComponent::InitializeComponent()
 {
-	
+
 }
 
 unordered_map<string, shared_ptr<Skill>> USkillComponent::ChooseSkillList(SkillType _skillType)
@@ -210,4 +210,30 @@ std::vector<std::string> USkillComponent::GetPassiveSkillInfo() const
 
 
 	return skillInfos;
+}
+
+
+vector<string> USkillComponent::GetActiveSkillInfoWithString(int type) const
+{
+	vector<string> SkillListInfo;
+	if (type == 0) //배틀, 인벤토리 열기
+	{
+		int i = 1;
+		for (auto activeSkill : activeSkillList)
+		{
+			string index = to_string(i++);
+			string name = activeSkill.first;
+			string mp = to_string(activeSkill.second->GetSkillData().mpCost);
+			int cooldown = activeSkill.second->GetSkillData().currentCooldown;
+			string cooldownString = cooldown == 0 ? "" : (" CoolDown: " + to_string(cooldown));
+			string result = index + ". " + name + " " + " MP: " + mp + cooldownString;
+			
+			SkillListInfo.push_back(result) ;
+		}
+	}
+	else //상점
+	{
+		// 상점에서 스킬을 팔기 위한 정보 함수를 불러와주세요
+	}
+	return SkillListInfo;
 }

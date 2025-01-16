@@ -168,6 +168,7 @@
     <ClCompile Include="ISystemTypes.h" />
     <ClCompile Include="Unbreakable.cpp" />
     <ClCompile Include="SystemContext.cpp" />
+    <ClCompile Include="URewardEventManagerSystem.cpp" />
     <ClCompile Include="UStatusComponent.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />
     <ClCompile Include="CommandTypes.h" />
@@ -249,6 +250,7 @@
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="UIEventManagerSystem.h" />
     <ClInclude Include="Unbreakable.h" />
+    <ClInclude Include="URewardEventManagerSystem.h" />
     <ClInclude Include="USkillComponent.h" />
     <ClInclude Include="UTurnEventManager.h" />
   </ItemGroup>

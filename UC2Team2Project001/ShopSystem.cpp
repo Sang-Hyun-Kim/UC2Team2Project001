@@ -6,36 +6,15 @@
 #include "Invoker.h"
 #include "CommandTypes.h"
 #include "ShopSystemStates.h"
+#include "Skill.h"
+#include "SkillManager.h"
+#include "USkillComponent.h"
 
 void ShopSystem::EnterSystem()
 {
-	GetRandomItems();
+	GetRandomItemsAndSkills();
 	state = make_shared<ShopMainState>();
 }
-
-//void ShopSystem::Update()
-//{
-//	switch (state)
-//	{
-//	case MAIN:
-//		MainMenu();
-//		break;
-//	case INVENTORY:
-//		DisplayInventory();
-//		break;
-//	case BUY:
-//		BuyMenu();
-//		break;
-//	case SELL:
-//		SellMenu();
-//		break;
-//	case EXIT:
-//		ExitSystem(SystemType::BATTLE);
-//		break;
-//	default:
-//		break;
-//	}
-//}
 
 void ShopSystem::MainMenu()
 {
@@ -53,7 +32,7 @@ void ShopSystem::MainMenu()
 	}
 	else if (input == 2)
 	{
-		state = make_shared<ShopBuyState>();
+		state = make_shared<ShopBuyItemState>();
 	}
 	else if (input == 3)
 	{
@@ -77,7 +56,7 @@ void ShopSystem::DisplayInventory()
 	state = make_shared<ShopMainState>();
 }
 
-void ShopSystem::BuyMenu()
+void ShopSystem::BuyItemMenu()
 {
 	CLEAR;
 
@@ -98,7 +77,7 @@ void ShopSystem::BuyMenu()
 	if (input <= itemSize)
 	{
 		auto player = GSystemContext->GetPlayer();
-		auto buyCommand = make_shared<BuyCommand>(player, itemList, input - 1);
+		auto buyCommand = make_shared<BuyItemCommand>(player, itemList, input - 1);
 		GInvoker->ExecuteCommand(buyCommand);
 
 		InputManagerSystem::PauseUntilEnter();
@@ -141,13 +120,23 @@ void ShopSystem::SellMenu()
 	}
 }
 
-void ShopSystem::GetRandomItems()
+void ShopSystem::BuySkillMenu()
+{
+
+}
+
+void ShopSystem::GetRandomItemsAndSkills()
 {
 	itemList.clear();
-
-	for (int i = 0; i < 5; i++)
+	auto player = GSystemContext->GetPlayer();
+	//player->skillManager->UseSkill();
+	for (int i = 0; i < 6; i++)
 	{
 		itemList.push_back(ItemManager::GetInstance().getRandomItem());
+		vector<type_index> skillTypes = SkillManager::GetInstance().GetUniqueRandomSkillTypes(player.get(), SkillType::ACTIVE, 1);
+		//vector<Skill> skills = SkillManager::GetInstance().CreateSkillFromType();
+		//skillList.push_back();
+		
 	}
 }
 

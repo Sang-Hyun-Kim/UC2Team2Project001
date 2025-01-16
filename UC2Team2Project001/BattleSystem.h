@@ -1,25 +1,15 @@
 #pragma once
 #include "GameSystem.h"
-
+class Character;
 class Monster;
+class URewardEventManagerSystem;
+class UTurnEventManager;
 
 class BattleSystem : public GameSystem
 {
-	friend class SystemContext;
-
-	enum BattleState
-	{
-		MAINMENU = 0,
-		ATTACK = 1,
-		DISPLAYSTAT = 2,
-		USEITEM = 3,
-		NEXTSTAGE = 4,
-		GAMEOVER = 5
-	};
-
+public:
 	BattleSystem();
 
-public:
 	virtual void EnterSystem() override;
 	//virtual void ChangeState() override;
 	void MainMenu();
@@ -28,10 +18,18 @@ public:
 	void UseItem();
 	void NextStage();
 	void GameOver();
+	void StartTurn();
 
-	inline SystemType GetSystemType() override { return SystemType::BATTLE; }
+	inline SystemType GetSystemType() override { return SystemType::BATTLE;}
 	void OnEvent(const std::shared_ptr<IEvent> ev) override;
 private:
-	shared_ptr<Monster> monster;
+	void GetReward();
 
+	vector<Character*> activeCharacters;
+
+	shared_ptr<Monster> monster;
+	shared_ptr<URewardEventManagerSystem> rewardSystem;
+	shared_ptr<UTurnEventManager> turnSystem;
+
+	int monsterCount = 0;
 };

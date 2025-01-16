@@ -8,40 +8,24 @@
 #include "ICharacterEventTypes.h"
 #include "ISystemTypes.h"
 #include "USkillComponent.h"
+#include "SkillManager.h"
+#include "Skill.h"
 
 shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 
 SystemContext::SystemContext()
 {
-	lobbySystem = new LobbySystem();
-	battleSystem = new BattleSystem();
-	shopSystem = new ShopSystem();
-
+	lobbySystem = make_shared<LobbySystem>();
+	battleSystem = make_shared<BattleSystem>();
+	shopSystem = make_shared<ShopSystem>();
 	currentSystem = lobbySystem;
 	currentSystem->EnterSystem();
 
-	// IPlayerStageClearEvent를 처리하는 핸들러 등록
-	/*Subscribe<IMoveSystemEvent>([this](IMoveSystemEvent* moveEvent)
-		{
-			MoveSystem(moveEvent->to, moveEvent->from);
-		});
-
-	Subscribe<ICharacterCreateEvent>([this](ICharacterCreateEvent* Cre)
-		{
-			CreateCharacter(Cre->name);
-		});
-
-	Subscribe<IPlayerDefeatEvent>([this](IPlayerDefeatEvent* defeatEvent)
-		{
-			player.reset();
-		});*/
+	GlobalEventManager::Get().Subscribe(battleSystem);
 }
 
 SystemContext::~SystemContext()
 {
-	delete battleSystem;
-	delete shopSystem;
-	delete lobbySystem;
 }
 
 void SystemContext::Update()
@@ -78,6 +62,23 @@ void SystemContext::CreateCharacter(string name)
 {
 	player = make_shared<Player>("Player");
 	player->Initialize();
+
+	auto skills = SkillManager::GetInstance().GetUniqueRandomSkillTypes(player.get(), SkillType::ACTIVE, 3);
+
+	vector<string> options;
+	int skillSize = skills.size();
+
+	for (int i = 0; i < skillSize; i++)
+	{
+		shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(skills[i], player.get());
+		options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
+	}
+
+	int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, skillSize));
+
+	auto skillManager = SkillManager::GetInstance();
+
+	skillManager.AddSelectSkillToCharacter(skills[input - 1], player.get());
 }
 
 void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)

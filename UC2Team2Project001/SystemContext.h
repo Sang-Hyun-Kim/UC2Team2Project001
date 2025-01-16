@@ -47,12 +47,11 @@ private:
 public:
 	void CreateCharacter(string name);
 
-private:
-	GameSystem* currentSystem = nullptr;
+	shared_ptr<GameSystem> currentSystem = nullptr;
 
-	LobbySystem* lobbySystem;
-	BattleSystem* battleSystem;
-	ShopSystem* shopSystem;
+	shared_ptr<LobbySystem> lobbySystem;
+	shared_ptr<BattleSystem> battleSystem;
+	shared_ptr<ShopSystem> shopSystem;
 
 	shared_ptr<Player> player;
 };

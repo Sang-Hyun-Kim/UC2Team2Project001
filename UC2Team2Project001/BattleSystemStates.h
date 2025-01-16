@@ -2,6 +2,21 @@
 #include "pch.h"
 #include "BattleSystem.h"
 
+class BattleStartTurnState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(system);
+
+		if (battle)
+		{
+			battle->StartTurn();
+		}
+	}
+};
+
 
 class BattleMainState : public ISystemState
 {

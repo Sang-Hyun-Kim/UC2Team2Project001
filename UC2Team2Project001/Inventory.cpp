@@ -88,7 +88,7 @@ void Inventory::useItem(int index, Character* target)
 
 int Inventory::getItemCount(int index) const {
     //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
-    index--;
+    //index--;
     if (index >= 0 && index < inven.size()) {
         return inven[index].count;
     }
