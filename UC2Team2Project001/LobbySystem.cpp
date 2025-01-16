@@ -2,6 +2,7 @@
 #include "LobbySystem.h"
 #include "LobbySystemStates.h"
 #include "PlayerCharacter.h"
+#include "ISystemTypes.h"
 #include "ICharacterEventTypes.h"
 
 LobbySystem::LobbySystem()
@@ -51,6 +52,8 @@ void LobbySystem::MainMenu()
 	if (input == 1)
 	{
 		state = make_shared<LobbyCreateState>();
+		auto startEvent = make_shared<IGameStartEvent>();
+		GlobalEventManager::Get().Notify(startEvent);
 	}
 	else
 	{
@@ -69,16 +72,17 @@ void LobbySystem::CreatePlayerMenu()
 		NoSpecialCharValidator()
 	);
 
-
 	auto createEvent = make_shared<ICharacterCreateEvent>(userName);
 	GlobalEventManager::Get().Notify(createEvent);
 
 	auto player = GSystemContext->GetPlayer();
-	CharacterUtility::PrintStatus(player.get());
 
+	CLEAR;
+	CharacterUtility::PrintStatus(player.get());
 	InputManagerSystem::PauseUntilEnter();
 
-	ExitSystem(SystemType::BATTLE);
+	auto moveEvent = make_shared<IMoveSystemEvent>(SystemType::BATTLE, GetSystemType(), "배틀", "로비");
+	GlobalEventManager::Get().Notify(moveEvent);
 }
 
 void LobbySystem::OnEvent(const std::shared_ptr<IEvent> ev)

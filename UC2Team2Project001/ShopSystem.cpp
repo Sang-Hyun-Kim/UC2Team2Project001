@@ -45,7 +45,7 @@ void ShopSystem::MainMenu()
 	}
 	else if (input == 4)
 	{
-		auto cmd = make_shared<SystemMoveCommand>(SystemType::BATTLE, GetSystemType());
+		auto cmd = make_shared<SystemMoveCommand>(SystemType::BATTLE, GetSystemType(), "배틀", "상점");
 		GInvoker->ExecuteCommand(cmd);
 	}
 }
@@ -95,6 +95,7 @@ void ShopSystem::SellMenu()
 {
 	//player->인벤토리 출력
 	//인벤토리 사이즈 받아 조건 확인
+	CLEAR;
 	string title = "==== 아이템 판매 ====";
 
 	auto player = GSystemContext->GetPlayer();

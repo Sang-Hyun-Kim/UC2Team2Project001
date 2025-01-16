@@ -21,7 +21,10 @@ public:
 	void StartTurn();
 
 	inline SystemType GetSystemType() override { return SystemType::BATTLE;}
-	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+
+	void OnEvent(const std::shared_ptr<IEvent> ev) override;
+
+	virtual string GetSystemName() override { return "배틀"; }
 private:
 	void GetReward();
 

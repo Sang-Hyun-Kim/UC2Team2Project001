@@ -71,10 +71,12 @@ class IMoveSystemEvent : public IEvent
 public:
 	SystemType to;
 	SystemType from;
-
-	IMoveSystemEvent(SystemType _to, /*shared_ptr<GameSystem> _curSystem*/ SystemType _from) : to(_to), from(_from)
+	string toName;
+	string fromName;
+	
+	IMoveSystemEvent(SystemType _to,  SystemType _from, string _toName, string _fromName) 
+		: to(_to), from(_from), toName(_toName), fromName(_fromName)
 	{
-		//from = _curSystem->GetSystemType();
 	}
 };
 

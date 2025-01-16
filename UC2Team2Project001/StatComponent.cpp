@@ -38,7 +38,7 @@ void UStatsComponent::Initialize(StatsData _loadStatsData)
 	SetStat(StatType::Level, _loadStatsData.Level);
 	SetStat(StatType::Experience, _loadStatsData.Experience);
 	SetStat(StatType::MaxExperience, _loadStatsData.MaxExperience);
-	PrintStatus();
+	//PrintStatus();
 }
 
 UStatsComponent::~UStatsComponent()

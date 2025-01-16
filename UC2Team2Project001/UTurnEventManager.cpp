@@ -25,7 +25,7 @@ void UTurnEventManager::OnEvent(std::shared_ptr<IEvent> _event)
 
 void UTurnEventManager::BeginTurn()
 {
-	std::cout << "===== Turn " << currentTurn << " 시작 =====\n";
+	std::cout << "================== Turn " << currentTurn << " 시작 ===================\n";
 
 	auto turnStartEvent = make_shared<ITurnStart>();
 	GlobalEventManager::Get().Notify(turnStartEvent);
@@ -63,7 +63,7 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& _allCharacters)
 	GlobalEventManager::Get().Notify(newTurnEndEvent);
 
 	// 턴 종료 출력
-	std::cout << "===== Turn " << currentTurn << " 종료 =====\n\n";
+	std::cout << "================== Turn " << currentTurn << " 종료 ===================\n\n";
 
 	// 다음 턴으로
 	++currentTurn;

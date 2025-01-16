@@ -18,11 +18,11 @@
 
 
 
+
 // 실행 모드를 설정합니다.
 // GAME_MODE = 1 : 메인 게임 루프 실행
 // GAME_MODE = 0 : 디버그 테스트 실행
 #define GAME_MODE 1
-
 // 게임 시스템 코드가 돌아갈 main 함수
 
 
@@ -41,11 +41,9 @@ int main()
 	// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 
-	auto TurnEventManager = std::make_shared<UTurnEventManager>();
-
 	eventManager.Subscribe(GSystemContext);
 	eventManager.Subscribe(UISystem);
-	eventManager.Subscribe(TurnEventManager);
+	
 
 #if GAME_MODE == 1
 
@@ -56,6 +54,9 @@ int main()
 
 
 #elif GAME_MODE == 0
+	auto TurnEventManager = std::make_shared<UTurnEventManager>();
+	eventManager.Subscribe(TurnEventManager);
+
 	shared_ptr<Player> player = make_shared<Player>("Player");
 	player->Initialize();
 

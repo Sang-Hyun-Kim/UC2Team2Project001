@@ -7,9 +7,7 @@ class LobbySystem : public GameSystem
 public:
 
 	LobbySystem();
-	void EnterSystem() override; // 로비 실행후 동작
-
-	//virtual void Update();
+	void EnterSystem() override;
 
 	inline SystemType GetSystemType() override
 	{ 
@@ -20,4 +18,7 @@ public:
 
 	void MainMenu();
 	void CreatePlayerMenu();
+
+	virtual string GetSystemName() override { return "로비"; };
+private:
 };
