@@ -52,8 +52,6 @@ void Monster::SetMonsterStat(int _playerLevel)
 	statManager.get()->BeginPlay();
 	StatsData LoadStatsData = StatsLoader::LoadFromJSON(characterName);
 
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
-
 	// 전략 설정
 	combatManager->SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
 	combatManager->SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
@@ -68,6 +66,8 @@ void Monster::SetMonsterStat(int _playerLevel)
 	int randomAttackPower = (rand() % (int)(5 * bossStat)) + (int)(10 * bossStat);
 	float attackPower = (float)_playerLevel * randomAttackPower;
 	statManager->SetStat(StatType::AttackPower, attackPower);
+
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), this);
 }
 
 void Monster::Initialize()
