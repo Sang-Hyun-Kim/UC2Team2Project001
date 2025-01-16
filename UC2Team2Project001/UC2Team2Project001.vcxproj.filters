@@ -231,30 +231,12 @@
     <ClCompile Include="Invoker.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="MentalDiscipline.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="OnePointAttack.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldAttack.cpp">
-      <Filter>소스 파일\SkillSystem</Filter>
-    </ClCompile>
     <ClCompile Include="SystemContext.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
     <ClCompile Include="InputManagerSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Sanctification.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LuckyGuy.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CursedSeal.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ShieldAttack.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
@@ -263,12 +245,6 @@
     </ClCompile>
     <ClCompile Include="MentalDiscipline.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
-    </ClCompile>
-    <ClCompile Include="Unbreakable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Patience.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MainSystem.cpp">
       <Filter>소스 파일\GameSystem</Filter>
@@ -291,8 +267,32 @@
     <ClCompile Include="URewardEventManagerSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Sanctification.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Patience.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Unbreakable.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="CursedSeal.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
     <ClCompile Include="BasicAttack.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="LuckyGuy.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="OnePointAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="MentalDiscipline.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,9 +522,6 @@
     <None Include="CharacterStat.json">
       <Filter>헤더 파일\JSONS</Filter>
     </None>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

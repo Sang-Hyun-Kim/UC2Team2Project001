@@ -163,3 +163,31 @@ void CursedSealState::TickDuration()
 	++turnCounter;
 	ICharacterState::TickDuration(); // 부모 클래스의 지속 시간 감소 로직 호출
 }
+
+SanctificationState::SanctificationState(int _duration, float _increasValue)
+	: ICharacterState("신성화 상태", _duration), increasValue(_increasValue), target(nullptr), isApplied(false)
+{
+}
+
+void SanctificationState::ApplyEffect(Character* _target)
+{
+	if (!isApplied)
+	{
+		target = _target;
+		CharacterUtility::ModifyStat(target, StatType::AttackPower, increasValue);
+		CharacterUtility::ModifyStat(target, StatType::Defense, increasValue);
+		CharacterUtility::ModifyStat(target, StatType::EvasionRate, increasValue / 100);
+		isApplied = true;
+	}
+}
+
+void SanctificationState::EffectBeforeRemove()
+{
+	if (isApplied && target)
+	{
+		CharacterUtility::ModifyStat(target, StatType::AttackPower, -increasValue);
+		CharacterUtility::ModifyStat(target, StatType::Defense, -increasValue);
+		CharacterUtility::ModifyStat(target, StatType::EvasionRate, -(increasValue / 100));
+		isApplied = false;
+	}
+}

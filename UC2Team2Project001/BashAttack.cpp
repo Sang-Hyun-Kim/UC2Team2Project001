@@ -15,6 +15,7 @@ BashAttack::BashAttack(Character* _owner) : ActiveSkill(_owner)
 	skillData.conditions.push_back(make_shared<AliveCondition>());
 	skillData.conditions.push_back(make_shared<CooldownCondition>());
 	skillData.conditions.push_back(make_shared<ManaCondition>());
+	skillData.conditions.push_back(make_shared<StunCondition>());
 
 	SkillInit(this);
 }

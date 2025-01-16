@@ -15,6 +15,7 @@
 #include "ICharacterEventTypes.h"
 #include "BasicAttack.h"
 #include "SkillManager.h"
+#include "Sanctification.h"
 
 Character::Character()
 {

@@ -2,30 +2,36 @@
 #include "Skill.h"
 #include "ISkillCondition.h"
 #include "StatComponent.h"
+#include "UStatusComponent.h"
 
 #include "Character.h"
 
-bool ManaCondition::Check(Skill* chekckSkill)
+bool ManaCondition::Check(Skill* _checkSkill)
 {
-	const auto& SkillData = chekckSkill->GetSkillData();
-	if (!SkillData.owner)
+	const auto& skillData = _checkSkill->GetSkillData();
+	if (!skillData.owner)
 	{
 		return false;
 	}
 
-	int MpValue = CharacterUtility::GetStat(SkillData.owner, StatType::MP);
+	int MpValue = CharacterUtility::GetStat(skillData.owner, StatType::MP);
 
-	return MpValue >= SkillData.mpCost;
+	return MpValue >= skillData.mpCost;
 }
 
-bool CooldownCondition::Check(Skill* chekckSkill)
+bool CooldownCondition::Check(Skill* _checkSkill)
 {
-	const auto& SkillData = chekckSkill->GetSkillData();
-	return SkillData.currentCooldown <= 0;
+	const auto& skillData = _checkSkill->GetSkillData();
+	return skillData.currentCooldown <= 0;
 }
 
-bool AliveCondition::Check(Skill* chekckSkill)
+bool AliveCondition::Check(Skill* _checkSkill)
 {
-	const auto& SkillData = chekckSkill->GetSkillData();
-	return !CharacterUtility::IsDead(chekckSkill->GetTarget());
+	return !CharacterUtility::IsDead(_checkSkill->GetTarget());
+}
+
+bool StunCondition::Check(Skill* _checkSkill)
+{
+	const auto& skillData = _checkSkill->GetSkillData();
+	return !skillData.owner->statusManager->GetState<StunState>();
 }

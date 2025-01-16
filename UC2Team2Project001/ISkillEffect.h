@@ -52,12 +52,14 @@ class IBuffEffect : public ISkillEffect
 {
 public:
 	shared_ptr<ICharacterState> state;
-	IBuffEffect(shared_ptr<ICharacterState> _state);
+	IBuffEffect(shared_ptr<ICharacterState> _state, bool _isSelf);
 
 	virtual void PreEffect()
 	{
 	};
 	virtual void PostEffect() override;
+
+	bool isSelf;
 };
 
 // 방어력 기반 피해 효과

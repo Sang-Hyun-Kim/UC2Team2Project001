@@ -9,6 +9,7 @@ BasicAttack::BasicAttack(Character* _owner)
 	skillData.action = make_shared<AttackAction>(CharacterUtility::GetStat(_owner, StatType::AttackPower));
 
 	skillData.conditions.push_back(make_shared<AliveCondition>());
+	skillData.conditions.push_back(make_shared<StunCondition>());
 
 	SkillInit(this);
 }

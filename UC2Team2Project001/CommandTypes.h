@@ -175,29 +175,6 @@ private:
 	shared_ptr<Item> item;
 };
 
-class CommonAttackCommand : public ICommand
-{
-public:
-	CommonAttackCommand() 
-	{
-	}
-
-	void Execute() override
-	{
-		auto player = GSystemContext->GetPlayer();
-		player->combatManager->Attack();
-	}
-
-	void Undo() override
-	{
-
-	}
-
-private:
-	shared_ptr<Player> player;
-	shared_ptr<Item> item;
-};
-
 class UseSkillCommand : public ICommand
 {
 public:

@@ -17,14 +17,21 @@ void ILifeStealEffect::PostEffect()
 	cout << "흡혈 효과 발동" << endl;
 }
 
-IBuffEffect::IBuffEffect(shared_ptr<ICharacterState> _state)
-	: state(_state)
+IBuffEffect::IBuffEffect(shared_ptr<ICharacterState> _state, bool _isSelf)
+	: state(_state), isSelf(_isSelf)
 {
 }
 
 void IBuffEffect::PostEffect()
 {
-	parentSkill->GetTarget()->statusManager->AddState(state);
+	if (isSelf)
+	{
+		parentSkill->GetSkillData().owner->statusManager->AddState(state);
+	}
+	else
+	{
+		parentSkill->GetTarget()->statusManager->AddState(state);
+	}
 }
 
 void IDefenseBasedDamageEffect::PostEffect()

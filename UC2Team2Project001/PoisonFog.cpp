@@ -11,11 +11,12 @@ PoisonFog::PoisonFog(Character* _owner) :ActiveSkill(_owner)
 
 	skillData.action = make_shared<PoisonPogAction>();
 
-	//shared_ptr<ISkillEffect> lifeEffect = make_shared<IPoisonEffect>();
-	//skillData.effects.push_back(lifeEffect);
+	shared_ptr<ISkillEffect> poisonEffect = make_shared<IPoisonEffect>();
+	skillData.effects.push_back(poisonEffect);
 
 	skillData.conditions.push_back(make_shared<CooldownCondition>());
 	skillData.conditions.push_back(make_shared<AliveCondition>());
+	skillData.conditions.push_back(make_shared<StunCondition>());
 
 	SkillInit(this);
 }

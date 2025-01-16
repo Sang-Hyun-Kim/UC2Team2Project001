@@ -171,6 +171,20 @@ private:
 	Character* target;
 };
 
+// 신성화 상태
+class SanctificationState : public ICharacterState
+{
+public:
+	SanctificationState(int _duration, float _increasValue);
+
+	virtual void ApplyEffect(Character* _target) override;
+
+	virtual void EffectBeforeRemove() override;
+private:
+	float increasValue;
+	bool isApplied;
+	Character* target;
+};
 
 //저주 인장 상태
 class CursedSealState : public ICharacterState
