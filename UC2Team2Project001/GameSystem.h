@@ -20,6 +20,7 @@ public:
 	void ExitSystem(SystemType nextType); // 시스템을 나가야할 때 수행할 함수
 	virtual ~GameSystem() {};
 	//virtual void ChangeState() = 0;
+	void SetState(shared_ptr<ISystemState> _state) { state = _state; }
 protected:
 	shared_ptr<ISystemState> state;
 };

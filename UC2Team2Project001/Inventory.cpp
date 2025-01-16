@@ -40,7 +40,7 @@ void Inventory::addItem(shared_ptr<Item> item, int count) {
 
 void Inventory::removeItem(int index, int count) {
     //입력시 인덱스가 + 1된걸 선택함으로 - 1해준다
-    index--;
+    //index--;
     if (index >= 0 && index < inven.size()) {
         FItemData& data = inven[index];
 

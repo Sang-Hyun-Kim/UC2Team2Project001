@@ -41,6 +41,8 @@ public:
 
 	void OnEvent(const std::shared_ptr<IEvent> ev) override;
 	inline shared_ptr<class Player> GetPlayer() { return player; }
+
+	shared_ptr<GameSystem> GetCurrentSystem() { return currentSystem; }
 private:
 	void MoveSystem(SystemType to, SystemType from);
 
