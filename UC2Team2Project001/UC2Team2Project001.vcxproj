@@ -135,6 +135,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackBoostPotion.cpp" />
+    <ClCompile Include="BashAttack.cpp" />
+    <ClCompile Include="BattleSystem.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterTypes.cpp" />
     <ClCompile Include="CharacterUtility.cpp" />

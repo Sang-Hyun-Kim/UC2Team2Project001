@@ -219,9 +219,6 @@
     <ClCompile Include="CommandTypes.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClCompile>
-    <ClCompile Include="BattleSystem.cpp">
-      <Filter>소스 파일\GameSystem</Filter>
-    </ClCompile>
     <ClCompile Include="IInputEventTypes.cpp">
       <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
@@ -267,9 +264,6 @@
     <ClCompile Include="MentalDiscipline.cpp">
       <Filter>소스 파일\SkillSystem\SkillClass</Filter>
     </ClCompile>
-    <ClCompile Include="BashAttack.cpp">
-      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
-    </ClCompile>
     <ClCompile Include="Unbreakable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -287,6 +281,12 @@
     </ClCompile>
     <ClCompile Include="MainSystem.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BashAttack.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSystem.cpp">
+      <Filter>소스 파일\GameSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +389,6 @@
     <ClInclude Include="IInputEventTypes.h">
       <Filter>헤더 파일\EventSystem\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="GameSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="UIEventManagerSystem.h">
       <Filter>헤더 파일\EventSystem</Filter>
     </ClInclude>
@@ -433,9 +430,6 @@
     </ClInclude>
     <ClInclude Include="Plague.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleSystem.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SystemContext.h">
       <Filter>헤더 파일</Filter>
@@ -488,9 +482,6 @@
     <ClInclude Include="SystemContext.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
-    <ClInclude Include="SubSystem.h">
-      <Filter>헤더 파일\GameSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ISkillEffect.h">
       <Filter>헤더 파일\SkillSystem\SkillEffect</Filter>
     </ClInclude>
@@ -498,9 +489,6 @@
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
     <ClInclude Include="Unbreakable.h">
-    </ClInclude>
-    <ClInclude Include="BattleSystemStates.h">
-      <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
     <ClInclude Include="Sanctification.h">
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
@@ -515,6 +503,9 @@
       <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
     <ClInclude Include="LobbySystem.h">
+      <Filter>헤더 파일\GameSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleSystem.h">
       <Filter>헤더 파일\GameSystem</Filter>
     </ClInclude>
   </ItemGroup>
