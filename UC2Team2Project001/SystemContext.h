@@ -43,8 +43,11 @@ public:
 	inline shared_ptr<class Player> GetPlayer() { return player; }
 private:
 	void MoveSystem(SystemType to, SystemType from);
+
+public:
 	void CreateCharacter(string name);
 
+private:
 	GameSystem* currentSystem = nullptr;
 
 	LobbySystem* lobbySystem;

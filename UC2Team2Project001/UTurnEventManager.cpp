@@ -7,6 +7,7 @@
 
 #include "IEventTypes.h"
 #include <iostream>
+#include "ISystemTypes.h"
 
 
 UTurnEventManager::UTurnEventManager() : currentTurn(1) // 초기 턴
@@ -39,23 +40,25 @@ void UTurnEventManager::EndTurn(std::vector<Character*>& AllCharacters)
 	{
 		// 1) 이번 턴에 적용된 상태 효과 적용
 		//    (만약 턴마다 반복 적용이 필요하면 여기에 배치)
-		if (Ch->StatusComponent)
+		if (Ch->statusManager)
 		{
-			Ch->StatusComponent->ApplyAllEffects();
+			Ch->statusManager->ApplyAllEffects();
 		}
 	}
 
 	// 2) 턴 끝나고 상태 지속시간 차감
 	for (auto& Ch : AllCharacters)
 	{
-		if (Ch->StatusComponent)
+		if (Ch->statusManager)
 		{
-			Ch->StatusComponent->DecrementAllDurations();
-			Ch->StatusComponent->RemoveExpiredStates();
+			Ch->statusManager->DecrementAllDurations();
+			Ch->statusManager->RemoveExpiredStates();
 		}
 	}
 
-	// 3) 스킬 쿨다운 차감 (추가 예정)
+	
+	auto newTurnEndEvent = make_shared<ITurnEndEvent>(currentTurn);
+	GlobalEventManager::Get().Notify(newTurnEndEvent);
 
 	// 턴 종료 출력
 	std::cout << "===== Turn " << currentTurn << " 종료 =====\n\n";

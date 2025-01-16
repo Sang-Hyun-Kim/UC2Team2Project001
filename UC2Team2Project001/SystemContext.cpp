@@ -18,6 +18,22 @@ SystemContext::SystemContext()
 
 	currentSystem = lobbySystem;
 	currentSystem->EnterSystem();
+
+	// IPlayerStageClearEvent를 처리하는 핸들러 등록
+	/*Subscribe<IMoveSystemEvent>([this](IMoveSystemEvent* moveEvent)
+		{
+			MoveSystem(moveEvent->to, moveEvent->from);
+		});
+
+	Subscribe<ICharacterCreateEvent>([this](ICharacterCreateEvent* Cre)
+		{
+			CreateCharacter(Cre->name);
+		});
+
+	Subscribe<IPlayerDefeatEvent>([this](IPlayerDefeatEvent* defeatEvent)
+		{
+			player.reset();
+		});*/
 }
 
 SystemContext::~SystemContext()
@@ -77,6 +93,8 @@ void SystemContext::OnEvent(const std::shared_ptr<IEvent> ev)
 	{
 		player.reset();
 	}
+
+	Publish(ev);
 }
 
 

@@ -142,12 +142,15 @@
     <ClCompile Include="CharacterUtility.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="ConsumableItem.cpp" />
+    <ClCompile Include="CursedSeal.cpp" />
     <ClCompile Include="ISkillAction.cpp" />
     <ClCompile Include="ISkillCondition.cpp" />
     <ClCompile Include="ISkillEffect.cpp" />
     <ClCompile Include="LifeStealAttack.cpp" />
+    <ClCompile Include="LuckyGuy.cpp" />
     <ClCompile Include="MentalDiscipline.cpp" />
     <ClCompile Include="OnePointAttack.cpp" />
+    <ClCompile Include="Sanctification.cpp" />
     <ClCompile Include="ShieldAttack.cpp" />
     <ClCompile Include="Plague.cpp" />
     <ClCompile Include="PoisonedBlade.cpp" />
@@ -202,6 +205,7 @@
     <ClInclude Include="CharacterUtility.h" />
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConsumableItem.h" />
+    <ClInclude Include="CursedSeal.h" />
     <ClInclude Include="EventManagerSystem.h" />
     <ClInclude Include="GlobalEventManager.h" />
     <ClInclude Include="HealthPotion.h" />
@@ -215,8 +219,10 @@
     <ClInclude Include="ISkillEffect.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="LifeStealAttack.h" />
+    <ClInclude Include="LuckyGuy.h" />
     <ClInclude Include="MentalDiscipline.h" />
     <ClInclude Include="OnePointAttack.h" />
+    <ClInclude Include="Sanctification.h" />
     <ClInclude Include="ShieldAttack.h" />
     <ClInclude Include="Plague.h" />
     <ClInclude Include="PoisonedBlade.h" />

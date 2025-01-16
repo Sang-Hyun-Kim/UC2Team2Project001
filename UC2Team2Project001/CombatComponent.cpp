@@ -5,18 +5,37 @@
 #include "IStrategy.h"
 #include "ICharacterEventTypes.h"
 #include "GlobalEventManager.h"
+#include "StatsLoader.h"
+#include "StrategyFactory.h"
 
-void CombatComponent::SetOwner(Character* _owner)
+UCombatComponent::UCombatComponent()
+{
+
+}
+
+UCombatComponent::UCombatComponent(Character* _owner)
 {
 	owner = _owner;
 }
 
-void CombatComponent::SetTarget(Character* _target)
+void UCombatComponent::Initialize(StatsData LoadStatsData)
+{
+	// 전략 설정
+	SetAttackStrategy(StrategyFactory::CreateAttackStrategy(LoadStatsData.AttackStrategyData));
+	SetDefenseStrategy(StrategyFactory::CreateDefenseStrategy(LoadStatsData.DefenseStrategyData));
+}
+
+void UCombatComponent::SetOwner(Character* _owner)
+{
+	owner = _owner;
+}
+
+void UCombatComponent::SetTarget(Character* _target)
 {
 	target = _target;
 }
 
-void CombatComponent::Attack()
+void UCombatComponent::Attack()
 {
 	if (CharacterUtility::IsDead(owner))
 	{
@@ -39,7 +58,7 @@ void CombatComponent::Attack()
 	attackStrategy->Attack(owner, target);
 }
 
-void CombatComponent::TakeDamage(int _incomingDamage)
+void UCombatComponent::TakeDamage(int _incomingDamage)
 {
 	int finalDamage = _incomingDamage;
 
@@ -56,12 +75,12 @@ void CombatComponent::TakeDamage(int _incomingDamage)
 	CharacterUtility::ModifyStat(owner, StatType::HP, (float)-finalDamage);
 }
 
-void CombatComponent::SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy)
+void UCombatComponent::SetAttackStrategy(shared_ptr<IAttackStrategy> _newAttackStrategy)
 {
 	attackStrategy = move(_newAttackStrategy);
 }
 
-void CombatComponent::SetDefenseStrategy(shared_ptr<IDefenseStrategy> _newDefenseStrategy)
+void UCombatComponent::SetDefenseStrategy(shared_ptr<IDefenseStrategy> _newDefenseStrategy)
 {
 	defenseStrategy = move(_newDefenseStrategy);
 }

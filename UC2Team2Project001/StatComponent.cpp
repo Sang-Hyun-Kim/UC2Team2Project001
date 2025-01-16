@@ -23,6 +23,23 @@ void UStatsComponent::BeginPlay()
 	}
 }
 
+void UStatsComponent::Initialize(StatsData LoadStatsData)
+{
+	// 스탯 설정
+	SetStat(StatType::HP, LoadStatsData.HP);
+	SetStat(StatType::MaxHP, LoadStatsData.MaxHP);
+	SetStat(StatType::MP, LoadStatsData.MP);
+	SetStat(StatType::MaxMP, LoadStatsData.MaxMP);
+	SetStat(StatType::AttackPower, LoadStatsData.AttackPower);
+	SetStat(StatType::Defense, LoadStatsData.Defense);
+	SetStat(StatType::CriticalChance, LoadStatsData.CriticalChance);
+	SetStat(StatType::EvasionRate, LoadStatsData.EvasionRate);
+	SetStat(StatType::Level, LoadStatsData.Level);
+	SetStat(StatType::Experience, LoadStatsData.Experience);
+	SetStat(StatType::MaxExperience, LoadStatsData.MaxExperience);
+	PrintStatus();
+}
+
 UStatsComponent::~UStatsComponent()
 {
 }
