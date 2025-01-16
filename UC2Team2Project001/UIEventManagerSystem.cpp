@@ -26,7 +26,10 @@ UIEventManagerSystem::UIEventManagerSystem()
 			if (!e->reward.IsEmpty())
 			{
 				std::cout << "[" << e->characterName << "]의 " << e->reward.DropGold << "를 획득했습니다.\n";
-				std::cout << "[" << e->characterName << "]의 " << e->reward.DropItem << "를 획득했습니다.\n";
+				if (e->reward.DropItem != nullptr)
+				{
+					std::cout << "[" << e->characterName << "]의 " << e->reward.DropItem << "를 획득했습니다.\n";
+				}
 			}
 			std::cout << "[UI] " << e->characterName << "님이 사망했습니다.\n";
 		});
