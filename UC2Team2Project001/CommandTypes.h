@@ -11,6 +11,9 @@
 #include "IItemEventTypes.h"
 #include "SystemContext.h"
 
+#include "LobbySystemStates.h"
+#include "BattleSystemStates.h"
+#include "ShopSystemStates.h"
 
 class ICommand
 {
@@ -20,10 +23,10 @@ public:
 	virtual ~ICommand() = default;
 };
 
-class SellCommand : public ICommand
+class SellItemCommand : public ICommand
 {
 public:
-	SellCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+	SellItemCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
 
 	void Execute() override
 	{
@@ -42,10 +45,10 @@ private:
 	shared_ptr<Item> item;
 };
 
-class BuyCommand : public ICommand
+class BuyItemCommand : public ICommand
 {
 public:
-	BuyCommand(shared_ptr<Player> player, vector<shared_ptr<Item>>& itemList, int index) :player(player), itemList(itemList), index(index) {}
+	BuyItemCommand(shared_ptr<Player> player, vector<shared_ptr<Item>>& itemList, int index) :player(player), itemList(itemList), index(index) {}
 
 	void Execute() override // Creature 로 둔다면 형변환
 	{
@@ -80,3 +83,156 @@ private:
 	vector<shared_ptr<Item>>& itemList;
 	int index;
 };
+
+class SystemMoveCommand : public ICommand
+{
+public:
+	SystemMoveCommand(SystemType _to, SystemType _from) : to(_to), from(_from)
+	{
+	}
+
+	void Execute() override
+	{
+		IMoveSystemEvent(to, from);
+	}
+
+	void Undo() override
+	{
+	}
+
+private:
+	SystemType to;
+	SystemType from;
+};
+
+class SystemChangeStateCommand : public ICommand
+{
+public:
+	SystemChangeStateCommand(shared_ptr<ISystemState> _state): state()
+	{
+	}
+
+	void Execute() override
+	{
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<ISystemState> state;
+};
+
+class ExitCommand : public ICommand
+{
+public:
+	ExitCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+
+	void Execute() override
+	{
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<Player> player;
+	shared_ptr<Item> item;
+};
+
+class CreateCharacterCommand : public ICommand
+{
+public:
+	CreateCharacterCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+
+	void Execute() override
+	{
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<Player> player;
+	shared_ptr<Item> item;
+};
+
+class CommonAttackCommand : public ICommand
+{
+public:
+	CommonAttackCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+
+	void Execute() override
+	{
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<Player> player;
+	shared_ptr<Item> item;
+};
+
+class UseSkillCommand : public ICommand
+{
+public:
+	UseSkillCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+
+	void Execute() override
+	{
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<Player> player;
+	shared_ptr<Item> item;
+};
+
+class AddSkillCommand : public ICommand
+{
+public:
+	AddSkillCommand(shared_ptr<Player> player, shared_ptr<Item> item) :player(player), item(item) {}
+
+	void Execute() override
+	{
+		/*auto Event = make_shared<IItemSoldEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+	void Undo() override
+	{
+		/*auto Event = make_shared<IItemPurchasedEvent>(player->GetName(), item->name, item->cost);
+		GlobalEventManager::Get().Notify(Event);*/
+	}
+
+private:
+	shared_ptr<Player> player;
+	shared_ptr<Item> item;
+};
+

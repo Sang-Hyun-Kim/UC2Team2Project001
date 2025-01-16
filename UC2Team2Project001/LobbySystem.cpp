@@ -71,7 +71,7 @@ void LobbySystem::CreatePlayerMenu()
 
 	auto createEvent = make_shared<ICharacterCreateEvent>(userName);
 	GlobalEventManager::Get().Notify(createEvent);
-	//GSystemContext->CreateCharacter(userName);
+
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 

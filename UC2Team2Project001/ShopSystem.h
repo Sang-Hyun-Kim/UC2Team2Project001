@@ -6,24 +6,9 @@ class Skill;
 class SystemContext;
 class ShopSystem : public GameSystem
 {
-	friend class SystemContext;
-
-	enum ShopState
-	{
-		MAIN = 0,
-		INVENTORY = 1,
-		BUY = 2,
-		SELL = 3,
-		EXIT = 4
-	};
-
-	ShopSystem() 
-	{
-	}
-	virtual ~ShopSystem() 
-	{
-	}
 public:
+	ShopSystem() = default;
+	virtual ~ShopSystem() = default;
 
 	virtual void EnterSystem() override;
 	//virtual void Update() override;

@@ -16,30 +16,6 @@ void ShopSystem::EnterSystem()
 	state = make_shared<ShopMainState>();
 }
 
-//void ShopSystem::Update()
-//{
-//	switch (state)
-//	{
-//	case MAIN:
-//		MainMenu();
-//		break;
-//	case INVENTORY:
-//		DisplayInventory();
-//		break;
-//	case BUY:
-//		BuyMenu();
-//		break;
-//	case SELL:
-//		SellMenu();
-//		break;
-//	case EXIT:
-//		ExitSystem(SystemType::BATTLE);
-//		break;
-//	default:
-//		break;
-//	}
-//}
-
 void ShopSystem::MainMenu()
 {
 	CLEAR;
@@ -157,7 +133,7 @@ void ShopSystem::GetRandomItemsAndSkills()
 	for (int i = 0; i < 6; i++)
 	{
 		itemList.push_back(ItemManager::GetInstance().getRandomItem());
-		//vector<type_index> skillTypes = SkillManager::GetInstance().GetUniqueRandomSkillTypes(player.get(), SkillType::ACTIVE, 1);
+		vector<type_index> skillTypes = SkillManager::GetInstance().GetUniqueRandomSkillTypes(player.get(), SkillType::ACTIVE, 1);
 		//vector<Skill> skills = SkillManager::GetInstance().CreateSkillFromType();
 		//skillList.push_back();
 		

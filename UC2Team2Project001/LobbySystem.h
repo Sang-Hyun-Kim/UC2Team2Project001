@@ -4,17 +4,9 @@
 
 class LobbySystem : public GameSystem
 {
-	friend class SystemContext;
-
-	enum LobbyState
-	{
-		MAIN = 0,
-		START = 1,
-		EXIT = 2
-	};
+public:
 
 	LobbySystem();
-public:
 	void EnterSystem() override; // 로비 실행후 동작
 
 	//virtual void Update();

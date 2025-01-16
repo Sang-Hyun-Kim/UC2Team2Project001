@@ -158,6 +158,7 @@
     <ClCompile Include="CharacterStatus.cpp" />
     <ClCompile Include="IInputEventTypes.cpp" />
     <ClCompile Include="ISystemTypes.h" />
+    <ClCompile Include="SystemContext.cpp" />
     <ClCompile Include="URewardEventManagerSystem.cpp" />
     <ClCompile Include="UStatusComponent.cpp" />
     <ClCompile Include="StrategyFactory.cpp" />

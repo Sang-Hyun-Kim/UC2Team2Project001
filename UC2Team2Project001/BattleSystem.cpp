@@ -12,8 +12,19 @@
 #include "UIEventManagerSystem.h"
 #include "IItemEventTypes.h"
 #include "USkillComponent.h"
+#include "URewardEventManagerSystem.h"
+#include "SkillManager.h"
+#include "Skill.h"
+#include "UTurnEventManager.h"
+#include "ICharacterEventTypes.h"
+
 BattleSystem::BattleSystem()
 {
+	rewardSystem = make_shared<URewardEventManagerSystem>();
+	GlobalEventManager::Get().Subscribe(rewardSystem);
+
+	turnSystem = std::make_shared<UTurnEventManager>();
+	GlobalEventManager::Get().Subscribe(turnSystem);
 }
 
 void BattleSystem::EnterSystem()
@@ -23,11 +34,18 @@ void BattleSystem::EnterSystem()
 	cout << "-----------------------------------------------------------------\n";
 	
 	auto player = GSystemContext->GetPlayer();
-	
-	// 플레이어 레벨에 따른 monster 생성
 	monster = make_shared<Monster>();
 	monster->Initialize();
-	state = make_shared<BattleMainState>();
+
+	activeCharacters.clear();
+	activeCharacters.push_back(player.get());
+	activeCharacters.push_back(monster.get());
+	
+	// 플레이어 레벨에 따른 monster 생성
+	state = make_shared<BattleStartTurnState>();
+
+	rewardSystem->Initialize();
+	turnSystem->TurnReset();
 }
 
 //void BattleSystem::ChangeState()
@@ -70,33 +88,6 @@ void BattleSystem::EnterSystem()
 //		}
 //	}
 //
-//}
-
-//void BattleSystem::Update()
-//{
-//	switch (state)
-//	{
-//	case MAINMENU:
-//		MainMenu();
-//		break;
-//	case ATTACK:
-//		Attack();
-//		break;
-//	case DISPLAYSTAT:
-//		DisplayStat();
-//		break;
-//	case USEITEM:
-//		UseItem();
-//		break;
-//	case NEXTSTAGE:
-//		NextStage();
-//		break;
-//	case GAMEOVER:
-//		GameOver();
-//		break;
-//	default:
-//		break;
-//	}
 //}
 
 void BattleSystem::MainMenu()
@@ -158,27 +149,30 @@ void BattleSystem::Attack()
 	int commonAttack = activeSkillList.size() + 1; // 일반 공격
 	int returnButton = commonAttack + 1; // 돌아가기
 
-	activeSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
-	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
+	indexActiveSkillList.push_back(to_string(commonAttack) + ". 일반 공격");
+	indexActiveSkillList.push_back(to_string(returnButton) + ". 돌아가기");
 
 	int input = InputManagerSystem::GetInput<int>(
 		"==================  스킬 사용 ===================",
-		activeSkillList,
+		indexActiveSkillList,
 		RangeValidator<int>(1, returnButton)
 	);
-	if (input == commonAttack)
-	{
-		player->combatManager->Attack(); // 일반 공격 호출
-	}
-	else if (input == returnButton)
+
+	if (input == returnButton)
 	{
 		state = make_shared<BattleMainState>();
 		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
 	}
+	else if (input == commonAttack)
+	{
+		state = make_shared<BattleStartTurnState>();
+		player->combatManager->Attack(); // 일반 공격 호출
+	}
 	else
 	{ // 스킬 사용
-		player->skillManager->UseSkill(SkillType::ACTIVE, activeSkillList[input-2]); // UseSkill로 변경 예정
-		Delay(1);
+		state = make_shared<BattleStartTurnState>();
+		player->skillManager->UseSkill(SkillType::ACTIVE, activeSkillList[input-1]); // UseSkill로 변경 예정
+		//Delay(1);
 	}
 
 
@@ -189,18 +183,7 @@ void BattleSystem::Attack()
 
 	InputManagerSystem::PauseUntilEnter();
 
-	if (monster->statManager->IsDead())
-	{
-		state = make_shared<BattleNextStageState>();
-	}
-	else if (player->statManager->IsDead())
-	{
-		state = make_shared<BattleGameOverState>();
-	}
-	else
-	{
-		state = make_shared<BattleMainState>();
-	}
+	turnSystem->EndTurn(activeCharacters);
 }
 
 void BattleSystem::DisplayStat()
@@ -246,7 +229,8 @@ void BattleSystem::NextStage()
 	CLEAR;
 
 	if (monster->IsBoss())
-	{// 보스 몬스터
+	{	
+		// 보스 몬스터
 		// 게임 승리 UI 출력
 		auto playergameclear = make_shared<IPlayerGameClearEvent>();
 		GlobalEventManager::Get().Notify(playergameclear);
@@ -261,27 +245,7 @@ void BattleSystem::NextStage()
 	}
 	else
 	{	
-		// 일반몬스터 사망
-		// 일반 몬스터 사망 UI 출력
-		// 몬스터에게서 보상, 경험치, 돈을 받아서 넘겨주기
-
-		auto player = GSystemContext->GetPlayer();
-		player->InventoryComponent->addGold(monster->characterReward.DropGold); // 돈 넣기
-
-		if (monster->characterReward.DropItem != nullptr)
-		{
-			auto playergetitem = make_shared<IPlayerGetItemEvent>();
-			GlobalEventManager::Get().Notify(playergetitem);
-			player->InventoryComponent->addItem(monster->characterReward.DropItem); // 템 넣기
-		}
-
-		CharacterUtility::ModifyStat(player.get(), StatType::Experience, 50);
-		monster = nullptr;
-
-
-		auto battlestageclear = make_shared<IPlayerStageClearEvent>();
-		GlobalEventManager::Get().Notify(battlestageclear);
-
+		GetReward();
 
 		int input = InputManagerSystem::GetInput<int>(
 			"==== 스테이지 클리어 메뉴 ====",
@@ -298,8 +262,6 @@ void BattleSystem::NextStage()
 			auto event = make_shared<IMoveSystemEvent>(SystemType::SHOP, GetSystemType());
 			GlobalEventManager::Get().Notify(event);
 		}
-
-		return;
 	}
 }
 
@@ -312,7 +274,65 @@ void BattleSystem::GameOver()
 	GlobalEventManager::Get().Notify(event);
 }
 
+void BattleSystem::StartTurn()
+{
+	turnSystem->BeginTurn();
+	state = make_shared<BattleMainState>();
+}
+
 void BattleSystem::OnEvent(const std::shared_ptr<IEvent> ev)
 {
+	if (auto deadEvent = dynamic_pointer_cast<ICharacterDeadEvent>(ev))
+	{
+		auto player = GSystemContext->GetPlayer();
+		if (monster->statManager->IsDead())
+		{
+			state = make_shared<BattleNextStageState>();
+		}
+		else if (player->statManager->IsDead())
+		{
+			state = make_shared<BattleGameOverState>();
+		}
+	}
+}
 
+void BattleSystem::GetReward()
+{
+	auto player = GSystemContext->GetPlayer();
+	auto reward = rewardSystem->GetReward();
+
+	player->InventoryComponent->addGold(reward.gold); // 돈 넣기
+
+	if (monster->characterReward.DropItem != nullptr)
+	{
+		auto playergetitem = make_shared<IPlayerGetItemEvent>();
+		GlobalEventManager::Get().Notify(playergetitem);
+		player->InventoryComponent->addItem(reward.item); // 템 넣기
+	}
+
+	int skillSize = reward.skillTypes.size();
+	
+	if (reward.skillTypes.size() > 0)
+	{
+		vector<string> options;
+
+		for (int i = 0; i < skillSize; i++)
+		{
+			Skill* skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
+			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
+		}
+
+		int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, reward.skillTypes.size()));
+		//SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[input], player.get());
+		shared_ptr<ActiveSkill> activeSkill = make_shared<ActiveSkill>(player.get(), "테스트용", 0, 1);
+		player->skillManager->AddSkill(activeSkill);
+		
+		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());
+	}
+
+	CharacterUtility::ModifyStat(player.get(), StatType::Experience, 50);
+	monster = nullptr;
+
+	auto battlestageclear = make_shared<IPlayerStageClearEvent>();
+	GlobalEventManager::Get().Notify(battlestageclear);
 }

@@ -12,19 +12,17 @@ shared_ptr<SystemContext> GSystemContext = make_shared<SystemContext>();
 
 SystemContext::SystemContext()
 {
-	lobbySystem = new LobbySystem();
-	battleSystem = new BattleSystem();
-	shopSystem = new ShopSystem();
-
+	lobbySystem = make_shared<LobbySystem>();
+	battleSystem = make_shared<BattleSystem>();
+	shopSystem = make_shared<ShopSystem>();
 	currentSystem = lobbySystem;
 	currentSystem->EnterSystem();
+
+	GlobalEventManager::Get().Subscribe(battleSystem);
 }
 
 SystemContext::~SystemContext()
 {
-	delete battleSystem;
-	delete shopSystem;
-	delete lobbySystem;
 }
 
 void SystemContext::Update()
