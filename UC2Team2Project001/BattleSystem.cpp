@@ -100,8 +100,11 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::MainMenu()
 {
-	CLEAR;
+	//CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
+
+	
+
 	CharacterUtility::PrintStatus(monster.get());
 
 	int input = InputManagerSystem::GetInput<int>(
@@ -131,7 +134,6 @@ void BattleSystem::Attack()
 	auto player = GSystemContext->GetPlayer();
 	player->combatManager->SetTarget(monster.get());
 	player->combatManager->Attack();
-
 	/*
 		플레이어 공격 방식(Active 스킬) 목록 출력 후 선택받기
 
@@ -183,7 +185,7 @@ void BattleSystem::Attack()
 
 void BattleSystem::DisplayStat()
 {
-	CLEAR;
+	//CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 

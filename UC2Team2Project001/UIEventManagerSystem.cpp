@@ -64,7 +64,7 @@ UIEventManagerSystem::UIEventManagerSystem()
 	// IDisplayMenuEvent를 처리하는 핸들러 등록
 	Subscribe<IDisplayMenuEvent>([](IDisplayMenuEvent* e)
 		{
-			system("cls");
+			CLEAR;
 			std::cout << e->title << "\n";
 			for (const auto& option : e->options)
 			{
@@ -135,8 +135,6 @@ UIEventManagerSystem::UIEventManagerSystem()
 		{
 			std::cout << "몬스터 사망으로 스테이지 클리어\n";
 		});
-
-
 }
 
 UIEventManagerSystem::~UIEventManagerSystem()

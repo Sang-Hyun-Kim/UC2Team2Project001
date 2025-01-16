@@ -69,9 +69,14 @@ void LobbySystem::CreatePlayerMenu()
 		NoSpecialCharValidator()
 	);
 
+
 	auto createEvent = make_shared<ICharacterCreateEvent>(userName);
 	GlobalEventManager::Get().Notify(createEvent);
+
+	//여기서 만든다
 	//GSystemContext->CreateCharacter(userName);
+
+	
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 

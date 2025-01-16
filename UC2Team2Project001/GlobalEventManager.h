@@ -37,5 +37,5 @@ public:
 private:
 	int NextId = 1;
 
-	std::vector<std::shared_ptr<IEventManagerSystem>> _listeners;
+	vector<shared_ptr<IEventManagerSystem>> _listeners;
 };

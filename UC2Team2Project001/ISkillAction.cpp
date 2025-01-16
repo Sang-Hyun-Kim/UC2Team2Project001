@@ -23,17 +23,17 @@ void AttackAction::ExecuteAction()
 void PoisonIntensifierAction::ExecuteAction()
 {
 	Character* target = parentSkill->GetTarget();
-	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	auto poisonState = target->statusManager->GetState<PoisonState>();
 	if (poisonState)
 	{
-		poisonState->ApplyStack(poisonState->poisonStack);
+		poisonState->ApplyStack(poisonState->currentStack);
 	}
 }
 
 void PoisonPogAction::ExecuteAction()
 {
 	Character* target = parentSkill->GetTarget();
-	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	auto poisonState = target->statusManager->GetState<PoisonState>();
 	if (poisonState)
 	{
 		poisonState->ApplyStack(2);
@@ -44,11 +44,11 @@ void PoisonPogAction::ExecuteAction()
 void PoisonTriggerAction::ExecuteAction()
 {
 	Character* target = parentSkill->GetTarget();
-	auto poisonState = target->StatusComponent->GetState<PoisonState>();
+	auto poisonState = target->statusManager->GetState<PoisonState>();
 
 	if (poisonState)
 	{
-		float TriggerPoisonDamage = poisonState->poisonStack* poisonState->GetDuration();
+		float TriggerPoisonDamage = poisonState->currentStack * poisonState->GetDuration();
 		target->statManager->ModifyStat(StatType::HP, TriggerPoisonDamage);	
 		cout << "독을 격발하였습니다" << endl;
 	}

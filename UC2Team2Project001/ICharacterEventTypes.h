@@ -69,3 +69,13 @@ public:
 	{
 	}
 };
+
+// 캐릭터 스탯이 0이 되는 이벤트
+class ICharacterStatZeroEvent : public IEvent
+{
+public:
+	string characterName;
+	ICharacterStatZeroEvent(const string& _name) : characterName(_name)
+	{
+	}
+};

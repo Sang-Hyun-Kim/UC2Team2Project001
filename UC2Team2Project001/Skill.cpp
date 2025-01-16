@@ -69,8 +69,7 @@ void PassiveSkill::PassiveSkillRegisterTrigger()
 	//handlers.insert(typeid(ICharacterDamagedEvent));
 	//handlers.insert(typeid(ICharacterDeadEvent));
 
-	std::cout << "[PassiveSkill] RegisterTrigger() - " << "이벤트를 처리하도록 등록했습니다.\n";
-
+	//std::cout << "[PassiveSkill] RegisterTrigger() - " << "이벤트를 처리하도록 등록했습니다.\n";
 }
 
 void PassiveSkill::PassiveSkillUnRegisterTrigger()
@@ -79,11 +78,11 @@ void PassiveSkill::PassiveSkillUnRegisterTrigger()
 	//handlers.erase(typeid(ICharacterDamagedEvent));
 	//handlers.erase(typeid(ICharacterDeadEvent));
 
-	std::cout << "[PassiveSkill] UnRegisterTrigger() - " << "이벤트 처리를 해제했습니다.\n";
+	//std::cout << "[PassiveSkill] UnRegisterTrigger() - " << "이벤트 처리를 해제했습니다.\n";
 }
 
 void PassiveSkill::HandlePassiveEvent(std::shared_ptr<IEvent> ev)
 {
-	std::cout << "[PassiveSkill] HandlePassiveEvent() - 스킬 발동!\n";
+	std::cout << "[PassiveSkill] " << skillData.skillName  <<" - 스킬 발동!\n";
 	UseSkill();
 }

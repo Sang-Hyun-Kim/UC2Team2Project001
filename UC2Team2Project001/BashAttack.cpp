@@ -3,7 +3,7 @@
 #include "ISkillCondition.h"
 
 
-BashAttack::BashAttack(Character* _owner)
+BashAttack::BashAttack(Character* _owner) : ActiveSkill(_owner)
 {
 	skillData = FSkillData(_owner, "강타", 5, 0);
 
