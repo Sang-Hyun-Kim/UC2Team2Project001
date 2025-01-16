@@ -252,7 +252,7 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 
-	std::cout <<owner->GetName() <<" 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
+	std::cout << _owner->GetName() <<" 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
 	
-	owner->skillManager->AddSkill(newSkill);
+	_owner->skillManager->AddSkill(newSkill);
 }

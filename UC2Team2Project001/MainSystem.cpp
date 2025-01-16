@@ -21,7 +21,7 @@
 // 실행 모드를 설정합니다.
 // GAME_MODE = 1 : 메인 게임 루프 실행
 // GAME_MODE = 0 : 디버그 테스트 실행
-#define GAME_MODE 0
+#define GAME_MODE 1
 
 // 게임 시스템 코드가 돌아갈 main 함수
 
