@@ -319,6 +319,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="FireBottle.cpp">
+		<Filter>소스 파일</Filter>
+	</ClCompile>
+    <ClCompile Include="GlacialShard.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="RageGatheringSkill.cpp">
+      <Filter>소스 파일\SkillSystem\SkillClass</Filter>
+    </ClCompile>
+    <ClCompile Include="ManaMastery.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -548,6 +557,12 @@
     <ClInclude Include="ConsoleLayout.h">
       <Filter>헤더 파일\WindowsDisplay</Filter>
     </ClInclude>
+    <ClInclude Include="GlacialShard.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
+    <ClInclude Include="RageGatheringSkill.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
+    </ClInclude>
     <ClInclude Include="ConsoleColorManager.h">
       <Filter>헤더 파일\WindowsDisplay</Filter>
     </ClInclude>
@@ -563,8 +578,11 @@
     <ClInclude Include="PoisonBottle.h">
       <Filter>헤더 파일\ItemSystem</Filter>
     </ClInclude>
-    <ClInclude Include="FireBottle.h">
-      <Filter>헤더 파일\ItemSystem</Filter>
+	<ClInclude Include="FireBottle.h">
+		<Filter>헤더 파일\ItemSystem</Filter>
+	</ClInclude>
+    <ClInclude Include="ManaMastery.h">
+      <Filter>헤더 파일\SkillSystem\SkillClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

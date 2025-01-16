@@ -129,7 +129,7 @@ public:
 
 
 	// 실제로 이벤트를 처리하는(혹은 스킬을 발동하는) 함수
-	void HandlePassiveEvent(std::shared_ptr<IEvent> _event);
+	virtual void HandlePassiveEvent(std::shared_ptr<IEvent> _event);
 
 public:
 	// '어떤 이벤트 타입'들을 처리할지 저장

@@ -184,7 +184,7 @@ void BattleSystem::Attack()
 
 		state = make_shared<BattleStartTurnState>();
 		
-		if (!player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)))
+		if (!player->skillManager->UseSkill(player->skillManager->GetActiveSkillNameByIndex(input - 1)))
 		{
 			state = make_shared<BattleMainState>();
 			return;
@@ -197,7 +197,7 @@ void BattleSystem::Attack()
 
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
+	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
 	cout << "\n\n";
 	
 	turnSystem->EndTurn(activeCharacters);

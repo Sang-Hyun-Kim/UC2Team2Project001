@@ -8,6 +8,8 @@
 #include "UStatusComponent.h"
 #include "StatComponent.h"
 #include "IStrategy.h"
+#include "ConsoleLayout.h"
+#include <string>
 
 
 
@@ -101,4 +103,50 @@ void PoisonTriggerAction::ExecuteAction()
 		target->statManager->ModifyStat(StatType::HP, TriggerPoisonDamage);
 		cout << "독을 격발하였습니다" << endl;
 	}
+}
+
+void GlacialShardAction::ExecuteAction()
+{
+	Character* owner = parentSkill->GetSkillData().owner;
+	Character* target = parentSkill->GetTarget();
+
+	if (!owner || !target)
+	{
+		DEBUG_COUT("");
+		std::cout << "대상 또는 소유자가 없습니다." << std::endl;
+		return;
+	}
+
+	// 공격력의 200% 피해를 입힘
+	float attackPower = CharacterUtility::GetStat(owner, StatType::AttackPower);
+	int damage = static_cast<int>(attackPower * damageMultiplier);
+	target->combatManager->TakeDamage(damage);
+
+	// 방어력을 20% 감소 (2턴 동안)
+	float defenseReductionValue = CharacterUtility::GetStat(target, StatType::Defense) * defenseReduction;
+	target->statusManager->AddState(std::make_shared<ModifyDefenseState>(defenseDuration, -defenseReductionValue));
+
+	std::string skillPrint = owner->GetName() + "이(가) " + target->GetName() + "에게 빙하의 파편을 사용하여 " + to_string(damage) + " 피해를 입히고 방어력을 20% 감소시켰습니다.";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillPrint, true, ConsoleColor::Blue);
+	
+}
+
+void ChargeRageAction::ExecuteAction()
+{
+	Character* owner = parentSkill->GetSkillData().owner;
+
+	if (!owner)
+	{
+		DEBUG_COUT("");
+		std::cerr << "스킬 소유자가 유효하지 않습니다." << std::endl;
+		return;
+	}
+
+	// 상태 추가: 다음 공격에 500% 피해 보너스
+	auto rageState = std::make_shared<RageState>(rageMultiplier, 1); // 1턴 지속
+	owner->statusManager->AddState(rageState);
+
+	std::string skillPrint = owner->GetName() + "이(가) 분노모으기를 사용하여 다음 공격에 500% 피해 보너스를 준비했습니다!";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillPrint, true, ConsoleColor::Red);
+
 }

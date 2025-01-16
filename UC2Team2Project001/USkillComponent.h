@@ -49,7 +49,11 @@ public:
 	void RemoveSkill(SkillType _skillType, string _skillName);
 
 	// 스킬 사용
-	bool UseSkill(SkillType _skillType, string _skillName);
+	bool UseSkill(string _skillName, SkillType _skillType= SkillType::ACTIVE);
+
+	bool UseSkillByType(const std::type_index& _type,SkillType _skillType = SkillType::ACTIVE);
+
+	bool UseSkillByIndex(int _index, SkillType _skillType = SkillType::ACTIVE);
 
 	// 매 턴 종료 시, 모든 스킬의 쿨타임을 1씩 감소
 	void AllReduceCooldown();

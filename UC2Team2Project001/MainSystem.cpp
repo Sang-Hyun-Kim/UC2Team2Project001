@@ -16,6 +16,11 @@
 #include "PoisonFog.h"
 
 #include "ConsoleLayout.h"
+#include "ICombatEventTypes.h"
+#include "GlacialShard.h"
+#include "RageGatheringSkill.h"
+#include "ManaMastery.h"
+
 
 
 
@@ -23,7 +28,7 @@
 // 실행 모드를 설정합니다.
 // GAME_MODE = 1 : 메인 게임 루프 실행
 // GAME_MODE = 0 : 디버그 테스트 실행
-#define GAME_MODE 1
+#define GAME_MODE 0
 // 게임 시스템 코드가 돌아갈 main 함수
 
 
@@ -57,7 +62,7 @@ int main()
 	//GlobalEventManager 싱글톤 인스턴스 가져오기 
 	GlobalEventManager& eventManager = GlobalEventManager::Get();
 
-	// UI 시스템 생성  //지우지 마세요
+	// UI 시스템 생성 
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 
 	eventManager.Subscribe(GSystemContext);
@@ -75,60 +80,57 @@ int main()
 	//GlobalEventManager 싱글톤 인스턴스 가져오기 
 	GlobalEventManager& eventManager = GlobalEventManager::Get();
 
-	// UI 시스템 생성  //지우지 마세요
+	// UI 시스템 생성 
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
+	auto TurnSystem = std::make_shared<UTurnEventManager>();
 
 	eventManager.Subscribe(GSystemContext);
 	eventManager.Subscribe(UISystem);
+	eventManager.Subscribe(TurnSystem);
 
-
-	auto TurnEventManager = std::make_shared<UTurnEventManager>();
-	eventManager.Subscribe(TurnEventManager);
-
+	
 	shared_ptr<Player> player = make_shared<Player>("Player");
 	player->Initialize();
-
+	
 	shared_ptr<Monster> monster = make_shared<Monster>();
 	monster->Initialize();
-
+	
 	//타겟 설정합니다
 	monster->combatManager->SetTarget(player.get());
 	player->combatManager->SetTarget(monster.get());
-
+	
 	std::vector<Character*> battleCharacters;
 	battleCharacters.push_back(player.get());
 	battleCharacters.push_back(monster.get());
+	
+	TurnSystem->BeginTurn();
 
+	//플레이어
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(GlacialShard), player.get());
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(RageGatheringSkill), player.get());
+	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(ManaMastery), player.get());
 
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), player.get());
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(Sanctification), player.get());
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonedBlade), player.get());
-	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(PoisonFog), player.get());
-
-
+	//몬스터
 	SkillManager::GetInstance().AddSelectSkillToCharacter(typeid(BasicAttack), monster.get());
 
+	
+	auto playerAttackEvent = make_shared<IPlayerBattleAttackEvent>();
+	eventManager.Notify(playerAttackEvent);
+
+	player->skillManager->UseSkillByType(typeid(RageGatheringSkill));
+	//player->skillManager->UseSkill("빙하의 파편");
+	 
+	monster->skillManager->UseSkillByType(typeid(BasicAttack));
 
 
-	TurnEventManager->BeginTurn();
-
-
-	//player->combatManager->Attack();
-	//monster->combatManager->Attack();
-
-	//player->skillManager->UseSkill(SkillType::ACTIVE, "신성화");
-	//player->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
-	player->skillManager->UseSkill(SkillType::ACTIVE, "독이 묻은 칼");
-	player->skillManager->UseSkill(SkillType::ACTIVE, "독 안개");
-
-	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");
-
-
-	TurnEventManager->EndTurn(battleCharacters);
+	TurnSystem->EndTurn(battleCharacters);
 
 	CharacterUtility::PrintStatus(player.get());
 	CharacterUtility::PrintStatus(monster.get());
+	
 
 #endif // !DEBUG_TEST
+
+
 
 }

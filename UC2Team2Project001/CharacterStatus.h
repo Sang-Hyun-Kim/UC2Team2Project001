@@ -28,7 +28,6 @@ public:
 	// 매 턴마다 지속 시간 감소
 	virtual void TickDuration();
 
-
 	// 상태가 만료되었는지 확인
 	virtual bool IsExpired() const;
 
@@ -202,4 +201,25 @@ private:
 	int damage;       // 적용되는 데미지 양
 	int interval;     // 몇 턴마다 발동되는지
 	int turnCounter;  // 현재 턴을 추적
+};
+
+
+// 분노 상태 정의
+class RageState : public ICharacterState
+{
+public:
+	RageState(int _duration, float _damageMultiplier)
+		: ICharacterState("RageState", _duration), damageMultiplier(_damageMultiplier), isApplied(false), target(nullptr) {
+	}
+
+	void ApplyEffect(Character* _target) override;
+
+
+	void EffectBeforeRemove() override;
+	
+
+private:
+	float damageMultiplier;  // 추가 공격 배율 (500% = 5.0)
+	bool isApplied;          // 상태가 적용되었는지 여부
+	Character* target;       // 상태 대상 캐릭터
 };

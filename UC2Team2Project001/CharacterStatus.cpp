@@ -9,6 +9,7 @@
 #include <iostream>
 #include "ConsoleColorManager.h"
 #include "PlayerCharacter.h"
+#include "ConsoleLayout.h"
 
 
 void ICharacterState::TickDuration()
@@ -21,7 +22,7 @@ void ICharacterState::TickDuration()
 
 bool ICharacterState::IsExpired() const
 {
-	return duration <= 0;
+	return duration < 0;
 }
 
 const std::string& ICharacterState::GetStateName() const
@@ -172,7 +173,7 @@ void CursedSealState::TickDuration()
 	ICharacterState::TickDuration(); // 부모 클래스의 지속 시간 감소 로직 호출
 }
 
-SanctificationState::SanctificationState(int _duration, float _increasValue): ICharacterState("신성화", _duration), increasValue(_increasValue), target(nullptr), isApplied(false)
+SanctificationState::SanctificationState(int _duration, float _increasValue) : ICharacterState("신성화", _duration), increasValue(_increasValue), target(nullptr), isApplied(false)
 {
 }
 
@@ -220,6 +221,38 @@ void SanctificationState::EffectBeforeRemove()
 		cout << target->GetName() << "의 공격력 : " << beforeAttackPower << " ->" << CharacterUtility::GetStat(target, StatType::AttackPower) << endl;
 		cout << target->GetName() << "의 방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
 		cout << target->GetName() << "의 회피력 : " << beforeEvasionRate << " ->" << CharacterUtility::GetStat(target, StatType::EvasionRate) << endl;
+
+		isApplied = false;
+	}
+}
+
+void RageState::ApplyEffect(Character* _target)
+{
+	if (!isApplied && _target)
+	{
+		target = _target;
+		isApplied = true;
+
+		// 공격력 증가
+		float currentAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
+		CharacterUtility::ModifyStat(target, StatType::AttackPower, currentAttackPower * (damageMultiplier - 1));
+
+		std::string effectString = target->GetName() + "이(가) 분노를 모으는 중입니다! 다음 기본 공격에 " + to_string(damageMultiplier * 100) + "% 피해를 입힙니다.";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, effectString, true, ConsoleColor::Brown);
+	}
+
+}
+
+void RageState::EffectBeforeRemove()
+{
+	if (isApplied && target)
+	{
+		// 공격력 복구
+		float currentAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
+		CharacterUtility::ModifyStat(target, StatType::AttackPower, -(currentAttackPower / damageMultiplier * (damageMultiplier - 1)));
+
+		std::string effectString = target->GetName() + "의 분노 상태가 종료되었습니다.";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, effectString, true, ConsoleColor::Brown);
 
 		isApplied = false;
 	}
