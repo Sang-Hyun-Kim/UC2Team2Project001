@@ -134,7 +134,7 @@ void Monster::CreateCharacterReward()
 	characterReward.dropExperience = reward.dropExperience;
 
 	// 아이템 드랍 확률: 30%
-	if (rand() % 100 <= 100) 
+	if (rand() % 100 < 30) 
 	{
 		characterReward.dropItem = ItemManager::GetInstance().getRandomItem();
 	}

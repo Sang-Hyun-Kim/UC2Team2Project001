@@ -11,8 +11,6 @@
 #include "USkillComponent.h"
 #include "ConsoleLayout.h"
 
-#include "ConsoleLayout.h"
-
 UStatsComponent::UStatsComponent(Character* _inOwnedCharacter)
 {
 	ownedCharacter = _inOwnedCharacter;
