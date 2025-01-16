@@ -25,6 +25,19 @@ public:
     Skill* parentSkill;
 };
 
+class NormalAttackAction : public ISkillAction
+{
+public:
+	NormalAttackAction()
+	{
+	};
+
+	~NormalAttackAction() = default;
+
+	virtual void ExecuteAction() override;
+};
+
+
 class AttackAction : public ISkillAction
 {
 public:

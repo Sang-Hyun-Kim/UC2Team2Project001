@@ -49,10 +49,15 @@ public:
 
 
 protected:
-	void ClampStat(StatType _type, float _minValue, float _maxValue);
+	void ClampStat(StatType type, float _minValue, float _maxValue);
+
+	void HandleCharacterDeath();
+	
+
+	void HandleExperienceGain();
 
 private:
-	Character* ownedCharacter;
+	Character* OwnedCharacter =nullptr;
 
 	std::map<StatType, float> stats;
 };

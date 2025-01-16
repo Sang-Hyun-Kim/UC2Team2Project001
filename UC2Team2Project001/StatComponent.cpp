@@ -50,25 +50,26 @@ void UStatsComponent::LoadFromJSON()
 	// OwnerCharacter의 이름을 가져옴
 	std::string characterName = ownedCharacter->GetName();
 
+
 	try
 	{
 		// StatsLoader를 통해 JSON에서 스탯 로드
-		StatsData statsData = StatsLoader::LoadFromJSON(characterName);
+		StatsData loadStatsData = StatsLoader::LoadFromJSON(characterName);
 
-		// Stats 맵 초기화
-		stats[StatType::HP] = statsData.HP;
-		stats[StatType::MaxHP] = statsData.MaxHP;
-		stats[StatType::MP] = statsData.MP;
-		stats[StatType::MaxMP] = statsData.MaxMP;
-		stats[StatType::AttackPower] = statsData.AttackPower;
-		stats[StatType::Defense] = statsData.Defense;
-		stats[StatType::CriticalChance] = statsData.CriticalChance;
-		stats[StatType::EvasionRate] = statsData.EvasionRate;
-		stats[StatType::Level] = statsData.Level;
-		stats[StatType::Experience] = statsData.Experience;
-		stats[StatType::MaxExperience] = statsData.MaxExperience;
+		Stats = {
+		  {StatType::HP, loadStatsData.HP},
+		  {StatType::MaxHP, loadStatsData.MaxHP},
+		  {StatType::MP, loadStatsData.MP},
+		  {StatType::MaxMP, loadStatsData.MaxMP},
+		  {StatType::AttackPower, loadStatsData.AttackPower},
+		  {StatType::Defense, loadStatsData.Defense},
+		  {StatType::CriticalChance, loadStatsData.CriticalChance},
+		  {StatType::EvasionRate, loadStatsData.EvasionRate},
+		  {StatType::Level, loadStatsData.Level},
+		  {StatType::Experience, loadStatsData.Experience},
+		  {StatType::MaxExperience, loadStatsData.MaxExperience}
+		};
 
-		// 스탯 출력 (테스트용)
 		PrintStatus();
 	}
 	catch (const std::exception& _exception)
@@ -92,53 +93,28 @@ void UStatsComponent::SetStat(StatType _type, float _value)
 
 void UStatsComponent::ModifyStat(StatType _type, float _delta)
 {
-	stats[_type] += _delta;
+	// 스탯 변경
+	Stats[_type] += _delta;
 
-	if (stats[_type] < 0)
+	if (Stats[_type] < 0)
 	{
-		stats[_type] = 0;
+		Stats[_type] = 0;
 	}
 
+	// HP, MP 경계값 처리
 	if (_type == StatType::HP || _type == StatType::MP)
 	{
-		ClampStat(_type, 0.0f, GetStat(_type == StatType::HP ? StatType::MaxHP : StatType::MaxMP));
+		StatType maxStatType = (_type == StatType::HP) ? StatType::MaxHP : StatType::MaxMP;
+		ClampStat(_type, 0.0f, GetStat(maxStatType));
 
-		if (_type == StatType::HP && stats[_type] == 0)
+		if (_type == StatType::HP && Stats[StatType::HP] == 0)
 		{
-			// 불굴의 의지가 있는지 확인
-			if (!ownedCharacter->skillManager->GetSkill(SkillType::PASSIVE, "불굴의 의지"))
-			{
-				// 캐릭터 사망 이벤트
-				auto newCharacterDeadEvent = std::make_shared<ICharacterDeadEvent>(ownedCharacter->GetName(), ownedCharacter->characterReward);
-				GlobalEventManager::Get().Notify(newCharacterDeadEvent);
-			}
-			else
-			{
-				// 캐릭터 스탯 0 이벤트
-				auto characterStatZeroEvent = std::make_shared<ICharacterStatZeroEvent>(ownedCharacter->GetName());
-				GlobalEventManager::Get().Notify(characterStatZeroEvent);
-			}
+			HandleCharacterDeath();
 		}
 	}
 	else if (_type == StatType::Experience)
 	{
-		float currentExp = stats[StatType::Experience];
-		float maxExp = stats[StatType::MaxExperience];
-
-		// 여러 레벨이 한 번에 오를 수 있으면 while 사용
-		while (currentExp >= maxExp)
-		{
-			// 남는 경험치 계산 (예: 120 / 100 -> 남는 20)
-			float leftover = currentExp - maxExp;
-			stats[StatType::Experience] = leftover;
-
-			// 레벨 업 실행
-			LevelUp();
-
-			// 레벨업 후, maxExp 값이 바뀔 수 있으므로 다시 읽어옴
-			currentExp = stats[StatType::Experience];
-			maxExp = stats[StatType::MaxExperience];
-		}
+		HandleExperienceGain();
 	}
 }
 
@@ -172,29 +148,63 @@ void UStatsComponent::LevelUp()
 	stats[StatType::Level] += 1;
 
 	// 체력/최대체력 증가
-	stats[StatType::MaxHP] += 10;
+	Stats[StatType::MaxHP] += 20;
 	// 체력은 새로 오른 최대체력으로 보충
 	stats[StatType::HP] = stats[StatType::MaxHP];
 
 	// MP/최대MP 증가
-	stats[StatType::MaxMP] += 5;
-	stats[StatType::MP] = stats[StatType::MaxMP];
+	Stats[StatType::MaxMP] += 10;
+	Stats[StatType::MP] = Stats[StatType::MaxMP];
 
 	// 공격력 증가
-	stats[StatType::AttackPower] += 2;
+	Stats[StatType::AttackPower] += 5;
 
 	// 방어력 증가
-	stats[StatType::Defense] += 1;
+	Stats[StatType::Defense] += 2;
 
-	// 다음 레벨에 필요한 경험치 증가(예: +50)
-	stats[StatType::MaxExperience] += 50;
+	// 다음 레벨에 필요한 경험치 증가(예: +20)
+	Stats[StatType::MaxExperience] += 20;
 
 	// 레벨업 시점에 메시지 출력 (UI 이벤트를 보낼 수도 있음)
 	auto NewLevelUpEvent = make_shared<ICharacterLevelUpEvent>(ownedCharacter->GetName(), (int)stats[StatType::Level]);
 	GlobalEventManager::Get().Notify(NewLevelUpEvent);
 }
 
-void UStatsComponent::ClampStat(StatType _type, float _minValue, float _maxValue)
+void UStatsComponent::ClampStat(StatType type, float _minValue, float _maxValue) 
 {
-	stats[_type] = std::clamp(stats[_type], _minValue, _maxValue);
+	Stats[type] = std::clamp(Stats[type], _minValue, _maxValue);
+}
+
+
+void UStatsComponent::HandleCharacterDeath()
+{
+	// 불굴의 의지 스킬 확인
+	if (OwnedCharacter->skillManager->GetSkill(SkillType::PASSIVE, "불굴의 의지"))
+	{
+		auto characterStatZeroEvent = std::make_shared<ICharacterStatZeroEvent>(OwnedCharacter->GetName());
+		GlobalEventManager::Get().Notify(characterStatZeroEvent);
+	}
+	else
+	{
+		auto characterDeadEvent = std::make_shared<ICharacterDeadEvent>(OwnedCharacter->GetName(), OwnedCharacter->characterReward);
+		GlobalEventManager::Get().Notify(characterDeadEvent);
+	}
+}
+
+void UStatsComponent::HandleExperienceGain()
+{
+	float currentExp = Stats[StatType::Experience];
+	float maxExp = Stats[StatType::MaxExperience];
+
+	// 여러 레벨이 한 번에 오를 수 있도록 while 루프 사용
+	while (currentExp >= maxExp)
+	{
+		float leftover = currentExp - maxExp;
+		Stats[StatType::Experience] = leftover;
+		LevelUp();
+
+		// 레벨업 이후 maxExp 값이 변경될 수 있으므로 다시 확인
+		currentExp = Stats[StatType::Experience];
+		maxExp = Stats[StatType::MaxExperience];
+	}
 }

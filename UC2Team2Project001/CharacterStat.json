@@ -1,8 +1,9 @@
+
 {
   "Characters": {
     "Player": {
       "Stats": {
-        "HP": 100,
+        "HP": 120,
         "MaxHP": 100,
         "MP": 50,
         "MaxMP": 50,
@@ -21,19 +22,73 @@
         "Type": "BlockDefense"
       }
     },
-    "Goblin": {
+    "Slime": {
       "Stats": {
-        "HP": 100,
-        "MaxHP": 100,
-        "MP": 0,
-        "MaxMP": 0,
+        "HP": 20,
+        "MaxHP": 20,
+        "MP": 10,
+        "MaxMP": 20,
         "AttackPower": 10,
-        "Defense": 5,
+        "Defense": 1,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 1,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "Rewards": {
+        "Experience": 80,
+        "Gold": 50
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "RedSlime": {
+      "Stats": {
+        "HP": 80,
+        "MaxHP": 80,
+        "MP": 20,
+        "MaxMP": 20,
+        "AttackPower": 20,
+        "Defense": 1,
         "CriticalChance": 0.05,
         "EvasionRate": 0.0,
         "Level": 0,
         "Experience": 0,
         "MaxExperience": 0
+      },
+      "Rewards": {
+        "Experience": 150,
+        "Gold": 9999
+      },
+      "AttackStrategy": {
+        "Type": "BasicAttack"
+      },
+      "DefenseStrategy": {
+        "Type": "BlockDefense"
+      }
+    },
+    "Goblin": {
+      "Stats": {
+        "HP": 50,
+        "MaxHP": 50,
+        "MP": 20,
+        "MaxMP": 20,
+        "AttackPower": 15,
+        "Defense": 3,
+        "CriticalChance": 0.05,
+        "EvasionRate": 0.0,
+        "Level": 0,
+        "Experience": 0,
+        "MaxExperience": 0
+      },
+      "Rewards": {
+        "Experience": 120,
+        "Gold": 100
       },
       "AttackStrategy": {
         "Type": "BasicAttack"
@@ -44,17 +99,21 @@
     },
     "Orc": {
       "Stats": {
-        "HP": 100,
-        "MaxHP": 100,
+        "HP": 120,
+        "MaxHP": 120,
         "MP": 0,
         "MaxMP": 0,
-        "AttackPower": 10,
-        "Defense": 5,
+        "AttackPower": 20,
+        "Defense": 10,
         "CriticalChance": 0.05,
         "EvasionRate": 0.0,
         "Level": 0,
         "Experience": 0,
         "MaxExperience": 0
+      },
+      "Rewards": {
+        "Experience": 120,
+        "Gold": 220
       },
       "AttackStrategy": {
         "Type": "BasicAttack"
@@ -65,8 +124,8 @@
     },
     "Troll": {
       "Stats": {
-        "HP": 100,
-        "MaxHP": 100,
+        "HP": 250,
+        "MaxHP": 250,
         "MP": 0,
         "MaxMP": 0,
         "AttackPower": 10,
@@ -77,6 +136,10 @@
         "Experience": 0,
         "MaxExperience": 0
       },
+      "Rewards": {
+        "Experience": 150,
+        "Gold": 550
+      },
       "AttackStrategy": {
         "Type": "BasicAttack"
       },
@@ -86,17 +149,21 @@
     },
     "Dragon": {
       "Stats": {
-        "HP": 100,
-        "MaxHP": 100,
+        "HP": 1000,
+        "MaxHP": 1000,
         "MP": 0,
         "MaxMP": 0,
-        "AttackPower": 10,
-        "Defense": 8,
+        "AttackPower": 20,
+        "Defense": 20,
         "CriticalChance": 0.05,
         "EvasionRate": 0.0,
         "Level": 0,
         "Experience": 0,
         "MaxExperience": 0
+      },
+      "Rewards": {
+        "Experience": 1000,
+        "Gold": 999999
       },
       "AttackStrategy": {
         "Type": "BasicAttack"
