@@ -20,6 +20,8 @@ public:
 	void BuyItemMenu();
 	void BuySkillMenu();
 	void SellMenu();
+
+	virtual string GetSystemName() override { return "상점"; }
 private:
 	void GetRandomItemsAndSkills();
 

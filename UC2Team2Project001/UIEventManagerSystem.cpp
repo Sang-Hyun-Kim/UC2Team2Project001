@@ -12,12 +12,15 @@
 #include "IInputEventTypes.h"
 #include "ISystemTypes.h"
 
+#include "InputManagerSystem.h"
+
 UIEventManagerSystem::UIEventManagerSystem()
 {
 	// ICharacterDamagedEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDamagedEvent>([](ICharacterDamagedEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "님이 " << e->damage << "의 피해를 입었습니다.\n";
+			Delay(1);
 		});
 
 	// ICharacterDeadEvent를 처리하는 핸들러 등록
@@ -41,12 +44,14 @@ UIEventManagerSystem::UIEventManagerSystem()
 	Subscribe<ICharacterAttackEvent>([](ICharacterAttackEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "이(가) 공격했습니다!\n";
+			Delay(1);
 		});
 
 	// ICharacterDefenseEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDefenseEvent>([](ICharacterDefenseEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "이(가) " << e->defenseValue << " 만큼 방어했습니다!\n";
+			Delay(1);
 		});
 
 	// IItemSoldEvent를 처리하는 핸들러 등록
@@ -56,15 +61,15 @@ UIEventManagerSystem::UIEventManagerSystem()
 		});
 
 	// IMoveEvent를 처리하는 핸들러 등록
-	Subscribe<IMoveEvent>([](IMoveEvent* e)
+	Subscribe<IMoveSystemEvent>([](IMoveSystemEvent* e)
 		{
-			std::cout << "[UI] " << e->from << "에서 " << e->to << "로 이동했습니다.\n";
+			std::cout << "[UI] " << e->fromName << "에서 " << e->toName << "로 이동했습니다.\n";
+			Delay(1);
 		});
 
 	// IDisplayMenuEvent를 처리하는 핸들러 등록
 	Subscribe<IDisplayMenuEvent>([](IDisplayMenuEvent* e)
 		{
-			CLEAR;
 			std::cout << e->title << "\n";
 			for (const auto& option : e->options)
 			{
@@ -77,6 +82,7 @@ UIEventManagerSystem::UIEventManagerSystem()
 	Subscribe<IWrongInputEvent>([](IWrongInputEvent*)
 		{
 			std::cout << "잘못된 입력입니다.\n";
+			InputManagerSystem::PauseUntilEnter();
 		});
 
 	// IGameExitEvent를 처리하는 핸들러 등록
@@ -89,14 +95,16 @@ UIEventManagerSystem::UIEventManagerSystem()
 	// IGameStartEvent를 처리하는 핸들러 등록
 	Subscribe<IGameStartEvent>([](IGameStartEvent*)
 		{
+			CLEAR;
 			std::cout << "게임을 시작합니다.\n";
+			Delay(1);
 		});
 
 	// IPlayerBattleAttackEvent를 처리하는 핸들러 등록
-	Subscribe<IPlayerBattleAttackEvent>([](IPlayerBattleAttackEvent*)
-		{
-			std::cout << "플레이어 공격 수행\n";
-		});
+	//Subscribe<IPlayerBattleAttackEvent>([](IPlayerBattleAttackEvent*)
+	//	{
+	//		std::cout << "플레이어 공격 수행\n";
+	//	});
 
 	// IBattleUseItemEvent를 처리하는 핸들러 등록
 	Subscribe<IBattleUseItemEvent>([](IBattleUseItemEvent*)
@@ -131,10 +139,10 @@ UIEventManagerSystem::UIEventManagerSystem()
 		});
 
 	// IPlayerStageClearEvent를 처리하는 핸들러 등록
-	Subscribe<IPlayerStageClearEvent>([](IPlayerStageClearEvent*)
-		{
-			std::cout << "몬스터 사망으로 스테이지 클리어\n";
-		});
+	//Subscribe<IPlayerStageClearEvent>([](IPlayerStageClearEvent*)
+	//	{
+	//		//std::cout << "몬스터 사망으로 스테이지 클리어\n";
+	//	});
 }
 
 UIEventManagerSystem::~UIEventManagerSystem()

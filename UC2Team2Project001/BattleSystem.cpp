@@ -32,10 +32,10 @@ BattleSystem::BattleSystem()
 
 void BattleSystem::EnterSystem()
 {
-	cout << "-----------------------------------------------------------------\n";
-	cout << "                            전투 입장                           " << endl;
-	cout << "-----------------------------------------------------------------\n";
-	
+	//cout << "-----------------------------------------------------------------\n";
+	//cout << "                            전투 입장                           " << endl;
+	//cout << "-----------------------------------------------------------------\n";
+	CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	monster = make_shared<Monster>();
 	monster->Initialize();
@@ -95,7 +95,7 @@ void BattleSystem::EnterSystem()
 
 void BattleSystem::MainMenu()
 {
-	//CLEAR;
+	CLEAR;
 	// 라운드 시작할때 몬스터 현재 상태 출력
 
 	CharacterUtility::PrintStatus(monster.get());
@@ -168,12 +168,25 @@ void BattleSystem::Attack()
 	}
 	else
 	{ // 스킬 사용
-		auto cmd = make_shared<UseSkillCommand>(player->skillManager->GetActiveSkillNameByIndex(input - 1));
-		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleStartTurnState>();
+		CLEAR;
+		//auto cmd = make_shared<UseSkillCommand>(player->skillManager->GetActiveSkillNameByIndex(input - 1));
+		//GInvoker->ExecuteCommand(cmd);
 		//player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)); // UseSkill로 변경 예정
 		//player->skillManager->UseSkill(input - 1);
 		//Delay(1);
+
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
+		auto player = GSystemContext->GetPlayer();
+
+		state = make_shared<BattleStartTurnState>();
+		
+		if (!player->skillManager->UseSkill(SkillType::ACTIVE, player->skillManager->GetActiveSkillNameByIndex(input - 1)))
+		{
+			state = make_shared<BattleMainState>();
+			return;
+		}
 	}
 
 	// 몬스터 공격
@@ -183,15 +196,17 @@ void BattleSystem::Attack()
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
-
+	cout << "\n";
 	InputManagerSystem::PauseUntilEnter();
+	cout << "\n\n";
 
+	
 	turnSystem->EndTurn(activeCharacters);
 }
 
 void BattleSystem::DisplayStat()
 {
-	//CLEAR;
+	CLEAR;
 	auto player = GSystemContext->GetPlayer();
 	CharacterUtility::PrintStatus(player.get());
 
@@ -242,7 +257,7 @@ void BattleSystem::NextStage()
 		// 게임 승리로 로비로 귀환,
 		// 이때까지 동작한 로그라던가는 여기서 출력하시면 됩니다
 
-		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType());
+		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
 		GlobalEventManager::Get().Notify(event);
 		InputManagerSystem::PauseUntilEnter();
 		return;
@@ -250,6 +265,7 @@ void BattleSystem::NextStage()
 	else
 	{	
 		GetReward();
+		CLEAR;
 
 		int input = InputManagerSystem::GetInput<int>(
 			"==== 스테이지 클리어 메뉴 ====",
@@ -263,7 +279,7 @@ void BattleSystem::NextStage()
 		}
 		else if (input == 2)
 		{
-			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType());
+			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType(), "상점", "배틀");
 			GInvoker->ExecuteCommand(cmd);
 		}
 	}
@@ -274,13 +290,15 @@ void BattleSystem::GameOver()
 	auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
 	GlobalEventManager::Get().Notify(playergamedefeat);
 
-	auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType());
+	auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
 	GlobalEventManager::Get().Notify(event);
 }
 
 void BattleSystem::StartTurn()
 {
+	CLEAR;
 	turnSystem->BeginTurn();
+	cout << "\n\n";
 	state = make_shared<BattleMainState>();
 }
 
@@ -326,7 +344,7 @@ void BattleSystem::GetReward()
 			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
 		}
 
-		int input = InputManagerSystem::GetInput<int>("스킬을 고르세요.", options, RangeValidator<int>(1, reward.skillTypes.size()));
+		int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, reward.skillTypes.size()));
 
 		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
 		GInvoker->ExecuteCommand(cmd);

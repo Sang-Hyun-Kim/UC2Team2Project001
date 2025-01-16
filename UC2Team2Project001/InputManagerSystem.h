@@ -7,8 +7,6 @@
 #include <sstream>
 
 
-
-
 class InputManagerSystem //선택지를 입력할 때 사용할 클래스
 {
 public:
@@ -44,6 +42,7 @@ public:
 				if (!_validators.IsValidate(input))
 				{
 					isValidate = false;
+					Delay(0, 500);
 				}
 				}(), ...);
 			if (isValidate) break;
@@ -81,6 +80,7 @@ public:
 				if (!_validators.IsValidate(input))
 				{
 					isValidate = false;
+					PauseUntilEnter();
 				}
 				}(), ...);
 			if (isValidate) break;
@@ -99,6 +99,7 @@ public:
 		};
 	}
 
+
 	static void PauseUntilEnter()
 	{
 		if (cin.rdbuf()->in_avail() > 0) // 버퍼에 읽을 수 있는 데이터가 있으면
@@ -106,7 +107,7 @@ public:
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 버퍼에 있는 모든 입력을 무시
 		};
 
-		cout << "\n엔터를 눌러 계속하세요...";
+		cout << "엔터를 눌러 계속하세요...";
 
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');  // 엔터를 누를 때까지 대기
 	}

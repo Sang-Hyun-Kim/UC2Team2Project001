@@ -34,6 +34,7 @@
 #include "Unbreakable.h"
 
 
+
 // 게임 시스템 코드가 돌아갈 main 함수
 
 using namespace std;
@@ -50,8 +51,8 @@ int main()
 	//// UI 시스템 생성  //지우지 마세요
 	auto UISystem = std::make_shared<UIEventManagerSystem>();
 	
-	eventManager.Subscribe(GSystemContext);
 	eventManager.Subscribe(UISystem);
+	eventManager.Subscribe(GSystemContext);
 
 	while (true)
 	{

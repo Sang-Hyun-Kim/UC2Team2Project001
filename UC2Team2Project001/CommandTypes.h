@@ -106,13 +106,13 @@ private:
 class SystemMoveCommand : public ICommand
 {
 public:
-	SystemMoveCommand(SystemType _to, SystemType _from) : to(_to), from(_from)
+	SystemMoveCommand(SystemType _to, SystemType _from, string _toName, string _fromName) : to(_to), from(_from), toName(_toName), fromName(_fromName)
 	{
 	}
 
 	void Execute() override
 	{
-		auto event = make_shared<IMoveSystemEvent>(to, from);
+		auto event = make_shared<IMoveSystemEvent>(to, from, toName, fromName);
 		GlobalEventManager::Get().Notify(event);
 	}
 
@@ -123,6 +123,8 @@ public:
 private:
 	SystemType to;
 	SystemType from;
+	string toName;
+	string fromName;
 };
 
 class SystemChangeStateCommand : public ICommand
@@ -203,7 +205,15 @@ public:
 		GlobalEventManager::Get().Notify(playerAttackEv);
 
 		auto player = GSystemContext->GetPlayer();
-		player->skillManager->UseSkill(SkillType::ACTIVE, skillName);
+
+		if (player->skillManager->UseSkill(SkillType::ACTIVE, skillName))
+		{
+
+		}
+		else
+		{
+
+		}
 	}
 
 	void Undo() override

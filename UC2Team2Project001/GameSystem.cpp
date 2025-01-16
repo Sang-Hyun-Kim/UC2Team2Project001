@@ -14,8 +14,8 @@ void GameSystem::Update()
 	}
 }
 
-void GameSystem::ExitSystem(SystemType nextType)
-{
-	auto moveEvent = make_shared<IMoveSystemEvent>(nextType, GetSystemType());
-	GlobalEventManager::Get().Notify(moveEvent);
-}
+//void GameSystem::ExitSystem(SystemType nextType)
+//{
+	//auto moveEvent = make_shared<IMoveSystemEvent>(nextType, GetSystemType());
+	//GlobalEventManager::Get().Notify(moveEvent);
+//}
