@@ -196,12 +196,13 @@ void BattleSystem::Attack()
 	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
 	GlobalEventManager::Get().Notify(monsterAttackEv);
 	monster->skillManager->UseSkill(SkillType::ACTIVE, "기본 공격");// 몬스터 죽으면 공격 안함
-	cout << "\n";
-	InputManagerSystem::PauseUntilEnter();
 	cout << "\n\n";
 
 	
 	turnSystem->EndTurn(activeCharacters);
+	
+	cout << "\n";
+	InputManagerSystem::PauseUntilEnter();
 }
 
 void BattleSystem::DisplayStat()

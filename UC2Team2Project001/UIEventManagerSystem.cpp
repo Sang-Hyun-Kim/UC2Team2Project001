@@ -20,21 +20,24 @@ UIEventManagerSystem::UIEventManagerSystem()
 	Subscribe<ICharacterDamagedEvent>([](ICharacterDamagedEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "님이 " << e->damage << "의 피해를 입었습니다.\n";
-			Delay(1);
+			Delay(0, 900);
 		});
 
 	// ICharacterDeadEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDeadEvent>([](ICharacterDeadEvent* e)
 		{
+			std::cout << "[UI] " << e->characterName << "님이 사망했습니다.\n";
+			Delay(0, 9000);
+
 			if (!e->reward.IsEmpty())
 			{
 				std::cout << "[" << e->characterName << "]에게서 " << e->reward.DropGold << "만 큼의 Gold를(을) 획득했습니다.\n";
+				Delay(0, 9000);
 				if (e->reward.DropItem != nullptr)
 				{
 					std::cout << "[" << e->characterName << "]의 " << e->reward.DropItem->getName()<< "를 획득했습니다.\n";
 				}
 			}
-			std::cout << "[UI] " << e->characterName << "님이 사망했습니다.\n";
 		});
 
 	// IItemPurchasedEvent를 처리하는 핸들러 등록
@@ -47,14 +50,14 @@ UIEventManagerSystem::UIEventManagerSystem()
 	Subscribe<ICharacterAttackEvent>([](ICharacterAttackEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "이(가) 공격했습니다!\n";
-			Delay(1);
+			Delay(0, 9000);
 		});
 
 	// ICharacterDefenseEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterDefenseEvent>([](ICharacterDefenseEvent* e)
 		{
 			std::cout << "[UI] " << e->characterName << "이(가) " << e->defenseValue << " 만큼 방어했습니다!\n";
-			Delay(1);
+			Delay(0, 9000);
 		});
 
 	// IItemSoldEvent를 처리하는 핸들러 등록
