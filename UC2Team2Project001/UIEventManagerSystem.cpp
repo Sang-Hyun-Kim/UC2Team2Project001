@@ -33,7 +33,7 @@ UIEventManagerSystem::UIEventManagerSystem()
 			{
 				std::cout << "[" << e->characterName << "]에게서 " << e->reward.dropGold << "만 큼의 Gold를(을) 획득했습니다.\n";
 				Delay(0, 9000);
-				if (e->reward.DropItem != nullptr)
+				if (e->reward.dropItem!= nullptr)
 				{
 					std::cout << "[" << e->characterName << "]의 " << e->reward.dropItem->getName()<< "를 획득했습니다.\n";
 				}

@@ -7,7 +7,6 @@
 #include "StatComponent.h"
 
 #include <iostream>
-#include "ConsoleColorManager.h"
 
 
 void ICharacterState::TickDuration()
@@ -89,13 +88,12 @@ void PoisonState::ApplyEffect(Character* _target)
 {
 	if (_target && !IsExpired())
 	{
-		ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Magenta, ConsoleColor::Black);
 		int CalculatedDamage = damagePerTurn * currentStack;
 		std::cout << _target->GetName() << "은(는) 중독되어 " << CalculatedDamage << "의 데미지를 받았습니다. " << "[스택: " << currentStack << ", 남은 턴: " << GetDuration() << "]\n";
 		_target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
 	}
 
-	ConsoleColorManager::GetInstance().SetDefaultColor();
+	
 }
 
 UnbreakableState::UnbreakableState(int _duration) : ICharacterState("불굴의 의지", _duration)

@@ -18,7 +18,7 @@
 #include "LuckyGuy.h"
 #include "CursedSeal.h"
 #include "BasicAttack.h" 
-#include "ConsoleColorManager.h"
+
 
 SkillManager::SkillManager()
 {
@@ -246,11 +246,9 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	if (!newSkill)
 	{
-		ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 		cerr << "스킬 생성에 실패했습니다. 스킬이 유효하지 않습니다." << endl;
 	}
 
-	ConsoleColorManager::GetInstance().SetColor(ConsoleColor::Green, ConsoleColor::Black);
 
 	std::cout << _owner->GetName() <<" 는(은) " << newSkill->GetSkillData().skillName << "스킬을 획득했습니다" << endl;
 	
