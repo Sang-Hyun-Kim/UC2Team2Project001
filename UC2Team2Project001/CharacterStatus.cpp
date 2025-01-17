@@ -183,7 +183,7 @@ void SanctificationState::ApplyEffect(Character* _target)
 	{
 		target = _target;
 
-		if (dynamic_cast<Player*>(target))
+		if (target->bIsPlayer)
 		{
 			cout << target->GetName() << "이(가) 신성화를 사용 했습니다." << endl;
 		}

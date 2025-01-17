@@ -10,6 +10,8 @@ public:
 	virtual ~ISkillCondition() = default;
 	virtual bool Check(Skill* _checkSkill) = 0;
 	virtual void CannotUseSkill() = 0;
+
+	Character* _owner;
 };
 
 class ManaCondition : public ISkillCondition

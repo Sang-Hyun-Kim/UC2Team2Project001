@@ -15,10 +15,6 @@
 #include "ICharacterEventTypes.h"
 #include "BasicAttack.h"
 #include "SkillManager.h"
-#include "Sanctification.h"
-#include "PoisonedBlade.h"
-#include "PoisonFog.h"
-#include "MentalDiscipline.h"
 
 Character::Character()
 {

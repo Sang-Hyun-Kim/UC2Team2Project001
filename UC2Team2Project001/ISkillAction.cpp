@@ -120,14 +120,15 @@ void GlacialShardAction::ExecuteAction()
 	// 공격력의 200% 피해를 입힘
 	float attackPower = CharacterUtility::GetStat(owner, StatType::AttackPower);
 	int damage = static_cast<int>(attackPower * damageMultiplier);
+
+	std::string skillPrint = owner->GetName() + "이(가) 빙하의 파편을 사용 " + to_string(damage) + " 피해! 방어력 20% 감소!";
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillPrint, true, ConsoleColor::Blue);
+
 	target->combatManager->TakeDamage(damage);
 
 	// 방어력을 20% 감소 (2턴 동안)
 	float defenseReductionValue = CharacterUtility::GetStat(target, StatType::Defense) * defenseReduction;
 	target->statusManager->AddState(std::make_shared<ModifyDefenseState>(defenseDuration, -defenseReductionValue));
-
-	std::string skillPrint = owner->GetName() + "이(가) " + target->GetName() + "에게 빙하의 파편을 사용하여 " + to_string(damage) + " 피해를 입히고 방어력을 20% 감소시켰습니다.";
-	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillPrint, true, ConsoleColor::Blue);
 	
 }
 
@@ -146,7 +147,7 @@ void ChargeRageAction::ExecuteAction()
 	auto rageState = std::make_shared<RageState>(rageMultiplier, 1); // 1턴 지속
 	owner->statusManager->AddState(rageState);
 
-	std::string skillPrint = owner->GetName() + "이(가) 분노모으기를 사용하여 다음 공격에 500% 피해 보너스를 준비했습니다!";
+	std::string skillPrint = owner->GetName() + "이(가) 분노 사용! 다음 공격에 500% 피해 보너스!";
 	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillPrint, true, ConsoleColor::Red);
 
 }

@@ -17,8 +17,8 @@ Sanctification::Sanctification(Character* _owner) : ActiveSkill(_owner)
 	// 조건 추가
 	skillData.conditions.push_back(make_shared<ManaCondition>());
 	skillData.conditions.push_back(make_shared<CooldownCondition>()); 
-	//skillData.conditions.push_back(make_shared<AliveCondition>());
-	//skillData.conditions.push_back(make_shared<StunCondition>());
+	skillData.conditions.push_back(make_shared<AliveCondition>());
+	skillData.conditions.push_back(make_shared<StunCondition>());
 
 	SkillInit(this);
 }

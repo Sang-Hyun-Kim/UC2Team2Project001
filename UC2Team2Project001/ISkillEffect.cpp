@@ -9,12 +9,13 @@
 #include "StatComponent.h"
 #include "PlayerCharacter.h"
 #include "Inventory.h"
+#include "ConsoleLayout.h"
 
 void ILifeStealEffect::PostEffect()
 {
 	CharacterUtility::ModifyStat(parentSkill->GetTarget(), StatType::HP, lifeAmount);
 
-	cout << "흡혈 효과 발동" << endl;
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "흡혈 효과 발동", true, ConsoleColor::LightBlue);
 }
 
 IBuffEffect::IBuffEffect(shared_ptr<ICharacterState> _state, bool _isSelf)
@@ -45,7 +46,7 @@ void IDefenseBasedDamageEffect::PostEffect()
 
 	float defense = CharacterUtility::GetStat(self, StatType::Defense);
 
-	cout << "방어력 " << defense << "만큼 추가 대미지가 발생 했습니다." << endl;
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "방어력 "+ to_string(defense) + "만큼 추가 대미지가 발생", true, ConsoleColor::LightBlue);
 
 	target->combatManager->TakeDamage(defense);
 }
@@ -72,7 +73,7 @@ void IStunEffect::PostEffect()
 	Character* target = parentSkill->GetTarget();
 
 	target->statusManager->AddState(make_shared<StunState>(duration));
-	cout << "기절 상태 적용! " << target->GetName() << "이(가) 기절 했습니다." << endl;
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, target->GetName() + "이(가) 기절 했습니다." , true, ConsoleColor::LightBlue);
 }
 
 IPoisonEffect::IPoisonEffect(int _amountStack)
@@ -94,7 +95,7 @@ void IRemoveStateEffect::PostEffect()
 
 	if (!target || !target->statusManager)
 	{
-		std::cout << "대상이 없거나 상태 컴포넌트가 없습니다.\n";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "대상이 없거나 상태 컴포넌트가 없습니다.", true, ConsoleColor::Magenta);
 		return;
 	}
 
@@ -103,9 +104,13 @@ void IRemoveStateEffect::PostEffect()
 	bool isSuccess = statusComponent->RemoveState(stateType);
 
 	if (isSuccess)
-		cout << "성공했습니다 상태제거에" << endl;
+	{
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "상태제거 성공!", true, ConsoleColor::LightBlue);
+	}
 	else
-		cout << "실패했습니다 상태제거에" << endl;
+	{
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "상태제거 실패!", true, ConsoleColor::Magenta);
+	}
 }
 
 IHealingEffect::IHealingEffect(float _healAmount) : healAmount(_healAmount)
@@ -115,7 +120,7 @@ IHealingEffect::IHealingEffect(float _healAmount) : healAmount(_healAmount)
 void IHealingEffect::PreEffect()
 {
 	CharacterUtility::ModifyStat(parentSkill->GetTarget(), StatType::HP, healAmount);
-	cout << "인내심 발동! " << parentSkill->GetTarget()->GetName() << "이(가) 체력을 " << healAmount << "만큼 회복 했습니다." << endl;
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "인내심 발동! " + parentSkill->GetTarget()->GetName() + "이(가) 체력을 "+ to_string(healAmount) + "만큼 회복 했습니다.", true, ConsoleColor::LightBlue);
 }
 
 IUnbreakableEffect::IUnbreakableEffect()
@@ -142,7 +147,7 @@ void LuckyRewardEffect::PostEffect()
 				playerCharacter->inventoryComponent->addGold(goldAmount);
 
 				// 캐릭터의 골드 스탯 증가			
-				std::cout << owner->GetName() << "은(는) 스테이지 클리어로 " << goldAmount << "골드를 획득했습니다.\n";
+				ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, owner->GetName() + "은(는) 스테이지 클리어로 " + to_string(goldAmount) + "골드를 획득했습니다.", true, ConsoleColor::LightBlue);
 			}			
 		}
 	}
