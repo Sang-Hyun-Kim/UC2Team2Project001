@@ -512,6 +512,8 @@ public:
 
 - **ModifyDefenseState**: 방어력 증감 상태 => 지속 시간 동안 방어력이 증가 하거나 감소.
 
+- **StunState**: 기절 상태 => 지속 시간 동안 기절이 걸려서 행동이 불가함.
+
 - **PoisonState**: 중독 상태 => 지속 시간 동안 **중첩된 스택**에 비례한 독 피해를 입힘.
 
 - **UnbreakableState**: 불굴 상태 => 죽음에 이르는 피해를 입었을 경우 지속 시간 동안 체력을 1로 고정하고 지속 시간 내로 적을 처치시 체력을 20회복하고 불굴 상태를 해제. 지속 시간 내로 적을 처치하지 못했을 경우 불굴 상태를 해제하고 사망.
@@ -528,6 +530,7 @@ public:
 
 ### IPoisionEffect : 중독 효과
 중독 상태를 부여.
+- AddState로 상태이상을 추가하고 ApplyState로 상태이상 적용
 ```cpp
 
 void IPoisonEffect::PostEffect()
