@@ -746,9 +746,25 @@ public:
 	}
 ```
 ### GameSystem
-현재 플레이어가 위치한 공간을 의미하는 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
+현재 플레이어가 위치한 공간을 의미하는 인터페이스 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
 각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행한다.
-- Update(): 현재 GaemSystem에 설정된 로직을 의미하는 SystemState 기능을 수행한다
+#### GameSystem의 역할
+
+- 공통 인터페이스 제공
+	-GameSystem은 다른 시스템이 반드시 구현해야 하는 메서드나 동작의 틀을 정의합니다. 이를 통해 시스템이 서로 다른 구현을 가지더라도, 일정한 인터페이스로 접근할 수 있습니다.
+
+- 상태 관리 기능 제공
+	- 모든 시스템이 상태 기반으로 동작하도록 설계되어 있어, 상태 변경과 동작이 명확히 구분됩니다.
+
+- 유연한 확장성 보장
+	-구체적인 기능은 각 하위 클래스 (BattleSystem, ShopSystem, ...)에서 구현하며, GameSystem은 이를 통제하는 역할을 합니다.
+
+#### 주요 메서드
+1. +Update() : void 
+	- 설명: 시스템의 state가 가진 기능을 실행합니다. 
+	- 예시
+		- BattleMainState->Update();
+		- ShopSellState->Update();
 ```c++
 void GameSystem::Update()
 {
@@ -765,7 +781,20 @@ void GameSystem::Update()
 
 
 ```
-- 
+
+2. +EnterSystem() : void = 0;
+	- 설명: 시스템이 활성화될 때 호출됩니다. 각 하위 클래스는 이를 구현하여 시스템별 초기화 작업을 수행합니다.
+	- 예시
+		- ShopSystem: 상점 아이템 리스트 초기화.
+
+3. +ExitSystem : void = 0;
+	- 설명: 시스템이 비활성화될 때 호출됩니다. 시스템 종료 시 리소스를 정리하거나 다음 시스템으로 전환하는 역할을 합니다.
+	- 예시
+		- BattleSystem: 전투에서 사용된 몬스터 삭제
+4. + SetState(shared_ptr<ISystemState>)  void 및 + GetState() shared_ptr<ISystemState>
+	- 설명: 현재 시스템의 상태를 관리하는 메서드입니다. 상태 변경(SetState) 및 현재 상태 조회(GetState)를 제공합니다.
+	- 예시
+		- BattleSystem에서 상태가 BattleAttackState로 전환되면 SetState를 호출.
 ```c++
 class ISystemState
 {
@@ -792,6 +821,103 @@ protected:
 };
 
 ```
+5. OnEvent void
+	- 설명: 이벤트 기반 시스템과의 통신을 처리합니다.(EventManagerSystem을 상속) 하위 클래스에서 필요한 이벤트를 오버라이드하여 처리합니다.
+	- 예시
+		- BattleSystem: ICharacterDeadEvent 이벤트를 통해 캐릭터 사망 처리.
+		- ShopSystem: IItemPurchasedEvent 이벤트를 통해 아이템 구매 처리.
+
+#### 설계 특징
+1. 템플릿 메서드 패턴
+GameSystem의 메서드는 템플릿 메서드 패턴을 따릅니다.
+이는 공통 로직을 상위 클래스에서 제공하고, 세부 구현은 하위 클래스에서 정의하도록 하는 방식입니다.
+
+2. 상태 관리의 통합성
+state라는 공통 속성을 사용해 모든 시스템이 상태 기반으로 동작하도록 설계되었습니다.
+상태는 각각 ISystemState클래스의 하위 클래스로 정의됩니다.
+
+3. 추상화와 구현의 분리
+GameSystem은 인터페이스만 제공하며, 구체적인 로직은 하위 클래스에서 구현합니다.
+이 방식은 코드 확장성과 유지보수성을 크게 향상시킵니다.
+
+4. 이벤트 기반 설계
+OnEvent 메서드를 통해 이벤트 시스템과 유연하게 통합됩니다.
+이를 통해 시스템 간의 결합도를 낮추고, 이벤트 구독/발행 방식을 활용할 수 있습니다.
+
+#### GameSystem의 장점
+1. 일관된 인터페이스: 모든 시스템이 동일한 방식으로 접근 가능.
+2. 유연한 확장성: 새로운 시스템 추가 시 GameSystem을 상속받아 구현하면 됨.
+3. 캡슐화: 상태와 로직을 각 시스템 내부에 캡슐화하여, 다른 시스템과 독립적으로 작동 가능.
+4. 유지보수 용이성: 공통 동작은 GameSystem에, 개별 동작은 하위 클래스에 구현되어 수정이 용이.
+
+### LobbySystem
+GameSystem을 상속받는 LobbySystem은 플레이어가 게임을 시작하거나, 게임 패배 혹은 승리 후 돌아올 때 위치하는 로비 공간을 의미힌다. 로비에서는 게임을 시작하가나 종료하고 게임을 시작할 경우 플레이어를 생성하는 기능을 수행한다.
+- inline SystemType GetSystemType() override : 현재 플레이어가 위치한 로비의 값을 반환한다.
+- MainMenu() : 플레이어에게 게임 시작, 게임 종료 메뉴를 출력한 뒤, 플레이어에게 입력을 받는다.
+- CreatePlayerMenu() : 플레이어가 게임 시작시 플레이어의 이름을 입력 받고 입력 검증을 통해 플레이어 이름을 결정한다면, 이를 통해 초기 플레이어를 생성한다. 
+```cpp
+class LobbySystem : public GameSystem
+{
+public:
+
+	LobbySystem();
+	void EnterSystem() override;
+
+	inline SystemType GetSystemType() override
+	{ 
+		return SystemType::LOBBY;
+	}
+
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+
+	void MainMenu();
+	void CreatePlayerMenu();
+
+	virtual string GetSystemName() override { return "로비"; };
+private:
+	std::vector<std::string> orcArt;
+	std::vector<std::string> slimeArt;
+	std::vector<std::string> dragonArt;
+};
+```
+### LobbySystemStates
+LobbySystem은 Update() 함수가 호출되면 현재 설정된 LobbySystemState 값에 맞는 기능을 호출한다. 
+각 기능에 맞게 실행되도록 팩토리 패턴을 적용하였다.
+LobbyMainState: LobbySystem의 메인 메뉴가 실행 되도록 함.
+LobbyCreateState: LobbySystem의 플레이어 생성이 실행 되도록 함.
+```
+class LobbyMainState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto lobby = dynamic_cast<LobbySystem*>(_system);
+
+		if (lobby)
+		{
+			lobby->MainMenu();
+		}
+	}
+};
+
+class LobbyCreateState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto lobby = dynamic_cast<LobbySystem*>(_system);
+
+		if (lobby)
+		{
+			lobby->CreatePlayerMenu();
+		}
+	}
+};
+```
+
+
 ---
 ## 코드 시연 영상
 [![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
