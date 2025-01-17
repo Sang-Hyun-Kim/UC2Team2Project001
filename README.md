@@ -65,6 +65,9 @@
 ## 개요
 이 프로젝트의 **스킬 시스템**은 캐릭터의 스킬을 관리하기 위한 강력하고 확장 가능한 프레임워크를 제공합니다. 액티브 스킬과 패시브 스킬, 스킬 조건, 효과, 행동을 지원하며, 모듈성과 재사용성을 극대화하여 다른 부분에 영향을 주지 않고도 스킬을 추가, 수정, 삭제할 수 있습니다.
 
+##목표
+이 스킬 시스템은 강력하고 유연하게 설계되어, 다양한 기획 의도에 맞춰 스킬을 손쉽게 생성하고 구현할 수 있습니다. 
+
 ---
 
 ## 주요 구성 요소
@@ -74,6 +77,9 @@
 - **Skill**: 모든 스킬의 기본 클래스.
   - **ActiveSkill**: 캐릭터가 능동적으로 사용하는 스킬.
   - **PassiveSkill**: 특정 이벤트가 발생했을 때 자동으로 발동되는 스킬.
+ 
+![image](https://github.com/user-attachments/assets/9f95f6a4-675f-444a-abc4-5d19fc956370)
+
 
 #### 스킬 데이터 구조
 스킬은 `FSkillData` 구조체로 표현됩니다:
@@ -109,6 +115,8 @@ public:
     virtual void CannotUseSkill() = 0;        // 조건 실패 시 호출
 };
 ```
+![image](https://github.com/user-attachments/assets/fd6bbdf4-580c-4ec7-bd20-0663386967e3)
+
 
 ---
 
@@ -128,6 +136,10 @@ public:
 };
 ```
 
+![image](https://github.com/user-attachments/assets/7f2c9551-811c-44df-a054-0978c92e7db9)
+
+
+
 ---
 
 ### 4. **스킬 효과**
@@ -146,6 +158,10 @@ public:
     virtual void PostEffect() = 0; // 메인 액션 실행 후 실행
 };
 ```
+
+
+![image](https://github.com/user-attachments/assets/2022ea98-db54-4d9e-8749-b9a0def00bba)
+
 
 ---
 
@@ -237,8 +253,7 @@ SkillManager::GetInstance().RegisterSkill<NewSkill>();
 
 ---
 
-## 결론
-이 스킬 시스템은 강력하고 유연하게 설계되어 게임 개발의 다양한 요구를 충족시킵니다. 모듈화 원칙을 준수하여 유지보수와 확장성을 보장하며, RPG 또는 전략 게임의 훌륭한 기반이 됩니다.
+
 
 
 
