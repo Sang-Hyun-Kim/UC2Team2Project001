@@ -45,4 +45,5 @@
 // 코드블록(언어 C++)
 ```
 ## 코드 시연 영상
-https://youtu.be/LgUdFP0pCiY
+[![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
+
