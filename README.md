@@ -541,3 +541,152 @@ void IPoisonEffect::PostEffect()
 }
 
 ```
+
+# 아이템 시스템 문서 
+
+
+## Item  
+- 모든 아이템들이 공통으로 상속하는 클래스입니다.
+- 이 클래스를 상속해서 다양한 아이템을 정의할 수 있습니다.
+
+### 구조 
+- **itemNumber** : 아이템 고유 번호.
+- **name** : 아이템 이름
+- **description** : 아이템 설명
+- **value** :  아이템 가치
+
+### 주요 기능 
+**use** :  순수 가상 함수로 캐릭터를 대상으로 아이템을 사용하는 메서드
+
+#### <예시 코드>
+```cpp
+    Character player("Hero", 100);
+    shared_ptr<Item> potion = make_shared<HealthPotion>();
+    potion->use(&player);
+```
+
+**clone** : 프로토타입 패턴을 활용하여 아이템을 복제하는 함수로 아이템 매니저에 저장된 아이템을 반환할때 사용한다.
+
+#### <예시 코드>
+```cpp
+
+    //아이템 매니저에서 인스턴스를 가지고옴
+    ItemManager& itemManager = ItemManager::GetInstance();
+
+    // 인스턴스에 있는 아이템 가져와서 복제
+    shared_ptr<Item> clonedItem = itemManager.getItem(0)->clone();
+
+```
+
+**getInfoTextForShop** : 상점에서 사용하는 아이템 정보 반환
+
+#### <예시 코드>
+```cpp
+
+    // HealthPotion 객체 생성
+    shared_ptr<Item> potion = make_shared<HealthPotion>();
+
+    // 상점 정보를 출력
+    cout << potion->getInfoTextForShop() << endl;
+
+```
+
+
+## ItemManager  
+- 게임 내에서 관리되는 모든 아이템을 한 곳에서 관리하는 싱글턴 패턴 기반의 클래스 입니다.
+
+### 구조
+- **items** : unordered_map 을 사용해 고유한 키 값으로 아이템을 저장
+- **nextKey** : 아이템을 저장할 때 사용되는 다음 키 값.
+
+### 주요 기능
+**GetInstance** : 싱글턴으로 만들어진 아이템 매니저 인스턴스를 가져옵니다.
+
+#### <예시 코드>
+```cpp
+
+ItemManager::GetInstance();
+
+```
+
+**getRandomItem** : 아이템 매니저에 저장된 랜덤한 아이템 하나를 반환
+
+#### <예시 코드>
+```cpp
+
+ItemManager::GetInstance()-> getRandomItem();
+
+```
+
+## Inventory 
+- 플레이어가 소유한 아이템과 골드를 관리하는 클래스 입니다.
+- 이 클래스는 플레이어 클래스에서 생성됩니다.
+
+### 구조 
+- **addItem** , **removeItem** : 아이템 저장, 삭제
+
+#### <예시 코드>
+```cpp
+
+    // 플레이어 객체 생성
+    Player player("Hero");
+
+    // HealthPotion 아이템 추가
+    player.inventoryComponent->addItem(make_shared<HealthPotion>());
+    player.inventoryComponent->addItem(make_shared<HealthPotion>());
+
+```
+
+- **useItem** : 아이템을 특정 캐릭터를 대상으로 사용 가능.
+
+#### <예시 코드>
+```cpp
+
+    // 플레이어 객체 생성
+    Player player("Hero");
+    player.UseItem(0, &player);
+
+```
+
+- **IsEmpty**: 인벤토리가 비어 있는지 확인.
+
+#### <예시 코드>
+```cpp
+
+    // 플레이어 객체 생성
+    Player player("Hero");
+    player.inventoryComponent.IsEmpty();
+
+```
+
+- **addGold**, **removeGold** : 골드 추가 및 삭제.
+
+#### <예시 코드>
+```cpp
+    
+    Player player("Hero");
+
+    // 골드 추가
+    player.inventoryComponent.addGold(100); // 100 골드 추가
+
+    // 골드 소모
+    player.inventoryComponent.removeGold(50); // 50 골드 소모
+
+```
+
+- **displayInventory** : 현재 저장된 아이템과 골드 정보를 출력.
+
+#### <예시 코드>
+```cpp
+    
+    // 플레이어 객체 생성
+    Player player("Hero");
+    
+    // 인벤토리 정보 출력
+    // type = 0 : 아이템 명, 아이템 설명, 아이템 개수, 골드 출력
+    // type = 1 : 이름, 설명, 개수 출력
+    // type = 2 : 이름, 설명 출력 
+    player->inventoryComponent->displayInventory(0)
+
+```
+
