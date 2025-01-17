@@ -12,6 +12,7 @@ bool Skill::CanUseSkill()
 	{
 		if (!condition->Check(this))
 		{
+			condition->CannotUseSkill();
 			return false;
 		}
 	}

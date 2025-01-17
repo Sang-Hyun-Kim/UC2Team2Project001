@@ -49,8 +49,8 @@
     },
     "RedSlime": {
       "Stats": {
-        "HP": 80,
-        "MaxHP": 80,
+        "HP": 60,
+        "MaxHP": 60,
         "MP": 20,
         "MaxMP": 20,
         "AttackPower": 20,
@@ -149,12 +149,12 @@
     },
     "Dragon": {
       "Stats": {
-        "HP": 1000,
-        "MaxHP": 1000,
+        "HP": 800,
+        "MaxHP": 800,
         "MP": 0,
         "MaxMP": 0,
         "AttackPower": 20,
-        "Defense": 20,
+        "Defense": 10,
         "CriticalChance": 0.05,
         "EvasionRate": 0.0,
         "Level": 0,

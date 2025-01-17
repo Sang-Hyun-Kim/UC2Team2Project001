@@ -5,7 +5,7 @@
 #include "Character.h"
 #include "ConsoleLayout.h"
 
-DefenseBoostPotion::DefenseBoostPotion(int _id) : Potion(_id, "방어력 부스트 물약", "방어력을 5 증가하는 물약입니다.", 50)
+DefenseBoostPotion::DefenseBoostPotion(int _id) : Potion(_id, "방어력 부스트 물약", "방어력이 5 증가합니다.", 50)
 {
 }
 

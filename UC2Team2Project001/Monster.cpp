@@ -69,18 +69,18 @@ std::string Monster::DetermineMonsterName(int _playerLevel)
 
 	if (_playerLevel <= 3) 
 	{
-		possibleNames = { "Slime"};
-		//possibleNames = { "Slime", "Goblin" ,"RedSlime"};
+		//possibleNames = { "Slime"};
+		possibleNames = { "Slime", "Goblin" ,"RedSlime"};
 	}
 	else if (_playerLevel <= 5) 
 	{
-		possibleNames = { "Slime"};
-		//possibleNames = { "Goblin", "Troll" };
+		//possibleNames = { "Slime"};
+		possibleNames = { "Goblin", "Troll" };
 	}
 	else if (_playerLevel <= 9) 
 	{
-		possibleNames = { "Slime"};
-		//possibleNames = { "Troll", "Orc" };
+		//possibleNames = { "Slime"};
+		possibleNames = { "Troll", "Orc" };
 		//possibleNames = { "Slime"};
 	}
 	else 

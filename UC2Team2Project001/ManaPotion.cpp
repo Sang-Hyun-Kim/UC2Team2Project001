@@ -2,7 +2,7 @@
 #include "ManaPotion.h"
 #include "ConsoleLayout.h"
 
-ManaPotion::ManaPotion(int _id) : Potion(_id, "마나 물약", "마나를 회복하는 물약입니다.", 60)
+ManaPotion::ManaPotion(int _id) : Potion(_id, "마나 물약", "마나를 회복합니다.", 60)
 {
 }
 

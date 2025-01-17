@@ -69,7 +69,11 @@ void ModifyDefenseState::ApplyEffect(Character* _target)
 		CharacterUtility::ModifyStat(_target, StatType::Defense, modifyValue);
 		isApplied = true;
 
-		cout << "방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
+
+		std::string defenseLog = "🛡️ 방어력: " + std::to_string(beforeDefense) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::Defense));
+
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, defenseLog, true, ConsoleColor::LightGreen);
+
 	}
 }
 
@@ -77,7 +81,9 @@ void ModifyDefenseState::EffectBeforeRemove()
 {
 	float beforeDefense = CharacterUtility::GetStat(target, StatType::Defense);
 	CharacterUtility::ModifyStat(target, StatType::Defense, -modifyValue);
-	cout << "방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
+
+	std::string defenseLog = "🛡️ 방어력: " + std::to_string(beforeDefense) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::Defense));
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, defenseLog, true, ConsoleColor::LightGreen);
 }
 
 void PoisonState::ApplyStack(int _newStack)
@@ -91,7 +97,14 @@ void PoisonState::ApplyEffect(Character* _target)
 	if (_target && !IsExpired())
 	{
 		int CalculatedDamage = damagePerTurn * currentStack;
-		std::cout << _target->GetName() << "은(는) 중독되어 " << CalculatedDamage << "의 데미지를 받았습니다. " << "[스택: " << currentStack << ", 남은 턴: " << GetDuration() << "]\n";
+
+		std::string statePrint = "🤬" + _target->GetName() + " 중독! " +
+			std::to_string(CalculatedDamage) + " 데미지 " +
+			"[" + std::to_string(currentStack) + "스택, " +
+			std::to_string(GetDuration()) + "턴]";
+
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, statePrint, true, ConsoleColor::Magenta);
+
 		_target->statManager->ModifyStat(StatType::HP, -(float)CalculatedDamage);
 	}
 }
@@ -114,12 +127,18 @@ void UnbreakableState::ApplyEffect(Character* _target)
 	{
 		target->statusManager->RemoveState(typeid(UnbreakableState));
 		CharacterUtility::ModifyStat(target, StatType::HP, 20);
-		cout << target->GetName() << "의 불굴의 의지 상태가 해제되었습니다." << endl;
-		cout << target->GetName() << "의 체력이 20 회복 되었습니다." << endl;
+
+		std::string stateRemovedMsg = "💪 " + target->GetName() + "의 불굴 상태 해제!";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, stateRemovedMsg, true, ConsoleColor::LightBlue);
+
+		std::string hpRecoveryMsg = "❤️ 체력 +20";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, hpRecoveryMsg, true, ConsoleColor::LightBlue);
 		return;
 	}
 
-	cout << target->GetName() << "의 현제 체력 : " << CharacterUtility::GetStat(target, StatType::HP) << endl;
+	std::string currentHpMsg = "❤️ " + target->GetName() + " 체력: " + std::to_string(CharacterUtility::GetStat(target, StatType::HP));
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, currentHpMsg, true, ConsoleColor::LightBlue);
+
 }
 
 void UnbreakableState::EffectBeforeRemove()
@@ -135,7 +154,10 @@ void ModifyStatState::ApplyEffect(Character* _target)
 
 		CharacterUtility::ModifyStat(target, statType, value); // 스탯 증가/감소
 
-		cout << "스탯 상승 효과 발동!" << endl;
+		// 스탯 타입과 상승값을 로그에 표시
+		std::string statName = CharacterUtility::GetStatName(statType); // StatType을 문자열로 변환하는 유틸리티 함수 필요
+		std::string logMessage = "🌟 " + statName + "이(가) " + std::to_string(duration) + "턴 동안 " + std::to_string(value) + "만큼 상승";
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, logMessage, true, ConsoleColor::LightBlue);
 
 		isApplied = true;
 	}
@@ -146,9 +168,6 @@ void ModifyStatState::EffectBeforeRemove()
 	if (isApplied && target)
 	{
 		CharacterUtility::ModifyStat(target, statType, -value); // 원래 값 복구
-
-		cout << "스탯 상승 효과 해제" << endl;
-
 		isApplied = false;
 	}
 }
@@ -161,7 +180,10 @@ void CursedSealState::ApplyEffect(Character* _target)
 		if (_target->statManager)
 		{
 			_target->statManager->ModifyStat(StatType::HP, -(float)damage);
-			std::cout << _target->GetName() << "은(는) 저주의 인장 효과로 " << damage << "의 데미지를 받았습니다. [남은 HP: " << _target->statManager->GetStat(StatType::HP) << "]\n";
+
+			std::string curseEffectString = "😱" + _target->GetName() + " [HP: " + std::to_string(_target->statManager->GetStat(StatType::HP)) + "] 저주 피해 " + std::to_string(damage);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, curseEffectString, true, ConsoleColor::Magenta);
+
 		}
 	}
 }
@@ -198,9 +220,14 @@ void SanctificationState::ApplyEffect(Character* _target)
 
 		cout << endl;
 
-		cout << target->GetName() << "의 공격력 : " << beforeAttackPower << " ->" << CharacterUtility::GetStat(target, StatType::AttackPower) << endl;
-		cout << target->GetName() << "의 방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
-		cout << target->GetName() << "의 회피력 : " << beforeEvasionRate << " ->" << CharacterUtility::GetStat(target, StatType::EvasionRate) << endl;
+		std::string attackString = "🌟 " + target->GetName() + "의 공격력 : " + std::to_string(beforeAttackPower) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::AttackPower));
+		std::string defenseString = "🌟 " + target->GetName() + "의 방어력 : " + std::to_string(beforeDefense) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::Defense));
+		std::string evasionString = "🌟 " + target->GetName() + "의 회피력: " + std::to_string(beforeEvasionRate) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::EvasionRate));
+
+		// ConsoleLayout을 사용해 출력
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, attackString, true, ConsoleColor::Brown);
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, defenseString, true, ConsoleColor::Brown);
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, evasionString, true, ConsoleColor::Brown);
 
 		isApplied = true;
 	}
@@ -218,9 +245,17 @@ void SanctificationState::EffectBeforeRemove()
 		CharacterUtility::ModifyStat(target, StatType::Defense, -increasValue);
 		CharacterUtility::ModifyStat(target, StatType::EvasionRate, -(increasValue / 100));
 
-		cout << target->GetName() << "의 공격력 : " << beforeAttackPower << " ->" << CharacterUtility::GetStat(target, StatType::AttackPower) << endl;
-		cout << target->GetName() << "의 방어력 : " << beforeDefense << " ->" << CharacterUtility::GetStat(target, StatType::Defense) << endl;
-		cout << target->GetName() << "의 회피력 : " << beforeEvasionRate << " ->" << CharacterUtility::GetStat(target, StatType::EvasionRate) << endl;
+
+		std::string attackString = "🌟 공격력: " + std::to_string(beforeAttackPower) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::AttackPower));
+		std::string defenseString = "🌟 방어력: " + std::to_string(beforeDefense) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::Defense));
+		std::string evasionString = "🌟 회피력: " + std::to_string(beforeEvasionRate) + " -> " + std::to_string(CharacterUtility::GetStat(target, StatType::EvasionRate));
+		std::string statsString = target->GetName() + "🌟  [" + attackString + ", " + defenseString + ", " + evasionString + "]";
+
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, attackString, true, ConsoleColor::Brown);
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, defenseString, true, ConsoleColor::Brown);
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, evasionString, true, ConsoleColor::Brown);
+		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, statsString, true, ConsoleColor::Brown);
+
 
 		isApplied = false;
 	}
@@ -237,7 +272,8 @@ void RageState::ApplyEffect(Character* _target)
 		float currentAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
 		CharacterUtility::ModifyStat(target, StatType::AttackPower, currentAttackPower * (damageMultiplier - 1));
 
-		std::string effectString = target->GetName() + "이(가) 분노를 모으는 중입니다! 다음 기본 공격에 " + to_string(damageMultiplier * 100) + "% 피해를 입힙니다.";
+
+		std::string effectString = "🌟" + target->GetName() + " 분노 중! 다음 공격 " + std::to_string(damageMultiplier * 100) + "% 피해";
 		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, effectString, true, ConsoleColor::Brown);
 	}
 
@@ -251,7 +287,7 @@ void RageState::EffectBeforeRemove()
 		float currentAttackPower = CharacterUtility::GetStat(target, StatType::AttackPower);
 		CharacterUtility::ModifyStat(target, StatType::AttackPower, -(currentAttackPower / damageMultiplier * (damageMultiplier - 1)));
 
-		std::string effectString = target->GetName() + "의 분노 상태가 종료되었습니다.";
+		std::string effectString = "😳" + target->GetName() + "의 분노 상태 종료 .";
 		ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, effectString, true, ConsoleColor::Brown);
 
 		isApplied = false;

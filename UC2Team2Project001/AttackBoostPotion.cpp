@@ -6,7 +6,7 @@
 #include "UStatusComponent.h"
 #include "ConsoleLayout.h"
 
-AttackBoostPotion::AttackBoostPotion(int _id) : Potion(_id,"공격력 부스트 물약", "공격력을 5 증가하는  물약입니다.", 50) {}
+AttackBoostPotion::AttackBoostPotion(int _id) : Potion(_id,"공격력 부스트 물약", "공격력이 5 증가 합니다.", 50) {}
 
 bool AttackBoostPotion::use(Character* _target)
 {

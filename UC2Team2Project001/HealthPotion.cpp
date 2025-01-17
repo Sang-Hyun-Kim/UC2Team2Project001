@@ -4,7 +4,7 @@
 #include "StatComponent.h"
 #include "ConsoleLayout.h"
 
-HealthPotion::HealthPotion(int _id): Potion(_id, "체력 물약", "체력을 회복하는 물약입니다.", 50)
+HealthPotion::HealthPotion(int _id): Potion(_id, "체력 물약", "체력을 회복합니다.", 50)
 {
 
 }

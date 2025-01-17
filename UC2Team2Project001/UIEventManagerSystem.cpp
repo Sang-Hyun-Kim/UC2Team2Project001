@@ -115,9 +115,13 @@ UIEventManagerSystem::UIEventManagerSystem()
 		});
 	Subscribe<IPlayerAddSkillEvent>([](IPlayerAddSkillEvent* e)
 		{
-			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "스킬 " + e->skillName + "이(가) " + e->ownerName + "에게 추가되었습니다.");
+			if (e->bIsPlayer)
+			{
+				std::string skillNotify = "💎" + e->ownerName + "님이 " + e->skillName + "스킬 획득 성공";
+				ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillNotify, true, ConsoleColor::LightBlue);
+			}
 		});
-	
+
 	// IPlayerBattleAttackEvent를 처리하는 핸들러 등록
 	//Subscribe<IPlayerBattleAttackEvent>([](IPlayerBattleAttackEvent*)
 	//	{
@@ -133,27 +137,34 @@ UIEventManagerSystem::UIEventManagerSystem()
 	// IPlayerDefeatEvent를 처리하는 핸들러 등록
 	Subscribe<IPlayerDefeatEvent>([](IPlayerDefeatEvent*)
 		{
-			std::cout << "플레이어가 사망하였습니다.\n게임 로비로 귀환합니다.\n";
-			std::cout << "--------------------------------------------------\n"
-				<< "                  게  임  패  배                   \n"
-				<< "---------------------------------------------------\n";
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "플레이어가 사망하였습니다.\n게임 로비로 귀환합니다.");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "--------------------------------------------------");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "                  게  임  패  배                   ");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "---------------------------------------------------");
+			Delay(1);
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 		});
 
 	// IPlayerGameClearEvent를 처리하는 핸들러 등록
 	Subscribe<IPlayerGameClearEvent>([](IPlayerGameClearEvent*)
 		{
-			std::cout << "보스 몬스터를 쓰러트렸습니다. 게임 클리어!!!\n";
-			std::cout << "--------------------------------------------------\n"
-				<< "                  게 임 클 리 어                   \n"
-				<< "---------------------------------------------------\n";
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "보스 몬스터를 쓰러트렸습니다. 게임 클리어!!!");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "--------------------------------------------------");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "                  게 임 클 리 어                   ");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "---------------------------------------------------");
 		});
 
 	// ICharacterLevelUpEvent를 처리하는 핸들러 등록
 	Subscribe<ICharacterLevelUpEvent>([](ICharacterLevelUpEvent*)
 		{
-			std::cout << "--------------------------------------------------\n"
-				<< "                플 레 이 어 레 벨 업              \n"
-				<< "---------------------------------------------------\n";
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "--------------------------------------------------");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "                플 레 이 어 레 벨 업              ");
+			ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "---------------------------------------------------");
+			Delay(1);
+			ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
 		});
 	Subscribe<IPauseEnterEvent>([](IPauseEnterEvent* ev)
 		{

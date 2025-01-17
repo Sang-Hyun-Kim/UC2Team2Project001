@@ -158,19 +158,19 @@ void UStatsComponent::PrintStatus(int type)
 	oss.precision(1); // 소수점 이하 1자리
 
 	layout.AppendLine(_consoleRegion, "=================== 캐릭터 정보 ===================");
-	layout.AppendLine(_consoleRegion, "이름    : " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
-	layout.AppendLine(_consoleRegion, "레벨    : " + std::to_string(int(stats[StatType::Level])));
-	layout.AppendLine(_consoleRegion, "경험치  : " + FormatFloat(stats[StatType::Experience]) + " / " + FormatFloat(stats[StatType::MaxExperience]));
+	layout.AppendLine(_consoleRegion, "👤이름    : " + (ownedCharacter ? ownedCharacter->GetName() : "None"));
+	layout.AppendLine(_consoleRegion, "⭐레벨    : " + std::to_string(int(stats[StatType::Level])));
+	layout.AppendLine(_consoleRegion, "📈경험치  : " + FormatFloat(stats[StatType::Experience]) + " / " + FormatFloat(stats[StatType::MaxExperience]));
 
 	//layout.AppendLine(ConsoleRegionType::LeftTop, "================ 캐릭터 스테이터스 ================");
 
-	layout.AppendLine(_consoleRegion, "HP      : " + std::to_string(int(stats[StatType::HP])) + " / " + std::to_string(int(stats[StatType::MaxHP])));
-	layout.AppendLine(_consoleRegion, "MP      : " + std::to_string(int(stats[StatType::MP])) + " / " + std::to_string(int(stats[StatType::MaxMP])));
-	
-	layout.AppendLine(_consoleRegion, "공격력  : " + FormatFloat(stats[StatType::AttackPower]));
-	layout.AppendLine(_consoleRegion, "방어력  : " + FormatFloat(stats[StatType::Defense]));
-	layout.AppendLine(_consoleRegion, "치명타율: " + FormatFloat(stats[StatType::CriticalChance] * 100) + "%");
-	layout.AppendLine(_consoleRegion, "회피율  : " + FormatFloat(stats[StatType::EvasionRate]) + "%");
+	layout.AppendLine(_consoleRegion, "❤️HP      : " + std::to_string(int(stats[StatType::HP])) + " / " + std::to_string(int(stats[StatType::MaxHP])));
+	layout.AppendLine(_consoleRegion, "💧MP      : " + std::to_string(int(stats[StatType::MP])) + " / " + std::to_string(int(stats[StatType::MaxMP])));
+
+	layout.AppendLine(_consoleRegion, "⚔️공격력  : " + FormatFloat(stats[StatType::AttackPower]));
+	layout.AppendLine(_consoleRegion, "🛡️방어력  : " + FormatFloat(stats[StatType::Defense]));
+	layout.AppendLine(_consoleRegion, "🎯치명타율: " + FormatFloat(stats[StatType::CriticalChance] * 100) + "%");
+	layout.AppendLine(_consoleRegion, "🏃회피율  : " + FormatFloat(stats[StatType::EvasionRate]) + "%");
 	layout.AppendLine(_consoleRegion, "==================================================");
 }
 

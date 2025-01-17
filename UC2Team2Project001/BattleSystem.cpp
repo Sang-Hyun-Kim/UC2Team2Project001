@@ -101,14 +101,9 @@ void BattleSystem::EnterSystem()
 void BattleSystem::MainMenu()
 {
 	// 라운드 시작할때 몬스터 현재 상태 출력
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+	DisplayStat();
 
-	auto player = GSystemContext->GetPlayer();
-	player.get()->PrintCharacterInfo();
-	monster.get()->PrintCharacterInfo(1);
+
 
 	int input = InputManagerSystem::GetInput<int>(
 		"==== 전투 메뉴 ====",
@@ -195,7 +190,9 @@ void BattleSystem::Attack()
 	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
 	
 	turnSystem->EndTurn(activeCharacters);
-	
+
+	DisplayStat();
+
 	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
 
 	InputManagerSystem::PauseUntilEnter();
@@ -205,13 +202,14 @@ void BattleSystem::Attack()
 void BattleSystem::DisplayStat()
 {
 	//CLEAR;
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+
 	auto player = GSystemContext->GetPlayer();
-	CharacterUtility::PrintStatus(player.get());
-
-	InputManagerSystem::PauseUntilEnter();
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
-
-	state = make_shared<BattleMainState>();
+	player.get()->PrintCharacterInfo();
+	monster.get()->PrintCharacterInfo(1);
 }
 
 void BattleSystem::UseItem()
@@ -265,7 +263,6 @@ void BattleSystem::NextStage()
 	else
 	{	
 		GetReward();
-		//CLEAR;
 
 		int input = InputManagerSystem::GetInput<int>(
 			"==== 스테이지 클리어 메뉴 ====",
@@ -352,7 +349,7 @@ void BattleSystem::GetReward()
 
 		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
 		GInvoker->ExecuteCommand(cmd);
-		
+		Delay(1);
 		//SkillManager::GetInstance().AddSelectSkillToCharacter(reward.skillTypes[input], player.get());
 	}
 

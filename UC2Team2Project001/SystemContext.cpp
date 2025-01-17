@@ -72,7 +72,7 @@ void SystemContext::CreateCharacter(string _name)
 	for (int i = 0; i < skillSize; i++)
 	{
 		shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(skills[i], player.get());
-		options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
+		options.push_back(to_string(i + 1) + ". " + skill->GetSkillData().skillName);
 	}
 
 	int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, skillSize));

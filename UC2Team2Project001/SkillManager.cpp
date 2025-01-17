@@ -74,7 +74,7 @@ SkillManager::SkillManager()
 
 	RegisterSkill<LuckyGuy>();
 	RegisterSkill<CursedSeal>();
-	
+
 
 	passiveSkillList.push_back(typeid(Plague));
 	passiveSkillList.push_back(typeid(LuckyGuy));
@@ -167,7 +167,7 @@ void SkillManager::AddRandomSkillToCharacter(Character* _owner, SkillType _skill
 	_owner->skillManager->AddSkill(newSkill);
 	if (auto player = dynamic_cast<Player*>(_owner))
 	{
-		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName(), _owner->bIsPlayer);
 		GlobalEventManager::Get().Notify(event);
 	}
 }
@@ -194,11 +194,12 @@ void SkillManager::AddUniqueSkillToCharacter(Character* _owner, SkillType _skill
 		return;
 	}
 
-	_owner->skillManager->AddSkill(newSkill);	
+	_owner->skillManager->AddSkill(newSkill);
 
 	if (auto player = dynamic_cast<Player*>(_owner))
 	{
-		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName(), _owner->bIsPlayer);
 		GlobalEventManager::Get().Notify(event);
 	}
 }
@@ -275,12 +276,11 @@ void SkillManager::AddSelectSkillToCharacter(const type_index& _skillType, Chara
 
 	if (auto player = dynamic_cast<Player*>(_owner))
 	{
-		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName());
+		auto event = make_shared<IPlayerAddSkillEvent>(newSkill->GetSkillData().skillName, _owner->GetName(), _owner->bIsPlayer);
 		GlobalEventManager::Get().Notify(event);
 	}
-	
-	std::string skillNotify = newSkill->GetSkillData().skillName + " 스킬 획득에 성공했습니다.";
-	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, skillNotify, true, ConsoleColor::Green);
+
+
 	_owner->skillManager->AddSkill(newSkill);
 
 }
