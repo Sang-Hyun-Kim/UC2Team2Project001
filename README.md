@@ -39,7 +39,7 @@
 
 ### 기능설명
   - 전체 시스템 플로우 차트
-  ![Image](https://github.com/user-attachments/assets/42e664dd-1a6e-4bb5-925e-e050a6328a21)
+![Image](https://github.com/user-attachments/assets/a08c011c-f997-4643-b899-b0e1a9d912bb)
 
 ```C++
 // 코드블록(언어 C++)
