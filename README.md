@@ -420,29 +420,7 @@ SkillManager::GetInstance().RegisterSkill<NewSkill>();
 ---
 
 
-
-
----
-```C++
-// 코드블록(언어 C++)
-```
-## 코드 시연 영상
-[![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 상태 시스템 문서
+## 상태 시스템 문서
 
 ## 개요
 **상태 시스템**은 캐릭터의 상태를 관리하기 위한 확장 가능한 프레임워크를 제공합니다.
@@ -545,7 +523,10 @@ void IPoisonEffect::PostEffect()
 
 ```
 
-# 아이템 시스템 문서 
+---
+
+
+## 아이템 시스템 문서 
 
 
 ## Item  
@@ -692,4 +673,25 @@ ItemManager::GetInstance()-> getRandomItem();
     player->inventoryComponent->displayInventory(0)
 
 ```
+
+
+## 코드 시연 영상
+[![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
