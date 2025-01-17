@@ -675,6 +675,11 @@ ItemManager::GetInstance()-> getRandomItem();
 ```
 
 
+
+## 게임 시스템
+---
+
+---
 ## 코드 시연 영상
 [![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
 
