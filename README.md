@@ -40,6 +40,9 @@
 ### 기능설명
   - 전체 시스템 플로우 차트
 ![Image](https://github.com/user-attachments/assets/a08c011c-f997-4643-b899-b0e1a9d912bb)
+  - UML: https://lucid.app/lucidchart/b9180622-3661-4862-aa7a-6da03484a47f/edit?invitationId=inv_5c977377-3e9a-475c-99cc-0a27c18cc749&page=Qq6J2hiGBQnQ#
+    
+
 
 ```C++
 // 코드블록(언어 C++)
