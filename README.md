@@ -678,7 +678,120 @@ ItemManager::GetInstance()-> getRandomItem();
 
 ## 게임 시스템
 ---
+### 개요
+게임 시스템은 프로젝트에서 플레이어가 머무는 공간을 의미한다. Gamesystem 은 SystemContext 클래스를 통해 서로 다른 GameSystem으로 이동 및 현재 GameSystem에서 수행되어야 하는 기능을 호출하는 Update 함수를 통해 현재 System에 설정되어있는 SystemState에 맞는 기능을 수행한다.
 
+### 주요 클래스
+- SystemContext
+- GameSystem
+- LobbySystem 과 LobbySystemStates
+- BattleSystem 과 BattleSystemStates
+- ShopSystem
+
+### SystemContext
+SystemContext 클래스는 GameSystem을 상속받는 서브 클래스의 로직이 main 코드에서 반복문으로 실행 될 수 있도록 GameSystem::Update() 호출하는 클래스이다. 또한, 현재 플레이어가 위치한 GameSystem을 관리하는 기능을 수행한다.
+- Update(): 현재 설정된 Gamesystem의 로직을 호출하는 함수이다.
+- MoveSystem(): GameSystem간 이동을 수행하는 함수이다.
+```c++
+enum class SystemType
+{
+	LOBBY,
+	BATTLE,
+	SHOP
+};
+
+class SystemContext : public IEventManagerSystem
+{
+public:
+	SystemContext();
+	~SystemContext();
+
+	SystemContext(const SystemContext&) = delete;
+	SystemContext& operator=(const SystemContext&) = delete;
+
+	void Update();
+
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+	inline shared_ptr<class Player> GetPlayer() 
+	{
+		return player; 
+	}
+
+	shared_ptr<GameSystem> GetCurrentSystem()
+	{ 
+		return currentSystem; 
+	}
+private:
+	void MoveSystem(SystemType _to, SystemType _from);
+
+public:
+	void CreateCharacter(string _name);
+
+	shared_ptr<GameSystem> currentSystem = nullptr;
+
+	shared_ptr<LobbySystem> lobbySystem;
+	shared_ptr<BattleSystem> battleSystem;
+	shared_ptr<ShopSystem> shopSystem;
+
+	shared_ptr<Player> player;
+};
+```
+
+```C++
+	extern shared_ptr<SystemContext> GSystemContext;
+
+	while (true)
+	{
+		GSystemContext->Update(); // Update()로 변경해야함
+	}
+```
+### GameSystem
+현재 플레이어가 위치한 공간을 의미하는 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
+각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행한다.
+- Update(): 현재 GaemSystem에 설정된 로직을 의미하는 SystemState 기능을 수행한다
+```c++
+void GameSystem::Update()
+{
+	//ChangeState();
+	if (state)
+	{
+		state->Excute(this);
+	}
+	else
+	{
+		throw std::runtime_error("GameSystem의 state가 nullptr입니다.");
+	}
+}
+
+
+```
+- 
+```c++
+class ISystemState
+{
+public:
+	virtual ~ISystemState() = default;
+
+	virtual void Excute(GameSystem* system) = 0;
+};
+
+class GameSystem : public IEventManagerSystem
+{
+public:
+	inline virtual SystemType GetSystemType() = 0;
+	
+	virtual void EnterSystem() = 0; // 시스템이 시작될 때 수행될 함수(Initialize)
+	void Update(); // system의 로직 수행을 수행하는 함수, 반복
+	//void ExitSystem(SystemType nextType); // 시스템을 나가야할 때 수행할 함수
+	virtual ~GameSystem() {};
+	//virtual void ChangeState() = 0;
+	void SetState(shared_ptr<ISystemState> _state) { state = _state; }
+	virtual string GetSystemName() = 0;
+protected:
+	shared_ptr<ISystemState> state;
+};
+
+```
 ---
 ## 코드 시연 영상
 [![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
