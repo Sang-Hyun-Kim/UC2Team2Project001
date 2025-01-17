@@ -44,3 +44,5 @@
 ```C++
 // 코드블록(언어 C++)
 ```
+## 코드 시연 영상
+https://youtu.be/LgUdFP0pCiY
