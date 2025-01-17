@@ -38,6 +38,9 @@
   - others: Git Desktop
 
 ### 기능설명
+  - 전체 시스템 플로우 차트
+  ![Image](https://github.com/user-attachments/assets/42e664dd-1a6e-4bb5-925e-e050a6328a21)
+
 ```C++
 // 코드블록(언어 C++)
 ```
