@@ -439,5 +439,95 @@ SkillManager::GetInstance().RegisterSkill<NewSkill>();
 
 
 
+# 상태 시스템 문서
+
+## 개요
+**상태 시스템**은 캐릭터의 상태를 관리하기 위한 확장 가능한 프레임워크를 제공합니다.
+각 상태는 모듈성과 재사용성을 극대화하여 다른 부분에 영향을 주지 않고도 상태를 추가, 수정, 삭제할 수 있습니다.
+
+## 목표
+
+상태 시스템은 손쉽게 생성하고 구현해서 원하는 스킬 효과에 넣어서 사용 가능합니다.
+
+---
+
+## 주요 구성 요소
+
+### 1. **상태 클래스 계층 구조**
+상태 시스템의 핵심 클래스는 다음과 같이 구성됩니다.
+- **UStatusComponent**: 캐릭터에 대해 상태 추가 및 제거 등 상태를 관리하는 클래스
+ - **ICharacterStatus**: 모든 상태의 기본 인터페이스
+
+- 상태 효과 적용(대미지, 버프, 디버프 등)
+- 매 턴마다 지속 시간 감소
+- 상태가 만료되었는지 확인
+- 상태가 제거되기 전에 호출 (스탯 복구 로직 등)
+- 상태 이름 반환
+- 지속 시간 반환
+- 지속 시간 설정
+- 상태 스택 추가
+- 상태 이름
+- 상태 지속 시간
+- 상태 스택
+
+```cpp
+
+class ICharacterState
+{
+public:
+	ICharacterState(const string& _inStateName, int _inDuration) : stateName(_inStateName), duration(_inDuration);
+	virtual ~ICharacterState();
+	virtual void ApplyEffect(Character* _target) = 0;
+	virtual void TickDuration();
+	virtual bool IsExpired() const;
+	virtual void EffectBeforeRemove();
+	virtual const std::string& GetStateName() const;
+	virtual int GetDuration() const;
+	virtual void SetDuration(int _newDuration);
+	virtual void ApplyStack(int _newStack);
+protected:
+	string stateName;
+	int duration;
+public:
+	int currentStack = 1;
+};
+
+```
+
+### 상태 구조
+상태는 이름, 지속시간, 스택을 기본으로 각 하위 클래스에서 상태 효과를 구현 합니다.
+
+---
+
+### 2. **상태 발생 흐름**
+상태는 스킬 내부 효과 발생 부분에서 대상 캐릭터에 적용되고 상태에 따라 즉시 혹은 턴이 끝나는 시점 등 다양한 시기에 효과가 발생 합니다.
+
+### 스킬 사용 -> 스킬 액션 이전 효과 발생(**상태 효과 부여 가능**) -> 스킬 액션  발생 -> 스킬 액션 이후 효과 발생(**상태효과 부여 가능**)
+
+---
+
+### 3. **구현된 상태 효과**
+-**BurnState**: 화상 상태 => 지속 시간 동안 일정한 화상 피해를 입힘.
+-**ModifyDefenseState**: 방어력 증감 상태 => 지속 시간 동안 방어력이 증가 하거나 감소.
+-**PoisonState**: 중독 상태 => 지속 시간 동안 **중첩된 스택**에 비례한 독 피해를 입힘.
+-**UnbreakableState**: 불굴 상태 => 죽음에 이르는 피해를 입었을 경우 지속 시간 동안 체력을 1로 고정하고 지속 시간 내로 적을 처치시 체력을 20회복하고 불굴 상태를 해제. 지속 시간 내로 적을 처치하지 못했을 경우 불굴 상태를 해제하고 사망.
+-**ModifyStatState**: 스탯 수정 상태 => 지속 시간 동안 스탯이 증가 하거나 감소.
+-**CursedSealState**: 저주 상태 => 지속 시간 동안 일정한 피해를 입힘.
+-**SanctificationState**: 신성화 상태 => 지속 시간 동안 시전자는 공격력, 방어력, 회피력이 증가, 적은 각 스탯 감소.
+-**RageState**: 분노 상태 => 한 턴 아무 것도 하지 않고, 다음 한 턴 기본 공격에 공격력의 500% 피해를 입힘.
 
 
+## 스킬 효과에 상태 적용 예시
+
+### IPoisionEffect : 중독 효과
+중독 상태를 부여.
+```cpp
+
+void IPoisonEffect::PostEffect()
+{
+	Character* target = parentSkill->GetTarget();
+
+	target->statusManager->AddState(make_shared<PoisonState>(2, 5, amountStack));
+}
+
+```
