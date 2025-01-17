@@ -1156,25 +1156,204 @@ void BattleSystem::MainMenu()
 }
   ```
 
--  Attack(): 플레이어가 공격을 선택한다면 실행되는 함수이다. 플레이어가 가지고 있는 스킬 목록들을 선택지로 출력한 뒤, 플레이어에게 입력을 받는다. 입력이 알맞은지 검증 또한 수행한다. 돌아가기 버튼을 누른다면 다시 MainState가 수행되도록 하며 스킬을 사용한 경우 대상에게 스킬 효과를 부여한다. 그리고 플레이어가 공격한다면 몬스터가 자동으로 반격하게 한다. 몬스터가 플레이어 상대로 공격하도록 몬스터의 공격 기능을 수행합니다. 각 공격은 수행시 플레이어와 몬스터의 사망 여부를 체크하고 사망시 이벤트 호출을 통해 다음 BattleSystemstate로 변환 될 작업인 BattleSystem::OnEvent() 함수를 수행하도록 구현했습니다.
+-  Attack(): 플레이어가 공격을 선택한다면 실행되는 함수이다. 플레이어가 가지고 있는 스킬 목록들을 선택지로 출력한 뒤, 플레이어에게 입력을 받는다. 입력이 알맞은지 검증 또한 수행합니다. 돌아가기 버튼을 누른다면 다시 MainState가 수행되도록 하며 스킬을 사용한 경우 대상에게 스킬 효과를 부여한다. 그리고 플레이어가 공격한다면 몬스터가 자동으로 반격하게 한다. 몬스터가 플레이어 상대로 공격하도록 몬스터의 공격 기능을 수행합니다. 각 공격은 수행시 플레이어와 몬스터의 사망 여부를 체크하고 사망시 이벤트 호출을 통해 다음 BattleSystemstate로 변환 될 작업인 BattleSystem::OnEvent() 함수를 수행하도록 구현했습니다.
   ```C++
+void BattleSystem::Attack()
+{
+	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
+	GlobalEventManager::Get().Notify(battleitemcheck);
 
+	auto player = GSystemContext->GetPlayer();
+
+	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
+	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
+	// 1~n: 가지고 있는 스킬
+	// n+1: 돌아가기
+	int returnButton = activeSkillList.size() + 1; // 돌아가기 버튼
+	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
+
+	int input = InputManagerSystem::GetInput<int>(
+		"==================  스킬 사용 ===================",
+		activeSkillList,
+		RangeValidator<int>(1, returnButton)
+	);
+
+	if (input == returnButton)
+	{
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleMainState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleMainState>();
+		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
+	}
+	else
+	{ // 스킬 사용
+		
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
+		auto player = GSystemContext->GetPlayer();
+
+		state = make_shared<BattleMainState>();
+		
+		if (!player->skillManager->UseSkill(player->skillManager->GetActiveSkillNameByIndex(input - 1)))
+		{
+			state = make_shared<BattleMainState>();
+			return;
+		}
+	}
+
+	// 몬스터 공격
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
+	monster->combatManager->SetTarget(player.get());
+
+	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
+	GlobalEventManager::Get().Notify(monsterAttackEv);
+
+	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
+	
+	turnSystem->EndTurn(activeCharacters);
+
+	DisplayStat();
+
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
+
+	InputManagerSystem::PauseUntilEnter();
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+}
   ```
   
--  DisplayStat();
+-  DisplayStat(): 전투중 플레이어의 현재 상태를 출력합니다
   ```C++
+void BattleSystem::DisplayStat()
+{
+	//CLEAR;
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
 
+	auto player = GSystemContext->GetPlayer();
+	player.get()->PrintCharacterInfo();
+	monster.get()->PrintCharacterInfo(1);
+}
   ```
--  UseItem();
+-  UseItem(): 플레이어가 가지고 있는 현재 아이템 목록을 출력합니다. 아이템을 사용하거나 돌아간다면 다시 전투 메인메뉴를 출력하도록 합니다.
   ```C++
+void BattleSystem::UseItem()
+{
+	//CLEAR;
 
-  ```
--  NextStage();
-  ```C++
+	auto battleitemcheck = make_shared<IBattleUseItemEvent>();
+	GlobalEventManager::Get().Notify(battleitemcheck);
+	
+	auto player = GSystemContext->GetPlayer();
+	vector<string> itemList = player->inventoryComponent->GetInventoryInfoWithString(1);
+	
+	int lastIndex = itemList.size() + 1;
 
+	itemList.push_back(to_string(lastIndex) +". 돌아가기");
+	int input = InputManagerSystem::GetInput<int>(
+		"=== 아이템 사용 ===", 
+		itemList,
+		RangeValidator<int>(1, lastIndex)
+	);
   ```
--  GameOver() :
+-  NextStage(): 플레이어가 몬스터와의 전투에서 승리하면 호출되는 함수입니다. 처치한 몬스터가 보스인 경우 플레이어가 승리했다는 UI를 출력한 뒤 LobbySystem으로 돌아가도록 SystemContext::currentSystem 멤버 변수 값을 재설정합니다.
+만약 플레이어가 일반 몬스터를 처치한 경우에는 플레이어에게 보상을 부여하는 GetReward() 함수를 호출한 다음 스테이지 또는 상점을 방문할 수있는 UI 출력 및 입력을 받습니다. 이때 입력을 검증합니다.
+
   ```C++
+void BattleSystem::NextStage()
+{
+	if (monster->IsBoss())
+	{	
+		// 보스 몬스터
+		// 게임 승리 UI 출력
+		auto playergameclear = make_shared<IPlayerGameClearEvent>();
+		GlobalEventManager::Get().Notify(playergameclear);
+
+		// 게임 승리로 로비로 귀환,
+		// 이때까지 동작한 로그라던가는 여기서 출력하시면 됩니다
+
+		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
+		GlobalEventManager::Get().Notify(event);
+		InputManagerSystem::PauseUntilEnter();
+		ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+		return;
+	}
+	else
+	{	
+		GetReward();
+
+		int input = InputManagerSystem::GetInput<int>(
+			"==== 스테이지 클리어 메뉴 ====",
+			{ "1. 다음 스테이지" , "2. 상점 방문하기" },
+			RangeValidator<int>(1, 2)
+		);
+
+		if (input == 1)
+		{
+			EnterSystem();
+		}
+		else if (input == 2)
+		{
+			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType(), "상점", "배틀");
+			GInvoker->ExecuteCommand(cmd);
+		}
+	}
+}
+  ```
+- GetReward() : 플레이어에게 보상을 부여하는 함수입니다. 플레이어는 일반 몬스터를 처치시 일반 몬스터가 가진 돈과 아이템을 받으며 경험치를 부여 받습니다. 또한 스킬을 선택해서 가질 수 있게 합니다.
+```C++
+void BattleSystem::GetReward()
+{
+	auto player = GSystemContext->GetPlayer();
+	auto reward = rewardSystem->GetReward();
+
+	player->inventoryComponent->addGold(reward.gold); // 돈 넣기
+
+	if (monster->characterReward.dropItem != nullptr)
+	{
+		auto playergetitem = make_shared<IPlayerGetItemEvent>();
+		GlobalEventManager::Get().Notify(playergetitem);
+		player->inventoryComponent->addItem(reward.item); // 템 넣기
+	}
+
+	int skillSize = reward.skillTypes.size();
+	
+	if (reward.skillTypes.size() > 0)
+	{
+		vector<string> options;
+
+		for (int i = 0; i < skillSize; i++)
+		{
+			shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
+			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
+		}
+
+		int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, reward.skillTypes.size()));
+
+		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
+		GInvoker->ExecuteCommand(cmd);
+		Delay(1);
+	}
+
+	CharacterUtility::ModifyStat(player.get(), StatType::Experience, rewardSystem->GetReward().exp);
+	monster = nullptr;
+
+	auto battlestageclear = make_shared<IPlayerStageClearEvent>();
+	GlobalEventManager::Get().Notify(battlestageclear);
+}
+```
+-  GameOver() : 플레이어가 패배했을 시 호출 되는 함수입니다. 다시 로비로 되돌아 가도록 SystemContext의 OnEvent() 를 호출 하도록 GlobalEventManager::Notify()를 호출합니다.
+  ```C++
+void BattleSystem::GameOver()
+{
+	auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
+	GlobalEventManager::Get().Notify(playergamedefeat);
+
+	auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
+	GlobalEventManager::Get().Notify(event);
+}
 
   ```
 
