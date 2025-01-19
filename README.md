@@ -1,5 +1,5 @@
 # 팀명: Auto
----
+
 ## 프로젝트 명: 뒷 동네 마왕 잡으러 가기
 ## 프로젝트 개요
   - 프로젝트 작업 기간: 2025/01/10 ~ 2025/01/16
@@ -10,7 +10,7 @@
   - 플레이어가 수동 전투를 진행하며 스킬과 아이템을 자유롭게 사용하며, 현재 자신의 스탯 정보를 확인합니다.
   - 플레이어에게 턴 시스템을 부여하여 스킬과 아이템이 적용하는 효과가 Turn이라는 Duration을 가지도록 설계 및 구현 하였고, 사용한 스킬은 일정 Turn 사용할 수 없는 CoolDown 시스템을 적용하였습니다.
   - 모든 아이템과 스킬을 관리하는 Singleton 인스턴스를 통해 게임 시작시 플레이어에게 Skill을 부여할 때, 전투에서 승리하고 플레이어가  
- ### 사용한 라이브러리
+ ## 사용한 라이브러리
  --- 
   - windows.h
   - iostream
@@ -34,20 +34,29 @@
 ## 개발 환경
   ---
   - IDE: Visual Studio 2022
-  - Language : C++
+  - Language : C+
   - Compiler : MSVC C++ 17
   - others: Git Desktop
 
-### 기능설명
+## 기능설명
   - 전체 시스템 플로우 차트
 ![Image](https://github.com/user-attachments/assets/a08c011c-f997-4643-b899-b0e1a9d912bb)
   - UML: https://lucid.app/lucidchart/b9180622-3661-4862-aa7a-6da03484a47f/edit?invitationId=inv_5c977377-3e9a-475c-99cc-0a27c18cc749&page=Qq6J2hiGBQnQ#
+
+## 코드 컨벤션 
+<details>
+<summary>코드 컨벤션 내용</summary>
+ 	1. 함수 및 if() 문의 중괄호는 전부 펼치기
+	2. 두 단어 이상의 이름을 가진 변수는 CamelCase(objectOne),
+		 그외 함수와 클래스 명은 PascalCase(FunctionA),
+			단어가 하나만 있는 변수는  snakeCase
+	3. 매개 변수는 _(언더바)를 붙여 구분하기
+		 예: FunctionA(int _parameter)
+</details>
     
 # 주요 기능 설명
 
 ## 목차
-
-# 목차
 
 1. [Event System](#event-시스템)
 
@@ -61,6 +70,13 @@
 
 6. [아이템 시스템](#아이템-시스템)
 
+7. [주요 테스트 케이스](#주요-테스트-케이스)
+
+8. [코드 시연 영상](#코드-시연-영상)
+
+9. [KPT회고](#KPT회고)
+
+---
 
 ## Event 시스템
 
@@ -194,7 +210,7 @@ void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
 
 ---
 
-## 주요 특징
+### 주요 특징
 
 1. **유연한 이벤트 구독 및 발행**
    - 특정 이벤트 타입에 대한 구독과 핸들러 등록이 가능하며, 타입 안전성을 보장합니다.
@@ -207,7 +223,7 @@ void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
 
 ---
 
-## 향후 개선 사항
+### 향후 개선 사항
 
 - 이벤트 처리의 성능 최적화를 위해 비동기 처리 기능 추가
 - 이벤트 로그 시스템 구현
@@ -229,9 +245,11 @@ void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
 - BattleSystem
 - BattleSystemStates
 - ShopSystem
+---
 
 ### SystemContext
-SystemContext 클래스는 GameSystem을 상속받는 서브 클래스의 로직이 main 코드에서 반복문으로 실행 될 수 있도록 GameSystem::Update() 호출하는 클래스이다. 또한, 현재 플레이어가 위치한 GameSystem을 관리하는 기능을 수행한다. SystemContext는 GlobalEventManager를 통해 OnEvent로 호출된 기능을 수행한다.
+- SystemContext 클래스는 GameSystem을 상속받는 서브 클래스의 로직이 main 코드에서 반복문으로 실행 될 수 있도록 GameSystem::Update() 호출하는 클래스이다. 또한, 현재 플레이어가 위치한 GameSystem을 관리하는 기능을 수행한다. SystemContext는 GlobalEventManager를 통해 OnEvent로 호출된 기능을 수행한다.
+#### 주요 기능
 - SystemContext(): SystemContext 생성자에서는 SystemContext가 관리할 각 GameSystem 멤버 변수들을 초기화하며, 첫 시작 System을 LobbySystem 으로 설정해 게임을 시작한다. 또한 GlobalEventManager에게 GameSystem(BattleSystem)을 등록해 추후 BattleSystem이 Event를 사용할 수 있도록 한다..
 - OnEvent() override : SystemContext에 등록된 알맞은 Event인 경우 수행된다.
 ```C++
@@ -344,6 +362,7 @@ public:
 ### GameSystem
 현재 플레이어가 위치한 공간을 의미하는 인터페이스 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
 각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행합니다.
+
 #### GameSystem의 역할
 
 - 공통 인터페이스 제공
@@ -355,7 +374,7 @@ public:
 - 유연한 확장성 보장
 	-구체적인 기능은 각 하위 클래스 (BattleSystem, ShopSystem, ...)에서 구현하며, GameSystem은 이를 통제하는 역할을 합니다.
 
-#### 주요 메서드
+#### 주요 기능
 1. Update() : void 
 	- 설명: 시스템의 state가 가진 기능을 실행합니다. 
 	- 예시
@@ -1660,6 +1679,9 @@ ItemManager::GetInstance()-> getRandomItem();
 
 ---
 
+## 주요 테스트 케이스
+
+
 ## 코드 시연 영상
 [![Video Label](http://img.youtube.com/vi/LgUdFP0pCiY/0.jpg)](https://youtu.be/LgUdFP0pCiY)
 
@@ -1668,7 +1690,31 @@ ItemManager::GetInstance()-> getRandomItem();
 ---
 
 ## KPT회고 
+- KPT 회고란 팀프로젝트를 진행하면서 팀원들이 느낀 좋았던 점(Keep)과 불편했던점(Problem), 그리고 Problem에 대한 팀에서 제시한 해결 방한(Try)에 대해 회고한 문서입니다. KPT 회고를 통해 다음 팀프로젝트가 더 좋은 결과물을 가지기 위해 진행했습니다.
+**Keep - 현재 만족하고 있는 부분**
+- 기획이나 아이디어를 제시하셨을 때 다른 팀원들이 적극적으로 관심을 가져주셔서 빠른 피드백이 되었고 바로 개선할 수 있던 점 - 전성은
+- 팀원 각자의 경험, 장점을 활용해서 다른 팀원들의 모자란 부분을 매꿔주었던 점. 게임적 설계나 디자인 패턴 구현 관련해서 아이디어를 제공하고 이를 바로 바로 구현하셔서 다른 팀원이 사용할 수 있게 만들어 주셨던 찬우 님이나 깃 관련 사용법과 설정을 도와주신 명관님, 기획이나 테스트 관련 문서를 작성해서 제공해주시는 성은님 등 팀원 간의 강점으로 약점을 커버해주는 협업이라 많은 것을 배웠음  - 김상현
+- 서로 간의 의견을 적극적으로 나눴던 팀이라 좋았다.  각자 구현할 파트를 나눠 구현하면서 중요했던 것이 서로 각자의 파트를 어떻게 활용하냐 였는데, 서로 맞닿는 부분에 대해 적극적으로 소통했던 점이 서로의 파트를 git으로 merge할 때 충돌이 매우 적었던 이유라고 생각합니다.  - 지명관
+- 팀원들에게 질문을 쉽게 할 수 있어서 좋았다. - 윤재성
+- 프로젝트를 진행하면서 팀원들의 실력이 좋아, 자신의 기능을 잘 사용할 수 있을 거란 신뢰를 기반으로 쉽게 기획과 구현을 할 수 있었다.  - 윤재성
+- 자세한 주석과 설명으로 코드를 이해하기 쉬웠다. - 윤재성
 
+**Problem & Try - 불편하게 느끼는 부분**
+- Problem 1: 코드 컨벤션 사전에 통일하지 못해서 나중에 수정하느라 어지러웠다.  - 찬우 
+ 당장 먼저 구현하는 것이 중요하다고 생각해서 설계와 구현을 진행했으나 나중에 서로 참조되거나 종속되는 부분에서  컨벤션 수정과 에러를 동시에 잡는 것에 시간이 추가로 소요되는 것 때문에 후회되었다.
+- Try 1: 코드 컨벤션을 사전에 통일한 다음 프로젝트를 진행하기
+
+- Problem 2: 각자 구현할 기술 모듈이 맞닿는 부분에 대한 자세한 설계와 명세 회의가 필요했다. - 상현
+서로 참조할 모듈들이 어떤 멤버 변수를 어떤 컨테이너에 어떤 자료형으로 사용할지에 대한 자료나 정보가 사전에 없었고 이를 사용할 멤버 함수 또한 정하지 않았기 때문에 각자 테스트 코드를 작성하면서 구현하고 반복해서 소통하면서 생기는 프로젝트 시간 지연 이슈가 있었다고 생각한다.
+- Try 2: 모듈이 맞닿는 부분에 대한 인터페이스에 대한 회의를 미리 진행서 인터페이스 설계(멤버 함수, 멤버 변수 자료형 등)을 정한 다음 구현하기
+
+- Problem 3 : 브랜치를 정리하면서 프로젝트 하기 - 발표 후 튜터님의 피드백 내용
+Pull Request 가 끝낸 모듈 개발 브랜치들은 삭제해서 깔끔하게 유지하자. 
+- Try 3: PR 완료 브랜치 제거로 git branch 깔끔하게 관리해서 버전 관리 효율 높이기
+
+- Problem 4: 다른 분이 개발한 모듈에 대해 좀 더 관심을 가지고 공부해서 반복 소통 줄이기 -찬우
+다른 분의 모듈을 라이브러리 보듯 살짝 보고 사용하다 생기는 궁금한 점들은 좀 더 자세히 보면 해결된 다고 생각한다.
+- Try 4: 모듈을 작성하신 분들은 UML 같은 명세를 미리 작성하고, 참고하시는 분들은 그 문서와 코드를 자세히 공부해서 자기 것으로 만들기
 
 
 
