@@ -55,14 +55,8 @@
    - [사용 예시](#사용-예시)
 2. [Game 시스템](#game-시스템)
    - [개요](#개요-1)
-   - [주요 클래스](#주요-클래스-1)
-     - [SystemContext](#systemcontext)
-     - [LobbySystem](#lobbysystem)
-     - [LobbySystemState](#lobbysystemstate)
-     - [BattleSystem](#battlesystem)
-     - [BattleSystemState](#battlesystemstate)
-     - [ShopSystem](#shopsystem)
-   - [사용 예시](#사용-예시-1)
+   - [주요 클래스](#주요-클래스)
+   - [사용 예시](#사용-예시)
 3. [캐릭터 시스템](#캐릭터-시스템)
    - [개요](#개요-2)
    - [주요 클래스](#주요-클래스-2)
@@ -105,7 +99,7 @@
 
 ---
 
-## 주요 클래스 및 구성 요소
+## 주요 클래스
 
 ### 1. `IEvent`
 모든 이벤트의 공통 부모 클래스입니다. 모든 이벤트는 `IEvent`를 상속받아 정의됩니다.
@@ -233,6 +227,745 @@ void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
 - 현재 시스템에서는 다수의 게임 로직이 이벤트와 강하게 연결되어 있어, 에러 발생 시 디버깅 과정에서 호출 위치와 방법을 추적하는 데 어려움이 있습니다.
 
 ---
+
+
+
+## Game 시스템
+---
+### 개요
+게임 시스템은 프로젝트에서 플레이어가 머무는 공간을 의미한다. Gamesystem 은 SystemContext 클래스를 통해 서로 다른 GameSystem으로 이동 및 현재 GameSystem에서 수행되어야 하는 기능을 호출하는 Update 함수를 통해 현재 System에 설정되어있는 SystemState에 맞는 기능을 수행한다.
+
+### 주요 클래스
+- SystemContext
+- GameSystem
+- LobbySystem
+- LobbySystemStates
+- BattleSystem
+- BattleSystemStates
+- ShopSystem
+
+### SystemContext
+SystemContext 클래스는 GameSystem을 상속받는 서브 클래스의 로직이 main 코드에서 반복문으로 실행 될 수 있도록 GameSystem::Update() 호출하는 클래스이다. 또한, 현재 플레이어가 위치한 GameSystem을 관리하는 기능을 수행한다. SystemContext는 GlobalEventManager를 통해 OnEvent로 호출된 기능을 수행한다.
+- SystemContext(): SystemContext 생성자에서는 SystemContext가 관리할 각 GameSystem 멤버 변수들을 초기화하며, 첫 시작 System을 LobbySystem 으로 설정해 게임을 시작한다. 또한 GlobalEventManager에게 GameSystem(BattleSystem)을 등록해 추후 BattleSystem이 Event를 사용할 수 있도록 한다..
+- OnEvent() override : SystemContext에 등록된 알맞은 Event인 경우 수행된다.
+```C++
+void SystemContext::OnEvent(const std::shared_ptr<IEvent> _event)
+{
+	if (auto move = std::dynamic_pointer_cast<IMoveSystemEvent>(_event)) // 플레이어 이동 이벤트 호출
+	{
+		MoveSystem(move->to, move->from);
+	}
+	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(_event)) // 플레이어 생성 이벤트 호출
+	{
+		CreateCharacter(create->name);
+	}
+	else if (auto gameOver = std::dynamic_pointer_cast<IPlayerDefeatEvent>(_event)) // 플레이어 패배 이벤트 호출
+	{
+		player.reset();
+	}
+
+	Publish(_event);
+}
+```
+- Update(): 현재 설정된 Gamesystem의 로직을 호출하는 함수이다. GameSystem에 저장된 state에 맞는 virtual void ISystemState::Excute() 함수가 실행 되도록한다.
+- MoveSystem(): GameSystem간 이동을 수행하는 함수이다.
+```c++
+oid SystemContext::MoveSystem(SystemType _to, SystemType _from)
+{
+	// System from 에서 System to 로 이동
+
+	if (_to != _from)
+	{
+		switch (_to)
+		{
+		case SystemType::LOBBY:
+			currentSystem = lobbySystem;
+			break;
+		case SystemType::BATTLE:
+			currentSystem = battleSystem;
+			break;
+		case SystemType::SHOP:
+			currentSystem = shopSystem;
+			break;
+		default:
+			break;
+		}
+
+		currentSystem->EnterSystem();
+	}
+}
+``` 
+
+```c++
+enum class SystemType
+{
+	LOBBY,
+	BATTLE,
+	SHOP
+};
+
+class SystemContext : public IEventManagerSystem
+{
+public:
+	SystemContext();
+	~SystemContext();
+
+	SystemContext(const SystemContext&) = delete;
+	SystemContext& operator=(const SystemContext&) = delete;
+
+	void Update();
+
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+	inline shared_ptr<class Player> GetPlayer() 
+	{
+		return player; 
+	}
+
+	shared_ptr<GameSystem> GetCurrentSystem()
+	{ 
+		return currentSystem; 
+	}
+private:
+	void MoveSystem(SystemType _to, SystemType _from);
+
+public:
+	void CreateCharacter(string _name);
+
+	shared_ptr<GameSystem> currentSystem = nullptr;
+
+	shared_ptr<LobbySystem> lobbySystem;
+	shared_ptr<BattleSystem> battleSystem;
+	shared_ptr<ShopSystem> shopSystem;
+
+	shared_ptr<Player> player;
+};
+```
+
+```C++
+	extern shared_ptr<SystemContext> GSystemContext;
+
+	while (true)
+	{
+		GSystemContext->Update(); // Update()로 변경해야함
+	}
+```
+
+[[목차로 돌아가기]](#목차)
+
+---
+
+
+### GameSystem
+현재 플레이어가 위치한 공간을 의미하는 인터페이스 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
+각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행합니다.
+#### GameSystem의 역할
+
+- 공통 인터페이스 제공
+	-GameSystem은 다른 시스템이 반드시 구현해야 하는 메서드나 동작의 틀을 정의합니다. 이를 통해 시스템이 서로 다른 구현을 가지더라도, 일정한 인터페이스로 접근할 수 있습니다.
+
+- 상태 관리 기능 제공
+	- 모든 시스템이 상태 기반으로 동작하도록 설계되어 있어, 상태 변경과 동작이 명확히 구분됩니다.
+
+- 유연한 확장성 보장
+	-구체적인 기능은 각 하위 클래스 (BattleSystem, ShopSystem, ...)에서 구현하며, GameSystem은 이를 통제하는 역할을 합니다.
+
+#### 주요 메서드
+1. Update() : void 
+	- 설명: 시스템의 state가 가진 기능을 실행합니다. 
+	- 예시
+		- BattleMainState->Update();
+		- ShopSellState->Update();
+```c++
+void GameSystem::Update()
+{
+	//ChangeState();
+	if (state)
+	{
+		state->Excute(this);
+	}
+	else
+	{
+		throw std::runtime_error("GameSystem의 state가 nullptr입니다.");
+	}
+}
+
+
+```
+
+2. EnterSystem() : void = 0;
+	- 설명: 시스템이 활성화될 때 호출됩니다. 각 하위 클래스는 이를 구현하여 시스템별 초기화 작업을 수행합니다.
+	- 예시
+		- ShopSystem: 상점 아이템 리스트 초기화.
+
+3. ExitSystem : void = 0;
+	- 설명: 시스템이 비활성화될 때 호출됩니다. 시스템 종료 시 리소스를 정리하거나 다음 시스템으로 전환하는 역할을 합니다.
+	- 예시
+		- BattleSystem: 전투에서 사용된 몬스터 삭제
+4. SetState(shared_ptr<ISystemState>)  void 및 + GetState() shared_ptr<ISystemState>
+	- 설명: 현재 시스템의 상태를 관리하는 메서드입니다. 상태 변경(SetState) 및 현재 상태 조회(GetState)를 제공합니다.
+	- 예시
+		- BattleSystem에서 상태가 BattleAttackState로 전환되면 SetState를 호출.
+```c++
+class ISystemState
+{
+public:
+	virtual ~ISystemState() = default;
+
+	virtual void Excute(GameSystem* system) = 0;
+};
+
+class GameSystem : public IEventManagerSystem
+{
+public:
+	inline virtual SystemType GetSystemType() = 0;
+	
+	virtual void EnterSystem() = 0; // 시스템이 시작될 때 수행될 함수(Initialize)
+	void Update(); // system의 로직 수행을 수행하는 함수, 반복
+	//void ExitSystem(SystemType nextType); // 시스템을 나가야할 때 수행할 함수
+	virtual ~GameSystem() {};
+	//virtual void ChangeState() = 0;
+	void SetState(shared_ptr<ISystemState> _state) { state = _state; }
+	virtual string GetSystemName() = 0;
+protected:
+	shared_ptr<ISystemState> state;
+};
+
+```
+5. OnEvent void
+	- 설명: 이벤트 기반 시스템과의 통신을 처리합니다.(EventManagerSystem을 상속) 하위 클래스에서 필요한 이벤트를 오버라이드하여 처리합니다.
+	- 예시
+		- BattleSystem: ICharacterDeadEvent 이벤트를 통해 캐릭터 사망 처리.
+		- ShopSystem: IItemPurchasedEvent 이벤트를 통해 아이템 구매 처리.
+
+#### 설계 특징
+1. 템플릿 메서드 패턴
+GameSystem의 메서드는 템플릿 메서드 패턴을 따릅니다.
+이는 공통 로직을 상위 클래스에서 제공하고, 세부 구현은 하위 클래스에서 정의하도록 하는 방식입니다.
+
+2. 상태 관리의 통합성
+state라는 공통 속성을 사용해 모든 시스템이 상태 기반으로 동작하도록 설계되었습니다.
+상태는 각각 ISystemState클래스의 하위 클래스로 정의됩니다.
+
+3. 추상화와 구현의 분리
+GameSystem은 인터페이스만 제공하며, 구체적인 로직은 하위 클래스에서 구현합니다.
+이 방식은 코드 확장성과 유지보수성을 크게 향상시킵니다.
+
+4. 이벤트 기반 설계
+OnEvent 메서드를 통해 이벤트 시스템과 유연하게 통합됩니다.
+이를 통해 시스템 간의 결합도를 낮추고, 이벤트 구독/발행 방식을 활용할 수 있습니다.
+
+#### GameSystem의 장점
+1. 일관된 인터페이스: 모든 시스템이 동일한 방식으로 접근 가능.
+2. 유연한 확장성: 새로운 시스템 추가 시 GameSystem을 상속받아 구현하면 됨.
+3. 캡슐화: 상태와 로직을 각 시스템 내부에 캡슐화하여, 다른 시스템과 독립적으로 작동 가능.
+4. 유지보수 용이성: 공통 동작은 GameSystem에, 개별 동작은 하위 클래스에 구현되어 수정이 용이.
+
+### LobbySystem
+GameSystem을 상속받는 LobbySystem은 플레이어가 게임을 시작하거나, 게임 패배 혹은 승리 후 돌아올 때 위치하는 로비 공간을 의미힌다. 로비에서는 게임을 시작하가나 종료하고 게임을 시작할 경우 플레이어를 생성하는 기능을 수행한다.
+- inline SystemType GetSystemType() override : 현재 플레이어가 위치한 로비의 값을 반환한다.
+- MainMenu() : 플레이어에게 게임 시작, 게임 종료 메뉴를 출력한 뒤, 플레이어에게 입력을 받는다.
+- CreatePlayerMenu() : 플레이어가 게임 시작시 플레이어의 이름을 입력 받고 입력 검증을 통해 플레이어 이름을 결정한다면, 이를 통해 초기 플레이어를 생성한다. 
+```cpp
+class LobbySystem : public GameSystem
+{
+public:
+
+	LobbySystem();
+	void EnterSystem() override;
+
+	inline SystemType GetSystemType() override
+	{ 
+		return SystemType::LOBBY;
+	}
+
+	void OnEvent(const std::shared_ptr<IEvent> _event) override;
+
+	void MainMenu();
+	void CreatePlayerMenu();
+
+	virtual string GetSystemName() override { return "로비"; };
+private:
+	std::vector<std::string> orcArt;
+	std::vector<std::string> slimeArt;
+	std::vector<std::string> dragonArt;
+};
+```
+### LobbySystemStates
+LobbySystem은 Update() 함수가 호출되면 현재 설정된 LobbySystemState 값에 맞는 기능을 호출하게 합니다. 
+각 기능에 맞게 실행되도록 팩토리 패턴 방식을 적용하여, 같은 함수 여도 다른 기능이 수행되도록 합니다.
+LobbyMainState: LobbySystem의 메인 메뉴가 실행 되도록 함.
+LobbyCreateState: LobbySystem의 플레이어 생성이 실행 되도록 함.
+```
+class LobbyMainState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto lobby = dynamic_cast<LobbySystem*>(_system);
+
+		if (lobby)
+		{
+			lobby->MainMenu();
+		}
+	}
+};
+
+class LobbyCreateState : public ISystemState
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto lobby = dynamic_cast<LobbySystem*>(_system);
+
+		if (lobby)
+		{
+			lobby->CreatePlayerMenu();
+		}
+	}
+};
+```
+### BattleSystemStates
+- 개요
+	- 플레이어가 전투를 진행하는 동안 생기는 이벤트들(공격 선택, 아이템 사용, 패배, 승리 등)에 대해 알맞은 기능을 수행하기 위해 구현한 클래스 입니다. 
+ 	- 플레이어가 전투 중 특정 전환을 수행할 때 state 멤버 변수를 변환해주면 다음에 Excute() 함수가 실행 될 때 의도한 기능이 수행 되도록 합니다
+	- 각 State별 기능은 주석으로 설명하였습니다.
+ ``` C++
+
+
+class BattleMainState : public ISystemState // 플레이어의 전투 선택지를 출력합니다.
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->MainMenu();
+		}
+	}
+};
+
+class BattleAttackState : public ISystemState // 플레이어의 공격 메뉴를 호출합니다.
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->Attack();
+		}
+	}
+};
+
+class BattleDisplayState : public ISystemState // 플레이어의 전투중 현재 상태 및 스탯을 호출합니다.
+{
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->DisplayStat();
+		}
+	}
+};
+
+class BattleUseItemState : public ISystemState // 플레이어의 아이템 사용 기능을 호출합니다. 보유 아이템을 출력합니다.
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->UseItem();
+		}
+	}
+};
+
+class BattleNextStageState : public ISystemState // 플레이어가 다음스테이지로 넘어갈 때 호출되는 기능입니다.
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->NextStage();
+		}
+	}
+};
+
+class BattleGameOverState: public ISystemState // 플레이어가 게임 종류 될 때 호출 되는 Battlesystem::GameOver() 함수입니다.
+{
+public:
+	// ISystemState을(를) 통해 상속됨
+	void Excute(GameSystem* _system) override
+	{
+		auto battle = dynamic_cast<BattleSystem*>(_system);
+
+		if (battle)
+		{
+			battle->GameOver();
+		}
+	}
+};
+ ```
+[[목차로 돌아가기]](#목차)
+
+---
+
+### BattleSystem
+- 개요
+	- BattleSystem은 플레이어가 전투를 진행하는 공간입니다.
+	- 
+
+   
+#### 주요 메서드
+1. void OnEvent(const std::shared_ptr<IEvent> _event) override: BattleSystem에서 사용될 이벤트들이 OnEvent 함수 호출을 하면 이벤트에 맞는 로직을 수행하도록 분기문을 수행합니다. 
+예를 들면 플레이어가 공격 받고 죽는다면 ICharacterDeadEvent 클래스 이벤트를 호출하고 BattleSystem이 GlobalEventManager::Notify()를 통해 호출 받는다면 BattleSystem::OnEvent() 함수에서 이를 처리하게 됩니다.
+```C++
+void BattleSystem::OnEvent(const std::shared_ptr<IEvent> _event)
+{
+	if (auto deadEvent = dynamic_pointer_cast<ICharacterDeadEvent>(_event))
+	{
+		auto player = GSystemContext->GetPlayer();
+		if (monster->statManager->IsDead())
+		{
+			state = make_shared<BattleNextStageState>();
+		}
+		else if (player->statManager->IsDead())
+		{
+			state = make_shared<BattleGameOverState>();
+		}
+	}
+	else if (auto turnEvent = dynamic_pointer_cast<ITurnStartEvent>(_event))
+	{
+		turnSystem->BeginTurn();
+	}
+}
+```
+2. BattleSystem(): 생성자 입니다. 전투 시스템에서 턴을 관리할 멤버 변수와 보상을 관리하는 멤버 변수를 초기화 해줍니다.
+```C++
+	shared_ptr<URewardEventManagerSystem> rewardSystem; // 플레이어가 승리시 골드, 경험치, 아이템, 스킬을 부여해주는 IEventMangerSystem을 상속받는 클래스 입니다.
+	shared_ptr<UTurnEventManager> turnSystem; // 플레이어가 스킬 사용시 스킬의 지속시간, 쿨다운을 계산해주는 IEventMangerSystem을 상속받는 클래스 입니다.
+
+BattleSystem::BattleSystem()
+{
+	rewardSystem = make_shared<URewardEventManagerSystem>();
+	GlobalEventManager::Get().Subscribe(rewardSystem);
+
+	turnSystem = std::make_shared<UTurnEventManager>();
+	GlobalEventManager::Get().Subscribe(turnSystem);
+}
+
+```
+3. virtual void EnterSystem() override : 플레이어가 전투 시스템에 처음 입장하면 전투 시스템의 시작 준비 기능을 수행합니다. 몬스터를 생성합니다. 이때 플레이어가 10레벨 이상인 경우 보스 몬스터를 생성합니다. 생성된 몬스터와 플레이어의 Target을 서로를 바로 보도록 설정하며 각자의 스킬이 Target에게 효과를 부여하도록 합니다.
+```C++
+void BattleSystem::EnterSystem()
+{
+	auto player = GSystemContext->GetPlayer();
+	monster = make_shared<Monster>();
+	monster->Initialize();
+	monster->combatManager->SetTarget(player.get());
+	player->combatManager->SetTarget(monster.get());
+
+	player->combatManager->SetTarget(monster.get());
+
+	activeCharacters.clear();
+	activeCharacters.push_back(player.get());
+	activeCharacters.push_back(monster.get());
+	
+	// 플레이어 레벨에 따른 monster 생성
+	state = make_shared<BattleMainState>();
+
+	rewardSystem->Initialize();
+	turnSystem->TurnReset();
+}
+```
+3.  MainMenu() : 플레이어가 매 턴 마다 수행할 선택지인 1. 공격, 2. 스탯확인, 3. 아이템 사용 메뉴를 출력하고 입력을 받습니다. 매 입력마다 검증을 수행합니다.
+  ```C++
+void BattleSystem::MainMenu()
+{
+	// 라운드 시작할때 몬스터 현재 상태 출력
+	DisplayStat();
+
+	int input = InputManagerSystem::GetInput<int>(
+		"==== 전투 메뉴 ====",
+		{ "1. 공격하기" ,"2. 아이템 사용하기" },
+		RangeValidator<int>(1, 2)
+	);
+
+	if (input == 1)
+	{
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleAttackState>()); // state->Excute() 가 공격을 수행하도록 변경 즉, BattleSystem::Attack을 수행하도록함
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleAttackState>();
+	}
+	else
+	{
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleUseItemState>());  // state->Excute() 가 아이템을 사용하도록 변경 즉, BattleSystem::UseItem() 수행하도록함
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleUseItemState>();
+	}
+}
+  ```
+
+-  Attack(): 플레이어가 공격을 선택한다면 실행되는 함수이다. 플레이어가 가지고 있는 스킬 목록들을 선택지로 출력한 뒤, 플레이어에게 입력을 받는다. 입력이 알맞은지 검증 또한 수행합니다. 돌아가기 버튼을 누른다면 다시 MainState가 수행되도록 하며 스킬을 사용한 경우 대상에게 스킬 효과를 부여한다. 그리고 플레이어가 공격한다면 몬스터가 자동으로 반격하게 한다. 몬스터가 플레이어 상대로 공격하도록 몬스터의 공격 기능을 수행합니다. 각 공격은 수행시 플레이어와 몬스터의 사망 여부를 체크하고 사망시 이벤트 호출을 통해 다음 BattleSystemstate로 변환 될 작업인 BattleSystem::OnEvent() 함수를 수행하도록 구현했습니다.
+  ```C++
+void BattleSystem::Attack()
+{
+	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
+	GlobalEventManager::Get().Notify(battleitemcheck);
+
+	auto player = GSystemContext->GetPlayer();
+
+	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
+	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
+	// 1~n: 가지고 있는 스킬
+	// n+1: 돌아가기
+	int returnButton = activeSkillList.size() + 1; // 돌아가기 버튼
+	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
+
+	int input = InputManagerSystem::GetInput<int>(
+		"==================  스킬 사용 ===================",
+		activeSkillList,
+		RangeValidator<int>(1, returnButton)
+	);
+
+	if (input == returnButton)
+	{
+		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleMainState>());
+		GInvoker->ExecuteCommand(cmd);
+		//state = make_shared<BattleMainState>();
+		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
+	}
+	else
+	{ // 스킬 사용
+		
+		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
+		GlobalEventManager::Get().Notify(playerAttackEv);
+
+		auto player = GSystemContext->GetPlayer();
+
+		state = make_shared<BattleMainState>();
+		
+		if (!player->skillManager->UseSkill(player->skillManager->GetActiveSkillNameByIndex(input - 1)))
+		{
+			state = make_shared<BattleMainState>();
+			return;
+		}
+	}
+
+	// 몬스터 공격
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
+	monster->combatManager->SetTarget(player.get());
+
+	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
+	GlobalEventManager::Get().Notify(monsterAttackEv);
+
+	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
+	
+	turnSystem->EndTurn(activeCharacters);
+
+	DisplayStat();
+
+	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
+
+	InputManagerSystem::PauseUntilEnter();
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+}
+  ```
+  
+-  DisplayStat(): 전투중 플레이어의 현재 상태를 출력합니다
+  ```C++
+void BattleSystem::DisplayStat()
+{
+	//CLEAR;
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
+	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
+
+	auto player = GSystemContext->GetPlayer();
+	player.get()->PrintCharacterInfo();
+	monster.get()->PrintCharacterInfo(1);
+}
+  ```
+-  UseItem(): 플레이어가 가지고 있는 현재 아이템 목록을 출력합니다. 아이템을 사용하거나 돌아간다면 다시 전투 메인메뉴를 출력하도록 합니다.
+  ```C++
+void BattleSystem::UseItem()
+{
+	//CLEAR;
+
+	auto battleitemcheck = make_shared<IBattleUseItemEvent>();
+	GlobalEventManager::Get().Notify(battleitemcheck);
+	
+	auto player = GSystemContext->GetPlayer();
+	vector<string> itemList = player->inventoryComponent->GetInventoryInfoWithString(1);
+	
+	int lastIndex = itemList.size() + 1;
+
+	itemList.push_back(to_string(lastIndex) +". 돌아가기");
+	int input = InputManagerSystem::GetInput<int>(
+		"=== 아이템 사용 ===", 
+		itemList,
+		RangeValidator<int>(1, lastIndex)
+	);
+  ```
+-  NextStage(): 플레이어가 몬스터와의 전투에서 승리하면 호출되는 함수입니다. 처치한 몬스터가 보스인 경우 플레이어가 승리했다는 UI를 출력한 뒤 LobbySystem으로 돌아가도록 SystemContext::currentSystem 멤버 변수 값을 재설정합니다.
+만약 플레이어가 일반 몬스터를 처치한 경우에는 플레이어에게 보상을 부여하는 GetReward() 함수를 호출한 다음 스테이지 또는 상점을 방문할 수있는 UI 출력 및 입력을 받습니다. 이때 입력을 검증합니다.
+
+  ```C++
+void BattleSystem::NextStage()
+{
+	if (monster->IsBoss())
+	{	
+		// 보스 몬스터
+		// 게임 승리 UI 출력
+		auto playergameclear = make_shared<IPlayerGameClearEvent>();
+		GlobalEventManager::Get().Notify(playergameclear);
+
+		// 게임 승리로 로비로 귀환,
+		// 이때까지 동작한 로그라던가는 여기서 출력하시면 됩니다
+
+		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
+		GlobalEventManager::Get().Notify(event);
+		InputManagerSystem::PauseUntilEnter();
+		ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
+		return;
+	}
+	else
+	{	
+		GetReward();
+
+		int input = InputManagerSystem::GetInput<int>(
+			"==== 스테이지 클리어 메뉴 ====",
+			{ "1. 다음 스테이지" , "2. 상점 방문하기" },
+			RangeValidator<int>(1, 2)
+		);
+
+		if (input == 1)
+		{
+			EnterSystem();
+		}
+		else if (input == 2)
+		{
+			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType(), "상점", "배틀");
+			GInvoker->ExecuteCommand(cmd);
+		}
+	}
+}
+  ```
+- GetReward() : 플레이어에게 보상을 부여하는 함수입니다. 플레이어는 일반 몬스터를 처치시 일반 몬스터가 가진 돈과 아이템을 받으며 경험치를 부여 받습니다. 또한 스킬을 선택해서 가질 수 있게 합니다.
+```C++
+void BattleSystem::GetReward()
+{
+	auto player = GSystemContext->GetPlayer();
+	auto reward = rewardSystem->GetReward();
+
+	player->inventoryComponent->addGold(reward.gold); // 돈 넣기
+
+	if (monster->characterReward.dropItem != nullptr)
+	{
+		auto playergetitem = make_shared<IPlayerGetItemEvent>();
+		GlobalEventManager::Get().Notify(playergetitem);
+		player->inventoryComponent->addItem(reward.item); // 템 넣기
+	}
+
+	int skillSize = reward.skillTypes.size();
+	
+	if (reward.skillTypes.size() > 0)
+	{
+		vector<string> options;
+
+		for (int i = 0; i < skillSize; i++)
+		{
+			shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
+			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
+		}
+
+		int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, reward.skillTypes.size()));
+
+		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
+		GInvoker->ExecuteCommand(cmd);
+		Delay(1);
+	}
+
+	CharacterUtility::ModifyStat(player.get(), StatType::Experience, rewardSystem->GetReward().exp);
+	monster = nullptr;
+
+	auto battlestageclear = make_shared<IPlayerStageClearEvent>();
+	GlobalEventManager::Get().Notify(battlestageclear);
+}
+```
+-  GameOver() : 플레이어가 패배했을 시 호출 되는 함수입니다. 다시 로비로 되돌아 가도록 SystemContext의 OnEvent() 를 호출 하도록 GlobalEventManager::Notify()를 호출합니다.
+  ```C++
+void BattleSystem::GameOver()
+{
+	auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
+	GlobalEventManager::Get().Notify(playergamedefeat);
+
+	auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
+	GlobalEventManager::Get().Notify(event);
+}
+
+  ```
+
+[[목차로 돌아가기]](#목차)
+
+---
+
+
+---
+
+
+
+
+---
+### ShopSystem
+도전과제의 상점 시스템을 구현한 것으로, 플레이어가 아이템을 사고팔고, 인벤토리와 관련된 작업을 처리하는 핵심적인 로직을 담당하고 있습니다. ShopSystem 은 아이템 구매, 판매, 인벤토리 관리 등의 기능을 처리하는 중요한 시스템입니다. 
+플레이어의 상점 경험을 처리하는 중심적인 역할을 하며, UI와 사용자 입력을 잘 연결하여 게임의 흐름을 제어합니다. 이 시스템은 상태 패턴을 사용하여 상점의 여러 상태(메인 메뉴, 아이템 구매, 아이템 판매 등)를 처리하며, 각각의 상태 전환을 명령 패턴을 통해 실행하는 구조를 가집니다.
+
+#### 주요 메서드
+1. EnterSystem()
+상점 시스템에 진입할 때 호출되는 함수로 진입 전 콘솔 화면을 전부 지우고, 랜덤 아이템과 스킬을 생성해 상점에서 판매할 아이템, 스킬을 준비합니다.
+
+2. MainMenu()
+상점의 메인 메뉴를 표시하고, 사용자의 선택을 처리합니다.
+메인에선 아이템 구매, 판매, BattleSystem으로 돌아가기 중 하나를 선택하고, 선택된 입력에 따라 적절한 명령을 실행합니다. 
+
+3. BuyItemMenu()
+아이템 구매 메뉴를 표시하고, 사용자의 구매 요청을 처리합니다. 
+
+4. SellMenu()
+목적: 아이템 판매 메뉴를 표시하고, 사용자가 선택한 아이템을 판매합니다.
+
+5. GetRandomItemsAndSkills()
+목적: 랜덤 아이템과 스킬을 생성하여 상점에 추가합니다.
+
+6. OnEvent()
+캐릭터가 상점과 관련된 스킬(파는 아이템 가격 감소)을 획득할 때 해당 스킬에 대한 효과를 적용합니다.
+
+
+[[목차로 돌아가기]](#목차)
+
+
+
+---
+
 
 ## 캐릭터 시스템 
 
@@ -852,737 +1585,6 @@ ItemManager::GetInstance()-> getRandomItem();
 ```
 
 
-
-## 게임 시스템
----
-### 개요
-게임 시스템은 프로젝트에서 플레이어가 머무는 공간을 의미한다. Gamesystem 은 SystemContext 클래스를 통해 서로 다른 GameSystem으로 이동 및 현재 GameSystem에서 수행되어야 하는 기능을 호출하는 Update 함수를 통해 현재 System에 설정되어있는 SystemState에 맞는 기능을 수행한다.
-
-### 주요 클래스
-- SystemContext
-- GameSystem
-- LobbySystem
-- LobbySystemStates
-- BattleSystem
-- BattleSystemStates
-- ShopSystem
-
-### SystemContext
-SystemContext 클래스는 GameSystem을 상속받는 서브 클래스의 로직이 main 코드에서 반복문으로 실행 될 수 있도록 GameSystem::Update() 호출하는 클래스이다. 또한, 현재 플레이어가 위치한 GameSystem을 관리하는 기능을 수행한다. SystemContext는 GlobalEventManager를 통해 OnEvent로 호출된 기능을 수행한다.
-- SystemContext(): SystemContext 생성자에서는 SystemContext가 관리할 각 GameSystem 멤버 변수들을 초기화하며, 첫 시작 System을 LobbySystem 으로 설정해 게임을 시작한다. 또한 GlobalEventManager에게 GameSystem(BattleSystem)을 등록해 추후 BattleSystem이 Event를 사용할 수 있도록 한다..
-- OnEvent() override : SystemContext에 등록된 알맞은 Event인 경우 수행된다.
-```C++
-void SystemContext::OnEvent(const std::shared_ptr<IEvent> _event)
-{
-	if (auto move = std::dynamic_pointer_cast<IMoveSystemEvent>(_event)) // 플레이어 이동 이벤트 호출
-	{
-		MoveSystem(move->to, move->from);
-	}
-	else if (auto create = std::dynamic_pointer_cast<ICharacterCreateEvent>(_event)) // 플레이어 생성 이벤트 호출
-	{
-		CreateCharacter(create->name);
-	}
-	else if (auto gameOver = std::dynamic_pointer_cast<IPlayerDefeatEvent>(_event)) // 플레이어 패배 이벤트 호출
-	{
-		player.reset();
-	}
-
-	Publish(_event);
-}
-```
-- Update(): 현재 설정된 Gamesystem의 로직을 호출하는 함수이다. GameSystem에 저장된 state에 맞는 virtual void ISystemState::Excute() 함수가 실행 되도록한다.
-- MoveSystem(): GameSystem간 이동을 수행하는 함수이다.
-```c++
-oid SystemContext::MoveSystem(SystemType _to, SystemType _from)
-{
-	// System from 에서 System to 로 이동
-
-	if (_to != _from)
-	{
-		switch (_to)
-		{
-		case SystemType::LOBBY:
-			currentSystem = lobbySystem;
-			break;
-		case SystemType::BATTLE:
-			currentSystem = battleSystem;
-			break;
-		case SystemType::SHOP:
-			currentSystem = shopSystem;
-			break;
-		default:
-			break;
-		}
-
-		currentSystem->EnterSystem();
-	}
-}
-``` 
-
-```c++
-enum class SystemType
-{
-	LOBBY,
-	BATTLE,
-	SHOP
-};
-
-class SystemContext : public IEventManagerSystem
-{
-public:
-	SystemContext();
-	~SystemContext();
-
-	SystemContext(const SystemContext&) = delete;
-	SystemContext& operator=(const SystemContext&) = delete;
-
-	void Update();
-
-	void OnEvent(const std::shared_ptr<IEvent> _event) override;
-	inline shared_ptr<class Player> GetPlayer() 
-	{
-		return player; 
-	}
-
-	shared_ptr<GameSystem> GetCurrentSystem()
-	{ 
-		return currentSystem; 
-	}
-private:
-	void MoveSystem(SystemType _to, SystemType _from);
-
-public:
-	void CreateCharacter(string _name);
-
-	shared_ptr<GameSystem> currentSystem = nullptr;
-
-	shared_ptr<LobbySystem> lobbySystem;
-	shared_ptr<BattleSystem> battleSystem;
-	shared_ptr<ShopSystem> shopSystem;
-
-	shared_ptr<Player> player;
-};
-```
-
-```C++
-	extern shared_ptr<SystemContext> GSystemContext;
-
-	while (true)
-	{
-		GSystemContext->Update(); // Update()로 변경해야함
-	}
-```
-
-[[목차로 돌아가기]](#목차)
-
----
-
-### GameSystem
-현재 플레이어가 위치한 공간을 의미하는 인터페이스 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
-각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행합니다.
-#### GameSystem의 역할
-
-- 공통 인터페이스 제공
-	-GameSystem은 다른 시스템이 반드시 구현해야 하는 메서드나 동작의 틀을 정의합니다. 이를 통해 시스템이 서로 다른 구현을 가지더라도, 일정한 인터페이스로 접근할 수 있습니다.
-
-- 상태 관리 기능 제공
-	- 모든 시스템이 상태 기반으로 동작하도록 설계되어 있어, 상태 변경과 동작이 명확히 구분됩니다.
-
-- 유연한 확장성 보장
-	-구체적인 기능은 각 하위 클래스 (BattleSystem, ShopSystem, ...)에서 구현하며, GameSystem은 이를 통제하는 역할을 합니다.
-
-#### 주요 메서드
-1. Update() : void 
-	- 설명: 시스템의 state가 가진 기능을 실행합니다. 
-	- 예시
-		- BattleMainState->Update();
-		- ShopSellState->Update();
-```c++
-void GameSystem::Update()
-{
-	//ChangeState();
-	if (state)
-	{
-		state->Excute(this);
-	}
-	else
-	{
-		throw std::runtime_error("GameSystem의 state가 nullptr입니다.");
-	}
-}
-
-
-```
-
-2. EnterSystem() : void = 0;
-	- 설명: 시스템이 활성화될 때 호출됩니다. 각 하위 클래스는 이를 구현하여 시스템별 초기화 작업을 수행합니다.
-	- 예시
-		- ShopSystem: 상점 아이템 리스트 초기화.
-
-3. ExitSystem : void = 0;
-	- 설명: 시스템이 비활성화될 때 호출됩니다. 시스템 종료 시 리소스를 정리하거나 다음 시스템으로 전환하는 역할을 합니다.
-	- 예시
-		- BattleSystem: 전투에서 사용된 몬스터 삭제
-4. SetState(shared_ptr<ISystemState>)  void 및 + GetState() shared_ptr<ISystemState>
-	- 설명: 현재 시스템의 상태를 관리하는 메서드입니다. 상태 변경(SetState) 및 현재 상태 조회(GetState)를 제공합니다.
-	- 예시
-		- BattleSystem에서 상태가 BattleAttackState로 전환되면 SetState를 호출.
-```c++
-class ISystemState
-{
-public:
-	virtual ~ISystemState() = default;
-
-	virtual void Excute(GameSystem* system) = 0;
-};
-
-class GameSystem : public IEventManagerSystem
-{
-public:
-	inline virtual SystemType GetSystemType() = 0;
-	
-	virtual void EnterSystem() = 0; // 시스템이 시작될 때 수행될 함수(Initialize)
-	void Update(); // system의 로직 수행을 수행하는 함수, 반복
-	//void ExitSystem(SystemType nextType); // 시스템을 나가야할 때 수행할 함수
-	virtual ~GameSystem() {};
-	//virtual void ChangeState() = 0;
-	void SetState(shared_ptr<ISystemState> _state) { state = _state; }
-	virtual string GetSystemName() = 0;
-protected:
-	shared_ptr<ISystemState> state;
-};
-
-```
-5. OnEvent void
-	- 설명: 이벤트 기반 시스템과의 통신을 처리합니다.(EventManagerSystem을 상속) 하위 클래스에서 필요한 이벤트를 오버라이드하여 처리합니다.
-	- 예시
-		- BattleSystem: ICharacterDeadEvent 이벤트를 통해 캐릭터 사망 처리.
-		- ShopSystem: IItemPurchasedEvent 이벤트를 통해 아이템 구매 처리.
-
-#### 설계 특징
-1. 템플릿 메서드 패턴
-GameSystem의 메서드는 템플릿 메서드 패턴을 따릅니다.
-이는 공통 로직을 상위 클래스에서 제공하고, 세부 구현은 하위 클래스에서 정의하도록 하는 방식입니다.
-
-2. 상태 관리의 통합성
-state라는 공통 속성을 사용해 모든 시스템이 상태 기반으로 동작하도록 설계되었습니다.
-상태는 각각 ISystemState클래스의 하위 클래스로 정의됩니다.
-
-3. 추상화와 구현의 분리
-GameSystem은 인터페이스만 제공하며, 구체적인 로직은 하위 클래스에서 구현합니다.
-이 방식은 코드 확장성과 유지보수성을 크게 향상시킵니다.
-
-4. 이벤트 기반 설계
-OnEvent 메서드를 통해 이벤트 시스템과 유연하게 통합됩니다.
-이를 통해 시스템 간의 결합도를 낮추고, 이벤트 구독/발행 방식을 활용할 수 있습니다.
-
-#### GameSystem의 장점
-1. 일관된 인터페이스: 모든 시스템이 동일한 방식으로 접근 가능.
-2. 유연한 확장성: 새로운 시스템 추가 시 GameSystem을 상속받아 구현하면 됨.
-3. 캡슐화: 상태와 로직을 각 시스템 내부에 캡슐화하여, 다른 시스템과 독립적으로 작동 가능.
-4. 유지보수 용이성: 공통 동작은 GameSystem에, 개별 동작은 하위 클래스에 구현되어 수정이 용이.
-
-### LobbySystem
-GameSystem을 상속받는 LobbySystem은 플레이어가 게임을 시작하거나, 게임 패배 혹은 승리 후 돌아올 때 위치하는 로비 공간을 의미힌다. 로비에서는 게임을 시작하가나 종료하고 게임을 시작할 경우 플레이어를 생성하는 기능을 수행한다.
-- inline SystemType GetSystemType() override : 현재 플레이어가 위치한 로비의 값을 반환한다.
-- MainMenu() : 플레이어에게 게임 시작, 게임 종료 메뉴를 출력한 뒤, 플레이어에게 입력을 받는다.
-- CreatePlayerMenu() : 플레이어가 게임 시작시 플레이어의 이름을 입력 받고 입력 검증을 통해 플레이어 이름을 결정한다면, 이를 통해 초기 플레이어를 생성한다. 
-```cpp
-class LobbySystem : public GameSystem
-{
-public:
-
-	LobbySystem();
-	void EnterSystem() override;
-
-	inline SystemType GetSystemType() override
-	{ 
-		return SystemType::LOBBY;
-	}
-
-	void OnEvent(const std::shared_ptr<IEvent> _event) override;
-
-	void MainMenu();
-	void CreatePlayerMenu();
-
-	virtual string GetSystemName() override { return "로비"; };
-private:
-	std::vector<std::string> orcArt;
-	std::vector<std::string> slimeArt;
-	std::vector<std::string> dragonArt;
-};
-```
-### LobbySystemStates
-LobbySystem은 Update() 함수가 호출되면 현재 설정된 LobbySystemState 값에 맞는 기능을 호출하게 합니다. 
-각 기능에 맞게 실행되도록 팩토리 패턴 방식을 적용하여, 같은 함수 여도 다른 기능이 수행되도록 합니다.
-LobbyMainState: LobbySystem의 메인 메뉴가 실행 되도록 함.
-LobbyCreateState: LobbySystem의 플레이어 생성이 실행 되도록 함.
-```
-class LobbyMainState : public ISystemState
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto lobby = dynamic_cast<LobbySystem*>(_system);
-
-		if (lobby)
-		{
-			lobby->MainMenu();
-		}
-	}
-};
-
-class LobbyCreateState : public ISystemState
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto lobby = dynamic_cast<LobbySystem*>(_system);
-
-		if (lobby)
-		{
-			lobby->CreatePlayerMenu();
-		}
-	}
-};
-```
-### BattleSystemStates
-- 개요
-	- 플레이어가 전투를 진행하는 동안 생기는 이벤트들(공격 선택, 아이템 사용, 패배, 승리 등)에 대해 알맞은 기능을 수행하기 위해 구현한 클래스 입니다. 
- 	- 플레이어가 전투 중 특정 전환을 수행할 때 state 멤버 변수를 변환해주면 다음에 Excute() 함수가 실행 될 때 의도한 기능이 수행 되도록 합니다
-	- 각 State별 기능은 주석으로 설명하였습니다.
- ``` C++
-
-
-class BattleMainState : public ISystemState // 플레이어의 전투 선택지를 출력합니다.
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->MainMenu();
-		}
-	}
-};
-
-class BattleAttackState : public ISystemState // 플레이어의 공격 메뉴를 호출합니다.
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->Attack();
-		}
-	}
-};
-
-class BattleDisplayState : public ISystemState // 플레이어의 전투중 현재 상태 및 스탯을 호출합니다.
-{
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->DisplayStat();
-		}
-	}
-};
-
-class BattleUseItemState : public ISystemState // 플레이어의 아이템 사용 기능을 호출합니다. 보유 아이템을 출력합니다.
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->UseItem();
-		}
-	}
-};
-
-class BattleNextStageState : public ISystemState // 플레이어가 다음스테이지로 넘어갈 때 호출되는 기능입니다.
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->NextStage();
-		}
-	}
-};
-
-class BattleGameOverState: public ISystemState // 플레이어가 게임 종류 될 때 호출 되는 Battlesystem::GameOver() 함수입니다.
-{
-public:
-	// ISystemState을(를) 통해 상속됨
-	void Excute(GameSystem* _system) override
-	{
-		auto battle = dynamic_cast<BattleSystem*>(_system);
-
-		if (battle)
-		{
-			battle->GameOver();
-		}
-	}
-};
- ```
-[[목차로 돌아가기]](#목차)
-
----
-
-### BattleSystem
-- 개요
-	- BattleSystem은 플레이어가 전투를 진행하는 공간입니다.
-	- 
-
-   
-#### 주요 메서드
-1. void OnEvent(const std::shared_ptr<IEvent> _event) override: BattleSystem에서 사용될 이벤트들이 OnEvent 함수 호출을 하면 이벤트에 맞는 로직을 수행하도록 분기문을 수행합니다. 
-예를 들면 플레이어가 공격 받고 죽는다면 ICharacterDeadEvent 클래스 이벤트를 호출하고 BattleSystem이 GlobalEventManager::Notify()를 통해 호출 받는다면 BattleSystem::OnEvent() 함수에서 이를 처리하게 됩니다.
-```C++
-void BattleSystem::OnEvent(const std::shared_ptr<IEvent> _event)
-{
-	if (auto deadEvent = dynamic_pointer_cast<ICharacterDeadEvent>(_event))
-	{
-		auto player = GSystemContext->GetPlayer();
-		if (monster->statManager->IsDead())
-		{
-			state = make_shared<BattleNextStageState>();
-		}
-		else if (player->statManager->IsDead())
-		{
-			state = make_shared<BattleGameOverState>();
-		}
-	}
-	else if (auto turnEvent = dynamic_pointer_cast<ITurnStartEvent>(_event))
-	{
-		turnSystem->BeginTurn();
-	}
-}
-```
-2. BattleSystem(): 생성자 입니다. 전투 시스템에서 턴을 관리할 멤버 변수와 보상을 관리하는 멤버 변수를 초기화 해줍니다.
-```C++
-	shared_ptr<URewardEventManagerSystem> rewardSystem; // 플레이어가 승리시 골드, 경험치, 아이템, 스킬을 부여해주는 IEventMangerSystem을 상속받는 클래스 입니다.
-	shared_ptr<UTurnEventManager> turnSystem; // 플레이어가 스킬 사용시 스킬의 지속시간, 쿨다운을 계산해주는 IEventMangerSystem을 상속받는 클래스 입니다.
-
-BattleSystem::BattleSystem()
-{
-	rewardSystem = make_shared<URewardEventManagerSystem>();
-	GlobalEventManager::Get().Subscribe(rewardSystem);
-
-	turnSystem = std::make_shared<UTurnEventManager>();
-	GlobalEventManager::Get().Subscribe(turnSystem);
-}
-
-```
-3. virtual void EnterSystem() override : 플레이어가 전투 시스템에 처음 입장하면 전투 시스템의 시작 준비 기능을 수행합니다. 몬스터를 생성합니다. 이때 플레이어가 10레벨 이상인 경우 보스 몬스터를 생성합니다. 생성된 몬스터와 플레이어의 Target을 서로를 바로 보도록 설정하며 각자의 스킬이 Target에게 효과를 부여하도록 합니다.
-```C++
-void BattleSystem::EnterSystem()
-{
-	auto player = GSystemContext->GetPlayer();
-	monster = make_shared<Monster>();
-	monster->Initialize();
-	monster->combatManager->SetTarget(player.get());
-	player->combatManager->SetTarget(monster.get());
-
-	player->combatManager->SetTarget(monster.get());
-
-	activeCharacters.clear();
-	activeCharacters.push_back(player.get());
-	activeCharacters.push_back(monster.get());
-	
-	// 플레이어 레벨에 따른 monster 생성
-	state = make_shared<BattleMainState>();
-
-	rewardSystem->Initialize();
-	turnSystem->TurnReset();
-}
-```
-3.  MainMenu() : 플레이어가 매 턴 마다 수행할 선택지인 1. 공격, 2. 스탯확인, 3. 아이템 사용 메뉴를 출력하고 입력을 받습니다. 매 입력마다 검증을 수행합니다.
-  ```C++
-void BattleSystem::MainMenu()
-{
-	// 라운드 시작할때 몬스터 현재 상태 출력
-	DisplayStat();
-
-	int input = InputManagerSystem::GetInput<int>(
-		"==== 전투 메뉴 ====",
-		{ "1. 공격하기" ,"2. 아이템 사용하기" },
-		RangeValidator<int>(1, 2)
-	);
-
-	if (input == 1)
-	{
-		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleAttackState>()); // state->Excute() 가 공격을 수행하도록 변경 즉, BattleSystem::Attack을 수행하도록함
-		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleAttackState>();
-	}
-	else
-	{
-		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleUseItemState>());  // state->Excute() 가 아이템을 사용하도록 변경 즉, BattleSystem::UseItem() 수행하도록함
-		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleUseItemState>();
-	}
-}
-  ```
-
--  Attack(): 플레이어가 공격을 선택한다면 실행되는 함수이다. 플레이어가 가지고 있는 스킬 목록들을 선택지로 출력한 뒤, 플레이어에게 입력을 받는다. 입력이 알맞은지 검증 또한 수행합니다. 돌아가기 버튼을 누른다면 다시 MainState가 수행되도록 하며 스킬을 사용한 경우 대상에게 스킬 효과를 부여한다. 그리고 플레이어가 공격한다면 몬스터가 자동으로 반격하게 한다. 몬스터가 플레이어 상대로 공격하도록 몬스터의 공격 기능을 수행합니다. 각 공격은 수행시 플레이어와 몬스터의 사망 여부를 체크하고 사망시 이벤트 호출을 통해 다음 BattleSystemstate로 변환 될 작업인 BattleSystem::OnEvent() 함수를 수행하도록 구현했습니다.
-  ```C++
-void BattleSystem::Attack()
-{
-	auto battleitemcheck = make_shared<IPlayerBattleAttackEvent>(); // UIEvent로 플레이어 공격 수행 출력
-	GlobalEventManager::Get().Notify(battleitemcheck);
-
-	auto player = GSystemContext->GetPlayer();
-
-	vector<string> activeSkillList = player->skillManager->GetActiveSkillInfoWithString(0);
-	// Context로 부터 플레이어 목록 받아오기(System에서 player 저장 x)
-	// 1~n: 가지고 있는 스킬
-	// n+1: 돌아가기
-	int returnButton = activeSkillList.size() + 1; // 돌아가기 버튼
-	activeSkillList.push_back(to_string(returnButton) + ". 돌아가기");
-
-	int input = InputManagerSystem::GetInput<int>(
-		"==================  스킬 사용 ===================",
-		activeSkillList,
-		RangeValidator<int>(1, returnButton)
-	);
-
-	if (input == returnButton)
-	{
-		auto cmd = make_shared<SystemChangeStateCommand>(make_shared<BattleMainState>());
-		GInvoker->ExecuteCommand(cmd);
-		//state = make_shared<BattleMainState>();
-		return; // mainstate 재실행=>공격,스탯,아이템 메뉴 재실행
-	}
-	else
-	{ // 스킬 사용
-		
-		auto playerAttackEv = make_shared<IPlayerBattleAttackEvent>();
-		GlobalEventManager::Get().Notify(playerAttackEv);
-
-		auto player = GSystemContext->GetPlayer();
-
-		state = make_shared<BattleMainState>();
-		
-		if (!player->skillManager->UseSkill(player->skillManager->GetActiveSkillNameByIndex(input - 1)))
-		{
-			state = make_shared<BattleMainState>();
-			return;
-		}
-	}
-
-	// 몬스터 공격
-	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
-	monster->combatManager->SetTarget(player.get());
-
-	auto monsterAttackEv = make_shared<IMonsterBattleAttackEvent>();
-	GlobalEventManager::Get().Notify(monsterAttackEv);
-
-	monster->skillManager->UseSkill("기본 공격");// 몬스터 죽으면 공격 안함
-	
-	turnSystem->EndTurn(activeCharacters);
-
-	DisplayStat();
-
-	ConsoleLayout::GetInstance().AppendLine(ConsoleRegionType::LeftBottom, "\n");
-
-	InputManagerSystem::PauseUntilEnter();
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
-}
-  ```
-  
--  DisplayStat(): 전투중 플레이어의 현재 상태를 출력합니다
-  ```C++
-void BattleSystem::DisplayStat()
-{
-	//CLEAR;
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftTop);
-	ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::RightTop);
-
-	auto player = GSystemContext->GetPlayer();
-	player.get()->PrintCharacterInfo();
-	monster.get()->PrintCharacterInfo(1);
-}
-  ```
--  UseItem(): 플레이어가 가지고 있는 현재 아이템 목록을 출력합니다. 아이템을 사용하거나 돌아간다면 다시 전투 메인메뉴를 출력하도록 합니다.
-  ```C++
-void BattleSystem::UseItem()
-{
-	//CLEAR;
-
-	auto battleitemcheck = make_shared<IBattleUseItemEvent>();
-	GlobalEventManager::Get().Notify(battleitemcheck);
-	
-	auto player = GSystemContext->GetPlayer();
-	vector<string> itemList = player->inventoryComponent->GetInventoryInfoWithString(1);
-	
-	int lastIndex = itemList.size() + 1;
-
-	itemList.push_back(to_string(lastIndex) +". 돌아가기");
-	int input = InputManagerSystem::GetInput<int>(
-		"=== 아이템 사용 ===", 
-		itemList,
-		RangeValidator<int>(1, lastIndex)
-	);
-  ```
--  NextStage(): 플레이어가 몬스터와의 전투에서 승리하면 호출되는 함수입니다. 처치한 몬스터가 보스인 경우 플레이어가 승리했다는 UI를 출력한 뒤 LobbySystem으로 돌아가도록 SystemContext::currentSystem 멤버 변수 값을 재설정합니다.
-만약 플레이어가 일반 몬스터를 처치한 경우에는 플레이어에게 보상을 부여하는 GetReward() 함수를 호출한 다음 스테이지 또는 상점을 방문할 수있는 UI 출력 및 입력을 받습니다. 이때 입력을 검증합니다.
-
-  ```C++
-void BattleSystem::NextStage()
-{
-	if (monster->IsBoss())
-	{	
-		// 보스 몬스터
-		// 게임 승리 UI 출력
-		auto playergameclear = make_shared<IPlayerGameClearEvent>();
-		GlobalEventManager::Get().Notify(playergameclear);
-
-		// 게임 승리로 로비로 귀환,
-		// 이때까지 동작한 로그라던가는 여기서 출력하시면 됩니다
-
-		auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
-		GlobalEventManager::Get().Notify(event);
-		InputManagerSystem::PauseUntilEnter();
-		ConsoleLayout::GetInstance().SelectClear(ConsoleRegionType::LeftBottom);
-		return;
-	}
-	else
-	{	
-		GetReward();
-
-		int input = InputManagerSystem::GetInput<int>(
-			"==== 스테이지 클리어 메뉴 ====",
-			{ "1. 다음 스테이지" , "2. 상점 방문하기" },
-			RangeValidator<int>(1, 2)
-		);
-
-		if (input == 1)
-		{
-			EnterSystem();
-		}
-		else if (input == 2)
-		{
-			auto cmd = make_shared<SystemMoveCommand>(SystemType::SHOP, GetSystemType(), "상점", "배틀");
-			GInvoker->ExecuteCommand(cmd);
-		}
-	}
-}
-  ```
-- GetReward() : 플레이어에게 보상을 부여하는 함수입니다. 플레이어는 일반 몬스터를 처치시 일반 몬스터가 가진 돈과 아이템을 받으며 경험치를 부여 받습니다. 또한 스킬을 선택해서 가질 수 있게 합니다.
-```C++
-void BattleSystem::GetReward()
-{
-	auto player = GSystemContext->GetPlayer();
-	auto reward = rewardSystem->GetReward();
-
-	player->inventoryComponent->addGold(reward.gold); // 돈 넣기
-
-	if (monster->characterReward.dropItem != nullptr)
-	{
-		auto playergetitem = make_shared<IPlayerGetItemEvent>();
-		GlobalEventManager::Get().Notify(playergetitem);
-		player->inventoryComponent->addItem(reward.item); // 템 넣기
-	}
-
-	int skillSize = reward.skillTypes.size();
-	
-	if (reward.skillTypes.size() > 0)
-	{
-		vector<string> options;
-
-		for (int i = 0; i < skillSize; i++)
-		{
-			shared_ptr<Skill> skill = SkillManager::GetInstance().CreateSkillFromType(reward.skillTypes[i], player.get());
-			options.push_back(to_string(i + 1) + ", " + skill->GetSkillData().skillName);
-		}
-
-		int input = InputManagerSystem::GetInput<int>("=== 스킬 선택 ===", options, RangeValidator<int>(1, reward.skillTypes.size()));
-
-		auto cmd = make_shared<AddSkillCommand>(reward.skillTypes[input - 1]);
-		GInvoker->ExecuteCommand(cmd);
-		Delay(1);
-	}
-
-	CharacterUtility::ModifyStat(player.get(), StatType::Experience, rewardSystem->GetReward().exp);
-	monster = nullptr;
-
-	auto battlestageclear = make_shared<IPlayerStageClearEvent>();
-	GlobalEventManager::Get().Notify(battlestageclear);
-}
-```
--  GameOver() : 플레이어가 패배했을 시 호출 되는 함수입니다. 다시 로비로 되돌아 가도록 SystemContext의 OnEvent() 를 호출 하도록 GlobalEventManager::Notify()를 호출합니다.
-  ```C++
-void BattleSystem::GameOver()
-{
-	auto playergamedefeat = make_shared<IPlayerDefeatEvent>();
-	GlobalEventManager::Get().Notify(playergamedefeat);
-
-	auto event = make_shared<IMoveSystemEvent>(SystemType::LOBBY, GetSystemType(), "로비", "배틀");
-	GlobalEventManager::Get().Notify(event);
-}
-
-  ```
-
-[[목차로 돌아가기]](#목차)
-
----
-
-
----
-
-
-
-
----
-### ShopSystem
-도전과제의 상점 시스템을 구현한 것으로, 플레이어가 아이템을 사고팔고, 인벤토리와 관련된 작업을 처리하는 핵심적인 로직을 담당하고 있습니다. ShopSystem 은 아이템 구매, 판매, 인벤토리 관리 등의 기능을 처리하는 중요한 시스템입니다. 
-플레이어의 상점 경험을 처리하는 중심적인 역할을 하며, UI와 사용자 입력을 잘 연결하여 게임의 흐름을 제어합니다. 이 시스템은 상태 패턴을 사용하여 상점의 여러 상태(메인 메뉴, 아이템 구매, 아이템 판매 등)를 처리하며, 각각의 상태 전환을 명령 패턴을 통해 실행하는 구조를 가집니다.
-
-#### 주요 메서드
-1. EnterSystem()
-상점 시스템에 진입할 때 호출되는 함수로 진입 전 콘솔 화면을 전부 지우고, 랜덤 아이템과 스킬을 생성해 상점에서 판매할 아이템, 스킬을 준비합니다.
-
-2. MainMenu()
-상점의 메인 메뉴를 표시하고, 사용자의 선택을 처리합니다.
-메인에선 아이템 구매, 판매, BattleSystem으로 돌아가기 중 하나를 선택하고, 선택된 입력에 따라 적절한 명령을 실행합니다. 
-
-3. BuyItemMenu()
-아이템 구매 메뉴를 표시하고, 사용자의 구매 요청을 처리합니다. 
-
-4. SellMenu()
-목적: 아이템 판매 메뉴를 표시하고, 사용자가 선택한 아이템을 판매합니다.
-
-5. GetRandomItemsAndSkills()
-목적: 랜덤 아이템과 스킬을 생성하여 상점에 추가합니다.
-
-6. OnEvent()
-캐릭터가 상점과 관련된 스킬(파는 아이템 가격 감소)을 획득할 때 해당 스킬에 대한 효과를 적용합니다.
-
-
-[[목차로 돌아가기]](#목차)
 
 
 ---
