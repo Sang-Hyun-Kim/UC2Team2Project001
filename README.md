@@ -222,10 +222,9 @@ JSON 통합을 담당하며, 스탯과 보상을 로드 및 저장합니다.
 3. **JSON 업데이트**:
    - 새로운 캐릭터에 대한 스탯과 보상을 JSON 파일에 정의.
 
-[목차로 돌아가기](#목차)
+[[목차로 돌아가기]](#목차)
+
 ---
-
-
 ## 스킬 시스템 문서
 
 ## 개요
@@ -417,6 +416,9 @@ ManaMastery::ManaMastery(Character* owner) : PassiveSkill(owner) {
 SkillManager::GetInstance().RegisterSkill<NewSkill>();
 ```
 5. **스킬 할당**: `AddSkill` 또는 `AddRandomSkillToCharacter`를 사용해 캐릭터에 할당.
+
+[[목차로 돌아가기]](#목차)
+
 
 ---
 
@@ -796,6 +798,11 @@ public:
 		GSystemContext->Update(); // Update()로 변경해야함
 	}
 ```
+
+[[목차로 돌아가기]](#목차)
+
+---
+
 ### GameSystem
 현재 플레이어가 위치한 공간을 의미하는 인터페이스 클래스이다. GameSystem을 상속 받는 서브 클래스로는 LobbySystem(로비 레벨), BattleSystem(전투 레벨), ShopSystem(상점 레벨)이 있으며
 각 GameSystem은 현재 수행해야하는 State의 전환을 통해 어떤 기능을 수행해야할지 설정하고 GameSystem::Update() 함수가 호출되면 저장된 ISystemState 서브 클래스 기능에 맞게 팩토리된 클래스 로직을 Excute() 함수를 통해 수행합니다.
@@ -1064,6 +1071,10 @@ public:
 	}
 };
  ```
+[[목차로 돌아가기]](#목차)
+
+---
+
 ### BattleSystem
 - 개요
 	- BattleSystem은 플레이어가 전투를 진행하는 공간입니다.
@@ -1361,6 +1372,11 @@ void BattleSystem::GameOver()
 
   ```
 
+[[목차로 돌아가기]](#목차)
+
+---
+
+
 ---
 
 # RPG 텍스트 게임 이벤트 시스템
@@ -1544,6 +1560,12 @@ void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
 캐릭터가 상점과 관련된 스킬(파는 아이템 가격 감소)을 획득할 때 해당 스킬에 대한 효과를 적용합니다.
 
 
+[[목차로 돌아가기]](#목차)
+
+
+---
+
+
 ---
 # InputManagerSystem
 
@@ -1637,6 +1659,11 @@ int input = InputManagerSystem::GetInput<int>(
 
 ### 결론
 InputManagerSystem은 게임에서 유저 인터페이스(UI)와 시스템 간의 중요한 연결 고리 역할을 합니다. 사용자로부터 입력을 받아 이를 검증하고, 적절한 시스템 동작을 유도하는 방식으로 게임의 흐름을 자연스럽게 제어합니다. 특히 다양한 입력을 처리하는 유연성과 검증 메커니즘을 통해 게임 시스템을 안정적으로 동작시킬 수 있는 중요한 역할을 합니다.
+
+
+[[목차로 돌아가기]](#목차)
+
+---
 
 
 ## 코드 시연 영상
