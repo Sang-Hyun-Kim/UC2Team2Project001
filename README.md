@@ -65,7 +65,7 @@
    - [개요](#개요-3)
    - [주요 클래스](#주요-클래스-3)
    - [사용 예시](#사용-예시-3)
-5. [인풋 시스템](#인풋-시스템)
+5. [Input 시스템](#input-시스템)
    - [개요](#개요-4)
    - [주요 클래스](#주요-클래스-4)
    - [사용 예시](#사용-예시-4)
@@ -1434,9 +1434,104 @@ void IPoisonEffect::PostEffect()
 ```
 
 ---
+## Input 시스템
+
+Input 시스템은 **InputManagerSystem** 클래스를 통해 사용자 입력을 관리하는 중요한 역할을 하며, 게임 내에서 플레이어의 동작을 처리하는 기능과 특정 상황마다 다르게 구현한 입력 검증 기능을 수행합니다. 이를 통해 게임 시스템과 유저 간의 상호작용을 담당합니다.
+
+## InputManagerSystem의 역할
+**InputManagerSystem**은 사용자로부터 입력을 받아 이를 게임 시스템의 적절한 동작으로 전환하는 역할을 합니다.
+키보드 입력을 처리하고, 이를 다른 시스템에 전달하거나 특정 명령을 실행하게끔 합니다. 이 시스템은 다음과 같은 주요 기능들을 제공할 수 있습니다.
+
+1. 입력 처리 및 검증: 사용자 입력을 받아 검증하고 검증 결과가 부합하면 값을 반환합니다.
+2. 입력 대기 및 전환: 입력을 기다리고, 특정 입력에 따라 상태나 시스템을 전환하는 기능을 담당합니다.
+3. 사용자 인터페이스 관리: 입력을 받아 UI 메뉴를 구성하고, 사용자 선택에 따라 다른 시스템으로의 전환을 유도할 수 있습니다.
+4. 범용성: 입력 처리 시스템이 다양한 게임 시스템에서 공통적으로 사용할 수 있도록 설계됩니다.
+
+## InputManagerSystem의 구성 및 흐름
+```cpp
+class InputManagerSystem {
+public:
+    template <typename T>
+    static T GetInput(const std::string& prompt, const std::vector<std::string>& options, const RangeValidator<T>& validator);
+
+    static void PauseUntilEnter();  // 엔터키가 입력될 때까지 대기
+};
+```
+### + GetInput<T>() 
+사용자로부터 입력을 받아 해당 타입(`T`)에 맞는 값을 반환합니다. options로 제공된 선택지들 중 하나를 선택하게 하거나, 특정 범위 내에서 값이 입력되도록 검증할 수 있습니다.
+InputValidator 객체를 사용하여 입력값이 유효한 범위 내에 있는지 확인합니다. 가변 인자 템플릿이기에, 하나의 입력에 대한 검증에 여러가지 검증 조건을 추가해줄 수 있습니다.
+범용성: 다양한 타입에 대해 GetInput을 사용할 수 있도록 템플릿으로 설계되었습니다. 예를 들어, 정수형, 문자열, 등 다양한 타입에 대해 동작합니다.
+
+#### 사용 예시
+```cpp
+string userName = InputManagerSystem::GetInput(
+	"캐릭터의 이름을 입력해주세요.(중간 공백 허용, 최대12자)",
+	{},
+	NameRangeValidator(1, 12),
+	NameSpaceValidator(),
+	NoSpecialCharValidator()
+);
+```
+`NameRangeValidator(1,12)` 는 `string.length()`를 기준으로 범위를 검증합니다.
+`NoSpaceValidator()` 는 입력 받은 string이 전부 공백인지 확인합니다.
+`NoSpecialCharValidator()` 는 특수문자 입력을 방지합니다.
+
+즉 위의 함수는 사용자에게 `string` 입력을 받고, 입력값의 길이가 1~12 인지, 전부 공백이 아닌지, 특수문자가 포함되지 않은지 확인하고 모든 조건이 `true`일 때 `userName`에 값을 리턴해줍니다.
+
+### + PauseUntilEnter 메서드
+이 메서드는 사용자가 Enter 키를 누를 때까지 대기하는 기능을 수행합니다.
+일반적으로 게임의 특정 화면에서 UI 이벤트나 상태 전환 후 사용자의 입력을 기다릴 때 사용됩니다.
+
+### InputManagerSystem의 사용 사례
+`InputManagerSystem`은 다양한 시스템에서 사용자 입력을 처리하는 역할을 합니다. 몇 가지 주요 사용 사례는 다음과 같습니다.
+
+1. 각 시스템에서의 분기 입력 
+각 시스템에서 분기를 선택해야 할 때, 입력을 처리합니다.
+
+```cpp
+//배틀 시스템에서의 분기 선택 예시
+int input = InputManagerSystem::GetInput<int>(
+    "==== 전투 메뉴 ====",
+    { "1. 공격하기", "2. 아이템 사용하기" },
+    RangeValidator<int>(1, 2)
+);
+
+//상점 시스템에서의 분기 선택 예시
+int input = InputManagerSystem::GetInput<int>(
+    "=== 아이템 구매 ===", 
+    itemList,
+    RangeValidator<int>(1, lastIndex)
+);
+```
+
+2. UI 메뉴 선택
+게임의 여러 메뉴에서 사용자의 선택을 받습니다. 예를 들어, 퀘스트 선택, 옵션 메뉴에서의 설정 변경 등이 가능합니다.
+
+```cpp
+int input = InputManagerSystem::GetInput<int>(
+    "=== 스킬 선택 ===",
+    options,
+    RangeValidator<int>(1, reward.skillTypes.size())
+);
+```
+### InputManagerSystem의 장점
+- 유연성: 다양한 게임 시스템에서 재사용할 수 있도록 설계되었습니다. 템플릿 메서드를 사용하여 다양한 타입의 입력을 받을 수 있습니다.
+- 사용자 입력의 검증: RangeValidator와 같은 검증 메커니즘을 사용하여, 잘못된 입력을 처리하고 유효한 입력만을 허용합니다.
+- 인터페이스와의 결합도 감소: InputManagerSystem을 통해 UI와 관련된 로직을 분리하고, 게임 시스템의 로직은 입력 처리에 집중할 수 있습니다.
+- 입력 대기 기능: PauseUntilEnter 메서드를 통해 사용자가 입력을 완료할 때까지 대기하는 기능을 제공합니다. 이는 특정 상황에서의 대기 또는 정지 동작에 유용합니다.
+
+### 개선 가능성
+- 입력 처리 확장: 현재는 텍스트 기반의 입력만 처리하는 것으로 보이는데, 게임이 발전함에 따라 마우스 클릭, 드래그 등의 입력도 지원할 수 있습니다.
+- 실행 처리 확장: 현재는 입력값을 반환하지만, 각 분기별 실행 기능을 같이 넣어 입력 값을 반환하지 않고 입력 값에 대한 추가적인 동작을 지원할 수 있습니다.
+
+### 결론
+InputManagerSystem은 게임에서 유저 인터페이스(UI)와 시스템 간의 중요한 연결 고리 역할을 합니다. 사용자로부터 입력을 받아 이를 검증하고, 적절한 시스템 동작을 유도하는 방식으로 게임의 흐름을 자연스럽게 제어합니다. 특히 다양한 입력을 처리하는 유연성과 검증 메커니즘을 통해 게임 시스템을 안정적으로 동작시킬 수 있는 중요한 역할을 합니다.
 
 
-## 아이템 시스템 문서 
+[[목차로 돌아가기]](#목차)
+
+---
+## 아이템 시스템
 
 
 ## Item  
@@ -1583,111 +1678,6 @@ ItemManager::GetInstance()-> getRandomItem();
     player->inventoryComponent->displayInventory(0)
 
 ```
-
-
-
-
----
-
-
----
-# InputManagerSystem
-
-**InputManagerSystem**은 사용자 입력을 관리하는 중요한 역할을 하며, 게임 내에서 플레이어의 동작을 처리하는 핵심적인 기능을 담당합니다. 이를 통해 게임 시스템과 유저 간의 상호작용을 연결합니다.
-
-## InputManagerSystem의 역할
-**InputManagerSystem**은 사용자로부터 입력을 받아 이를 게임 시스템의 적절한 동작으로 전환하는 역할을 합니다.
-키보드 입력을 처리하고, 이를 다른 시스템에 전달하거나 특정 명령을 실행하게끔 합니다. 이 시스템은 다음과 같은 주요 기능들을 제공할 수 있습니다.
-
-1. 입력 처리 및 검증: 사용자 입력을 받아 검증하고 검증 결과가 부합하면 값을 반환합니다.
-2. 입력 대기 및 전환: 입력을 기다리고, 특정 입력에 따라 상태나 시스템을 전환하는 기능을 담당합니다.
-3. 사용자 인터페이스 관리: 입력을 받아 UI 메뉴를 구성하고, 사용자 선택에 따라 다른 시스템으로의 전환을 유도할 수 있습니다.
-4. 범용성: 입력 처리 시스템이 다양한 게임 시스템에서 공통적으로 사용할 수 있도록 설계됩니다.
-
-## InputManagerSystem의 구성 및 흐름
-```cpp
-class InputManagerSystem {
-public:
-    template <typename T>
-    static T GetInput(const std::string& prompt, const std::vector<std::string>& options, const RangeValidator<T>& validator);
-
-    static void PauseUntilEnter();  // 엔터키가 입력될 때까지 대기
-};
-```
-### + GetInput<T>() 
-사용자로부터 입력을 받아 해당 타입(`T`)에 맞는 값을 반환합니다. options로 제공된 선택지들 중 하나를 선택하게 하거나, 특정 범위 내에서 값이 입력되도록 검증할 수 있습니다.
-InputValidator 객체를 사용하여 입력값이 유효한 범위 내에 있는지 확인합니다. 가변 인자 템플릿이기에, 하나의 입력에 대한 검증에 여러가지 검증 조건을 추가해줄 수 있습니다.
-범용성: 다양한 타입에 대해 GetInput을 사용할 수 있도록 템플릿으로 설계되었습니다. 예를 들어, 정수형, 문자열, 등 다양한 타입에 대해 동작합니다.
-
-#### 사용 예시
-```cpp
-string userName = InputManagerSystem::GetInput(
-	"캐릭터의 이름을 입력해주세요.(중간 공백 허용, 최대12자)",
-	{},
-	NameRangeValidator(1, 12),
-	NameSpaceValidator(),
-	NoSpecialCharValidator()
-);
-```
-`NameRangeValidator(1,12)` 는 `string.length()`를 기준으로 범위를 검증합니다.
-`NoSpaceValidator()` 는 입력 받은 string이 전부 공백인지 확인합니다.
-`NoSpecialCharValidator()` 는 특수문자 입력을 방지합니다.
-
-즉 위의 함수는 사용자에게 `string` 입력을 받고, 입력값의 길이가 1~12 인지, 전부 공백이 아닌지, 특수문자가 포함되지 않은지 확인하고 모든 조건이 `true`일 때 `userName`에 값을 리턴해줍니다.
-
-### + PauseUntilEnter 메서드
-이 메서드는 사용자가 Enter 키를 누를 때까지 대기하는 기능을 수행합니다.
-일반적으로 게임의 특정 화면에서 UI 이벤트나 상태 전환 후 사용자의 입력을 기다릴 때 사용됩니다.
-
-### InputManagerSystem의 사용 사례
-`InputManagerSystem`은 다양한 시스템에서 사용자 입력을 처리하는 역할을 합니다. 몇 가지 주요 사용 사례는 다음과 같습니다.
-
-1. 각 시스템에서의 분기 입력 
-각 시스템에서 분기를 선택해야 할 때, 입력을 처리합니다.
-
-```cpp
-//배틀 시스템에서의 분기 선택 예시
-int input = InputManagerSystem::GetInput<int>(
-    "==== 전투 메뉴 ====",
-    { "1. 공격하기", "2. 아이템 사용하기" },
-    RangeValidator<int>(1, 2)
-);
-
-//상점 시스템에서의 분기 선택 예시
-int input = InputManagerSystem::GetInput<int>(
-    "=== 아이템 구매 ===", 
-    itemList,
-    RangeValidator<int>(1, lastIndex)
-);
-```
-
-2. UI 메뉴 선택
-게임의 여러 메뉴에서 사용자의 선택을 받습니다. 예를 들어, 퀘스트 선택, 옵션 메뉴에서의 설정 변경 등이 가능합니다.
-
-```cpp
-int input = InputManagerSystem::GetInput<int>(
-    "=== 스킬 선택 ===",
-    options,
-    RangeValidator<int>(1, reward.skillTypes.size())
-);
-```
-### InputManagerSystem의 장점
-- 유연성: 다양한 게임 시스템에서 재사용할 수 있도록 설계되었습니다. 템플릿 메서드를 사용하여 다양한 타입의 입력을 받을 수 있습니다.
-- 사용자 입력의 검증: RangeValidator와 같은 검증 메커니즘을 사용하여, 잘못된 입력을 처리하고 유효한 입력만을 허용합니다.
-- 인터페이스와의 결합도 감소: InputManagerSystem을 통해 UI와 관련된 로직을 분리하고, 게임 시스템의 로직은 입력 처리에 집중할 수 있습니다.
-- 입력 대기 기능: PauseUntilEnter 메서드를 통해 사용자가 입력을 완료할 때까지 대기하는 기능을 제공합니다. 이는 특정 상황에서의 대기 또는 정지 동작에 유용합니다.
-
-### 개선 가능성
-- 입력 처리 확장: 현재는 텍스트 기반의 입력만 처리하는 것으로 보이는데, 게임이 발전함에 따라 마우스 클릭, 드래그 등의 입력도 지원할 수 있습니다.
-- 실행 처리 확장: 현재는 입력값을 반환하지만, 각 분기별 실행 기능을 같이 넣어 입력 값을 반환하지 않고 입력 값에 대한 추가적인 동작을 지원할 수 있습니다.
-
-### 결론
-InputManagerSystem은 게임에서 유저 인터페이스(UI)와 시스템 간의 중요한 연결 고리 역할을 합니다. 사용자로부터 입력을 받아 이를 검증하고, 적절한 시스템 동작을 유도하는 방식으로 게임의 흐름을 자연스럽게 제어합니다. 특히 다양한 입력을 처리하는 유연성과 검증 메커니즘을 통해 게임 시스템을 안정적으로 동작시킬 수 있는 중요한 역할을 합니다.
-
-
-[[목차로 돌아가기]](#목차)
-
----
 
 
 ## 코드 시연 영상
