@@ -47,18 +47,192 @@
 
 ## 목차
 
-1. [주요 기능](#주요-기능)
-2. [핵심 클래스 및 컴포넌트](#핵심-클래스-및-컴포넌트)
-   - [Character (기본 클래스)](#1-character-기본-클래스)
-   - [Player (파생 클래스)](#2-player-파생-클래스)
-   - [Monster (파생 클래스)](#3-monster-파생-클래스)
-   - [UStatsComponent](#4-ustatscomponent)
-   - [UCombatComponent](#5-ucombatcomponent)
-   - [StatsLoader](#6-statsloader)
-3. [사용 예시](#사용-예시)
-4. [JSON 구조](#json-구조)
-5. [시스템 확장 방법](#시스템-확장-방법)
+# 목차
 
+1. [Event System](#event-systen)
+   - [개요](#개요)
+   - [주요 클래스](#주요-클래스)
+   - [사용 예시](#사용-예시)
+2. [Game 시스템](#game-시스템)
+   - [개요](#개요-1)
+   - [주요 클래스](#주요-클래스-1)
+     - [SystemContext](#systemcontext)
+     - [LobbySystem](#lobbysystem)
+     - [LobbySystemState](#lobbysystemstate)
+     - [BattleSystem](#battlesystem)
+     - [BattleSystemState](#battlesystemstate)
+     - [ShopSystem](#shopsystem)
+   - [사용 예시](#사용-예시-1)
+3. [캐릭터 시스템](#캐릭터-시스템)
+   - [개요](#개요-2)
+   - [주요 클래스](#주요-클래스-2)
+   - [사용 예시](#사용-예시-2)
+4. [스킬 시스템](#스킬-시스템)
+   - [개요](#개요-3)
+   - [주요 클래스](#주요-클래스-3)
+   - [사용 예시](#사용-예시-3)
+5. [인풋 시스템](#인풋-시스템)
+   - [개요](#개요-4)
+   - [주요 클래스](#주요-클래스-4)
+   - [사용 예시](#사용-예시-4)
+6. [아이템 시스템](#아이템-시스템)
+   - [개요](#개요-5)
+   - [주요 클래스](#주요-클래스-5)
+   - [사용 예시](#사용-예시-5)
+
+## Event System
+
+이 프로젝트의 이벤트 시스템은 다양한 게임 이벤트를 효율적으로 관리하고 처리할 수 있도록 설계되었습니다. 아래는 시스템의 주요 구성 요소와 사용법에 대한 설명입니다.
+
+## 코드 구조
+
+```
+📂 Project
+├── 📂 Events
+│   ├── IEvent.h  
+│   ├── IEventTypes.h
+│   ├── CharacterEventTypes.h
+│   ├── ItemEventTypes.h
+│   └── CombatEventTypes.h
+├── 📂 Managers
+│   ├── GlobalEventManager.h
+│   ├── GlobalEventManager.cpp
+│   ├── IEventManagerSystem.h
+│   └── UIEventManagerSystem.h
+└── main.cpp
+```
+![image](https://github.com/user-attachments/assets/d3bf07af-6427-4a3a-889d-f0f9ddefa5a3)
+
+---
+
+## 주요 클래스 및 구성 요소
+
+### 1. `IEvent`
+모든 이벤트의 공통 부모 클래스입니다. 모든 이벤트는 `IEvent`를 상속받아 정의됩니다.
+
+```cpp
+class IEvent {
+public:
+    virtual ~IEvent() = default;
+};
+```
+
+### 2. `IEventManagerSystem`
+이벤트를 처리하고 구독을 관리하는 인터페이스입니다.
+
+- **주요 메서드**
+  - `OnEvent`: 전달받은 이벤트를 처리합니다.
+  - `Subscribe`: 특정 이벤트 타입에 대한 핸들러를 등록합니다.
+  - `Publish`: 등록된 모든 핸들러에 이벤트를 전달합니다.
+
+```cpp
+class IEventManagerSystem {
+public:
+    virtual ~IEventManagerSystem() = default;
+
+    virtual void OnEvent(std::shared_ptr<IEvent> _event) = 0;
+
+    template<typename T>
+    int Subscribe(std::function<void(T*)> _handler);
+
+    void Publish(std::shared_ptr<IEvent> _event);
+};
+```
+
+### 3. `GlobalEventManager`
+전역에서 이벤트 시스템을 관리하는 싱글톤 클래스입니다. 구독, 구독 해제, 이벤트 알림 등의 작업을 수행합니다.
+
+- **주요 메서드**
+  - `Subscribe`: 새로운 구독자를 등록합니다.
+  - `Unsubscribe`: 구독을 해제합니다.
+  - `Notify`: 모든 구독자에게 이벤트를 전달합니다.
+
+```cpp
+class GlobalEventManager {
+public:
+    static GlobalEventManager& Get();
+
+    int Subscribe(const std::shared_ptr<IEventManagerSystem>& _system);
+    void Unsubscribe(int _subscriptionId);
+    void Notify(std::shared_ptr<IEvent> _callEv);
+};
+```
+
+### 4. 이벤트 예제: `ICharacterDamagedEvent`
+캐릭터가 데미지를 받는 이벤트입니다.
+
+```cpp
+class ICharacterDamagedEvent : public IEvent {
+public:
+    std::string characterName;
+    int damage;
+    int hp;
+
+    ICharacterDamagedEvent(const std::string& _name, int _dmg, int _hp)
+        : characterName(_name), damage(_dmg), hp(_hp) {}
+};
+```
+
+---
+
+## 사용법
+
+### 1. 이벤트 구독
+특정 이벤트를 처리하기 위해 이벤트 핸들러를 등록합니다.
+
+```cpp
+std::shared_ptr<IEventManagerSystem> eventSystem = std::make_shared<UIEventManagerSystem>();
+GlobalEventManager::Get().Subscribe(eventSystem);
+
+eventSystem->Subscribe<ICharacterDamagedEvent>([](ICharacterDamagedEvent* e) {
+    std::cout << e->characterName << " received " << e->damage << " damage.\n";
+});
+```
+
+### 2. 이벤트 발행
+이벤트를 생성하고 발행하여 모든 구독자가 처리할 수 있도록 합니다.
+
+```cpp
+std::shared_ptr<ICharacterDamagedEvent> damageEvent = std::make_shared<ICharacterDamagedEvent>("Hero", 50, 450);
+GlobalEventManager::Get().Notify(damageEvent);
+```
+
+### 3. 이벤트 처리
+등록된 핸들러는 발행된 이벤트를 자동으로 처리합니다.
+
+```cpp
+void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
+    Publish(ev);
+}
+```
+
+---
+
+
+
+---
+
+## 주요 특징
+
+1. **유연한 이벤트 구독 및 발행**
+   - 특정 이벤트 타입에 대한 구독과 핸들러 등록이 가능하며, 타입 안전성을 보장합니다.
+
+2. **모듈화된 설계**
+   - 이벤트 및 이벤트 관리자는 독립적으로 설계되어 코드의 재사용성과 유지보수성이 높습니다.
+
+3. **실시간 이벤트 처리**
+   - 이벤트 발행 시, 등록된 모든 핸들러가 호출되어 즉각적으로 처리됩니다.
+
+---
+
+## 향후 개선 사항
+
+- 이벤트 처리의 성능 최적화를 위해 비동기 처리 기능 추가
+- 이벤트 로그 시스템 구현
+- 이벤트 간 의존성 관리 및 우선순위 처리 기능 추가
+- 현재 시스템에서는 다수의 게임 로직이 이벤트와 강하게 연결되어 있어, 에러 발생 시 디버깅 과정에서 호출 위치와 방법을 추적하는 데 어려움이 있습니다.
+
+---
 
 ## 캐릭터 시스템 
 
@@ -1379,159 +1553,7 @@ void BattleSystem::GameOver()
 
 ---
 
-# RPG 텍스트 게임 이벤트 시스템
 
-이 프로젝트의 이벤트 시스템은 다양한 게임 이벤트를 효율적으로 관리하고 처리할 수 있도록 설계되었습니다. 아래는 시스템의 주요 구성 요소와 사용법에 대한 설명입니다.
-
-## 코드 구조
-
-```
-📂 Project
-├── 📂 Events
-│   ├── IEvent.h  
-│   ├── IEventTypes.h
-│   ├── CharacterEventTypes.h
-│   ├── ItemEventTypes.h
-│   └── CombatEventTypes.h
-├── 📂 Managers
-│   ├── GlobalEventManager.h
-│   ├── GlobalEventManager.cpp
-│   ├── IEventManagerSystem.h
-│   └── UIEventManagerSystem.h
-└── main.cpp
-```
-![image](https://github.com/user-attachments/assets/d3bf07af-6427-4a3a-889d-f0f9ddefa5a3)
-
----
-
-## 주요 클래스 및 구성 요소
-
-### 1. `IEvent`
-모든 이벤트의 공통 부모 클래스입니다. 모든 이벤트는 `IEvent`를 상속받아 정의됩니다.
-
-```cpp
-class IEvent {
-public:
-    virtual ~IEvent() = default;
-};
-```
-
-### 2. `IEventManagerSystem`
-이벤트를 처리하고 구독을 관리하는 인터페이스입니다.
-
-- **주요 메서드**
-  - `OnEvent`: 전달받은 이벤트를 처리합니다.
-  - `Subscribe`: 특정 이벤트 타입에 대한 핸들러를 등록합니다.
-  - `Publish`: 등록된 모든 핸들러에 이벤트를 전달합니다.
-
-```cpp
-class IEventManagerSystem {
-public:
-    virtual ~IEventManagerSystem() = default;
-
-    virtual void OnEvent(std::shared_ptr<IEvent> _event) = 0;
-
-    template<typename T>
-    int Subscribe(std::function<void(T*)> _handler);
-
-    void Publish(std::shared_ptr<IEvent> _event);
-};
-```
-
-### 3. `GlobalEventManager`
-전역에서 이벤트 시스템을 관리하는 싱글톤 클래스입니다. 구독, 구독 해제, 이벤트 알림 등의 작업을 수행합니다.
-
-- **주요 메서드**
-  - `Subscribe`: 새로운 구독자를 등록합니다.
-  - `Unsubscribe`: 구독을 해제합니다.
-  - `Notify`: 모든 구독자에게 이벤트를 전달합니다.
-
-```cpp
-class GlobalEventManager {
-public:
-    static GlobalEventManager& Get();
-
-    int Subscribe(const std::shared_ptr<IEventManagerSystem>& _system);
-    void Unsubscribe(int _subscriptionId);
-    void Notify(std::shared_ptr<IEvent> _callEv);
-};
-```
-
-### 4. 이벤트 예제: `ICharacterDamagedEvent`
-캐릭터가 데미지를 받는 이벤트입니다.
-
-```cpp
-class ICharacterDamagedEvent : public IEvent {
-public:
-    std::string characterName;
-    int damage;
-    int hp;
-
-    ICharacterDamagedEvent(const std::string& _name, int _dmg, int _hp)
-        : characterName(_name), damage(_dmg), hp(_hp) {}
-};
-```
-
----
-
-## 사용법
-
-### 1. 이벤트 구독
-특정 이벤트를 처리하기 위해 이벤트 핸들러를 등록합니다.
-
-```cpp
-std::shared_ptr<IEventManagerSystem> eventSystem = std::make_shared<UIEventManagerSystem>();
-GlobalEventManager::Get().Subscribe(eventSystem);
-
-eventSystem->Subscribe<ICharacterDamagedEvent>([](ICharacterDamagedEvent* e) {
-    std::cout << e->characterName << " received " << e->damage << " damage.\n";
-});
-```
-
-### 2. 이벤트 발행
-이벤트를 생성하고 발행하여 모든 구독자가 처리할 수 있도록 합니다.
-
-```cpp
-std::shared_ptr<ICharacterDamagedEvent> damageEvent = std::make_shared<ICharacterDamagedEvent>("Hero", 50, 450);
-GlobalEventManager::Get().Notify(damageEvent);
-```
-
-### 3. 이벤트 처리
-등록된 핸들러는 발행된 이벤트를 자동으로 처리합니다.
-
-```cpp
-void UIEventManagerSystem::OnEvent(std::shared_ptr<IEvent> ev) {
-    Publish(ev);
-}
-```
-
----
-
-
-
----
-
-## 주요 특징
-
-1. **유연한 이벤트 구독 및 발행**
-   - 특정 이벤트 타입에 대한 구독과 핸들러 등록이 가능하며, 타입 안전성을 보장합니다.
-
-2. **모듈화된 설계**
-   - 이벤트 및 이벤트 관리자는 독립적으로 설계되어 코드의 재사용성과 유지보수성이 높습니다.
-
-3. **실시간 이벤트 처리**
-   - 이벤트 발행 시, 등록된 모든 핸들러가 호출되어 즉각적으로 처리됩니다.
-
----
-
-## 향후 개선 사항
-
-- 이벤트 처리의 성능 최적화를 위해 비동기 처리 기능 추가
-- 이벤트 로그 시스템 구현
-- 이벤트 간 의존성 관리 및 우선순위 처리 기능 추가
-- 현재 시스템에서는 다수의 게임 로직이 이벤트와 강하게 연결되어 있어, 에러 발생 시 디버깅 과정에서 호출 위치와 방법을 추적하는 데 어려움이 있습니다.
-
----
 
 
 ---
